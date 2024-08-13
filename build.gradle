@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+group = "${group}"
+version = "${version}"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //LWJGL
+    implementation platform("org.lwjgl:lwjgl-bom:${lwjglVersion}")
+
+    //JOML - 3D math
+    implementation "org.joml:joml:${jomlVersion}"
+
+    //LWJGL
+    implementation "org.lwjgl:lwjgl"
+    implementation "org.lwjgl:lwjgl-glfw"      // Windows management
+    implementation "org.lwjgl:lwjgl-opengl"    // OpenGL 3D
+    implementation "org.lwjgl:lwjgl-stb"       // Images/assets loader
+
+    //Windows
+    runtimeOnly "org.lwjgl:lwjgl::${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-glfw::${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-opengl::${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-stb::${lwjglNatives}"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
