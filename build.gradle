@@ -1,12 +1,15 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = "${group}"
 version = "${version}"
+mainClassName = "${mainClass}"
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -21,16 +24,38 @@ dependencies {
     implementation "org.lwjgl:lwjgl-glfw"      // Windows management
     implementation "org.lwjgl:lwjgl-opengl"    // OpenGL 3D
     implementation "org.lwjgl:lwjgl-stb"       // Images/assets loader
+    implementation "org.lwjgl:lwjgl-openal"    // OpenAL for audio
+    //implementation "org.lwjgl:lwjgl-imgui"     // ImGui for GUI
+    implementation "io.github.spair:imgui-java-binding:${imguiJavaVersion}"
+    implementation "org.lwjgl:lwjgl-assimp" // Assimp for complex models
+
 
     //Windows
     runtimeOnly "org.lwjgl:lwjgl::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-glfw::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-opengl::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-stb::${lwjglNatives}"
+    runtimeOnly "org.lwjgl:lwjgl-openal::${lwjglNatives}"
+    runtimeOnly "io.github.spair:imgui-java-${imguiNatives}:${imguiJavaVersion}"
+    runtimeOnly "org.lwjgl:lwjgl-assimp::${lwjglNatives}"
 }
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': "${mainClass}",
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    from 'resources'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    archiveBaseName.set("EpicGameiGues")
 }
