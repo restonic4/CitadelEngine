@@ -1,8 +1,10 @@
 package me.restonic4.engine.sound;
 
+import me.restonic4.engine.util.FileManager;
 import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.system.*;
 
+import java.io.File;
 import java.nio.*;
 
 import static org.lwjgl.openal.AL10.*;
@@ -38,9 +40,12 @@ public class SoundBuffer {
     private ShortBuffer readVorbis(String filePath, STBVorbisInfo info) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer error = stack.mallocInt(1);
-            long decoder = stb_vorbis_open_filename(filePath, error, null);
+
+            String resourcePath = FileManager.toResources(filePath);
+
+            long decoder = stb_vorbis_open_filename(resourcePath, error, null);
             if (decoder == NULL) {
-                throw new RuntimeException("Failed to open Ogg Vorbis file. Error: " + error.get(0) + ", Path: " + filePath);
+                throw new RuntimeException("Failed to open Ogg Vorbis file. Error: " + error.get(0) + ", Path: " + resourcePath);
             }
 
             stb_vorbis_get_info(decoder, info);

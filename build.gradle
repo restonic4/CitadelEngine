@@ -55,7 +55,42 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    from 'resources'
+    from('resources') {
+        into 'resources'
+    }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveBaseName.set("EpicGameiGues")
+}
+
+tasks.register('buildJar', Exec) {
+    commandLine 'cmd', '/c', 'gradlew.bat', 'clean', 'build'
+}
+
+tasks.register('packageApp', Exec) {
+    def jarName = jar.archiveFileName.get()
+    def appVersion = project.version
+
+    def outputDir = "$buildDir/app"
+
+    doFirst {
+        file(outputDir).mkdirs()
+    }
+
+    commandLine 'jpackage',
+            '--input', 'build/libs/',
+            '--main-jar', jarName,
+            '--main-class', 'me.restonic4.game.Main',
+            '--name', 'YourGame',
+            '--type', 'exe',
+            '--win-dir-chooser',
+            '--win-shortcut',
+            '--win-menu',
+            '--app-version', appVersion,
+            '--win-console',
+            '--dest', outputDir
+}
+
+tasks.register('buildAndPackage') {
+    dependsOn 'buildJar'
+    dependsOn 'packageApp'
 }

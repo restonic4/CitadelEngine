@@ -1,7 +1,13 @@
 package me.restonic4.engine.graph;
 
+import me.restonic4.engine.util.FileManager;
 import org.lwjgl.system.MemoryStack;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.*;
 
 import static org.lwjgl.opengl.GL30.*;
@@ -18,15 +24,19 @@ public class Texture {
     }
 
     public Texture(String texturePath) {
+        String resourcePath = FileManager.toResources(texturePath);
+
         try (MemoryStack stack = MemoryStack.stackPush()) {
-            this.texturePath = texturePath;
+            this.texturePath = resourcePath;
             IntBuffer w = stack.mallocInt(1);
             IntBuffer h = stack.mallocInt(1);
             IntBuffer channels = stack.mallocInt(1);
 
-            ByteBuffer buf = stbi_load(texturePath, w, h, channels, 4);
+            //ByteBuffer buf = stbi_load(file.getPath(), w, h, channels, 4);
+            ByteBuffer buf = FileManager.getTexture(resourcePath, w, h, channels);
+
             if (buf == null) {
-                throw new RuntimeException("Image file [" + texturePath + "] not loaded: " + stbi_failure_reason());
+                throw new RuntimeException("Image file [" + resourcePath + "] not loaded: " + stbi_failure_reason());
             }
 
             int width = w.get();

@@ -25,7 +25,7 @@ public class ShadowRender {
 
     public ShadowRender() {
         List<ShaderProgram.ShaderModuleData> shaderModuleDataList = new ArrayList<>();
-        shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("resources/shaders/shadow.vert", GL_VERTEX_SHADER));
+        shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("shaders/shadow.vert", GL_VERTEX_SHADER));
         shaderProgram = new ShaderProgram(shaderModuleDataList);
 
         shadowBuffer = new ShadowBuffer();

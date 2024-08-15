@@ -20,10 +20,10 @@ public class RegistryManager {
         String path;
 
         if (Objects.equals(registryKey.getKey(), "sound")) {
-            path = "resources/sounds/" + registryItem.getAssetLocation().getPath() + ".ogg";
+            path = "sounds/" + registryItem.getAssetLocation().getPath() + ".ogg";
         }
         else {
-            path = "resources/" + registryItem.getAssetLocation().getPath();
+            path = registryItem.getAssetLocation().getPath();
         }
 
         return path;

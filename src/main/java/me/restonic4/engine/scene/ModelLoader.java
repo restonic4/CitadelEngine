@@ -1,15 +1,23 @@
 package me.restonic4.engine.scene;
 
+import me.restonic4.engine.exceptions.ModelException;
+import me.restonic4.engine.util.FileManager;
 import me.restonic4.engine.util.Utils;
 import me.restonic4.engine.graph.*;
+import me.restonic4.engine.util.debug.DebugLogger;
+import me.restonic4.game.Main;
 import org.joml.*;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.lang.Math;
 import java.nio.IntBuffer;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.lwjgl.assimp.Assimp.*;
@@ -38,7 +46,13 @@ public class ModelLoader {
         for (Bone bone : affectedBones) {
             Matrix4f boneTransform = new Matrix4f(globalInverseTransform).mul(nodeGlobalTransform).
                     mul(bone.offsetMatrix());
-            animatedFrame.getBonesMatrices()[bone.boneId()] = boneTransform;
+
+            if (bone.boneId() < animatedFrame.getBonesMatrices().length) {
+                animatedFrame.getBonesMatrices()[bone.boneId()] = boneTransform;
+            }
+            else {
+                throw new ModelException("Max bones reached: " + bone.boneId());
+            }
         }
 
         for (Node childNode : node.getChildren()) {
@@ -121,31 +135,32 @@ public class ModelLoader {
         return result;
     }
 
-    public static Model loadModel(String modelId, String modelPath, TextureCache textureCache, MaterialCache materialCache,
-                                  boolean animation) {
+    public static Model loadModel(String modelId, String modelPath, TextureCache textureCache, MaterialCache materialCache, boolean animation) {
         return loadModel(modelId, modelPath, textureCache, materialCache, aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices |
                 aiProcess_Triangulate | aiProcess_FixInfacingNormals | aiProcess_CalcTangentSpace | aiProcess_LimitBoneWeights |
                 aiProcess_GenBoundingBoxes | (animation ? 0 : aiProcess_PreTransformVertices));
     }
 
-    public static Model loadModel(String modelId, String modelPath, TextureCache textureCache,
-                                  MaterialCache materialCache, int flags) {
-        File file = new File(modelPath);
-        if (!file.exists()) {
-            throw new RuntimeException("Model path does not exist [" + modelPath + "]");
-        }
-        String modelDir = file.getParent();
+    public static Model loadModel(String modelId, String modelPath, TextureCache textureCache, MaterialCache materialCache, int flags) {
+        String modelResourcePath = FileManager.toResources(modelPath);
+        String modelResourceDir = Paths.get(modelResourcePath).getParent().toString();
 
-        AIScene aiScene = aiImportFile(modelPath, flags);
+        DebugLogger.log(modelResourcePath);
+
+        if (FileManager.isFileInJar(modelResourcePath)) {
+            modelResourcePath = FileManager.extractFileFromJar(modelResourcePath);
+        }
+
+        AIScene aiScene = aiImportFile(modelResourcePath, flags);
         if (aiScene == null) {
-            throw new RuntimeException("Error loading model [modelPath: " + modelPath + "]");
+            throw new RuntimeException("Error loading model [modelPath: " + modelResourcePath + "]");
         }
 
         int numMaterials = aiScene.mNumMaterials();
         List<Material> materialList = new ArrayList<>();
         for (int i = 0; i < numMaterials; i++) {
             AIMaterial aiMaterial = AIMaterial.create(aiScene.mMaterials().get(i));
-            Material material = processMaterial(aiMaterial, modelDir, textureCache);
+            Material material = processMaterial(aiMaterial, modelResourceDir, textureCache);
             materialCache.addMaterial(material);
             materialList.add(material);
         }
@@ -322,7 +337,7 @@ public class ModelLoader {
                     null, null, null, null, null);
             String texturePath = aiTexturePath.dataString();
             if (texturePath != null && texturePath.length() > 0) {
-                material.setTexturePath(modelDir + File.separator + new File(texturePath).getName());
+                material.setTexturePath(modelDir + File.separator + new File(texturePath).getName());//improve this
                 textureCache.createTexture(material.getTexturePath());
                 material.setDiffuseColor(Material.DEFAULT_COLOR);
             }
@@ -332,7 +347,7 @@ public class ModelLoader {
                     null, null, null, null, null);
             String normalMapPath = aiNormalMapPath.dataString();
             if (normalMapPath != null && normalMapPath.length() > 0) {
-                material.setNormalMapPath(modelDir + File.separator + new File(normalMapPath).getName());
+                material.setNormalMapPath(modelDir + File.separator + new File(normalMapPath).getName());//improve this
                 textureCache.createTexture(material.getNormalMapPath());
             }
             return material;

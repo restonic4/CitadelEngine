@@ -1,5 +1,6 @@
 package me.restonic4.engine.graph;
 
+import me.restonic4.engine.util.FileManager;
 import me.restonic4.engine.util.Utils;
 import org.lwjgl.opengl.GL30;
 
@@ -18,7 +19,7 @@ public class ShaderProgram {
         }
 
         List<Integer> shaderModules = new ArrayList<>();
-        shaderModuleDataList.forEach(s -> shaderModules.add(createShader(Utils.readFile(s.shaderFile), s.shaderType)));
+        shaderModuleDataList.forEach(s -> shaderModules.add(createShader(FileManager.readFile(s.shaderFile), s.shaderType)));
 
         link(shaderModules);
     }
@@ -78,5 +79,9 @@ public class ShaderProgram {
     }
 
     public record ShaderModuleData(String shaderFile, int shaderType) {
+        public ShaderModuleData(String shaderFile, int shaderType) {
+            this.shaderFile = FileManager.toResources(shaderFile);
+            this.shaderType = shaderType;
+        }
     }
 }

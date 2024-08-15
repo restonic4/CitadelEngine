@@ -60,7 +60,7 @@ public class Main implements IEngineLogic {
         soundManager.setListener(new SoundListener(new Vector3f(0, 0, 0)));
 
         String terrainModelId = "terrain";
-        Model terrainModel = ModelLoader.loadModel(terrainModelId, "resources/models/terrain/terrain.obj",
+        Model terrainModel = ModelLoader.loadModel(terrainModelId, "models/terrain/terrain.obj",
                 scene.getTextureCache(), scene.getMaterialCache(), false);
         scene.addModel(terrainModel);
         Entity terrainEntity = new Entity("terrainEntity", terrainModelId);
@@ -70,7 +70,7 @@ public class Main implements IEngineLogic {
         scene.addEntity(terrainEntity);
 
         String bobModelId = "bobModel";
-        Model bobModel = ModelLoader.loadModel(bobModelId, "resources/models/bob/boblamp.md5mesh",
+        Model bobModel = ModelLoader.loadModel(bobModelId, "models/bob/boblamp.md5mesh",
                 scene.getTextureCache(), scene.getMaterialCache(), true);
         scene.addModel(bobModel);
         Entity bobEntity = new Entity("bobEntity-1", bobModelId);
@@ -88,7 +88,7 @@ public class Main implements IEngineLogic {
         bobEntity2.setAnimationData(animationData2);
         scene.addEntity(bobEntity2);
 
-        Model cubeModel = ModelLoader.loadModel("cube-model", "resources/models/cube/cube.obj",
+        Model cubeModel = ModelLoader.loadModel("cube-model", "models/cube/cube.obj",
                 scene.getTextureCache(), scene.getMaterialCache(), false);
         scene.addModel(cubeModel);
         cubeEntity1 = new Entity("cube-entity-1", cubeModel.getId());
@@ -113,7 +113,7 @@ public class Main implements IEngineLogic {
         dirLight.setIntensity(1.0f);
         scene.setSceneLights(sceneLights);
 
-        SkyBox skyBox = new SkyBox("resources/models/skybox/skybox.obj", scene.getTextureCache(),
+        SkyBox skyBox = new SkyBox("models/skybox/skybox.obj", scene.getTextureCache(),
                 scene.getMaterialCache());
         skyBox.getSkyBoxEntity().setScale(100);
         skyBox.getSkyBoxEntity().updateModelMatrix();

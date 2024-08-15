@@ -1,16 +1,15 @@
 package me.restonic4.engine.graph;
 
+import me.restonic4.engine.util.Constants;
+
 import java.util.*;
 
 public class TextureCache {
-
-    public static final String DEFAULT_TEXTURE = "resources/models/default/default_texture.png";
-
     private Map<String, Texture> textureMap;
 
     public TextureCache() {
         textureMap = new HashMap<>();
-        textureMap.put(DEFAULT_TEXTURE, new Texture(DEFAULT_TEXTURE));
+        textureMap.put(Constants.DEFAULT_TEXTURE, new Texture(Constants.DEFAULT_TEXTURE));
     }
 
     public void cleanup() {
@@ -31,7 +30,7 @@ public class TextureCache {
             texture = textureMap.get(texturePath);
         }
         if (texture == null) {
-            texture = textureMap.get(DEFAULT_TEXTURE);
+            texture = textureMap.get(Constants.DEFAULT_TEXTURE);
         }
         return texture;
     }

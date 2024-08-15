@@ -14,7 +14,7 @@ public class AnimationRender {
 
     public AnimationRender() {
         List<ShaderProgram.ShaderModuleData> shaderModuleDataList = new ArrayList<>();
-        shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("resources/shaders/anim.comp", GL_COMPUTE_SHADER));
+        shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("shaders/anim.comp", GL_COMPUTE_SHADER));
         shaderProgram = new ShaderProgram(shaderModuleDataList);
         createUniforms();
     }

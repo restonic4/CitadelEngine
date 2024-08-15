@@ -1,6 +1,10 @@
 package me.restonic4.engine.util;
 
+import me.restonic4.game.Main;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.List;
 
@@ -21,15 +25,5 @@ public class Utils {
 
     public static int[] listIntToArray(List<Integer> list) {
         return list.stream().mapToInt((Integer v) -> v).toArray();
-    }
-
-    public static String readFile(String filePath) {
-        String str;
-        try {
-            str = new String(Files.readAllBytes(Paths.get(filePath)));
-        } catch (IOException excp) {
-            throw new RuntimeException("Error reading file [" + filePath + "]", excp);
-        }
-        return str;
     }
 }

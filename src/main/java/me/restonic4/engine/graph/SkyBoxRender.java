@@ -3,6 +3,7 @@ package me.restonic4.engine.graph;
 import me.restonic4.engine.scene.Entity;
 import me.restonic4.engine.scene.Scene;
 import me.restonic4.engine.scene.SkyBox;
+import me.restonic4.engine.util.Constants;
 import org.joml.Matrix4f;
 
 import java.util.*;
@@ -20,8 +21,8 @@ public class SkyBoxRender {
 
     public SkyBoxRender() {
         List<ShaderProgram.ShaderModuleData> shaderModuleDataList = new ArrayList<>();
-        shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("resources/shaders/skybox.vert", GL_VERTEX_SHADER));
-        shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("resources/shaders/skybox.frag", GL_FRAGMENT_SHADER));
+        shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("shaders/skybox.vert", GL_VERTEX_SHADER));
+        shaderModuleDataList.add(new ShaderProgram.ShaderModuleData("shaders/skybox.frag", GL_FRAGMENT_SHADER));
         shaderProgram = new ShaderProgram(shaderModuleDataList);
         viewMatrix = new Matrix4f();
         createUniforms();
@@ -65,7 +66,7 @@ public class SkyBoxRender {
         texture.bind();
 
         uniformsMap.setUniform("diffuse", material.getDiffuseColor());
-        uniformsMap.setUniform("hasTexture", texture.getTexturePath().equals(TextureCache.DEFAULT_TEXTURE) ? 0 : 1);
+        uniformsMap.setUniform("hasTexture", texture.getTexturePath().equals(Constants.DEFAULT_TEXTURE) ? 0 : 1);
 
         glBindVertexArray(mesh.getVaoId());
 
