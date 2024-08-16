@@ -1,5 +1,9 @@
 package me.restonic4.engine.util.debug;
 
+import me.restonic4.engine.util.FileManager;
+
+import java.io.File;
+
 public class DebugManager {
     private static boolean DEBUG_MODE = false;
 
@@ -11,7 +15,7 @@ public class DebugManager {
         return DEBUG_MODE;
     }
 
-    public static boolean isDevEnviroment() {
-        return true;
+    public static boolean isDevEnvironment() {
+        return FileManager.isFileInSystem("build.gradle");
     }
 }

@@ -10,7 +10,7 @@ public abstract class Logger {
     }
 
     public static void logExtra(Object message) {
-        if (DebugManager.isDebugMode()) {
+        if (DebugManager.isDebugMode() && DebugManager.isDevEnvironment()) {
             log(message);
         }
     }
