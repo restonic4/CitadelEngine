@@ -98,6 +98,16 @@ public class Engine {
     public void close() {
         Logger.log("Closing the window");
 
+        Logger.stop();
+
         glfwSetWindowShouldClose(window.getWindowHandle(), true);
+    }
+
+    public static void crash(String reason) {
+        throw new RuntimeException(reason);
+    }
+
+    public static void crash() {
+        crash("Forced crash");
     }
 }

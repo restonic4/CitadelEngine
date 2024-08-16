@@ -169,6 +169,10 @@ public class Main implements IEngineLogic {
             soundSource.play();
         }
 
+        if (window.isKeyPressedOnce(GLFW_KEY_C)) {
+            Engine.crash("Haha, crashed");
+        }
+
         MouseInput mouseInput = window.getMouseInput();
         if (mouseInput.isRightButtonPressed()) {
             Vector2f displVec = mouseInput.getDisplVec();

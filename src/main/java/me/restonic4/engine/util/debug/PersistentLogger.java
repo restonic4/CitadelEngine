@@ -1,0 +1,93 @@
+package me.restonic4.engine.util.debug;
+
+import me.restonic4.engine.util.FileManager;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class PersistentLogger {
+    private static final long LOG_INTERVAL_MS = 60000;
+    private static final String LOG_DIRECTORY = "logs";
+    private static final String LOG_FILE = "CurrentLog.txt";
+    private static final String DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss";
+
+    private final List<String> logBuffer = new ArrayList<>();
+    private final File logFile;
+    private boolean running = true;
+
+    public PersistentLogger() {
+        if (DebugManager.isDevEnvironment()) {
+            logFile = new File(LOG_FILE);
+            return;
+        }
+
+        File logDir = new File(FileManager.createDirectory(LOG_DIRECTORY));
+        logFile = new File(logDir, LOG_FILE);
+
+        archiveOldLog();
+        clearLogFile();
+
+        Thread logWriterThread = new Thread(this::logWriter);
+        logWriterThread.setDaemon(true); // Closes the thread when the app dies
+        logWriterThread.start();
+
+        writeLogsToFile();
+    }
+
+    public synchronized void log(String message) {
+        logBuffer.add(message);
+    }
+
+    private void logWriter() {
+        while (running) {
+            try {
+                Thread.sleep(LOG_INTERVAL_MS);
+                writeLogsToFile();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    private void archiveOldLog() {
+        if (logFile.exists()) {
+            String timestamp = new SimpleDateFormat(DATE_FORMAT).format(new Date(logFile.lastModified()));
+            File archivedFile = new File(logFile.getParent(), "Log_" + timestamp + ".txt");
+            boolean renamed = logFile.renameTo(archivedFile);
+            if (!renamed) {
+                System.err.println("Failed to archive the old log file.");
+            }
+        }
+    }
+
+    private void clearLogFile() {
+        try {
+            new FileWriter(logFile, false).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private synchronized void writeLogsToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true))) {
+            for (String log : logBuffer) {
+                writer.write(log);
+                writer.newLine();
+            }
+            logBuffer.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stop() {
+        running = false;
+        writeLogsToFile();
+    }
+}

@@ -1,6 +1,7 @@
 package me.restonic4.game.core.registries;
 
 import me.restonic4.engine.util.Constants;
+import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.game.core.AssetLocation;
 import me.restonic4.game.core.world.sounds.Sound;
 import me.restonic4.game.core.world.sounds.Sounds;
@@ -9,7 +10,7 @@ import java.util.Objects;
 
 public class RegistryManager {
     public static void registerAll() {
-        System.out.println("Starting all the registries");
+        Logger.log("Starting all the registries");
 
         Sounds.register();
     }

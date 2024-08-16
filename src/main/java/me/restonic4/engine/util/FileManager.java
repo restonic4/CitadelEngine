@@ -118,11 +118,46 @@ public class FileManager {
 
             Files.copy(inputStream, tempFilePath, StandardCopyOption.REPLACE_EXISTING);
 
-            Logger.log("Temporal file created: " + tempFilePath);
+            Logger.logExtra("Temporal file created: " + tempFilePath);
 
             return tempFilePath.toString();
         } catch (IOException e) {
             throw new RuntimeException("Failed to extract file from JAR: " + resourcePath, e);
         }
+    }
+
+    public static String createDirectory(String directory) {
+        String appDataDir = System.getenv("LOCALAPPDATA");
+        if (appDataDir == null) {
+            appDataDir = System.getenv("APPDATA");
+        }
+
+        if (appDataDir == null) {
+            throw new RuntimeException("appDataDir is null. Could not create the directory: " + directory);
+        }
+
+        appDataDir = appDataDir + "/" + Constants.APP_NAME;
+
+        File appDir = new File(appDataDir);
+
+        if (!appDir.exists()) {
+            boolean created = appDir.mkdir();
+
+            if (!created) {
+                throw new RuntimeException("Could not create the APP directory: " + appDir.getAbsolutePath());
+            }
+        }
+
+        File directoryFile = new File(appDir, directory);
+
+        if (!directoryFile.exists()) {
+            boolean created = directoryFile.mkdir();
+
+            if (!created) {
+                throw new RuntimeException("Could not create the directory: " + directoryFile.getAbsolutePath());
+            }
+        }
+
+        return directoryFile.getAbsolutePath();
     }
 }
