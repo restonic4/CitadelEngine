@@ -105,52 +105,28 @@ public class FileManager {
         return filePath;
     }
 
-    public static ByteBuffer getTexture(String filepath, IntBuffer width, IntBuffer height, IntBuffer channels) {
-        try {
-            System.out.println("wait: " + isFileInJar(filepath));
-            if (isFileInJar(filepath)) {
-                InputStream is = Utils.class.getResourceAsStream("/" + filepath);
-
-                if (is == null) {
-                    throw new RuntimeException("Failed to load image: " + filepath + ". The input stream is null");
-                }
-
-                BufferedImage img = ImageIO.read(is);
-
-                System.out.println(filepath);
-                System.out.println(is);
-                System.out.println(img);
-
-                ByteBuffer scratch = ByteBuffer.allocateDirect(4 * img.getWidth() * img.getHeight());
-
-                byte data[] = (byte[]) img.getRaster().getDataElements(0, 0, img.getWidth(), img.getHeight(), null);
-                scratch.clear();
-                scratch.put(data);
-                scratch.rewind();
-
-                return scratch;
-            }
-            else {
-                return stbi_load(filepath, width, height, channels, 4);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static String extractFileFromJar(String resourcePath) {
         try (InputStream inputStream = FileManager.class.getResourceAsStream("/" + resourcePath)) {
             if (inputStream == null) {
                 throw new RuntimeException("Resource not found: " + resourcePath);
             }
 
-            // Temporal file
-            Path tempFile = Files.createTempFile("model", ".tmp");
-            Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            Path relativePath = Paths.get(resourcePath);
+            String fileName = relativePath.getFileName().toString();
 
-            DebugLogger.log("Temporal file created: " + resourcePath);
+            Path tempDir = Paths.get(System.getProperty("java.io.tmpdir"), Constants.APP_NAME);
+            if (!Files.exists(tempDir)) {
+                Files.createDirectory(tempDir);
+            }
 
-            return tempFile.toString();
+            Path tempFilePath = tempDir.resolve(relativePath);
+            Files.createDirectories(tempFilePath.getParent());
+
+            Files.copy(inputStream, tempFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+            DebugLogger.log("Temporal file created: " + tempFilePath);
+
+            return tempFilePath.toString();
         } catch (IOException e) {
             throw new RuntimeException("Failed to extract file from JAR: " + resourcePath, e);
         }

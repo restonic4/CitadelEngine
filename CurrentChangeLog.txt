@@ -1,0 +1,8 @@
+Multiple upgrades to the game engine:
+
+- Change log file created to help me keep track of all the things I changed.
+- FileManager.extractFileFromJar fixed, now it uses the original extension instead of .tmp. It also creates a temp folder to keep track of the files. It also keeps the original file name.
+- Now the build.gradle reads gradle.properties to name the .exe file and main class.
+- Now textures extracts the images to the temp directory.
+- DebugLogger now supports Objects.
+- Now the ModelLoader extracts assets that could be used in aiImportFile -> extractPossibleNeededAssets(String modelPath)

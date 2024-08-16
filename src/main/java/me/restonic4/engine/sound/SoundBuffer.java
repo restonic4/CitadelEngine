@@ -43,6 +43,10 @@ public class SoundBuffer {
 
             String resourcePath = FileManager.toResources(filePath);
 
+            if (FileManager.isFileInJar(resourcePath)) {
+                resourcePath = FileManager.extractFileFromJar(resourcePath);
+            }
+
             long decoder = stb_vorbis_open_filename(resourcePath, error, null);
             if (decoder == NULL) {
                 throw new RuntimeException("Failed to open Ogg Vorbis file. Error: " + error.get(0) + ", Path: " + resourcePath);

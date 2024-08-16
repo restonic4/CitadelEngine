@@ -135,6 +135,22 @@ public class ModelLoader {
         return result;
     }
 
+    public static void extractPossibleNeededAssets(String modelPath) {
+        String[] relatedExtensions = {".mtl", ".md5anim", ".png", ".jpg", ".tga", ".dds"};
+
+        String baseFileName = modelPath.substring(0, modelPath.lastIndexOf('.'));
+
+        DebugLogger.logExtra("Extracting extra resources from " + modelPath);
+
+        for (String extension : relatedExtensions) {
+            String relatedResourcePath = baseFileName + extension;
+
+            if (FileManager.isFileInJar(relatedResourcePath)) {
+                FileManager.extractFileFromJar(relatedResourcePath);
+            }
+        }
+    }
+
     public static Model loadModel(String modelId, String modelPath, TextureCache textureCache, MaterialCache materialCache, boolean animation) {
         return loadModel(modelId, modelPath, textureCache, materialCache, aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices |
                 aiProcess_Triangulate | aiProcess_FixInfacingNormals | aiProcess_CalcTangentSpace | aiProcess_LimitBoneWeights |
@@ -145,9 +161,8 @@ public class ModelLoader {
         String modelResourcePath = FileManager.toResources(modelPath);
         String modelResourceDir = Paths.get(modelResourcePath).getParent().toString();
 
-        DebugLogger.log(modelResourcePath);
-
         if (FileManager.isFileInJar(modelResourcePath)) {
+            extractPossibleNeededAssets(modelResourcePath);
             modelResourcePath = FileManager.extractFileFromJar(modelResourcePath);
         }
 
@@ -183,6 +198,7 @@ public class ModelLoader {
 
         List<Model.Animation> animations = new ArrayList<>();
         int numAnimations = aiScene.mNumAnimations();
+
         if (numAnimations > 0) {
             Node rootNode = buildNodesTree(aiScene.mRootNode(), null);
             Matrix4f globalInverseTransformation = toMatrix(aiScene.mRootNode().mTransformation()).invert();

@@ -2,6 +2,9 @@ package me.restonic4.engine;
 
 import me.restonic4.engine.graph.Render;
 import me.restonic4.engine.scene.Scene;
+import me.restonic4.engine.util.debug.DebugLogger;
+
+import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class Engine {
 
@@ -90,4 +93,9 @@ public class Engine {
         running = false;
     }
 
+    public void close() {
+        DebugLogger.log("Closing the window");
+
+        glfwSetWindowShouldClose(window.getWindowHandle(), true);
+    }
 }

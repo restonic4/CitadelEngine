@@ -1,6 +1,7 @@
 package me.restonic4.engine.graph;
 
 import me.restonic4.engine.util.FileManager;
+import me.restonic4.engine.util.debug.DebugLogger;
 import org.lwjgl.system.MemoryStack;
 
 import javax.imageio.ImageIO;
@@ -32,8 +33,12 @@ public class Texture {
             IntBuffer h = stack.mallocInt(1);
             IntBuffer channels = stack.mallocInt(1);
 
-            //ByteBuffer buf = stbi_load(file.getPath(), w, h, channels, 4);
-            ByteBuffer buf = FileManager.getTexture(resourcePath, w, h, channels);
+
+            if (FileManager.isFileInJar(resourcePath)) {
+                resourcePath = FileManager.extractFileFromJar(resourcePath);
+            }
+
+            ByteBuffer buf = stbi_load(resourcePath, w, h, channels, 4);
 
             if (buf == null) {
                 throw new RuntimeException("Image file [" + resourcePath + "] not loaded: " + stbi_failure_reason());

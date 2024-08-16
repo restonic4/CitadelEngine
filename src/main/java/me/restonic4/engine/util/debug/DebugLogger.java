@@ -11,7 +11,7 @@ public abstract class DebugLogger {
         return DEBUG_MODE;
     }
 
-    public static void log(String message) {
+    public static void log(Object message) {
         if (isDebugMode()) {
             message = getDebugInfo() + message;
         }
@@ -19,7 +19,7 @@ public abstract class DebugLogger {
         System.out.println(message);
     }
 
-    public static void logExtra(String message) {
+    public static void logExtra(Object message) {
         if (isDebugMode()) {
             log(message);
         }

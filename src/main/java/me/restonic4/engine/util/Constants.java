@@ -2,6 +2,7 @@ package me.restonic4.engine.util;
 
 public class Constants {
     public static final String WINDOW_TITLE = "EpicAmazingCoolGameTestIGues";
+    public static final String APP_NAME = "YourGame";
 
     public static final int SHADOW_MAP_WIDTH = 4096;
     public static final int SHADOW_MAP_HEIGHT = SHADOW_MAP_WIDTH;

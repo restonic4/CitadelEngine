@@ -34,14 +34,15 @@ public class Main implements IEngineLogic {
     private float lightAngle;
     private float rotation;
 
+    private static Engine engine;
     private static SoundManager soundManager;
 
     public static void main(String[] args) {
         Main main = new Main();
         Window.WindowOptions opts = new Window.WindowOptions();
         opts.antiAliasing = true;
-        Engine gameEng = new Engine(Constants.WINDOW_TITLE, opts, main);
-        gameEng.start();
+        engine = new Engine(Constants.WINDOW_TITLE, opts, main);
+        engine.start();
     }
 
     @Override
@@ -133,6 +134,11 @@ public class Main implements IEngineLogic {
         if (inputConsumed) {
             return;
         }
+
+        if (window.isKeyPressedOnce(GLFW_KEY_ESCAPE)) {
+            engine.close();
+        }
+
         float move = diffTimeMillis * MOVEMENT_SPEED;
         Camera camera = scene.getCamera();
         if (window.isKeyPressed(GLFW_KEY_W)) {
