@@ -1,18 +1,8 @@
 package me.restonic4.engine.util.debug;
 
 public abstract class Logger {
-    private static boolean DEBUG_MODE = false;
-
-    public static void setDebugMode(boolean value) {
-        DEBUG_MODE = value;
-    }
-
-    public static boolean isDebugMode() {
-        return DEBUG_MODE;
-    }
-
     public static void log(Object message) {
-        if (isDebugMode()) {
+        if (DebugManager.isDebugMode()) {
             message = getDebugInfo() + message;
         }
 
@@ -20,7 +10,7 @@ public abstract class Logger {
     }
 
     public static void logExtra(Object message) {
-        if (isDebugMode()) {
+        if (DebugManager.isDebugMode()) {
             log(message);
         }
     }
