@@ -126,19 +126,23 @@ public class FileManager {
         }
     }
 
-    public static String createDirectory(String directory) {
+    public static String getMainDirectory() {
         String appDataDir = System.getenv("LOCALAPPDATA");
         if (appDataDir == null) {
             appDataDir = System.getenv("APPDATA");
         }
 
         if (appDataDir == null) {
-            throw new RuntimeException("appDataDir is null. Could not create the directory: " + directory);
+            throw new RuntimeException("appDataDir is null. Could not create the directory");
         }
 
         appDataDir = appDataDir + "/" + Constants.APP_NAME;
 
-        File appDir = new File(appDataDir);
+        return appDataDir;
+    }
+
+    public static String createDirectory(String directory) {
+        File appDir = new File(getMainDirectory());
 
         if (!appDir.exists()) {
             boolean created = appDir.mkdir();

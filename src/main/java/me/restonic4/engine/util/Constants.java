@@ -15,6 +15,11 @@ public class Constants {
 
     public static final String DEFAULT_TEXTURE = "models/default/default_texture.png";
 
+    public static final long LOG_INTERVAL_MS = 60000;
+    public static final String LOG_DIRECTORY = "logs";
+    public static final String LOG_FILE = "CurrentLog.txt";
+    public static final String LOG_DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss";
+
     public static final String[] CRASH_MESSAGES = {
             "The game crashed.",
             "RIP.",

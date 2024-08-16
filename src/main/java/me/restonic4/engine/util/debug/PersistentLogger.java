@@ -1,5 +1,6 @@
 package me.restonic4.engine.util.debug;
 
+import me.restonic4.engine.util.Constants;
 import me.restonic4.engine.util.FileManager;
 
 import java.io.BufferedWriter;
@@ -12,23 +13,18 @@ import java.util.Date;
 import java.util.List;
 
 public class PersistentLogger {
-    private static final long LOG_INTERVAL_MS = 60000;
-    private static final String LOG_DIRECTORY = "logs";
-    private static final String LOG_FILE = "CurrentLog.txt";
-    private static final String DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss";
-
     private final List<String> logBuffer = new ArrayList<>();
     private final File logFile;
     private boolean running = true;
 
     public PersistentLogger() {
         if (DebugManager.isDevEnvironment()) {
-            logFile = new File(LOG_FILE);
+            logFile = new File(Constants.LOG_FILE);
             return;
         }
 
-        File logDir = new File(FileManager.createDirectory(LOG_DIRECTORY));
-        logFile = new File(logDir, LOG_FILE);
+        File logDir = new File(FileManager.createDirectory(Constants.LOG_DIRECTORY));
+        logFile = new File(logDir, Constants.LOG_FILE);
 
         archiveOldLog();
         clearLogFile();
@@ -55,7 +51,7 @@ public class PersistentLogger {
     private void logWriter() {
         while (running) {
             try {
-                Thread.sleep(LOG_INTERVAL_MS);
+                Thread.sleep(Constants.LOG_INTERVAL_MS);
                 writeLogsToFile();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -65,7 +61,7 @@ public class PersistentLogger {
 
     private void archiveOldLog() {
         if (logFile.exists()) {
-            String timestamp = new SimpleDateFormat(DATE_FORMAT).format(new Date(logFile.lastModified()));
+            String timestamp = new SimpleDateFormat(Constants.LOG_DATE_FORMAT).format(new Date(logFile.lastModified()));
             File archivedFile = new File(logFile.getParent(), "Log_" + timestamp + ".txt");
             boolean renamed = logFile.renameTo(archivedFile);
             if (!renamed) {
