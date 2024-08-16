@@ -14,4 +14,14 @@ public class Constants {
     public static final String VALID_PATH_CHARS = VALID_NAMESPACE_CHARS + "/";
 
     public static final String DEFAULT_TEXTURE = "models/default/default_texture.png";
+
+    public static final String[] CRASH_MESSAGES = {
+            "The game crashed.",
+            "RIP.",
+            "This game is so broken...",
+            "Crashed... cool i guess?",
+            "Pls, don't kill the devs...",
+            "This crash message is random.",
+            "This crash message is random. And you probably do not care at all."
+    };
 }

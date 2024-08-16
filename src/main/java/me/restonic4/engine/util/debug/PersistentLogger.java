@@ -37,6 +37,14 @@ public class PersistentLogger {
         logWriterThread.setDaemon(true); // Closes the thread when the app dies
         logWriterThread.start();
 
+        Runtime.getRuntime().addShutdownHook(new Thread(this::onShutdown));
+
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            logCrashInfo(t, e);
+            DebugManager.displayCrashDialog(e);
+            onShutdown();
+        });
+
         writeLogsToFile();
     }
 
@@ -84,6 +92,34 @@ public class PersistentLogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void logCrashInfo(Thread t, Throwable e) {
+        StringBuilder crashInfo = new StringBuilder();
+        crashInfo.append("Uncaught exception in thread '").append(t.getName()).append("': ")
+                .append(e.toString()).append("\n");
+
+        for (StackTraceElement element : e.getStackTrace()) {
+            crashInfo.append("\tat ").append(element.toString()).append("\n");
+        }
+
+        Throwable cause = e.getCause();
+        while (cause != null) {
+            crashInfo.append("Caused by: ").append(cause.toString()).append("\n");
+            for (StackTraceElement element : cause.getStackTrace()) {
+                crashInfo.append("\tat ").append(element.toString()).append("\n");
+            }
+            cause = cause.getCause();
+        }
+
+        log(crashInfo.toString());
+
+        writeLogsToFile();
+    }
+
+    private void onShutdown() {
+        writeLogsToFile();
+        stop();
     }
 
     public void stop() {

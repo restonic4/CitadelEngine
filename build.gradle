@@ -86,7 +86,6 @@ tasks.register('packageApp', Exec) {
             '--win-shortcut',
             '--win-menu',
             '--app-version', appVersion,
-            '--win-console',
             '--dest', outputDir
 }
 
