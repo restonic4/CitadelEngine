@@ -1,14 +1,8 @@
 package me.restonic4.engine.graph;
 
 import me.restonic4.engine.util.FileManager;
-import me.restonic4.engine.util.debug.DebugLogger;
 import org.lwjgl.system.MemoryStack;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.*;
 
 import static org.lwjgl.opengl.GL30.*;

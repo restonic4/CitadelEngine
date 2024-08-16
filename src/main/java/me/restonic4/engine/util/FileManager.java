@@ -1,21 +1,15 @@
 package me.restonic4.engine.util;
 
-import me.restonic4.engine.util.debug.DebugLogger;
+import me.restonic4.engine.util.debug.Logger;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-
-import static org.lwjgl.stb.STBImage.*;
 
 public class FileManager {
     public static final String RESOURCES_PATH = "resources/";
@@ -124,7 +118,7 @@ public class FileManager {
 
             Files.copy(inputStream, tempFilePath, StandardCopyOption.REPLACE_EXISTING);
 
-            DebugLogger.log("Temporal file created: " + tempFilePath);
+            Logger.log("Temporal file created: " + tempFilePath);
 
             return tempFilePath.toString();
         } catch (IOException e) {

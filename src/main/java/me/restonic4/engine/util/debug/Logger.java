@@ -1,6 +1,6 @@
 package me.restonic4.engine.util.debug;
 
-public abstract class DebugLogger {
+public abstract class Logger {
     private static boolean DEBUG_MODE = false;
 
     public static void setDebugMode(boolean value) {

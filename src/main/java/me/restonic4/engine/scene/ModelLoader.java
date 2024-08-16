@@ -4,17 +4,13 @@ import me.restonic4.engine.exceptions.ModelException;
 import me.restonic4.engine.util.FileManager;
 import me.restonic4.engine.util.Utils;
 import me.restonic4.engine.graph.*;
-import me.restonic4.engine.util.debug.DebugLogger;
-import me.restonic4.game.Main;
+import me.restonic4.engine.util.debug.Logger;
 import org.joml.*;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.lang.Math;
 import java.nio.IntBuffer;
 import java.nio.file.Paths;
@@ -140,7 +136,7 @@ public class ModelLoader {
 
         String baseFileName = modelPath.substring(0, modelPath.lastIndexOf('.'));
 
-        DebugLogger.logExtra("Extracting extra resources from " + modelPath);
+        Logger.logExtra("Extracting extra resources from " + modelPath);
 
         for (String extension : relatedExtensions) {
             String relatedResourcePath = baseFileName + extension;

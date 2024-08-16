@@ -2,7 +2,7 @@ package me.restonic4.engine;
 
 import me.restonic4.engine.graph.Render;
 import me.restonic4.engine.scene.Scene;
-import me.restonic4.engine.util.debug.DebugLogger;
+import me.restonic4.engine.util.debug.Logger;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
@@ -94,7 +94,7 @@ public class Engine {
     }
 
     public void close() {
-        DebugLogger.log("Closing the window");
+        Logger.log("Closing the window");
 
         glfwSetWindowShouldClose(window.getWindowHandle(), true);
     }
