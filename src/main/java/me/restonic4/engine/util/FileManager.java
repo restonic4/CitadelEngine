@@ -26,7 +26,7 @@ public class FileManager {
     }
 
     public static boolean isFileInJar(String filePath) {
-        InputStream is = Utils.class.getResourceAsStream("/" + filePath);
+        InputStream is = FileManager.class.getResourceAsStream("/" + filePath);
 
         if (is != null) {
             try (InputStream inputStream = is) {
@@ -67,7 +67,7 @@ public class FileManager {
     }
 
     public static String readFileFromJar(String filePath) {
-        InputStream is = Utils.class.getResourceAsStream("/" + filePath);
+        InputStream is = FileManager.class.getResourceAsStream("/" + filePath);
 
         if (is != null) {
             try (InputStream inputStream = is) {

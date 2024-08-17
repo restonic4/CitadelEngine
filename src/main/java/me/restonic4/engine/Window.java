@@ -1,168 +1,95 @@
 package me.restonic4.engine;
 
-import org.lwjgl.glfw.*;
+import me.restonic4.engine.util.Constants;
+import me.restonic4.engine.util.debug.Logger;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryUtil;
-
-import java.util.Set;
-import java.util.HashSet;
-import java.util.concurrent.Callable;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
+    private static Window instance = null;
 
-    private final long windowHandle;
-    private int height;
-    private MouseInput mouseInput;
-    private Callable<Void> resizeFunc;
-    private int width;
+    private int width, height;
+    private String title;
+    private long glfwWindowAddress; // This is the created window, but it saves as a long because is not an object, it's a Memory address, where C saves it.
 
-    private final Set<Integer> keysPressedOnce;
+    public Window() {
+        this.width = 500;
+        this.height = 500;
+        this.title = Constants.WINDOW_TITLE;
+    }
 
-    public Window(String title, WindowOptions opts, Callable<Void> resizeFunc) {
-        this.resizeFunc = resizeFunc;
-        this.keysPressedOnce = new HashSet<>();
+    public static Window getInstance() {
+        if (Window.instance == null) {
+            Window.instance = new Window();
+        }
+        return Window.instance;
+    }
 
+    public void run() {
+        init();
+        loop();
+        cleanup();
+    }
+
+    public void init() {
+        Logger.log("Creating the GLFW window");
+
+        // This redirects errors to sout.err
+        GLFWErrorCallback.createPrint(System.err).set();
+
+        // Initialize GLFW
         if (!glfwInit()) {
-            throw new IllegalStateException("Unable to initialize GLFW");
+            throw new IllegalStateException("Unable to initialize GLFW.");
         }
 
-        glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+        // Configure GLFW
+        glfwDefaultWindowHints(); // Gets the default GLFW settings (fullscreen, resizeable, ect)
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // Invisible window at the start, is not created yet
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
-        if (opts.antiAliasing) {
-            glfwWindowHint(GLFW_SAMPLES, 4);
-        }
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-        if (opts.compatibleProfile) {
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-        } else {
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        // Create the window                   width        height       tile         monitor      share(idk what is this)
+        glfwWindowAddress = glfwCreateWindow(this.width, this.height, this.title, MemoryUtil.NULL, MemoryUtil.NULL);
+        if (glfwWindowAddress == MemoryUtil.NULL) {
+            throw new IllegalStateException("Failed to create the GLFW window.");
         }
 
-        if (opts.width > 0 && opts.height > 0) {
-            this.width = opts.width;
-            this.height = opts.height;
-        } else {
-            glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
-            GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            width = vidMode.width();
-            height = vidMode.height();
-        }
+        // Make the OpenGL context current
+        glfwMakeContextCurrent(glfwWindowAddress);
+        // Enable v-sync
+        glfwSwapInterval(1);
 
-        windowHandle = glfwCreateWindow(width, height, title, NULL, NULL);
-        if (windowHandle == NULL) {
-            throw new RuntimeException("Failed to create the GLFW window");
-        }
+        // Make the window visible
+        glfwShowWindow(glfwWindowAddress);
 
-        glfwSetFramebufferSizeCallback(windowHandle, (window, w, h) -> resized(w, h));
-
-        glfwSetErrorCallback((int errorCode, long msgPtr) ->
-                System.err.println("Error code [" + errorCode + "], msg [" + MemoryUtil.memUTF8(msgPtr) + "]")
-        );
-
-        glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
-            keyCallBack(key, action);
-        });
-
-        glfwMakeContextCurrent(windowHandle);
-
-        if (opts.fps > 0) {
-            glfwSwapInterval(0);
-        } else {
-            glfwSwapInterval(1);
-        }
-
-        glfwShowWindow(windowHandle);
-
-        int[] arrWidth = new int[1];
-        int[] arrHeight = new int[1];
-        glfwGetFramebufferSize(windowHandle, arrWidth, arrHeight);
-        width = arrWidth[0];
-        height = arrHeight[0];
-
-        mouseInput = new MouseInput(windowHandle);
+        //OpenGL initialization
+        GL.createCapabilities();
     }
 
-    public void cleanup() {
-        glfwFreeCallbacks(windowHandle);
-        glfwDestroyWindow(windowHandle);
+    public void loop() {
+        while (!glfwWindowShouldClose(glfwWindowAddress)) {
+            // Listen for input events
+            glfwPollEvents();
+
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            glfwSwapBuffers(glfwWindowAddress);
+        }
+    }
+
+    private void cleanup() {
+        // Free the memory
+        glfwFreeCallbacks(glfwWindowAddress);
+        glfwDestroyWindow(glfwWindowAddress);
+
+        // Terminate GLFW and the free the error callback
         glfwTerminate();
-        GLFWErrorCallback callback = glfwSetErrorCallback(null);
-        if (callback != null) {
-            callback.free();
-        }
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public MouseInput getMouseInput() {
-        return mouseInput;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public long getWindowHandle() {
-        return windowHandle;
-    }
-
-    public boolean isKeyPressed(int keyCode) {
-        return glfwGetKey(windowHandle, keyCode) == GLFW_PRESS;
-    }
-
-    public boolean isKeyPressedOnce(int keyCode) {
-        if (isKeyPressed(keyCode) && !keysPressedOnce.contains(keyCode)) {
-            keysPressedOnce.add(keyCode);
-            return true;
-        }
-
-        return false;
-    }
-
-    public void keyCallBack(int key, int action) {
-        if (action == GLFW_RELEASE) {
-            keysPressedOnce.remove(key);
-        }
-    }
-
-    public void pollEvents() {
-        glfwPollEvents();
-    }
-
-    protected void resized(int width, int height) {
-        this.width = width;
-        this.height = height;
-        try {
-            resizeFunc.call();
-        } catch (Exception excp) {
-            System.err.println("Error calling resize callback: " + excp.getMessage());
-        }
-    }
-
-    public void update() {
-        glfwSwapBuffers(windowHandle);
-    }
-
-    public boolean windowShouldClose() {
-        return glfwWindowShouldClose(windowHandle);
-    }
-
-    public static class WindowOptions {
-        public boolean antiAliasing;
-        public boolean compatibleProfile;
-        public int fps;
-        public int height;
-        public int ups = Engine.TARGET_UPS;
-        public int width;
+        glfwSetErrorCallback(null).free();
     }
 }

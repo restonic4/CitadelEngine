@@ -1,6 +1,5 @@
 package me.restonic4.engine.sound;
 
-import me.restonic4.engine.scene.Camera;
 import org.joml.*;
 import org.lwjgl.openal.*;
 
@@ -84,7 +83,7 @@ public class SoundManager {
         this.listener = listener;
     }
 
-    public void updateListenerPosition(Camera camera) {
+    /*public void updateListenerPosition(Camera camera) {
         Matrix4f viewMatrix = camera.getViewMatrix();
         listener.setPosition(camera.getPosition());
         Vector3f at = new Vector3f();
@@ -92,5 +91,5 @@ public class SoundManager {
         Vector3f up = new Vector3f();
         viewMatrix.positiveY(up);
         listener.setOrientation(at, up);
-    }
+    }*/
 }
