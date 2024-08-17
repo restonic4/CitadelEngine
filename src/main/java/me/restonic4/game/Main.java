@@ -1,9 +1,9 @@
 package me.restonic4.game;
 
-import me.restonic4.engine.Engine;
-import me.restonic4.engine.IEngineLogic;
-import me.restonic4.engine.MouseInput;
-import me.restonic4.engine.Window;
+import imgui.ImGui;
+import imgui.ImGuiIO;
+import imgui.flag.ImGuiCond;
+import me.restonic4.engine.*;
 import me.restonic4.engine.graph.Model;
 import me.restonic4.engine.graph.Render;
 import me.restonic4.engine.scene.*;
@@ -15,15 +15,18 @@ import me.restonic4.engine.sound.SoundManager;
 import me.restonic4.engine.sound.SoundSource;
 import me.restonic4.engine.util.Constants;
 import me.restonic4.engine.util.FileManager;
+import me.restonic4.engine.util.debug.DebugManager;
+import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.game.core.registries.RegistryManager;
 import me.restonic4.game.core.world.sounds.Sounds;
+import me.restonic4.game.core.world.terrain.TerrainGenerator;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class Main implements IEngineLogic {
+public class Main implements IEngineLogic, IGuiInstance {
 
     private static final float MOUSE_SENSITIVITY = 0.1f;
     private static final float MOVEMENT_SPEED = 0.005f;
@@ -35,15 +38,37 @@ public class Main implements IEngineLogic {
     private float lightAngle;
     private float rotation;
 
+    private static Main instance;
     private static Engine engine;
     private static SoundManager soundManager;
 
     public static void main(String[] args) {
-        Main main = new Main();
+        Main main = getInstance();
+
+        Logger.log("Starting the game");
+        DebugManager.setDebugMode(true);
+
         Window.WindowOptions opts = new Window.WindowOptions();
+
         opts.antiAliasing = true;
+
         engine = new Engine(Constants.WINDOW_TITLE, opts, main);
         engine.start();
+    }
+
+    public static synchronized Main getInstance() {
+        if (instance == null) {
+            instance = new Main();
+        }
+        return instance;
+    }
+
+    public static SoundManager getSoundManager() {
+        return soundManager;
+    }
+
+    public static Engine getEngine() {
+        return engine;
     }
 
     @Override
@@ -55,15 +80,14 @@ public class Main implements IEngineLogic {
 
     @Override
     public void init(Window window, Scene scene, Render render) {
-        RegistryManager.registerAll();
-
         soundManager = new SoundManager();
         soundManager.setAttenuationModel(AL11.AL_EXPONENT_DISTANCE);
         soundManager.setListener(new SoundListener(new Vector3f(0, 0, 0)));
 
+        RegistryManager.registerAll();
+
         String terrainModelId = "terrain";
-        Model terrainModel = ModelLoader.loadModel(terrainModelId, "models/terrain/terrain.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
+        Model terrainModel = ModelLoader.loadModel(terrainModelId, "models/terrain/terrain.obj", scene.getTextureCache(), scene.getMaterialCache(), false);
         scene.addModel(terrainModel);
         Entity terrainEntity = new Entity("terrainEntity", terrainModelId);
         terrainEntity.setScale(100.0f);
@@ -72,8 +96,7 @@ public class Main implements IEngineLogic {
         scene.addEntity(terrainEntity);
 
         String bobModelId = "bobModel";
-        Model bobModel = ModelLoader.loadModel(bobModelId, "models/bob/boblamp.md5mesh",
-                scene.getTextureCache(), scene.getMaterialCache(), true);
+        Model bobModel = ModelLoader.loadModel(bobModelId, "models/bob/boblamp.md5mesh", scene.getTextureCache(), scene.getMaterialCache(), true);
         scene.addModel(bobModel);
         Entity bobEntity = new Entity("bobEntity-1", bobModelId);
         bobEntity.setScale(0.05f);
@@ -90,8 +113,7 @@ public class Main implements IEngineLogic {
         bobEntity2.setAnimationData(animationData2);
         scene.addEntity(bobEntity2);
 
-        Model cubeModel = ModelLoader.loadModel("cube-model", "models/cube/cube.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
+        Model cubeModel = ModelLoader.loadModel("cube-model", "models/cube/cube.obj", scene.getTextureCache(), scene.getMaterialCache(), false);
         scene.addModel(cubeModel);
         cubeEntity1 = new Entity("cube-entity-1", cubeModel.getId());
         cubeEntity1.setPosition(0, 2, -1);
@@ -102,6 +124,26 @@ public class Main implements IEngineLogic {
         cubeEntity2.setPosition(-2, 2, -1);
         cubeEntity2.updateModelMatrix();
         scene.addEntity(cubeEntity2);
+
+        TerrainGenerator terrainGenerator = new TerrainGenerator(1, 10, 10, 40);
+        float[][] heightMap = terrainGenerator.generateHeightMap();
+
+        int width = heightMap.length;
+        int depth = heightMap[0].length;
+
+        for (int z = 0; z < depth; z++) {
+            for (int x = 0; x < width; x++) {
+                float height = heightMap[x][z];
+
+                String id = "terrain-" + x + "-" + z;
+                Logger.log(id);
+                Entity cubeEntity = new Entity(id, cubeModel.getId());
+                cubeEntity.setPosition(x, height, z);
+                cubeEntity.updateModelMatrix();
+
+                scene.addEntity(cubeEntity);
+            }
+        }
 
         render.setupData(scene);
 
@@ -128,6 +170,8 @@ public class Main implements IEngineLogic {
         camera.addRotation((float) Math.toRadians(15.0f), (float) Math.toRadians(390.f));
 
         lightAngle = 45.001f;
+
+        scene.setGuiInstance(this);
     }
 
     @Override
@@ -207,7 +251,24 @@ public class Main implements IEngineLogic {
         soundManager.updateListenerPosition(scene.getCamera());
     }
 
-    public static SoundManager getSoundManager() {
-        return soundManager;
+    @Override
+    public void drawGui() {
+        ImGui.newFrame();
+        ImGui.setNextWindowPos(0, 0, ImGuiCond.Always);
+        //ImGui.showDemoWindow();
+        ImGui.endFrame();
+        ImGui.render();
+    }
+
+    @Override
+    public boolean handleGuiInput(Scene scene, Window window) {
+        ImGuiIO imGuiIO = ImGui.getIO();
+        MouseInput mouseInput = window.getMouseInput();
+        Vector2f mousePos = mouseInput.getCurrentPos();
+        imGuiIO.setMousePos(mousePos.x, mousePos.y);
+        imGuiIO.setMouseDown(0, mouseInput.isLeftButtonPressed());
+        imGuiIO.setMouseDown(1, mouseInput.isRightButtonPressed());
+
+        return imGuiIO.getWantCaptureMouse() || imGuiIO.getWantCaptureKeyboard();
     }
 }

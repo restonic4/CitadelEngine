@@ -17,7 +17,7 @@ public class ShadowBuffer {
         // Create the depth map textures
         depthMap = new ArrTexture(CascadeShadow.SHADOW_MAP_CASCADE_COUNT, Constants.SHADOW_MAP_WIDTH, Constants.SHADOW_MAP_HEIGHT, GL_DEPTH_COMPONENT);
 
-        // Attach the the depth map texture to the FBO
+        // Attach the depth map texture to the FBO
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap.getIds()[0], 0);
 

@@ -18,6 +18,7 @@ public class Registry {
         }
 
         object.setAssetLocation(assetLocation);
+        object.onPopulate();
 
         registry.put(assetLocation, object);
 

@@ -3,6 +3,7 @@ package me.restonic4.game.core.world.sounds;
 import me.restonic4.engine.sound.SoundBuffer;
 import me.restonic4.engine.sound.SoundManager;
 import me.restonic4.engine.sound.SoundSource;
+import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.game.Main;
 import me.restonic4.game.core.registries.RegistryItem;
 import me.restonic4.game.core.registries.RegistryManager;
@@ -44,5 +45,14 @@ public class Sound extends RegistryItem {
         soundManager.addSoundSource(getAssetLocation().toString(), soundSource);
 
         return soundSource;
+    }
+
+    @Override
+    public void onPopulate() {
+        super.onPopulate();
+
+        Logger.logExtra("Preloading the asset: " + getAssetLocation());
+
+        getBuffer();
     }
 }

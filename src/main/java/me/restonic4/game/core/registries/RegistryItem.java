@@ -17,4 +17,9 @@ public abstract class RegistryItem {
     public void setAssetLocation(AssetLocation assetLocation) {
         this.assetLocation = assetLocation;
     }
+
+    //Gets called when the game registers the item
+    public void onPopulate() {
+        return;
+    }
 }
