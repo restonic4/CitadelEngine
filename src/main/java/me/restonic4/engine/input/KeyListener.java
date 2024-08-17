@@ -27,9 +27,9 @@ public class KeyListener {
         return getInstance().keyPressed[keyCode];
     }
 
-    public boolean isKeyPressedOnce(int keyCode) {
-        if (isKeyPressed(keyCode) && !keyPressedOnce[keyCode]) {
-            keyPressedOnce[keyCode] = true;
+    public static boolean isKeyPressedOnce(int keyCode) {
+        if (isKeyPressed(keyCode) && !getInstance().keyPressedOnce[keyCode]) {
+            getInstance().keyPressedOnce[keyCode] = true;
             return true;
         }
 
