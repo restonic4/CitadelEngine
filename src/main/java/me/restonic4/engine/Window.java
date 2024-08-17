@@ -1,7 +1,11 @@
 package me.restonic4.engine;
 
+import me.restonic4.engine.input.KeyListener;
+import me.restonic4.engine.input.MouseListener;
 import me.restonic4.engine.util.Constants;
+import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.game.core.scenes.WorldScene;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryUtil;
@@ -16,6 +20,9 @@ public class Window {
     private int width, height;
     private String title;
     private long glfwWindowAddress; // This is the created window, but it saves as a long because is not an object, it's a Memory address, where C saves it.
+
+    // TODO: Change this, a way to set, get and update the scene
+    private Scene currentScene = new WorldScene();
 
     public Window() {
         this.width = 500;
@@ -51,13 +58,21 @@ public class Window {
         glfwDefaultWindowHints(); // Gets the default GLFW settings (fullscreen, resizeable, ect)
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // Invisible window at the start, is not created yet
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 
         // Create the window                   width        height       tile         monitor      share(idk what is this)
         glfwWindowAddress = glfwCreateWindow(this.width, this.height, this.title, MemoryUtil.NULL, MemoryUtil.NULL);
         if (glfwWindowAddress == MemoryUtil.NULL) {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
+
+        // Listen to mouse input
+        glfwSetCursorPosCallback(glfwWindowAddress, MouseListener::mousePosCallback);
+        glfwSetMouseButtonCallback(glfwWindowAddress, MouseListener::mouseButtonCallback);
+        glfwSetScrollCallback(glfwWindowAddress, MouseListener::mouseScrollCallback);
+
+        // Listen to keyboard input
+        glfwSetKeyCallback(glfwWindowAddress, KeyListener::keyCallback);
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(glfwWindowAddress);
@@ -67,8 +82,11 @@ public class Window {
         // Make the window visible
         glfwShowWindow(glfwWindowAddress);
 
-        //OpenGL initialization
+        // OpenGL initialization
         GL.createCapabilities();
+
+        // TODO: Make this better, like a scene manager
+        currentScene.init();
     }
 
     public void loop() {
@@ -79,7 +97,13 @@ public class Window {
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            currentScene.update();
+
             glfwSwapBuffers(glfwWindowAddress);
+
+            glfwSetWindowTitle(glfwWindowAddress, "FPS: " + Time.getFPS());
+
+            Time.onFrameEnded();
         }
     }
 

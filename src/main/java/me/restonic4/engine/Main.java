@@ -8,6 +8,8 @@ public class Main {
     public static void main(String[] args) {
         DebugManager.setDebugMode(true);
 
+        Logger.log("Starting the game");
+
         Game game = Game.getInstance();
     }
 }
