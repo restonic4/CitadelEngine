@@ -2,7 +2,7 @@ package me.restonic4.engine;
 
 import me.restonic4.engine.input.KeyListener;
 import me.restonic4.engine.input.MouseListener;
-import me.restonic4.engine.util.Constants;
+import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.game.core.scenes.WorldScene;
@@ -27,7 +27,7 @@ public class Window {
     public Window() {
         this.width = 500;
         this.height = 500;
-        this.title = Constants.WINDOW_TITLE;
+        this.title = SharedConstants.WINDOW_TITLE;
     }
 
     public static Window getInstance() {

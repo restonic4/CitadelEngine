@@ -1,6 +1,6 @@
 package me.restonic4.game.core;
 
-import me.restonic4.engine.util.Constants;
+import me.restonic4.shared.SharedConstants;
 import me.restonic4.game.core.exceptions.AssetLocationException;
 import me.restonic4.game.core.registries.RegistryKey;
 
@@ -42,11 +42,11 @@ public class AssetLocation {
     }
 
     public static boolean isValidNamespace(String string) {
-        return isValidString(string, Constants.VALID_NAMESPACE_CHARS);
+        return isValidString(string, SharedConstants.VALID_NAMESPACE_CHARS);
     }
 
     public static boolean isValidNPath(String string) {
-        return isValidString(string, Constants.VALID_PATH_CHARS);
+        return isValidString(string, SharedConstants.VALID_PATH_CHARS);
     }
 
     private static boolean isValidString(String string, String validChars) {

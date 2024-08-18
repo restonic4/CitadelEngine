@@ -1,6 +1,6 @@
-package me.restonic4.engine.util;
+package me.restonic4.shared;
 
-public class Constants {
+public class SharedConstants {
     public static final String WINDOW_TITLE = "EpicAmazingCoolGameTestIGues";
     public static final String APP_NAME = "YourGame";
 

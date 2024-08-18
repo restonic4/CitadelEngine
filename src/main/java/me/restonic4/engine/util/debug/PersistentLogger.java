@@ -1,6 +1,6 @@
 package me.restonic4.engine.util.debug;
 
-import me.restonic4.engine.util.Constants;
+import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.util.FileManager;
 
 import java.io.BufferedWriter;
@@ -19,12 +19,12 @@ public class PersistentLogger {
 
     public PersistentLogger() {
         if (DebugManager.isDevEnvironment()) {
-            logFile = new File(Constants.LOG_FILE);
+            logFile = new File(SharedConstants.LOG_FILE);
             return;
         }
 
-        File logDir = new File(FileManager.createDirectory(Constants.LOG_DIRECTORY));
-        logFile = new File(logDir, Constants.LOG_FILE);
+        File logDir = new File(FileManager.createDirectory(SharedConstants.LOG_DIRECTORY));
+        logFile = new File(logDir, SharedConstants.LOG_FILE);
 
         archiveOldLog();
         clearLogFile();
@@ -51,7 +51,7 @@ public class PersistentLogger {
     private void logWriter() {
         while (running) {
             try {
-                Thread.sleep(Constants.LOG_INTERVAL_MS);
+                Thread.sleep(SharedConstants.LOG_INTERVAL_MS);
                 writeLogsToFile();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -61,7 +61,7 @@ public class PersistentLogger {
 
     private void archiveOldLog() {
         if (logFile.exists()) {
-            String timestamp = new SimpleDateFormat(Constants.LOG_DATE_FORMAT).format(new Date(logFile.lastModified()));
+            String timestamp = new SimpleDateFormat(SharedConstants.LOG_DATE_FORMAT).format(new Date(logFile.lastModified()));
             File archivedFile = new File(logFile.getParent(), "Log_" + timestamp + ".txt");
             boolean renamed = logFile.renameTo(archivedFile);
             if (!renamed) {

@@ -1,6 +1,7 @@
 package me.restonic4.engine.util;
 
 import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.shared.SharedConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -108,7 +109,7 @@ public class FileManager {
             Path relativePath = Paths.get(resourcePath);
             String fileName = relativePath.getFileName().toString();
 
-            Path tempDir = Paths.get(System.getProperty("java.io.tmpdir"), Constants.APP_NAME);
+            Path tempDir = Paths.get(System.getProperty("java.io.tmpdir"), SharedConstants.APP_NAME);
             if (!Files.exists(tempDir)) {
                 Files.createDirectory(tempDir);
             }
@@ -136,7 +137,7 @@ public class FileManager {
             throw new RuntimeException("appDataDir is null. Could not create the directory");
         }
 
-        appDataDir = appDataDir + "/" + Constants.APP_NAME;
+        appDataDir = appDataDir + "/" + SharedConstants.APP_NAME;
 
         return appDataDir;
     }
