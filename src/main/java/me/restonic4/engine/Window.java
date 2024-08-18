@@ -20,6 +20,7 @@ public class Window {
     private int width, height;
     private String title;
     private long glfwWindowAddress; // This is the created window, but it saves as a long because is not an object, it's a Memory address, where C saves it.
+    private float aspectRatio;
 
     // TODO: Change this, a way to set, get and update the scene
     private Scene currentScene = new WorldScene();
@@ -58,7 +59,7 @@ public class Window {
         glfwDefaultWindowHints(); // Gets the default GLFW settings (fullscreen, resizeable, ect)
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // Invisible window at the start, is not created yet
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-        glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
         // Create the window                   width        height       tile         monitor      share(idk what is this)
         glfwWindowAddress = glfwCreateWindow(this.width, this.height, this.title, MemoryUtil.NULL, MemoryUtil.NULL);
@@ -87,6 +88,7 @@ public class Window {
 
         // TODO: Make this better, like a scene manager
         currentScene.init();
+        currentScene.activate();
     }
 
     public void loop() {
@@ -97,11 +99,12 @@ public class Window {
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            updateAspectRatio();
             currentScene.update();
 
             glfwSwapBuffers(glfwWindowAddress);
 
-            glfwSetWindowTitle(glfwWindowAddress, "FPS: " + Time.getFPS());
+            //glfwSetWindowTitle(glfwWindowAddress, "FPS: " + Time.getFPS());
 
             Time.onFrameEnded();
         }
@@ -115,5 +118,17 @@ public class Window {
         // Terminate GLFW and the free the error callback
         glfwTerminate();
         glfwSetErrorCallback(null).free();
+    }
+
+    private void updateAspectRatio() {
+        aspectRatio = (float) width / (float) height;
+    }
+
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
+
+    public long getGlfwWindowAddress() {
+        return glfwWindowAddress;
     }
 }

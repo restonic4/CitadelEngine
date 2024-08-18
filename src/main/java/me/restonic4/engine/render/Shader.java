@@ -3,8 +3,13 @@ package me.restonic4.engine.render;
 import me.restonic4.engine.platform.PlatformManager;
 import me.restonic4.engine.util.FileManager;
 import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.shared.SharedMathConstants;
+
+import org.joml.*;
+import org.lwjgl.BufferUtils;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
@@ -16,6 +21,7 @@ public class Shader {
     private int shaderProgramID;
     private String vertexSource;
     private String fragmentSource;
+    private boolean isUsed = false;
 
     public Shader(String filepath) {
         filepath = FileManager.toResources(filepath);
@@ -43,6 +49,17 @@ public class Shader {
         } catch(IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Error: Could not open file for shader: '" + filepath + "'");
+        }
+    }
+
+    // This sets the shader to the correct variable
+    private void setShaderInPattern(String pattern, String shader) throws IOException {
+        if (pattern.equals("vertex")) {
+            this.vertexSource = shader;
+        } else if (pattern.equals("fragment")) {
+            this.fragmentSource = shader;
+        } else {
+            throw new IOException("Unexpected token '" + pattern + "'");
         }
     }
 
@@ -104,22 +121,82 @@ public class Shader {
     }
 
     public void use() {
+        if (isUsed) {
+            return;
+        }
+
         // Bind shader program
         glUseProgram(this.shaderProgramID);
+
+        isUsed = true;
     }
 
     public void detach() {
         glUseProgram(0);
+        isUsed = false;
     }
 
-    // This sets the shader to the correct variable
-    private void setShaderInPattern(String pattern, String shader) throws IOException {
-        if (pattern.equals("vertex")) {
-            this.vertexSource = shader;
-        } else if (pattern.equals("fragment")) {
-            this.fragmentSource = shader;
-        } else {
-            throw new IOException("Unexpected token '" + pattern + "'");
-        }
+    public void uploadMat4f(String varName, Matrix4f mat4) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+
+        use(); // Use the shader in case is not being used
+
+        // Convert the matrix into a "simple float array"
+        FloatBuffer matBuffer = BufferUtils.createFloatBuffer(SharedMathConstants.MATRIX4F_CAPACITY);
+        mat4.get(matBuffer);
+
+        glUniformMatrix4fv(varLocation, false, matBuffer);
+    }
+
+    public void uploadMat3f(String varName, Matrix3f mat3) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+
+        use(); // Use the shader in case is not being used
+
+        // Convert the matrix into a "simple float array"
+        FloatBuffer matBuffer = BufferUtils.createFloatBuffer(SharedMathConstants.MATRIX3F_CAPACITY);
+        mat3.get(matBuffer);
+
+        glUniformMatrix3fv(varLocation, false, matBuffer);
+    }
+
+    public void uploadVec4f(String varName, Vector4f vec) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+
+        use(); // Use the shader in case is not being used
+
+        glUniform4f(varLocation, vec.x, vec.y, vec.z, vec.w);
+    }
+
+    public void uploadVec3f(String varName, Vector3f vec) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+
+        use(); // Use the shader in case is not being used
+
+        glUniform3f(varLocation, vec.x, vec.y, vec.z);
+    }
+
+    public void uploadVec2f(String varName, Vector2f vec) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+
+        use(); // Use the shader in case is not being used
+
+        glUniform2f(varLocation, vec.x, vec.y);
+    }
+
+    public void uploadFloat(String varName, float val) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+
+        use(); // Use the shader in case is not being used
+
+        glUniform1f(varLocation, val);
+    }
+
+    public void uploadInt(String varName, int val) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+
+        use(); // Use the shader in case is not being used
+
+        glUniform1i(varLocation, val);
     }
 }
