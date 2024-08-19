@@ -13,6 +13,7 @@ import me.restonic4.engine.render.PerspectiveCamera;
 import me.restonic4.engine.render.Shader;
 import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.engine.util.math.RandomUtil;
 import me.restonic4.shared.SharedMathConstants;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -22,6 +23,8 @@ import org.lwjgl.glfw.GLFW;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
 import static org.lwjgl.opengl.GL11.glDrawElements;
@@ -30,11 +33,19 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class WorldScene extends Scene {
+    List<GameObject> gameObjects = new ArrayList<>();
+
+    GameObject player;
+
     @Override
     public void init() {
         Logger.log("Starting the world scene");
 
-        camera = new PerspectiveCamera(new Vector3f(-250, 0, 20), new Vector3f(0, 0, 0));
+        camera = new OrthographicCamera(new Vector3f(-250, 0, 20), new Vector3f(0, 0, 0));
+
+        player = new GameObject("player", new Transform(new Vector3f(-250, 0, 0), new Vector3f(100,100,100)));
+        player.addComponent(new ModelRendererComponent(new Vector4f(1,1,1,1)));
+        this.addGameObject(player);
 
         int xOffset = 10;
         int yOffset = 10;
@@ -53,6 +64,8 @@ public class WorldScene extends Scene {
                 GameObject go = new GameObject("Obj" + x + "" + y, new Transform(new Vector3f(xPos, yPos, 0), new Vector3f(sizeX, sizeY, sizeX)));
                 go.addComponent(new ModelRendererComponent(new Vector4f(xPos / totalWidth, yPos / totalHeight, 1, 1)));
                 this.addGameObject(go);
+
+                gameObjects.add(go);
             }
         }
     }
@@ -63,18 +76,26 @@ public class WorldScene extends Scene {
             throw new RuntimeException("lol");
         }
 
+        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_U)) {
+            RandomUtil.getRandom(gameObjects).transform.setPosition(RandomUtil.random(-100, 100), RandomUtil.random(-100, 100), 0);
+        }
+
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
-            camera.position.x += 100 * Time.getDeltaTime();
+            //camera.position.x += 100 * Time.getDeltaTime();
+            player.transform.addPositionX((float) (-100 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_D)) {
-            camera.position.x -= 100 * Time.getDeltaTime();
+            //camera.position.x -= 100 * Time.getDeltaTime();
+            player.transform.addPositionX((float) (100 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_W)) {
-            camera.position.y -= 100 * Time.getDeltaTime();
+            //camera.position.y -= 100 * Time.getDeltaTime();
+            player.transform.addPositionY((float) (100 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_S)) {
-            camera.position.y += 100 * Time.getDeltaTime();
+            //camera.position.y += 100 * Time.getDeltaTime();
+            player.transform.addPositionY((float) (-100 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {
@@ -94,6 +115,7 @@ public class WorldScene extends Scene {
         glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
                 "FPS: " + Time.getFPS()
                 + ", DrawCalls: " + this.renderer.getDrawCalls()
+                + ", Dirty objects: " + this.renderer.getDirtyModified()
                 + ", AspectRatio: " + Window.getInstance().getAspectRatio()
                 + ", Pos: (" + camera.getPosition().x + ", " + camera.getPosition().y + ", " + camera.getPosition().z + ")"
                 + ", Rot: (" + camera.getRotation().x + ", " + camera.getRotation().y + ")"

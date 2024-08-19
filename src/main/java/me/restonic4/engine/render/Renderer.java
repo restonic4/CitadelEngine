@@ -11,7 +11,9 @@ public class Renderer {
     private final int MAX_BATCH_SIZE = 1000;
     private List<RenderBatch> batches;
 
+    // This is just a stat
     private int drawCallsConsumed = 0;
+    private int dirtyModifiedTotal = 0;
 
     public Renderer() {
         this.batches = new ArrayList<>();
@@ -43,16 +45,23 @@ public class Renderer {
     }
 
     public void render() {
+        // Stats
         drawCallsConsumed = 0;
+        dirtyModifiedTotal = 0;
 
         for (RenderBatch batch : this.batches) {
             batch.render();
 
             drawCallsConsumed++;
+            dirtyModifiedTotal += batch.getDirtyModified();
         }
     }
 
     public int getDrawCalls() {
         return this.drawCallsConsumed;
+    }
+
+    public int getDirtyModified() {
+        return dirtyModifiedTotal;
     }
 }

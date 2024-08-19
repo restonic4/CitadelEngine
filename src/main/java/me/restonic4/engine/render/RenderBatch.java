@@ -1,9 +1,12 @@
 package me.restonic4.engine.render;
 
 import me.restonic4.engine.Window;
+import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.components.ModelRendererComponent;
 import me.restonic4.engine.util.debug.Logger;
 import org.joml.Vector4f;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -32,6 +35,9 @@ public class RenderBatch {
     private int vaoID, vboID;
     private int maxBatchSize;
     private Shader shader;
+
+    // This is just a stat
+    private int dirtyModified = 0;
 
     public RenderBatch(int maxBatchSize) {
         shader = new Shader("shaders/default.glsl");
@@ -85,8 +91,30 @@ public class RenderBatch {
         }
     }
 
+    private FloatBuffer getVertexSubArray(int index) {
+        int start = index * 4 * VERTEX_SIZE;
+        return FloatBuffer.wrap(vertices, start, 4 * VERTEX_SIZE);
+    }
+
+    public void updateDirtyModels() {
+        for (int i = 0; i < numModels; i++) {
+            GameObject gameObject = models[i].gameObject;
+
+            if (gameObject.transform.isDirty()) {
+                loadVertexProperties(i);
+
+                gameObject.transform.setClean();
+
+                dirtyModified++; // Stat
+            }
+        }
+    }
+
     public void render() {
-        // For now, we will rebuffer all data every frame
+        dirtyModified = 0; // Stat
+
+        updateDirtyModels();
+
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
 
@@ -129,8 +157,8 @@ public class RenderBatch {
             }
 
             // Load position
-            vertices[offset] = modelRenderer.gameObject.transform.position.x + (xAdd * modelRenderer.gameObject.transform.scale.x);
-            vertices[offset + 1] = modelRenderer.gameObject.transform.position.y + (yAdd * modelRenderer.gameObject.transform.scale.y);
+            vertices[offset] = modelRenderer.gameObject.transform.getPosition().x + (xAdd * modelRenderer.gameObject.transform.getScale().x);
+            vertices[offset + 1] = modelRenderer.gameObject.transform.getPosition().y + (yAdd * modelRenderer.gameObject.transform.getScale().y);
 
             // Load color
             vertices[offset + 2] = color.x;
@@ -175,5 +203,9 @@ public class RenderBatch {
 
     public boolean hasRoom() {
         return this.hasRoom;
+    }
+
+    public int getDirtyModified() {
+        return dirtyModified;
     }
 }
