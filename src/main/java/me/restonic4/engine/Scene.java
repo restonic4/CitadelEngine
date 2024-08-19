@@ -2,12 +2,14 @@ package me.restonic4.engine;
 
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.render.Camera;
+import me.restonic4.engine.render.Renderer;
 import me.restonic4.engine.util.debug.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Scene {
+    protected Renderer renderer = new Renderer();
     protected Camera camera;
     protected List<GameObject> gameObjects = new ArrayList<>();
 
@@ -24,6 +26,7 @@ public abstract class Scene {
 
         for (GameObject gameObject : gameObjects) {
             gameObject.start();
+            this.renderer.add(gameObject);
         }
 
         isActivated = true;
@@ -37,6 +40,7 @@ public abstract class Scene {
         } else {
             gameObjects.add(gameObject);
             gameObject.start();
+            this.renderer.add(gameObject);
         }
     }
 

@@ -23,7 +23,7 @@ public class Window {
     private float aspectRatio;
 
     // TODO: Change this, a way to set, get and update the scene
-    private Scene currentScene = new WorldScene();
+    public Scene currentScene = new WorldScene();
 
     public Window() {
         this.width = 500;
@@ -67,6 +67,13 @@ public class Window {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
 
+        // Resize callback, gets the current width and height and updates it
+        glfwSetFramebufferSizeCallback(glfwWindowAddress, (window, newWidth, newHeight) -> {
+            this.width = newWidth;
+            this.height = newHeight;
+            updateAspectRatio();
+        });
+
         // Listen to mouse input
         glfwSetCursorPosCallback(glfwWindowAddress, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(glfwWindowAddress, MouseListener::mouseButtonCallback);
@@ -96,7 +103,7 @@ public class Window {
             // Listen for input events
             glfwPollEvents();
 
-            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             updateAspectRatio();
@@ -125,6 +132,7 @@ public class Window {
     }
 
     public float getAspectRatio() {
+        updateAspectRatio();
         return aspectRatio;
     }
 
