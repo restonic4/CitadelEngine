@@ -41,7 +41,7 @@ public class WorldScene extends Scene {
     public void init() {
         Logger.log("Starting the world scene");
 
-        camera = new OrthographicCamera(new Vector3f(-250, 0, 20), new Vector3f(0, 0, 0));
+        camera = new PerspectiveCamera(new Vector3f(-250, 0, 20), new Vector3f(0, 0, 0));
 
         player = new GameObject("player", new Transform(new Vector3f(-250, 0, 0), new Vector3f(100,100,100)));
         player.addComponent(new ModelRendererComponent(new Vector4f(1,1,1,1)));
@@ -82,7 +82,7 @@ public class WorldScene extends Scene {
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_R)) {
             //camera.position.x += 100 * Time.getDeltaTime();
-            player.transform.addRotationEuler((float) (100 * Time.getDeltaTime()), (float) (100 * Time.getDeltaTime()), (float) (100 * Time.getDeltaTime()));
+            player.transform.addRotationEuler((float) (10 * Time.getDeltaTime()), (float) (10 * Time.getDeltaTime()), (float) (10 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
@@ -104,17 +104,21 @@ public class WorldScene extends Scene {
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {
-            camera.addRotation((float) (100 * Time.getDeltaTime()), 0, 0);
+            //camera.addRotation((float) (100 * Time.getDeltaTime()), 0, 0);
+            player.transform.addRotationEuler((float) (10 * Time.getDeltaTime()), 0, 0);
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
-            camera.addRotation((float) (-100 * Time.getDeltaTime()), 0, 0);
+            //camera.addRotation((float) (-100 * Time.getDeltaTime()), 0, 0);
+            player.transform.addRotationEuler((float) (-10 * Time.getDeltaTime()), 0, 0);
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_RIGHT)) {
-            camera.addRotation(0, (float) (-100 * Time.getDeltaTime()), 0);
+            //camera.addRotation(0, (float) (-100 * Time.getDeltaTime()), 0);
+            player.transform.addRotationEuler(0, (float) (10 * Time.getDeltaTime()), 0);
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT)) {
-            camera.addRotation(0, (float) (100 * Time.getDeltaTime()), 0);
+            //camera.addRotation(0, (float) (100 * Time.getDeltaTime()), 0);
+            player.transform.addRotationEuler(0, (float) (-10 * Time.getDeltaTime()), 0);
         }
 
         glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),

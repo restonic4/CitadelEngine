@@ -4,6 +4,7 @@ import me.restonic4.engine.Window;
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.components.ModelRendererComponent;
 import me.restonic4.engine.util.debug.Logger;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.nio.FloatBuffer;
@@ -17,12 +18,12 @@ public class RenderBatch {
     // Pos                    Color
     // float, float, float    float, float, float, float
 
-    private final int POS_SIZE = 2;
+    private final int POS_SIZE = 3;
     private final int COLOR_SIZE = 4;
 
     private final int POS_OFFSET = 0;
     private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
-    private final int VERTEX_SIZE = 6;
+    private final int VERTEX_SIZE = 7;
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     private final int INDICES_PER_QUAD = 6;
@@ -134,32 +135,39 @@ public class RenderBatch {
     private void loadVertexProperties(int index) {
         ModelRendererComponent modelRenderer = this.models[index];
 
-        // Find offset within array (4 vertices per sprite)
         int offset = index * 4 * VERTEX_SIZE;
 
         Vector4f color = modelRenderer.getColor();
 
-        // Add vertices with the appropriate properties
-        float xAdd = 1.0f;
-        float yAdd = 1.0f;
-        for (int i=0; i < 4; i++) {
-            if (i == 1) {
-                yAdd = 0.0f;
-            } else if (i == 2) {
-                xAdd = 0.0f;
-            } else if (i == 3) {
-                yAdd = 1.0f;
-            }
+        Vector3f[] vertexPositions = {
+                new Vector3f(0.5f, 0.5f, 0.0f), // Top Right
+                new Vector3f(0.5f, -0.5f, 0.0f), // Bottom Right
+                new Vector3f(-0.5f, -0.5f, 0.0f), // Bottom Left
+                new Vector3f(-0.5f, 0.5f, 0.0f)  // Top Left
+        };
 
-            // Load position
-            vertices[offset] = modelRenderer.gameObject.transform.getPosition().x + (xAdd * modelRenderer.gameObject.transform.getScale().x);
-            vertices[offset + 1] = modelRenderer.gameObject.transform.getPosition().y + (yAdd * modelRenderer.gameObject.transform.getScale().y);
+        for (int i = 0; i < 4; i++) {
+            Vector3f currentPos = vertexPositions[i];
+
+            // Apply scale
+            currentPos.mul(modelRenderer.gameObject.transform.getScale());
+
+            // Apply rotation
+            currentPos.rotate(modelRenderer.gameObject.transform.getRotation());
+
+            // Apply position
+            currentPos.add(modelRenderer.gameObject.transform.getPosition());
+
+            // Load position into the vertices array
+            vertices[offset] = currentPos.x;
+            vertices[offset + 1] = currentPos.y;
+            vertices[offset + 2] = currentPos.z;
 
             // Load color
-            vertices[offset + 2] = color.x;
-            vertices[offset + 3] = color.y;
-            vertices[offset + 4] = color.z;
-            vertices[offset + 5] = color.w;
+            vertices[offset + 3] = color.x;
+            vertices[offset + 4] = color.y;
+            vertices[offset + 5] = color.z;
+            vertices[offset + 6] = color.w;
 
             offset += VERTEX_SIZE;
         }

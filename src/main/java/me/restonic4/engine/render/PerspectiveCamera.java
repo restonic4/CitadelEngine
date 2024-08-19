@@ -17,7 +17,8 @@ public class PerspectiveCamera extends Camera {
         this.projectionMatrix.identity();
 
         //projectionMatrix.perspective(fov, Window.getInstance().getAspectRatio(), nearPlane, farPlane);
-        projectionMatrix.setPerspective(fov, Window.getInstance().getAspectRatio(), nearPlane, farPlane);
+        //projectionMatrix.setPerspective(fov, Window.getInstance().getAspectRatio(), nearPlane, farPlane);
+        //projectionMatrix.ortho(0.0f, 32.0f * 40.0f, 0.0f, 32.0f * 21.0f, nearPlane, farPlane);
     }
 
     public Matrix4f getViewMatrix() {
