@@ -80,6 +80,11 @@ public class WorldScene extends Scene {
             RandomUtil.getRandom(gameObjects).transform.setPosition(RandomUtil.random(-100, 100), RandomUtil.random(-100, 100), 0);
         }
 
+        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_R)) {
+            //camera.position.x += 100 * Time.getDeltaTime();
+            player.transform.addRotationEuler((float) (100 * Time.getDeltaTime()), (float) (100 * Time.getDeltaTime()), (float) (100 * Time.getDeltaTime()));
+        }
+
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
             //camera.position.x += 100 * Time.getDeltaTime();
             player.transform.addPositionX((float) (-100 * Time.getDeltaTime()));

@@ -1,13 +1,19 @@
 package me.restonic4.engine.object;
 
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class Transform {
     private Vector3f position;
     private Vector3f scale;
+    private Quaternionf rotation;
 
     // Tells to the render system if it needs to update something
     private boolean dirty = true;
+
+    ///////////////////////////////////////////////
+    //               CONSTRUCTORS                //
+    ///////////////////////////////////////////////
 
     public Transform() {
         create(new Vector3f(), new Vector3f());
@@ -21,6 +27,10 @@ public class Transform {
         create(position, scale);
     }
 
+    ///////////////////////////////////////////////
+    //                  GETTERS                  //
+    ///////////////////////////////////////////////
+
     public Vector3f getPosition() {
         return this.position;
     }
@@ -28,6 +38,14 @@ public class Transform {
     public Vector3f getScale() {
         return this.scale;
     }
+
+    public Quaternionf getRotation() {
+        return rotation;
+    }
+
+    ///////////////////////////////////////////////
+    //             POSITION SETTERS              //
+    ///////////////////////////////////////////////
 
     public void setPosition(float x, float y, float z) {
         this.position.x = x;
@@ -81,6 +99,10 @@ public class Transform {
         setDirty();
     }
 
+    ///////////////////////////////////////////////
+    //               SCALE SETTERS               //
+    ///////////////////////////////////////////////
+
     public void setScale(float x, float y, float z) {
         this.scale.x = x;
         this.scale.y = y;
@@ -133,9 +155,47 @@ public class Transform {
         setDirty();
     }
 
+    ///////////////////////////////////////////////
+    //             ROTATION SETTERS              //
+    ///////////////////////////////////////////////
+
+    public void setRotation(float x, float y, float z, float angle) {
+        this.rotation.fromAxisAngleRad(x, y, z, angle);
+    }
+
+    public void setRotationEuler(float pitch, float yaw, float roll) {
+        this.rotation.rotationXYZ(pitch, yaw, roll);
+
+        setDirty();
+    }
+
+    public void addRotationEuler(float pitch, float yaw, float roll) {
+        Quaternionf additionalRotation = new Quaternionf().rotationXYZ(pitch, yaw, roll);
+        this.rotation.mul(additionalRotation);
+
+        setDirty();
+    }
+
+    public void setRotationQuaternion(Quaternionf quaternion) {
+        this.rotation.set(quaternion);
+
+        setDirty();
+    }
+
+    public void addRotationQuaternion(Quaternionf quaternion) {
+        this.rotation.mul(quaternion);
+
+        setDirty();
+    }
+
+    ///////////////////////////////////////////////
+    //                   OTHER                   //
+    ///////////////////////////////////////////////
+
     public void create(Vector3f position, Vector3f scale) {
         this.position = position;
         this.scale = scale;
+        this.rotation = new Quaternionf();
     }
 
     public boolean isDirty() {

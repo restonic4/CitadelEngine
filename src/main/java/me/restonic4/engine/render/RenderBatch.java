@@ -91,11 +91,6 @@ public class RenderBatch {
         }
     }
 
-    private FloatBuffer getVertexSubArray(int index) {
-        int start = index * 4 * VERTEX_SIZE;
-        return FloatBuffer.wrap(vertices, start, 4 * VERTEX_SIZE);
-    }
-
     public void updateDirtyModels() {
         for (int i = 0; i < numModels; i++) {
             GameObject gameObject = models[i].gameObject;
