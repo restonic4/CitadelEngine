@@ -1,20 +1,19 @@
 package me.restonic4.engine.render;
 
+import me.restonic4.engine.object.Transform;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public abstract class Camera {
     protected float nearPlane = 0.01f;
-    protected float farPlane = 1000.0f;
+    protected float farPlane = 100000.0f;
 
     protected Matrix4f projectionMatrix, viewMatrix;
-    public Vector3f position;
-    public Vector3f rotation;
+    public Transform transform;
 
-    public Camera(Vector3f position, Vector3f rotation) {
-        this.position = position;
-        this.rotation = rotation;
+    public Camera(Transform transform) {
+        this.transform = transform;
         this.projectionMatrix = new Matrix4f();
         this.viewMatrix = new Matrix4f();
         adjustProjection();
@@ -22,41 +21,23 @@ public abstract class Camera {
 
     public abstract void adjustProjection();
 
-    public abstract Matrix4f getViewMatrix();
+    public Matrix4f getViewMatrix() {
+        this.viewMatrix.identity();
+
+        Vector3f front = new Vector3f(0, 0, -1).rotate(transform.getRotation());
+        Vector3f up = new Vector3f(0, 1, 0).rotate(transform.getRotation());
+
+        Vector3f center = new Vector3f(transform.getPosition()).add(front);
+
+        this.viewMatrix.lookAt(transform.getPosition(), center, up);
+
+        return this.viewMatrix;
+    }
 
     public Matrix4f getProjectionMatrix() {
+        adjustProjection();
         return this.projectionMatrix;
     }
 
-    public void setPosition(Vector3f position) {
-        this.position.set(position);
-    }
 
-    public void setRotation(Vector3f rotation) {
-        this.rotation.set(rotation);
-    }
-
-    public void addRotation(float pitch, float yaw, float roll) {
-        this.rotation.add(pitch, yaw, roll);
-    }
-
-    public Vector3f getPosition() {
-        return position;
-    }
-
-    public Vector3f getRotation() {
-        return rotation;
-    }
-
-    public double getPitch() {
-        return rotation.x;
-    }
-
-    public double getYaw() {
-        return rotation.y;
-    }
-
-    public double getRoll() {
-        return rotation.z;
-    }
 }

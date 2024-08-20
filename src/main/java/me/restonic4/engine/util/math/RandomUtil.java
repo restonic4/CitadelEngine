@@ -6,6 +6,10 @@ import java.util.Random;
 public class RandomUtil {
     private static final Random RANDOM = new Random();
 
+    public static float randomTiny() {
+        return RANDOM.nextFloat();
+    }
+
     public static int random(int min, int max) {
         if (min > max) {
             throw new IllegalArgumentException("Minimum value cannot be greater than maximum value");

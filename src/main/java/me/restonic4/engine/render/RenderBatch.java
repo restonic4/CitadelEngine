@@ -76,6 +76,9 @@ public class RenderBatch {
 
         glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, COLOR_OFFSET);
         glEnableVertexAttribArray(1);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
     }
 
     public void addSprite(ModelRendererComponent modelRenderer) {
@@ -110,6 +113,9 @@ public class RenderBatch {
         dirtyModified = 0; // Stat
 
         updateDirtyModels();
+
+        // Clear the color and depth buffers
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);

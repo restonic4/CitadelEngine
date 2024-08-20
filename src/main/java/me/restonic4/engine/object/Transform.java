@@ -47,6 +47,12 @@ public class Transform {
     //             POSITION SETTERS              //
     ///////////////////////////////////////////////
 
+    public void setPosition(Vector3f vector3f) {
+        this.position = vector3f;
+
+        setDirty();
+    }
+
     public void setPosition(float x, float y, float z) {
         this.position.x = x;
         this.position.y = y;
@@ -100,6 +106,31 @@ public class Transform {
     }
 
     ///////////////////////////////////////////////
+    //          LOCAL POSITION SETTERS           //
+    ///////////////////////////////////////////////
+
+    public void addLocalPosition(float x, float y, float z) {
+        Vector3f localMovement = new Vector3f(x, y, z);
+        Vector3f globalMovement = localMovement.rotate(rotation);
+
+        this.position.add(globalMovement);
+
+        setDirty();
+    }
+
+    public void addLocalPositionX(float x) {
+        addLocalPosition(x, 0, 0);
+    }
+
+    public void addLocalPositionY(float y) {
+        addLocalPosition(0, y, 0);
+    }
+
+    public void addLocalPositionZ(float z) {
+        addLocalPosition(0, 0, z);
+    }
+
+    ///////////////////////////////////////////////
     //               SCALE SETTERS               //
     ///////////////////////////////////////////////
 
@@ -107,6 +138,12 @@ public class Transform {
         this.scale.x = x;
         this.scale.y = y;
         this.scale.z = z;
+
+        setDirty();
+    }
+
+    public void setScale(Vector3f vector3f) {
+        this.scale = vector3f;
 
         setDirty();
     }
@@ -176,7 +213,7 @@ public class Transform {
         setDirty();
     }
 
-    public void setRotationQuaternion(Quaternionf quaternion) {
+    public void setRotation(Quaternionf quaternion) {
         this.rotation.set(quaternion);
 
         setDirty();

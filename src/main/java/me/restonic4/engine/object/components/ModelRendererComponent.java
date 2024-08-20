@@ -22,4 +22,8 @@ public class ModelRendererComponent extends Component {
     public Vector4f getColor() {
         return this.color;
     }
+
+    public void setColor(Vector4f vector4f) {
+        this.color = vector4f;
+    }
 }

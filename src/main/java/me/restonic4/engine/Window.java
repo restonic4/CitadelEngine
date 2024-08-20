@@ -26,8 +26,8 @@ public class Window {
     public Scene currentScene = new WorldScene();
 
     public Window() {
-        this.width = 500;
-        this.height = 500;
+        this.width = 1000;
+        this.height = 1000;
         this.title = SharedConstants.WINDOW_TITLE;
     }
 
@@ -73,6 +73,13 @@ public class Window {
             this.height = newHeight;
             updateAspectRatio();
         });
+
+        glfwSetWindowSizeCallback(glfwWindowAddress, (window, newWidth, newHeight) -> {
+            this.width = newWidth;
+            this.height = newHeight;
+            updateAspectRatio();
+        });
+
 
         // Listen to mouse input
         glfwSetCursorPosCallback(glfwWindowAddress, MouseListener::mousePosCallback);
@@ -128,12 +135,20 @@ public class Window {
     }
 
     private void updateAspectRatio() {
-        aspectRatio = (float) width / (float) height;
+        this.aspectRatio = (float) this.width / (float) this.height;
     }
 
     public float getAspectRatio() {
         updateAspectRatio();
-        return aspectRatio;
+        return this.aspectRatio;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 
     public long getGlfwWindowAddress() {

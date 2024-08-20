@@ -15,6 +15,7 @@ import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.engine.util.math.RandomUtil;
 import me.restonic4.shared.SharedMathConstants;
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -35,40 +36,97 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public class WorldScene extends Scene {
     List<GameObject> gameObjects = new ArrayList<>();
 
-    GameObject player;
-
     @Override
     public void init() {
         Logger.log("Starting the world scene");
 
-        camera = new PerspectiveCamera(new Vector3f(-250, 0, 20), new Vector3f(0, 0, 0));
+        Transform camTransform = new Transform();
+        camTransform.setPosition(0, 0, 100);
+        camTransform.setScale(1, 1, 1);
+        camera = new PerspectiveCamera(camTransform);
 
-        player = new GameObject("player", new Transform(new Vector3f(-250, 0, 0), new Vector3f(100,100,100)));
-        player.addComponent(new ModelRendererComponent(new Vector4f(1,1,1,1)));
-        this.addGameObject(player);
+        genWall();
 
-        int xOffset = 10;
-        int yOffset = 10;
+        GameObject gameObjectA = new GameObject("a", new Transform(new Vector3f(0, 0, -30), new Vector3f(10,10,1)));
+        gameObjectA.addComponent(new ModelRendererComponent(new Vector4f(1,0,0,1)));
+        this.addGameObject(gameObjectA);
 
-        float totalWidth = (float)(600 - xOffset * 2);
-        float totalHeight = (float)(300 - yOffset * 2);
-        float sizeX = totalWidth / 100.0f;
-        float sizeY = totalHeight / 100.0f;
-        float padding = 3;
+        GameObject gameObjectB = new GameObject("b", new Transform(new Vector3f(0, 0, -40), new Vector3f(10,10,1)));
+        gameObjectB.addComponent(new ModelRendererComponent(new Vector4f(0,1,0,1)));
+        this.addGameObject(gameObjectB);
 
-        for (int x=0; x < 100; x++) {
-            for (int y=0; y < 100; y++) {
-                float xPos = xOffset + (x * sizeX) + (padding * x);
-                float yPos = yOffset + (y * sizeY) + (padding * y);
+        GameObject gameObjectC = new GameObject("c", new Transform(new Vector3f(0, 0, -50), new Vector3f(10,10,1)));
+        gameObjectC.addComponent(new ModelRendererComponent(new Vector4f(0,0,1,1)));
+        this.addGameObject(gameObjectC);
+    }
 
-                GameObject go = new GameObject("Obj" + x + "" + y, new Transform(new Vector3f(xPos, yPos, 0), new Vector3f(sizeX, sizeY, sizeX)));
-                go.addComponent(new ModelRendererComponent(new Vector4f(xPos / totalWidth, yPos / totalHeight, 1, 1)));
-                this.addGameObject(go);
+    public void genWall() {
+        int size = 10;
 
-                gameObjects.add(go);
+        int width = 10;
+        int height = width;
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                GameObject gameObject = new GameObject("i" + i + "j" + j, new Transform(new Vector3f(i * size, j * size, -20), new Vector3f(size,size,1)));
+                gameObject.addComponent(new ModelRendererComponent(new Vector4f(RandomUtil.randomTiny(),RandomUtil.randomTiny(),RandomUtil.randomTiny(),1)));
+                this.addGameObject(gameObject);
             }
         }
     }
+
+
+    public void generateSphere(float radius, int density) {
+        // Radio de la esfera
+        float radiusSquared = radius * radius;
+
+        // Centro de la esfera
+        Vector3f center = new Vector3f(200, 200, 0); // Puedes cambiarlo si es necesario
+
+        // Densidad de la esfera (cantidad de objetos por eje)
+        float step = radius / density;
+
+        for (float x = -radius; x <= radius; x += step) {
+            for (float y = -radius; y <= radius; y += step) {
+                for (float z = -radius; z <= radius; z += step) {
+                    // Verificar si el punto está dentro de la esfera
+                    float distanceSquared = x * x + y * y + z * z;
+                    if (distanceSquared <= radiusSquared) {
+                        // Posición del objeto
+                        float xPos = center.x + x;
+                        float yPos = center.y + y;
+                        float zPos = center.z + z;
+
+                        // Calcular el color
+                        float distanceFromCenter = (float) Math.sqrt(distanceSquared);
+                        float colorFactor = distanceFromCenter / radius;
+                        Vector4f color = new Vector4f(colorFactor, 0, 1 - colorFactor, 1);
+
+                        // Calcular la dirección hacia el centro
+                        Vector3f directionToCenter = new Vector3f(center).sub(xPos, yPos, zPos).normalize();
+
+                        // Calcular la rotación que alinea el objeto hacia el centro
+                        Quaternionf rotation = new Quaternionf().lookAlong(directionToCenter, new Vector3f(0, 1, 0));
+
+                        // Crear y agregar el objeto
+                        GameObject go = new GameObject(
+                                "Obj" + x + "_" + y + "_" + z,
+                                new Transform(new Vector3f(xPos, yPos, zPos), new Vector3f(step, step, step))
+                        );
+
+                        // Aplicar la rotación al objeto
+                        go.transform.setRotation(rotation);
+
+                        go.addComponent(new ModelRendererComponent(color));
+                        this.addGameObject(go);
+
+                        gameObjects.add(go);
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
     public void update() {
@@ -82,53 +140,54 @@ public class WorldScene extends Scene {
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_R)) {
             //camera.position.x += 100 * Time.getDeltaTime();
-            player.transform.addRotationEuler((float) (10 * Time.getDeltaTime()), (float) (10 * Time.getDeltaTime()), (float) (10 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
-            //camera.position.x += 100 * Time.getDeltaTime();
-            player.transform.addPositionX((float) (-100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (-100 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_D)) {
-            //camera.position.x -= 100 * Time.getDeltaTime();
-            player.transform.addPositionX((float) (100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (100 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_W)) {
-            //camera.position.y -= 100 * Time.getDeltaTime();
-            player.transform.addPositionY((float) (100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (-100 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_S)) {
-            //camera.position.y += 100 * Time.getDeltaTime();
-            player.transform.addPositionY((float) (-100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (100 * Time.getDeltaTime()));
+        }
+
+        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_Q)) {
+            camera.transform.addLocalPositionY((float) (-100 * Time.getDeltaTime()));
+        }
+        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_E)) {
+            camera.transform.addLocalPositionY((float) (100 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {
-            //camera.addRotation((float) (100 * Time.getDeltaTime()), 0, 0);
-            player.transform.addRotationEuler((float) (10 * Time.getDeltaTime()), 0, 0);
+            camera.transform.addRotationEuler((float) (2 * Time.getDeltaTime()), 0, 0);
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
-            //camera.addRotation((float) (-100 * Time.getDeltaTime()), 0, 0);
-            player.transform.addRotationEuler((float) (-10 * Time.getDeltaTime()), 0, 0);
+            camera.transform.addRotationEuler((float) (-2 * Time.getDeltaTime()), 0, 0);
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_RIGHT)) {
-            //camera.addRotation(0, (float) (-100 * Time.getDeltaTime()), 0);
-            player.transform.addRotationEuler(0, (float) (10 * Time.getDeltaTime()), 0);
+            camera.transform.addRotationEuler(0, (float) (-2 * Time.getDeltaTime()), 0);
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT)) {
-            //camera.addRotation(0, (float) (100 * Time.getDeltaTime()), 0);
-            player.transform.addRotationEuler(0, (float) (-10 * Time.getDeltaTime()), 0);
+            camera.transform.addRotationEuler(0, (float) (2 * Time.getDeltaTime()), 0);
         }
 
         glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
                 "FPS: " + Time.getFPS()
                 + ", DrawCalls: " + this.renderer.getDrawCalls()
                 + ", Dirty objects: " + this.renderer.getDirtyModified()
+                + ", Game objects: " + this.gameObjects.size()
                 + ", AspectRatio: " + Window.getInstance().getAspectRatio()
-                + ", Pos: (" + camera.getPosition().x + ", " + camera.getPosition().y + ", " + camera.getPosition().z + ")"
-                + ", Rot: (" + camera.getRotation().x + ", " + camera.getRotation().y + ")"
+                + ", w: " + Window.getInstance().getWidth()
+                + ", h: " + Window.getInstance().getHeight()
+                + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
         );
+
 
         for (GameObject gameObjects : this.gameObjects) {
             gameObjects.update();
