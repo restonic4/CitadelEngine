@@ -34,6 +34,10 @@ public abstract class Scene {
 
     public abstract void update();
 
+    public void unload() {
+        Logger.log("Unloading the scene");
+    }
+
     public void addGameObject(GameObject gameObject) {
         if (!isActivated) {
             gameObjects.add(gameObject);

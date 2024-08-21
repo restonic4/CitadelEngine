@@ -10,6 +10,6 @@ public class Main {
 
         Logger.log("Starting the game");
 
-        Game game = Game.getInstance();
+        Window.getInstance().run();
     }
 }

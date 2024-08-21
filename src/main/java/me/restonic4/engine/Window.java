@@ -2,6 +2,7 @@ package me.restonic4.engine;
 
 import me.restonic4.engine.input.KeyListener;
 import me.restonic4.engine.input.MouseListener;
+import me.restonic4.game.Game;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.Logger;
@@ -21,9 +22,6 @@ public class Window {
     private String title;
     private long glfwWindowAddress; // This is the created window, but it saves as a long because is not an object, it's a Memory address, where C saves it.
     private float aspectRatio;
-
-    // TODO: Change this, a way to set, get and update the scene
-    private Scene currentScene = new WorldScene();
 
     public Window() {
         this.width = 1000;
@@ -100,9 +98,8 @@ public class Window {
         // OpenGL initialization
         GL.createCapabilities();
 
-        // TODO: Make this better, like a scene manager
-        currentScene.init();
-        currentScene.activate();
+        Game game = Game.getInstance();
+        game.start();
     }
 
     public void loop() {
@@ -114,17 +111,22 @@ public class Window {
             glClear(GL_COLOR_BUFFER_BIT);
 
             updateAspectRatio();
-            currentScene.update();
+
+            Scene scene = SceneManager.getInstance().getCurrentScene();
+            //Logger.log(scene);
+            if (scene != null) {
+                scene.update();
+            }
 
             glfwSwapBuffers(glfwWindowAddress);
-
-            //glfwSetWindowTitle(glfwWindowAddress, "FPS: " + Time.getFPS());
 
             Time.onFrameEnded();
         }
     }
 
     private void cleanup() {
+        SceneManager.getInstance().unLoadCurrentScene();
+
         // Free the memory
         glfwFreeCallbacks(glfwWindowAddress);
         glfwDestroyWindow(glfwWindowAddress);

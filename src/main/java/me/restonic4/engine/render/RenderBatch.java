@@ -1,5 +1,7 @@
 package me.restonic4.engine.render;
 
+import me.restonic4.engine.Scene;
+import me.restonic4.engine.SceneManager;
 import me.restonic4.engine.Window;
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.components.ModelRendererComponent;
@@ -112,6 +114,11 @@ public class RenderBatch {
     public void render() {
         dirtyModified = 0; // Stat
 
+        Scene scene = SceneManager.getInstance().getCurrentScene();
+        if (scene == null) {
+            return;
+        }
+
         updateDirtyModels();
 
         // Clear the color and depth buffers
@@ -122,8 +129,8 @@ public class RenderBatch {
 
         // Use shader
         shader.use();
-        shader.uploadMat4f("uProjection", Window.getInstance().currentScene.getCamera().getProjectionMatrix());
-        shader.uploadMat4f("uView", Window.getInstance().currentScene.getCamera().getViewMatrix());
+        shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
+        shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());
 
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);
