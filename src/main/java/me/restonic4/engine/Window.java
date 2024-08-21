@@ -23,7 +23,7 @@ public class Window {
     private float aspectRatio;
 
     // TODO: Change this, a way to set, get and update the scene
-    public Scene currentScene = new WorldScene();
+    private Scene currentScene = new WorldScene();
 
     public Window() {
         this.width = 1000;
