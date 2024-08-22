@@ -35,6 +35,8 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class WorldScene extends Scene {
+    GameObject player;
+
     @Override
     public void init() {
         Logger.log("Starting the world scene");
@@ -46,38 +48,90 @@ public class WorldScene extends Scene {
 
         Mesh mesh = new Mesh(
                 new Vector3f[] {
-                        new Vector3f(-0.5f,  0.5f, -0.5f),  // Vértice 0: Superior izquierdo trasero
-                        new Vector3f( 0.5f,  0.5f, -0.5f),  // Vértice 1: Superior derecho trasero
-                        new Vector3f( 0.5f, -0.5f, -0.5f),  // Vértice 2: Inferior derecho trasero
-                        new Vector3f(-0.5f, -0.5f, -0.5f),  // Vértice 3: Inferior izquierdo trasero
-                        new Vector3f(-0.5f,  0.5f,  0.5f),  // Vértice 4: Superior izquierdo delantero
-                        new Vector3f( 0.5f,  0.5f,  0.5f),  // Vértice 5: Superior derecho delantero
-                        new Vector3f( 0.5f, -0.5f,  0.5f),  // Vértice 6: Inferior derecho delantero
-                        new Vector3f(-0.5f, -0.5f,  0.5f)   // Vértice 7: Inferior izquierdo delantero
+                        new Vector3f(-1, 1, -1),  // 0
+                        new Vector3f( 1, 1, -1),  // 1
+                        new Vector3f( -1, 1,  1),  // 2
+                        new Vector3f(1, 1,  1),  // 3
+
+                        new Vector3f(-1, -1, -1),  // 4
+                        new Vector3f( 1, -1, -1),  // 5
+                        new Vector3f( -1, -1,  1),  // 6
+                        new Vector3f(1, -1,  1)   // 7
                 },
                 new int[] {
-                        // Cara trasera
-                        0, 1, 2, 2, 3, 0,
-
-                        // Cara delantera
-                        4, 5, 6, 6, 7, 4,
-
-                        // Cara izquierda
-                        0, 3, 7, 7, 4, 0,
-
-                        // Cara derecha
-                        1, 2, 6, 6, 5, 1,
-
-                        // Cara superior
-                        0, 1, 5, 5, 4, 0,
-
-                        // Cara inferior
-                        3, 2, 6, 6, 7, 3
+                        0, 3, 1, 0, 2, 3,
+                        5, 7, 4, 7, 6, 4,
+                        3, 7, 1, 7, 5, 1,
+                        6, 0, 4, 6, 2, 0,
+                        6, 7, 3, 6, 3, 2,
+                        0, 1, 5, 0, 5, 4
                 },
-                new Vector4f(1,1,1,1)
+                new Vector4f[] {           // Colors for each vertex
+                        new Vector4f(1, 0, 0, 1), // Red
+                        new Vector4f(0, 1, 0, 1), // Green
+                        new Vector4f(0, 0, 1, 1), // Blue
+                        new Vector4f(1, 1, 0, 1), // Yellow
+                        new Vector4f(1, 0, 1, 1), // Magenta
+                        new Vector4f(0, 1, 1, 1), // Cyan
+                        new Vector4f(0.5f, 0.5f, 0.5f, 1), // Gray
+                        new Vector4f(1, 1, 1, 1)  // White
+                }
         );
 
-        for (int i = 0; i < 1000; i++) {
+        Mesh pyramidMesh = new Mesh(
+                new Vector3f[] {
+                        // Base
+                        new Vector3f(-1, -1, -1), // Vértice 0
+                        new Vector3f( 1, -1, -1), // Vértice 1
+                        new Vector3f( 1, -1,  1), // Vértice 2
+                        new Vector3f(-1, -1,  1), // Vértice 3
+
+                        // Cima
+                        new Vector3f(0, 1, 0)     // Vértice 4
+                },
+                new int[] {
+                        // Base
+                        1, 2, 0,
+                        2, 3, 0,
+
+                        // Caras laterales
+                        0, 4, 1,
+                        1, 4, 2,
+                        2, 4, 3,
+                        3, 4, 0
+                },
+                new Vector4f[] {
+                        new Vector4f(1, 0, 0, 1), // Color para Vértice 0
+                        new Vector4f(0, 1, 0, 1), // Color para Vértice 1
+                        new Vector4f(0, 0, 1, 1), // Color para Vértice 2
+                        new Vector4f(1, 1, 0, 1), // Color para Vértice 3
+                        new Vector4f(1, 0, 1, 1)  // Color para Vértice 4
+                }
+        );
+
+        player = new GameObject("player", false, new Transform(new Vector3f(0, 0, 0), new Vector3f(1,1,1)));
+        player.addComponent(new ModelRendererComponent(pyramidMesh));
+        this.addGameObject(player);
+
+        /*GameObject test2 = new GameObject("test2", true, new Transform(new Vector3f(2, 0, 0), new Vector3f(1,1,1)));
+        test2.addComponent(new ModelRendererComponent(pyramidMesh));
+        this.addGameObject(test2);
+
+        GameObject test3 = new GameObject("test3", true, new Transform(new Vector3f(3, 0, 0), new Vector3f(1,1,1)));
+        test3.addComponent(new ModelRendererComponent(pyramidMesh));
+        this.addGameObject(test3);*/
+
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                for (int w = 0; w < 20; w++) {
+                    GameObject test = new GameObject("test" + i + ":" + j + ":" + w, true, new Transform(new Vector3f(i * 2, w * 2, j * 2), new Vector3f(1, 1, 1)));
+                    test.addComponent(new ModelRendererComponent(pyramidMesh));
+                    this.addGameObject(test);
+                }
+            }
+        }
+
+        /*for (int i = 0; i < 1000; i++) {
             Transform objectTransform = new Transform(new Vector3f(0, 0, -i * 11), new Vector3f(10, 10, 1));
             GameObject object = new GameObject("object" + i, true, objectTransform);
             mesh = new Mesh(null, null, new Vector4f());
@@ -93,7 +147,7 @@ public class WorldScene extends Scene {
             mesh.setColor(new Vector4f(RandomUtil.randomTiny(), RandomUtil.randomTiny(), RandomUtil.randomTiny(), 1));
             object.addComponent(new ModelRendererComponent(mesh));
             this.addGameObject(object);
-        }
+        }*/
 
         //genWall();
 
@@ -177,6 +231,7 @@ public class WorldScene extends Scene {
         }
     }*/
 
+    int index = 0;
 
     @Override
     public void update() {
@@ -185,27 +240,29 @@ public class WorldScene extends Scene {
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_U)) {
-            for (int i = 0; i < 10; i++) {
-                RandomUtil.getRandom(this.getGameObjects()).transform.setPosition(RandomUtil.random(-100, 100), RandomUtil.random(-100, 100), RandomUtil.random(-100, 100));
-            }
+            /*GameObject newGO = new GameObject("r" + index, true, new Transform(new Vector3f(RandomUtil.random(-100,100), RandomUtil.random(-100,100), RandomUtil.random(-100,100))));
+            newGO.addComponent(new ModelRendererComponent(new Mesh(null, null, new Vector4f(RandomUtil.randomTiny(),RandomUtil.randomTiny(),RandomUtil.randomTiny(),1))));
+            this.addGameObject(newGO);
+            index++;*/
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_R)) {
-            //camera.position.x += 100 * Time.getDeltaTime();
+            Logger.log("reset");
+            camera.transform.setPosition(0, 0, 0);
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
-            camera.transform.addLocalPositionX((float) (-100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (-1000 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_D)) {
-            camera.transform.addLocalPositionX((float) (100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (1000 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_W)) {
-            camera.transform.addLocalPositionZ((float) (-100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (-1000 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_S)) {
-            camera.transform.addLocalPositionZ((float) (100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (1000 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_Q)) {
@@ -241,6 +298,10 @@ public class WorldScene extends Scene {
                 + ", h: " + Window.getInstance().getHeight()
                 + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
         );
+
+        float offset = (float) Math.sin(Time.getRunningTime()) / 20;
+
+        player.transform.setPosition(offset, offset, offset);
 
         for (GameObject gameObject : this.getGameObjects()) {
             //gameObject.transform.addPositionY(RandomUtil.random(-10, 10));

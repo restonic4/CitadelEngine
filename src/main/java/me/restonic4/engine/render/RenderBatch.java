@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
@@ -30,18 +31,19 @@ public class RenderBatch {
     private final int VERTEX_SIZE = 7;
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
-    private final int INDICES_PER_QUAD = 6;
-
     private List<ModelRendererComponent> models;
     private boolean isStatic;
     private float[] vertices;
+    private int[] indices;
+    private int currentVertexCount = 0;
 
-    private int vaoID, vboID;
-    private int maxBatchSize;
+    private int vaoID, vboID, eboID;
+    private int maxBatchSize; // Max vertices allowed per batch
     private Shader shader;
 
     // This is just a stat
     private int dirtyModified = 0;
+    private boolean areIndicesDirty;
 
     public RenderBatch(int maxBatchSize, boolean isStatic) {
         shader = new Shader("shaders/default.glsl");
@@ -50,10 +52,10 @@ public class RenderBatch {
         this.models = new ArrayList<>();
         this.maxBatchSize = maxBatchSize;
 
-        // 4 vertices quads
         vertices = new float[maxBatchSize * VERTEX_SIZE];
 
         this.isStatic = isStatic;
+        this.areIndicesDirty = false;
     }
 
     public boolean isStatic() {
@@ -71,8 +73,8 @@ public class RenderBatch {
         glBufferData(GL_ARRAY_BUFFER, vertices.length * Float.BYTES, GL_DYNAMIC_DRAW);
 
         // Create and upload indices buffer
-        int eboID = glGenBuffers();
-        int[] indices = generateIndices();
+        eboID = glGenBuffers();
+        int[] indices = updateIndices();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_DYNAMIC_DRAW);
 
@@ -90,10 +92,6 @@ public class RenderBatch {
         glDepthFunc(GL_LESS);
     }
 
-    public int getCurrentVertexAmount() {
-        return this.vertices.length / VERTEX_SIZE;
-    }
-
     public int getModelVertexOffset(ModelRendererComponent modelRenderer) {
         int offset = 0;
 
@@ -108,24 +106,24 @@ public class RenderBatch {
         return offset;
     }
 
-    public int getModelIndex(ModelRendererComponent modelRenderer) {
-        return models.lastIndexOf(modelRenderer);
-    }
-
     public AddFailureTypes addModel(ModelRendererComponent modelRenderer) {
         if ((this.isStatic() && !modelRenderer.gameObject.isStatic()) || (!this.isStatic() && modelRenderer.gameObject.isStatic())) {
             return AddFailureTypes.WRONG_TYPE;
         }
 
-        if (getCurrentVertexAmount() + modelRenderer.getMesh().getVertices().length > this.maxBatchSize) {
+        int modelVertexCount = modelRenderer.getMesh().getVertices().length;
+
+        if (currentVertexCount + modelVertexCount > this.maxBatchSize) {
             return AddFailureTypes.FULL;
         }
 
         // Add the model to the list
         this.models.add(modelRenderer);
+        currentVertexCount += modelVertexCount;
 
         // Add properties to local vertices array
         loadVertexProperties(modelRenderer);
+        this.areIndicesDirty = true;
 
         return AddFailureTypes.PASS;
     }
@@ -161,6 +159,12 @@ public class RenderBatch {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
 
+        if (this.areIndicesDirty) {
+            this.areIndicesDirty = false;
+
+            updateIndices();
+        }
+
         // Use shader
         shader.use();
         shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
@@ -170,7 +174,11 @@ public class RenderBatch {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
 
-        glDrawElements(GL_TRIANGLES, this.numModels * INDICES_PER_QUAD, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
+
+        // Debug
+        glDrawArrays(GL_POINTS, 0, currentVertexCount);
+        //glDrawArrays(GL_LINES, 0, currentVertexCount);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
@@ -183,9 +191,10 @@ public class RenderBatch {
         int offset = getModelVertexOffset(modelRenderer);
 
         Vector3f[] vertexPositions = modelRenderer.getMesh().getVertices();
-        Vector4f color = modelRenderer.getMesh().getColor();
+        Vector4f[] vertexColors = modelRenderer.getMesh().getVerticesColors();
+        Vector4f tint = modelRenderer.getMesh().getTint();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < vertexPositions.length; i++) {
             Vector3f currentPos = vertexPositions[i];
 
             // Apply scale
@@ -202,6 +211,14 @@ public class RenderBatch {
             vertices[offset + 1] = currentPos.y;
             vertices[offset + 2] = currentPos.z;
 
+            // Gets the vertex color and applies the tint
+            Vector4f color;
+            if (vertexColors != null && i < vertexColors.length) {
+                color = vertexColors[i];
+            } else {
+                color = tint;  // Use tint if vertexColors is null or does not have color for this vertex
+            }
+
             // Load color
             vertices[offset + 3] = color.x;
             vertices[offset + 4] = color.y;
@@ -212,39 +229,29 @@ public class RenderBatch {
         }
     }
 
-    private int[] generateIndices() {
-        // TODO: Support custom models instead of just quads
+    private int[] updateIndices() {
+        List<Integer> indicesList = new ArrayList<>();
 
-        // 6 indices per quad (3 per triangle)
-        int[] elements = new int[6 * maxBatchSize];
+        for (ModelRendererComponent model : models) {
+            int[] modelIndices = model.getMesh().getIndices();
+            int offset = indicesList.size();
 
-        for (int i=0; i < maxBatchSize; i++) {
-            loadElementIndices(elements, i);
+            for (int index : modelIndices) {
+                indicesList.add(index + offset);
+            }
         }
 
-        return elements;
-    }
+        this.indices = indicesList.stream().mapToInt(Integer::intValue).toArray();
 
-    private void loadElementIndices(int[] elements, int index) {
-        // TODO: Support custom models instead of just quads
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+        //glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this.indices);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices, GL_DYNAMIC_DRAW);
 
-        int offsetArrayIndex = 6 * index;
-        int offset = 4 * index;
-
-        // 3, 2, 0, 0, 2, 1        7, 6, 4, 4, 6, 5
-        // Triangle 1
-        elements[offsetArrayIndex] = offset + 3;
-        elements[offsetArrayIndex + 1] = offset + 2;
-        elements[offsetArrayIndex + 2] = offset + 0;
-
-        // Triangle 2
-        elements[offsetArrayIndex + 3] = offset + 0;
-        elements[offsetArrayIndex + 4] = offset + 2;
-        elements[offsetArrayIndex + 5] = offset + 1;
+        return this.indices;
     }
 
     public boolean hasRoom() {
-        return getCurrentVertexAmount() < maxBatchSize;
+        return currentVertexCount < maxBatchSize;
     }
 
     public int getDirtyModified() {

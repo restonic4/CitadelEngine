@@ -54,9 +54,7 @@ public class Transform {
     }
 
     public void setPosition(float x, float y, float z) {
-        this.position.x = x;
-        this.position.y = y;
-        this.position.z = z;
+        setPosition(new Vector3f(x, y, z));
 
         setDirty();
     }
