@@ -9,17 +9,24 @@ public class GameObject {
     private String name;
     public Transform transform;
     private List<Component> components;
+    private boolean isStatic;
 
-    public GameObject(String name) {
+    private Transform startingTransform;
+
+    public GameObject(String name, boolean isStatic) {
         this.name = name;
         this.transform = new Transform();
+        this.startingTransform = new Transform();
         this.components = new ArrayList<>();
+        this.isStatic = isStatic;
     }
 
-    public GameObject(String name, Transform transform) {
+    public GameObject(String name, boolean isStatic, Transform transform) {
         this.name = name;
         this.transform = transform;
+        this.startingTransform = transform.copy();
         this.components = new ArrayList<>();
+        this.isStatic = isStatic;
     }
 
     public <T extends Component> T getComponent(Class<T> componentClass) {
@@ -54,6 +61,11 @@ public class GameObject {
     }
 
     public void update() {
+        // Reset the transform if it changed and is static
+        if (isStatic() && !this.transform.equals(this.startingTransform)) {
+            this.transform.set(this.startingTransform);
+        }
+
         for (Component component : components) {
             component.update();
         }
@@ -67,5 +79,9 @@ public class GameObject {
 
     public String getName() {
         return this.name;
+    }
+
+    public boolean isStatic() {
+        return this.isStatic;
     }
 }

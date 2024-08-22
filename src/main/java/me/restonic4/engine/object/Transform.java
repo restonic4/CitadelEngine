@@ -235,6 +235,26 @@ public class Transform {
         this.rotation = new Quaternionf();
     }
 
+    public Transform copy() {
+        Transform newTransform = new Transform();
+
+        newTransform.setPosition(this.getPosition());
+        newTransform.setScale(this.getScale());
+        newTransform.setRotation(this.getRotation());
+
+        newTransform.setDirty();
+
+        return newTransform;
+    }
+
+    public void set(Transform transform) {
+        this.position = transform.position;
+        this.scale = transform.scale;
+        this.rotation = transform.rotation;
+
+        this.setDirty();
+    }
+
     public boolean isDirty() {
         return dirty;
     }
@@ -245,5 +265,19 @@ public class Transform {
 
     public void setClean() {
         this.dirty = false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj instanceof Transform transform) {
+            return transform.position.equals(this.position) && transform.scale.equals(this.scale) && transform.rotation.equals(this.rotation);
+        }
+        else {
+            return false;
+        }
     }
 }

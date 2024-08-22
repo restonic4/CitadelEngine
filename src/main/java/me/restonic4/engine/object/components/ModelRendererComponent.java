@@ -1,13 +1,15 @@
 package me.restonic4.engine.object.components;
 
 import me.restonic4.engine.object.Component;
+import me.restonic4.engine.object.Mesh;
 import org.joml.Vector4f;
 
 public class ModelRendererComponent extends Component {
-    private Vector4f color;
+    private Mesh mesh;
 
-    public ModelRendererComponent(Vector4f color) {
-        this.color = color;
+
+    public ModelRendererComponent(Mesh mesh) {
+        this.mesh = mesh;
     }
 
     @Override
@@ -19,11 +21,7 @@ public class ModelRendererComponent extends Component {
 
     }
 
-    public Vector4f getColor() {
-        return this.color;
-    }
-
-    public void setColor(Vector4f vector4f) {
-        this.color = vector4f;
+    public Mesh getMesh() {
+        return this.mesh;
     }
 }

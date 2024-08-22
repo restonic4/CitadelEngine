@@ -7,16 +7,22 @@ import me.restonic4.engine.util.debug.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.lwjgl.opengl.GL11.*;
+
 public class Renderer {
-    private final int MAX_BATCH_SIZE = 1000;
-    private List<RenderBatch> batches;
+    private final int MAX_STATIC_BATCH_SIZE = 1000;
+    private final int MAX_DYNAMIC_BATCH_SIZE = 1000;
+
+    private List<RenderBatch> staticBatches;
+    private List<RenderBatch> dynamicBatches;
 
     // This is just a stat
     private int drawCallsConsumed = 0;
     private int dirtyModifiedTotal = 0;
 
     public Renderer() {
-        this.batches = new ArrayList<>();
+        this.staticBatches = new ArrayList<>();
+        this.dynamicBatches = new ArrayList<>();
     }
 
     public void add(GameObject gameObject) {
@@ -27,21 +33,22 @@ public class Renderer {
     }
 
     private void add(ModelRendererComponent modelRenderer) {
-        boolean added = false;
-        for (RenderBatch batch : this.batches) {
+        List<RenderBatch> batches = modelRenderer.gameObject.isStatic() ? this.staticBatches : this.dynamicBatches;
+        int maxBatchSize = modelRenderer.gameObject.isStatic() ? MAX_STATIC_BATCH_SIZE : MAX_DYNAMIC_BATCH_SIZE;
+
+        // Trying adding it to an existing one
+        for (RenderBatch batch : batches) {
             if (batch.hasRoom()) {
-                batch.addSprite(modelRenderer);
-                added = true;
-                break;
+                batch.addModel(modelRenderer);
+                return;
             }
         }
 
-        if (!added) {
-            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE);
-            newBatch.start();
-            this.batches.add(newBatch);
-            newBatch.addSprite(modelRenderer);
-        }
+        // Creating a new batch
+        RenderBatch newBatch = new RenderBatch(maxBatchSize, modelRenderer.gameObject.isStatic());
+        newBatch.start();
+        batches.add(newBatch);
+        newBatch.addModel(modelRenderer);
     }
 
     public void render() {
@@ -49,7 +56,16 @@ public class Renderer {
         drawCallsConsumed = 0;
         dirtyModifiedTotal = 0;
 
-        for (RenderBatch batch : this.batches) {
+        // Clear the color and depth buffers
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Render batches
+        renderBatches(this.staticBatches);
+        renderBatches(this.dynamicBatches);
+    }
+
+    private void renderBatches(List<RenderBatch> batches) {
+        for (RenderBatch batch : batches) {
             batch.render();
 
             drawCallsConsumed++;

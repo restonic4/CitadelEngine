@@ -4,6 +4,7 @@ import me.restonic4.engine.Scene;
 import me.restonic4.engine.Window;
 import me.restonic4.engine.input.KeyListener;
 import me.restonic4.engine.object.GameObject;
+import me.restonic4.engine.object.Mesh;
 import me.restonic4.engine.object.Transform;
 import me.restonic4.engine.object.components.DebugComponent;
 import me.restonic4.engine.object.components.ModelRendererComponent;
@@ -34,8 +35,6 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class WorldScene extends Scene {
-    List<GameObject> gameObjects = new ArrayList<>();
-
     @Override
     public void init() {
         Logger.log("Starting the world scene");
@@ -45,9 +44,60 @@ public class WorldScene extends Scene {
         camTransform.setScale(1, 1, 1);
         camera = new PerspectiveCamera(camTransform);
 
-        genWall();
+        Mesh mesh = new Mesh(
+                new Vector3f[] {
+                        new Vector3f(-0.5f,  0.5f, -0.5f),  // Vértice 0: Superior izquierdo trasero
+                        new Vector3f( 0.5f,  0.5f, -0.5f),  // Vértice 1: Superior derecho trasero
+                        new Vector3f( 0.5f, -0.5f, -0.5f),  // Vértice 2: Inferior derecho trasero
+                        new Vector3f(-0.5f, -0.5f, -0.5f),  // Vértice 3: Inferior izquierdo trasero
+                        new Vector3f(-0.5f,  0.5f,  0.5f),  // Vértice 4: Superior izquierdo delantero
+                        new Vector3f( 0.5f,  0.5f,  0.5f),  // Vértice 5: Superior derecho delantero
+                        new Vector3f( 0.5f, -0.5f,  0.5f),  // Vértice 6: Inferior derecho delantero
+                        new Vector3f(-0.5f, -0.5f,  0.5f)   // Vértice 7: Inferior izquierdo delantero
+                },
+                new int[] {
+                        // Cara trasera
+                        0, 1, 2, 2, 3, 0,
 
-        GameObject gameObjectA = new GameObject("a", new Transform(new Vector3f(0, 0, -30), new Vector3f(10,10,1)));
+                        // Cara delantera
+                        4, 5, 6, 6, 7, 4,
+
+                        // Cara izquierda
+                        0, 3, 7, 7, 4, 0,
+
+                        // Cara derecha
+                        1, 2, 6, 6, 5, 1,
+
+                        // Cara superior
+                        0, 1, 5, 5, 4, 0,
+
+                        // Cara inferior
+                        3, 2, 6, 6, 7, 3
+                },
+                new Vector4f(1,1,1,1)
+        );
+
+        for (int i = 0; i < 1000; i++) {
+            Transform objectTransform = new Transform(new Vector3f(0, 0, -i * 11), new Vector3f(10, 10, 1));
+            GameObject object = new GameObject("object" + i, true, objectTransform);
+            mesh = new Mesh(null, null, new Vector4f());
+            mesh.setColor(new Vector4f(RandomUtil.randomTiny(), RandomUtil.randomTiny(), RandomUtil.randomTiny(), 1));
+            object.addComponent(new ModelRendererComponent(mesh));
+            this.addGameObject(object);
+        }
+
+        for (int i = 0; i < 1000; i++) {
+            Transform objectTransform = new Transform(new Vector3f(20, 0, -i * 11), new Vector3f(10, 10, 1));
+            GameObject object = new GameObject("objectA" + i, false, objectTransform);
+            mesh = new Mesh(null, null, new Vector4f());
+            mesh.setColor(new Vector4f(RandomUtil.randomTiny(), RandomUtil.randomTiny(), RandomUtil.randomTiny(), 1));
+            object.addComponent(new ModelRendererComponent(mesh));
+            this.addGameObject(object);
+        }
+
+        //genWall();
+
+        /*GameObject gameObjectA = new GameObject("a", new Transform(new Vector3f(0, 0, -30), new Vector3f(10,10,1)));
         gameObjectA.addComponent(new ModelRendererComponent(new Vector4f(1,0,0,1)));
         this.addGameObject(gameObjectA);
 
@@ -57,10 +107,10 @@ public class WorldScene extends Scene {
 
         GameObject gameObjectC = new GameObject("c", new Transform(new Vector3f(0, 0, -50), new Vector3f(10,10,1)));
         gameObjectC.addComponent(new ModelRendererComponent(new Vector4f(0,0,1,1)));
-        this.addGameObject(gameObjectC);
+        this.addGameObject(gameObjectC);*/
     }
 
-    public void genWall() {
+    /*public void genWall() {
         int size = 10;
 
         int width = 10;
@@ -73,10 +123,10 @@ public class WorldScene extends Scene {
                 this.addGameObject(gameObject);
             }
         }
-    }
+    }*/
 
 
-    public void generateSphere(float radius, int density) {
+    /*public void generateSphere(float radius, int density) {
         // Radio de la esfera
         float radiusSquared = radius * radius;
 
@@ -125,7 +175,7 @@ public class WorldScene extends Scene {
                 }
             }
         }
-    }
+    }*/
 
 
     @Override
@@ -135,7 +185,9 @@ public class WorldScene extends Scene {
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_U)) {
-            RandomUtil.getRandom(gameObjects).transform.setPosition(RandomUtil.random(-100, 100), RandomUtil.random(-100, 100), 0);
+            for (int i = 0; i < 10; i++) {
+                RandomUtil.getRandom(this.getGameObjects()).transform.setPosition(RandomUtil.random(-100, 100), RandomUtil.random(-100, 100), RandomUtil.random(-100, 100));
+            }
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_R)) {
@@ -181,18 +233,19 @@ public class WorldScene extends Scene {
                 "FPS: " + Time.getFPS()
                 + ", DrawCalls: " + this.renderer.getDrawCalls()
                 + ", Dirty objects: " + this.renderer.getDirtyModified()
-                + ", Game objects: " + this.gameObjects.size()
+                + ", Game objects: " + this.getGameObjects().size()
+                + ", Static objects: " + this.getStaticGameObjects().size()
+                + ", Dynamic objects: " + this.getDynamicGameObjects().size()
                 + ", AspectRatio: " + Window.getInstance().getAspectRatio()
                 + ", w: " + Window.getInstance().getWidth()
                 + ", h: " + Window.getInstance().getHeight()
                 + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
         );
 
-
-        for (GameObject gameObjects : this.gameObjects) {
-            gameObjects.update();
+        for (GameObject gameObject : this.getGameObjects()) {
+            //gameObject.transform.addPositionY(RandomUtil.random(-10, 10));
         }
 
-        this.renderer.render();
+        super.update();
     }
 }

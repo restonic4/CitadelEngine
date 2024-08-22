@@ -1,5 +1,7 @@
 package me.restonic4.engine.input;
 
+import me.restonic4.engine.util.debug.Logger;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class KeyListener {
@@ -15,6 +17,11 @@ public class KeyListener {
     }
 
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
+        if (key == -1) {
+            Logger.log("KEY -1 PRESSED, WHAT IS THAT??");
+            return;
+        }
+
         if (action == GLFW_PRESS) {
             getInstance().keyPressed[key] = true;
         } else if (action == GLFW_RELEASE) {

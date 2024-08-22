@@ -33,6 +33,7 @@ public class RenderBatch {
     private ModelRendererComponent[] models;
     private int numModels;
     private boolean hasRoom;
+    private boolean isStatic;
     private float[] vertices;
 
     private int vaoID, vboID;
@@ -42,7 +43,7 @@ public class RenderBatch {
     // This is just a stat
     private int dirtyModified = 0;
 
-    public RenderBatch(int maxBatchSize) {
+    public RenderBatch(int maxBatchSize, boolean isStatic) {
         shader = new Shader("shaders/default.glsl");
         shader.compile();
 
@@ -54,6 +55,11 @@ public class RenderBatch {
 
         this.numModels = 0;
         this.hasRoom = true;
+        this.isStatic = isStatic;
+    }
+
+    public boolean isStatic() {
+        return this.isStatic;
     }
 
     public void start() {
@@ -70,7 +76,7 @@ public class RenderBatch {
         int eboID = glGenBuffers();
         int[] indices = generateIndices();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_DYNAMIC_DRAW);
 
         // Enable the buffer attribute pointers
         glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, POS_OFFSET);
@@ -79,11 +85,18 @@ public class RenderBatch {
         glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, COLOR_OFFSET);
         glEnableVertexAttribArray(1);
 
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
     }
 
-    public void addSprite(ModelRendererComponent modelRenderer) {
+    public void addModel(ModelRendererComponent modelRenderer) {
+        if ((this.isStatic() && !modelRenderer.gameObject.isStatic()) || (!this.isStatic() && modelRenderer.gameObject.isStatic())) {
+            return;
+        }
+
         // Get index and add renderObject
         int index = this.numModels;
         this.models[index] = modelRenderer;
@@ -98,6 +111,10 @@ public class RenderBatch {
     }
 
     public void updateDirtyModels() {
+        if (isStatic()) {
+            return;
+        }
+
         for (int i = 0; i < numModels; i++) {
             GameObject gameObject = models[i].gameObject;
 
@@ -120,9 +137,6 @@ public class RenderBatch {
         }
 
         updateDirtyModels();
-
-        // Clear the color and depth buffers
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
@@ -150,7 +164,7 @@ public class RenderBatch {
 
         int offset = index * 4 * VERTEX_SIZE;
 
-        Vector4f color = modelRenderer.getColor();
+        Vector4f color = modelRenderer.getMesh().getColor();
 
         Vector3f[] vertexPositions = {
                 new Vector3f(0.5f, 0.5f, 0.0f), // Top Right
