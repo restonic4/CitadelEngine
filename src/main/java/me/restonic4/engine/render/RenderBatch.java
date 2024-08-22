@@ -100,10 +100,10 @@ public class RenderBatch {
                 break;
             }
 
-            offset += mrc.getMesh().getVertices().length * VERTEX_SIZE;
+            offset += mrc.getMesh().getVertices().length;
         }
 
-        return offset;
+        return offset * VERTEX_SIZE;
     }
 
     public AddFailureTypes addModel(ModelRendererComponent modelRenderer) {
@@ -190,6 +190,8 @@ public class RenderBatch {
     private void loadVertexProperties(ModelRendererComponent modelRenderer) {
         int offset = getModelVertexOffset(modelRenderer);
 
+        Logger.log(offset);
+
         Vector3f[] vertexPositions = modelRenderer.getMesh().getVertices();
         Vector4f[] vertexColors = modelRenderer.getMesh().getVerticesColors();
         Vector4f tint = modelRenderer.getMesh().getTint();
@@ -198,10 +200,10 @@ public class RenderBatch {
             Vector3f currentPos = vertexPositions[i];
 
             // Apply scale
-            currentPos.mul(modelRenderer.gameObject.transform.getScale());
+            //currentPos.mul(modelRenderer.gameObject.transform.getScale());
 
             // Apply rotation
-            currentPos.rotate(modelRenderer.gameObject.transform.getRotation());
+            //currentPos.rotate(modelRenderer.gameObject.transform.getRotation());
 
             // Apply position
             currentPos.add(modelRenderer.gameObject.transform.getPosition());
@@ -244,8 +246,8 @@ public class RenderBatch {
         this.indices = indicesList.stream().mapToInt(Integer::intValue).toArray();
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        //glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this.indices);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices, GL_DYNAMIC_DRAW);
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this.indices);
+        //glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices, GL_DYNAMIC_DRAW);
 
         return this.indices;
     }
