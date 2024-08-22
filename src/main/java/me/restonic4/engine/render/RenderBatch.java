@@ -10,6 +10,8 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -30,9 +32,7 @@ public class RenderBatch {
 
     private final int INDICES_PER_QUAD = 6;
 
-    private ModelRendererComponent[] models;
-    private int numModels;
-    private boolean hasRoom;
+    private List<ModelRendererComponent> models;
     private boolean isStatic;
     private float[] vertices;
 
@@ -47,14 +47,12 @@ public class RenderBatch {
         shader = new Shader("shaders/default.glsl");
         shader.compile();
 
-        this.models = new ModelRendererComponent[maxBatchSize];
+        this.models = new ArrayList<>();
         this.maxBatchSize = maxBatchSize;
 
         // 4 vertices quads
-        vertices = new float[maxBatchSize * 4 * VERTEX_SIZE]; // TODO: Support custom models instead of just quads
+        vertices = new float[maxBatchSize * VERTEX_SIZE];
 
-        this.numModels = 0;
-        this.hasRoom = true;
         this.isStatic = isStatic;
     }
 
@@ -92,22 +90,44 @@ public class RenderBatch {
         glDepthFunc(GL_LESS);
     }
 
-    public void addModel(ModelRendererComponent modelRenderer) {
-        if ((this.isStatic() && !modelRenderer.gameObject.isStatic()) || (!this.isStatic() && modelRenderer.gameObject.isStatic())) {
-            return;
+    public int getCurrentVertexAmount() {
+        return this.vertices.length / VERTEX_SIZE;
+    }
+
+    public int getModelVertexOffset(ModelRendererComponent modelRenderer) {
+        int offset = 0;
+
+        for (ModelRendererComponent mrc : models) {
+            if (mrc == modelRenderer) {
+                break;
+            }
+
+            offset += mrc.getMesh().getVertices().length * VERTEX_SIZE;
         }
 
-        // Get index and add renderObject
-        int index = this.numModels;
-        this.models[index] = modelRenderer;
-        this.numModels++;
+        return offset;
+    }
+
+    public int getModelIndex(ModelRendererComponent modelRenderer) {
+        return models.lastIndexOf(modelRenderer);
+    }
+
+    public AddFailureTypes addModel(ModelRendererComponent modelRenderer) {
+        if ((this.isStatic() && !modelRenderer.gameObject.isStatic()) || (!this.isStatic() && modelRenderer.gameObject.isStatic())) {
+            return AddFailureTypes.WRONG_TYPE;
+        }
+
+        if (getCurrentVertexAmount() + modelRenderer.getMesh().getVertices().length > this.maxBatchSize) {
+            return AddFailureTypes.FULL;
+        }
+
+        // Add the model to the list
+        this.models.add(modelRenderer);
 
         // Add properties to local vertices array
-        loadVertexProperties(index);
+        loadVertexProperties(modelRenderer);
 
-        if (numModels >= this.maxBatchSize) {
-            this.hasRoom = false;
-        }
+        return AddFailureTypes.PASS;
     }
 
     public void updateDirtyModels() {
@@ -115,11 +135,11 @@ public class RenderBatch {
             return;
         }
 
-        for (int i = 0; i < numModels; i++) {
-            GameObject gameObject = models[i].gameObject;
+        for (ModelRendererComponent modelRendererComponent : models) {
+            GameObject gameObject = modelRendererComponent.gameObject;
 
             if (gameObject.transform.isDirty()) {
-                loadVertexProperties(i);
+                loadVertexProperties(modelRendererComponent);
 
                 gameObject.transform.setClean();
 
@@ -159,19 +179,11 @@ public class RenderBatch {
         shader.detach();
     }
 
-    private void loadVertexProperties(int index) {
-        ModelRendererComponent modelRenderer = this.models[index];
+    private void loadVertexProperties(ModelRendererComponent modelRenderer) {
+        int offset = getModelVertexOffset(modelRenderer);
 
-        int offset = index * 4 * VERTEX_SIZE;
-
+        Vector3f[] vertexPositions = modelRenderer.getMesh().getVertices();
         Vector4f color = modelRenderer.getMesh().getColor();
-
-        Vector3f[] vertexPositions = {
-                new Vector3f(0.5f, 0.5f, 0.0f), // Top Right
-                new Vector3f(0.5f, -0.5f, 0.0f), // Bottom Right
-                new Vector3f(-0.5f, -0.5f, 0.0f), // Bottom Left
-                new Vector3f(-0.5f, 0.5f, 0.0f)  // Top Left
-        };
 
         for (int i = 0; i < 4; i++) {
             Vector3f currentPos = vertexPositions[i];
@@ -232,10 +244,26 @@ public class RenderBatch {
     }
 
     public boolean hasRoom() {
-        return this.hasRoom;
+        return getCurrentVertexAmount() < maxBatchSize;
     }
 
     public int getDirtyModified() {
         return dirtyModified;
+    }
+
+    public enum AddFailureTypes {
+        WRONG_TYPE("The batch type incorrect. (Static/Dynamic)"),
+        FULL("The batch is full."),
+        PASS("The operation was successful.");
+
+        private final String message;
+
+        AddFailureTypes(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 }

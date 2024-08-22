@@ -39,8 +39,11 @@ public class Renderer {
         // Trying adding it to an existing one
         for (RenderBatch batch : batches) {
             if (batch.hasRoom()) {
-                batch.addModel(modelRenderer);
-                return;
+                RenderBatch.AddFailureTypes addFailureTypes = batch.addModel(modelRenderer);
+
+                if (addFailureTypes == RenderBatch.AddFailureTypes.PASS) {
+                    return;
+                }
             }
         }
 
@@ -48,7 +51,11 @@ public class Renderer {
         RenderBatch newBatch = new RenderBatch(maxBatchSize, modelRenderer.gameObject.isStatic());
         newBatch.start();
         batches.add(newBatch);
-        newBatch.addModel(modelRenderer);
+        RenderBatch.AddFailureTypes addFailureTypes = newBatch.addModel(modelRenderer);
+
+        if (addFailureTypes != RenderBatch.AddFailureTypes.PASS) {
+            throw new IllegalStateException("Failed adding a game object to a render batch (" + addFailureTypes.getMessage() + ")");
+        }
     }
 
     public void render() {
@@ -81,3 +88,5 @@ public class Renderer {
         return dirtyModifiedTotal;
     }
 }
+
+
