@@ -69,8 +69,6 @@ public class Renderer {
         // Render batches
         renderBatches(this.staticBatches);
         renderBatches(this.dynamicBatches);
-
-        System.out.println("a");
     }
 
     private void renderBatches(List<RenderBatch> batches) {
