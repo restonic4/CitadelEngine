@@ -118,6 +118,7 @@ public class Window {
                 scene.update();
             }
 
+            KeyListener.endFrame();
             MouseListener.endFrame();
 
             glfwSwapBuffers(glfwWindowAddress);
