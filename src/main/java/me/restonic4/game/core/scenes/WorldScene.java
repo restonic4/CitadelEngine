@@ -145,7 +145,7 @@ public class WorldScene extends Scene {
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
                 for (int w = 0; w < 20; w++) {
-                    GameObject test = new GameObject("test" + i + ":" + j + ":" + w, true, new Transform(new Vector3f(i * 2, w * 2, j * 2), new Vector3f(1, 1, 1)));
+                    GameObject test = new GameObject("test" + i + ":" + j + ":" + w, false, new Transform(new Vector3f(i * 2, w * 2, j * 2), new Vector3f(1, 1, 1)));
                     test.addComponent(new ModelRendererComponent(pyramidMesh));
                     this.addGameObject(test);
                 }
@@ -273,17 +273,17 @@ public class WorldScene extends Scene {
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
-            camera.transform.addLocalPositionX((float) (-1000 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (-100 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_D)) {
-            camera.transform.addLocalPositionX((float) (1000 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (100 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_W)) {
-            camera.transform.addLocalPositionZ((float) (-1000 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (-100 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_S)) {
-            camera.transform.addLocalPositionZ((float) (1000 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (100 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_Q)) {
@@ -325,7 +325,7 @@ public class WorldScene extends Scene {
         //player.transform.setPosition(offset, offset, offset);
 
         for (GameObject gameObject : this.getGameObjects()) {
-            //gameObject.transform.addPositionY(RandomUtil.random(-10, 10));
+            gameObject.transform.addPositionY(RandomUtil.random(-10, 10));
         }
 
         super.update();

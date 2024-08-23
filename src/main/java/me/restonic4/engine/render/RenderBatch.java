@@ -189,7 +189,7 @@ public class RenderBatch {
         Vector4f tint = modelRenderer.getMesh().getTint();
 
         for (int i = 0; i < vertexPositions.length; i++) {
-            Vector3f currentPos = vertexPositions[i];
+            Vector3f currentPos = new Vector3f(vertexPositions[i]);
 
             // Apply scale
             currentPos.mul(modelRenderer.gameObject.transform.getScale());
