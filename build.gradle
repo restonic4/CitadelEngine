@@ -92,3 +92,7 @@ tasks.register('buildAndPackage') {
     dependsOn 'buildJar'
     dependsOn 'packageApp'
 }
+
+tasks.register('gource', Exec) {
+    commandLine 'cmd', '/c', 'gource', '-f', '-1920x1080'
+}
