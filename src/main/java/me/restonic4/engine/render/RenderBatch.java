@@ -231,21 +231,22 @@ public class RenderBatch {
 
     private int[] updateIndices() {
         List<Integer> indicesList = new ArrayList<>();
+        int vertexOffset = 0;
 
         for (ModelRendererComponent model : models) {
             int[] modelIndices = model.getMesh().getIndices();
-            int offset = indicesList.size();
 
             for (int index : modelIndices) {
-                indicesList.add(index + offset);
+                indicesList.add(index + vertexOffset);
             }
+
+            vertexOffset += model.getMesh().getVertices().length;
         }
 
         this.indices = indicesList.stream().mapToInt(Integer::intValue).toArray();
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this.indices);
-        //glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices, GL_DYNAMIC_DRAW);
 
         return this.indices;
     }
