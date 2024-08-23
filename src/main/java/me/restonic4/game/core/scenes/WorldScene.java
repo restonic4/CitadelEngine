@@ -142,15 +142,35 @@ public class WorldScene extends Scene {
         test3.addComponent(new ModelRendererComponent(pyramidMesh));
         this.addGameObject(test3);*/
 
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                for (int w = 0; w < 20; w++) {
-                    GameObject test = new GameObject("test:" + i + ":" + j + ":" + w, false, new Transform(new Vector3f(i * 2, w * 2, j * 2), new Vector3f(1, 1, 1)));
-                    test.addComponent(new ModelRendererComponent(pyramidMesh));
+        int amount = 6;
+
+        GameObject player = new GameObject(false);
+        player.transform.setScale(10, 10, 10);
+        player.addComponent(new ModelRendererComponent(pyramidMesh));
+        //player.transform.setPosition(0, 100, 100);
+        player.transform.setPosition(0, 0, 0);
+        this.addGameObject(player);
+
+        for (int i = 0; i < amount; i++) {
+            for (int j = 0; j < amount; j++) {
+                for (int w = 0; w < amount; w++) {
+
+                    GameObject test = new GameObject("test:" + i + ":" + j + ":" + w, false, new Transform(new Vector3f(i * 20, w * 20, j * 20), new Vector3f(1, 1, 1)));
+                    test.addComponent(new ModelRendererComponent(mesh));
                     this.addGameObject(test);
                 }
             }
         }
+
+        /*for (int i = 0; i < amount; i++) {
+            for (int j = 0; j < amount; j++) {
+                for (int w = 0; w < amount; w++) {
+                    GameObject test = new GameObject("testxd:" + i + ":" + j + ":" + w, true, new Transform(new Vector3f(i * 2, w * 2, j * 2), new Vector3f(1, 1, 1)));
+                    test.addComponent(new ModelRendererComponent(mesh));
+                    this.addGameObject(test);
+                }
+            }
+        }*/
 
         /*for (int i = 0; i < 1000; i++) {
             Transform objectTransform = new Transform(new Vector3f(0, 0, -i * 11), new Vector3f(10, 10, 1));
@@ -294,17 +314,17 @@ public class WorldScene extends Scene {
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {
-            camera.transform.addRotationEuler((float) (2 * Time.getDeltaTime()), 0, 0);
+            camera.transform.addLocalRotationEuler((float) (2 * Time.getDeltaTime()), 0, 0);
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
-            camera.transform.addRotationEuler((float) (-2 * Time.getDeltaTime()), 0, 0);
+            camera.transform.addLocalRotationEuler((float) (-2 * Time.getDeltaTime()), 0, 0);
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_RIGHT)) {
-            camera.transform.addRotationEuler(0, (float) (-2 * Time.getDeltaTime()), 0);
+            camera.transform.addLocalRotationEuler(0, (float) (-2 * Time.getDeltaTime()), 0);
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT)) {
-            camera.transform.addRotationEuler(0, (float) (2 * Time.getDeltaTime()), 0);
+            camera.transform.addLocalRotationEuler(0, (float) (2 * Time.getDeltaTime()), 0);
         }
 
         glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
@@ -324,7 +344,7 @@ public class WorldScene extends Scene {
 
         //player.transform.setPosition(offset, offset, offset);
 
-        for (GameObject gameObject : this.getGameObjects()) {
+        /*for (GameObject gameObject : this.getGameObjects()) {
             int extraOffsetX, extraOffsetY, extraOffsetZ;
 
             extraOffsetX = Integer.parseInt(gameObject.getName().split(":")[1]);
@@ -335,7 +355,7 @@ public class WorldScene extends Scene {
 
             gameObject.transform.setPosition(offset + extraOffsetX, offset + extraOffsetY, offset+ extraOffsetZ);
             //gameObject.transform.addPositionY(RandomUtil.random(-10, 10));
-        }
+        }*/
 
         super.update();
     }

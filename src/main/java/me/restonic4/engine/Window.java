@@ -113,7 +113,7 @@ public class Window {
             updateAspectRatio();
 
             Scene scene = SceneManager.getInstance().getCurrentScene();
-            //Logger.log(scene);
+
             if (scene != null) {
                 scene.update();
             }

@@ -172,7 +172,7 @@ public class RenderBatch {
         glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
 
         // Debug
-        glDrawArrays(GL_POINTS, 0, currentVertexCount);
+        //glDrawArrays(GL_POINTS, 0, currentVertexCount);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
@@ -210,7 +210,7 @@ public class RenderBatch {
             if (vertexColors != null && i < vertexColors.length) {
                 color = vertexColors[i];
             } else {
-                color = tint;  // Use tint if vertexColors is null or does not have color for this vertex
+                color = tint; // Use tint if vertexColors is null or does not have color for this vertex
             }
 
             // Load color

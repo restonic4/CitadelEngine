@@ -3,6 +3,7 @@ package me.restonic4.engine.render;
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.components.ModelRendererComponent;
 import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.shared.SharedConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,6 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
-    private final int MAX_STATIC_BATCH_SIZE = 1000;
-    private final int MAX_DYNAMIC_BATCH_SIZE = 1000;
-
     private List<RenderBatch> staticBatches;
     private List<RenderBatch> dynamicBatches;
 
@@ -34,7 +32,7 @@ public class Renderer {
 
     private void add(ModelRendererComponent modelRenderer) {
         List<RenderBatch> batches = modelRenderer.gameObject.isStatic() ? this.staticBatches : this.dynamicBatches;
-        int maxBatchSize = modelRenderer.gameObject.isStatic() ? MAX_STATIC_BATCH_SIZE : MAX_DYNAMIC_BATCH_SIZE;
+        int maxBatchSize = modelRenderer.gameObject.isStatic() ? SharedConstants.MAX_STATIC_BATCH_VERTEX_SIZE : SharedConstants.MAX_DYNAMIC_BATCH_VERTEX_SIZE;
 
         // Trying adding it to an existing one
         for (RenderBatch batch : batches) {

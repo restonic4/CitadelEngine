@@ -24,4 +24,7 @@ public class SharedConstants {
             "This crash message is random.",
             "This crash message is random. And you probably do not care at all."
     };
+
+    public static final int MAX_STATIC_BATCH_VERTEX_SIZE = 2048;
+    public static final int MAX_DYNAMIC_BATCH_VERTEX_SIZE = 1024;
 }

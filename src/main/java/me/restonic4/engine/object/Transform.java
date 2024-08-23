@@ -16,11 +16,11 @@ public class Transform {
     ///////////////////////////////////////////////
 
     public Transform() {
-        create(new Vector3f(), new Vector3f());
+        create(new Vector3f(), new Vector3f(1, 1, 1));
     }
 
     public Transform(Vector3f position) {
-        create(position, new Vector3f());
+        create(position, new Vector3f(1, 1, 1));
     }
 
     public Transform(Vector3f position, Vector3f scale) {
@@ -206,7 +206,16 @@ public class Transform {
 
     public void addRotationEuler(float pitch, float yaw, float roll) {
         Quaternionf additionalRotation = new Quaternionf().rotationXYZ(pitch, yaw, roll);
+
         this.rotation.mul(additionalRotation);
+
+        setDirty();
+    }
+
+    public void addLocalRotationEuler(float pitch, float yaw, float roll) {
+        Quaternionf localRotation = new Quaternionf().rotationXYZ(pitch, yaw, roll);
+
+        this.rotation.mul(localRotation);
 
         setDirty();
     }
