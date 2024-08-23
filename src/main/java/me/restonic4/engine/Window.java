@@ -118,6 +118,8 @@ public class Window {
                 scene.update();
             }
 
+            MouseListener.endFrame();
+
             glfwSwapBuffers(glfwWindowAddress);
 
             Time.onFrameEnded();
