@@ -55,7 +55,7 @@ public class RenderBatch {
         vertices = new float[maxBatchSize * VERTEX_SIZE];
 
         this.isStatic = isStatic;
-        this.areIndicesDirty = false;
+        this.areIndicesDirty = true;
     }
 
     public boolean isStatic() {
@@ -74,9 +74,8 @@ public class RenderBatch {
 
         // Create and upload indices buffer
         eboID = glGenBuffers();
-        int[] indices = updateIndices();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, updateIndices(), GL_DYNAMIC_DRAW);
 
         // Enable the buffer attribute pointers
         glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, POS_OFFSET);
@@ -159,11 +158,7 @@ public class RenderBatch {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
 
-        if (this.areIndicesDirty) {
-            this.areIndicesDirty = false;
-
-            updateIndices();
-        }
+        updateIndices();
 
         // Use shader
         shader.use();
@@ -178,7 +173,6 @@ public class RenderBatch {
 
         // Debug
         glDrawArrays(GL_POINTS, 0, currentVertexCount);
-        //glDrawArrays(GL_LINES, 0, currentVertexCount);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
@@ -230,6 +224,12 @@ public class RenderBatch {
     }
 
     private int[] updateIndices() {
+        if (!this.areIndicesDirty) {
+            return this.indices;
+        }
+
+        this.areIndicesDirty = false;
+
         List<Integer> indicesList = new ArrayList<>();
         int vertexOffset = 0;
 
@@ -246,7 +246,8 @@ public class RenderBatch {
         this.indices = indicesList.stream().mapToInt(Integer::intValue).toArray();
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this.indices);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices, GL_DYNAMIC_DRAW);
+        //glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this.indices);
 
         return this.indices;
     }
