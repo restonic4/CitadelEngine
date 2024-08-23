@@ -325,7 +325,8 @@ public class WorldScene extends Scene {
         //player.transform.setPosition(offset, offset, offset);
 
         for (GameObject gameObject : this.getGameObjects()) {
-            gameObject.transform.addPositionY(RandomUtil.random(-10, 10));
+            //gameObject.transform.setPosition(offset, offset, offset);
+            //gameObject.transform.addPositionY(RandomUtil.random(-10, 10));
         }
 
         super.update();

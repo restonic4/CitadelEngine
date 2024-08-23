@@ -6,12 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameObject {
-    private String name;
     public Transform transform;
+
+    private String name;
     private List<Component> components;
     private boolean isStatic;
 
     private Transform startingTransform;
+
+    public GameObject(boolean isStatic) {
+        this.name = "GameObject";
+        this.transform = new Transform();
+        this.startingTransform = new Transform();
+        this.components = new ArrayList<>();
+        this.isStatic = isStatic;
+    }
 
     public GameObject(String name, boolean isStatic) {
         this.name = name;
@@ -77,11 +86,15 @@ public class GameObject {
         }
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     public boolean isStatic() {
         return this.isStatic;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }
