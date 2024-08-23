@@ -174,7 +174,7 @@ public class RenderBatch {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
 
-        glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
 
         // Debug
         glDrawArrays(GL_POINTS, 0, currentVertexCount);
@@ -190,8 +190,6 @@ public class RenderBatch {
     private void loadVertexProperties(ModelRendererComponent modelRenderer) {
         int offset = getModelVertexOffset(modelRenderer);
 
-        Logger.log(offset);
-
         Vector3f[] vertexPositions = modelRenderer.getMesh().getVertices();
         Vector4f[] vertexColors = modelRenderer.getMesh().getVerticesColors();
         Vector4f tint = modelRenderer.getMesh().getTint();
@@ -200,10 +198,10 @@ public class RenderBatch {
             Vector3f currentPos = vertexPositions[i];
 
             // Apply scale
-            //currentPos.mul(modelRenderer.gameObject.transform.getScale());
+            currentPos.mul(modelRenderer.gameObject.transform.getScale());
 
             // Apply rotation
-            //currentPos.rotate(modelRenderer.gameObject.transform.getRotation());
+            currentPos.rotate(modelRenderer.gameObject.transform.getRotation());
 
             // Apply position
             currentPos.add(modelRenderer.gameObject.transform.getPosition());

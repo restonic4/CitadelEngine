@@ -109,19 +109,19 @@ public class WorldScene extends Scene {
                 }
         );
 
-        player = new GameObject("player", false, new Transform(new Vector3f(0, 0, 0), new Vector3f(1,1,1)));
+        /*player = new GameObject("player", false, new Transform(new Vector3f(0, 0, 0), new Vector3f(1,1,1)));
         player.addComponent(new ModelRendererComponent(pyramidMesh));
-        this.addGameObject(player);
+        this.addGameObject(player);*/
 
-        /*GameObject test2 = new GameObject("test2", true, new Transform(new Vector3f(2, 0, 0), new Vector3f(1,1,1)));
+        GameObject test2 = new GameObject("test2", true, new Transform(new Vector3f(2, 0, 0), new Vector3f(1,1,1)));
         test2.addComponent(new ModelRendererComponent(pyramidMesh));
         this.addGameObject(test2);
 
         GameObject test3 = new GameObject("test3", true, new Transform(new Vector3f(3, 0, 0), new Vector3f(1,1,1)));
         test3.addComponent(new ModelRendererComponent(pyramidMesh));
-        this.addGameObject(test3);*/
+        this.addGameObject(test3);
 
-        for (int i = 0; i < 20; i++) {
+        /*for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
                 for (int w = 0; w < 20; w++) {
                     GameObject test = new GameObject("test" + i + ":" + j + ":" + w, true, new Transform(new Vector3f(i * 2, w * 2, j * 2), new Vector3f(1, 1, 1)));
@@ -129,7 +129,7 @@ public class WorldScene extends Scene {
                     this.addGameObject(test);
                 }
             }
-        }
+        }*/
 
         /*for (int i = 0; i < 1000; i++) {
             Transform objectTransform = new Transform(new Vector3f(0, 0, -i * 11), new Vector3f(10, 10, 1));
@@ -301,7 +301,7 @@ public class WorldScene extends Scene {
 
         float offset = (float) Math.sin(Time.getRunningTime()) / 20;
 
-        player.transform.setPosition(offset, offset, offset);
+        //player.transform.setPosition(offset, offset, offset);
 
         for (GameObject gameObject : this.getGameObjects()) {
             //gameObject.transform.addPositionY(RandomUtil.random(-10, 10));
