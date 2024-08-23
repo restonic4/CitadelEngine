@@ -85,4 +85,8 @@ public abstract class Scene {
     public List<GameObject> getDynamicGameObjects() {
         return this.dynamicGameObjects;
     }
+
+    public int getGameObjectsAmount() {
+        return this.staticGameObjects.size() + this.dynamicGameObjects.size();
+    }
 }

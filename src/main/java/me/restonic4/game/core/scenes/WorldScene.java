@@ -145,7 +145,7 @@ public class WorldScene extends Scene {
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
                 for (int w = 0; w < 20; w++) {
-                    GameObject test = new GameObject("test" + i + ":" + j + ":" + w, false, new Transform(new Vector3f(i * 2, w * 2, j * 2), new Vector3f(1, 1, 1)));
+                    GameObject test = new GameObject("test:" + i + ":" + j + ":" + w, false, new Transform(new Vector3f(i * 2, w * 2, j * 2), new Vector3f(1, 1, 1)));
                     test.addComponent(new ModelRendererComponent(pyramidMesh));
                     this.addGameObject(test);
                 }
@@ -320,12 +320,20 @@ public class WorldScene extends Scene {
                 + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
         );
 
-        float offset = (float) Math.sin(Time.getRunningTime()) / 20;
+
 
         //player.transform.setPosition(offset, offset, offset);
 
         for (GameObject gameObject : this.getGameObjects()) {
-            //gameObject.transform.setPosition(offset, offset, offset);
+            int extraOffsetX, extraOffsetY, extraOffsetZ;
+
+            extraOffsetX = Integer.parseInt(gameObject.getName().split(":")[1]);
+            extraOffsetY = Integer.parseInt(gameObject.getName().split(":")[2]);
+            extraOffsetZ = Integer.parseInt(gameObject.getName().split(":")[3]);
+
+            float offset = (float) Math.sin((Time.getRunningTime()) * (float) ((extraOffsetX + extraOffsetY + extraOffsetZ) )/ 10);
+
+            gameObject.transform.setPosition(offset + extraOffsetX, offset + extraOffsetY, offset+ extraOffsetZ);
             //gameObject.transform.addPositionY(RandomUtil.random(-10, 10));
         }
 
