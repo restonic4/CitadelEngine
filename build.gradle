@@ -105,9 +105,6 @@ static def getFormattedDateString(Date date) {
 static def getStartDate(mode) {
     Calendar calendar = Calendar.getInstance()
     switch (mode) {
-        case "lastHour":
-            calendar.add(Calendar.HOUR, -1)
-            break
         case "last24Hours":
             calendar.add(Calendar.DATE, -1)
             break
@@ -131,8 +128,6 @@ static def getStartDate(mode) {
 // Function to get seconds per day based on mode
 static def getSecondsPerDay(mode) {
     switch (mode) {
-        case "lastHour":
-            return 20
         case "last24Hours":
             return 20
         case "lastWeek":
@@ -150,7 +145,7 @@ static def getSecondsPerDay(mode) {
 
 tasks.register('gource', Exec) {
     // Set the desired mode
-    def mode = 'lastHour'
+    def mode = 'last24Hours'
     def startDate = getStartDate(mode)
     def secondsPerDay = getSecondsPerDay(mode)
 
