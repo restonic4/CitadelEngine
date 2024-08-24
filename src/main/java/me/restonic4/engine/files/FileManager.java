@@ -1,5 +1,6 @@
 package me.restonic4.engine.files;
 
+import me.restonic4.engine.exceptions.FileException;
 import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.shared.SharedConstants;
 
@@ -53,7 +54,7 @@ public class FileManager {
             return new File(filePath);
         }
 
-        throw new RuntimeException("Error getting file from jar/system: " + filePath);
+        throw new FileException("Error getting file from jar/system: " + filePath);
     }
 
     public static String readFile(String filePath) {
@@ -64,7 +65,7 @@ public class FileManager {
             return readFileFromSystem(filePath);
         }
 
-        throw new RuntimeException("Error reading file from jar/system: " + filePath);
+        throw new FileException("Error reading file from jar/system: " + filePath);
     }
 
     public static String readFileFromJar(String filePath) {
@@ -74,10 +75,10 @@ public class FileManager {
             try (InputStream inputStream = is) {
                 return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             } catch (IOException e) {
-                throw new RuntimeException("Error reading file from jar: " + filePath, e);
+                throw new FileException("Error reading file from jar: " + filePath, e);
             }
         } else {
-            throw new IllegalStateException("Error reading file from jar: " + filePath);
+            throw new FileException("Error reading file from jar: " + filePath);
         }
     }
 
@@ -85,7 +86,7 @@ public class FileManager {
         try {
             return Files.readString(Paths.get(filePath));
         } catch (IOException e) {
-            throw new RuntimeException("Error reading file: " + filePath, e);
+            throw new FileException("Error reading file: " + filePath, e);
         }
     }
 
@@ -103,7 +104,7 @@ public class FileManager {
     public static String extractFileFromJar(String resourcePath) {
         try (InputStream inputStream = FileManager.class.getResourceAsStream("/" + resourcePath)) {
             if (inputStream == null) {
-                throw new RuntimeException("Resource not found: " + resourcePath);
+                throw new FileException("Resource not found: " + resourcePath);
             }
 
             Path relativePath = Paths.get(resourcePath);
@@ -123,7 +124,7 @@ public class FileManager {
 
             return tempFilePath.toString();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to extract file from JAR: " + resourcePath, e);
+            throw new FileException("Failed to extract file from JAR: " + resourcePath, e);
         }
     }
 
@@ -134,7 +135,7 @@ public class FileManager {
         }
 
         if (appDataDir == null) {
-            throw new RuntimeException("appDataDir is null. Could not create the directory");
+            throw new FileException("appDataDir is null. Could not create the directory");
         }
 
         appDataDir = appDataDir + "/" + SharedConstants.APP_NAME;
@@ -149,7 +150,7 @@ public class FileManager {
             boolean created = appDir.mkdir();
 
             if (!created) {
-                throw new RuntimeException("Could not create the APP directory: " + appDir.getAbsolutePath());
+                throw new FileException("Could not create the APP directory: " + appDir.getAbsolutePath());
             }
         }
 
@@ -159,7 +160,7 @@ public class FileManager {
             boolean created = directoryFile.mkdir();
 
             if (!created) {
-                throw new RuntimeException("Could not create the directory: " + directoryFile.getAbsolutePath());
+                throw new FileException("Could not create the directory: " + directoryFile.getAbsolutePath());
             }
         }
 

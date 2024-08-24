@@ -1,5 +1,6 @@
 package me.restonic4.engine.render;
 
+import me.restonic4.engine.exceptions.RenderException;
 import me.restonic4.engine.platform.PlatformManager;
 import me.restonic4.engine.files.FileManager;
 import me.restonic4.engine.util.debug.Logger;
@@ -50,7 +51,7 @@ public class Shader {
             setShaderInPattern(secondPattern, splitString[2]);
         } catch(IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error: Could not open file for shader: '" + filepath + "'");
+            throw new RenderException("Error: Could not open file for shader: '" + filepath + "'");
         }
     }
 
@@ -83,7 +84,7 @@ public class Shader {
             Logger.log("ERROR: '" + this.filepath + "'\n\tVertex shader compilation failed.");
             Logger.log(glGetShaderInfoLog(vertexID, len));
 
-            throw new RuntimeException();
+            throw new RenderException("Error compiling vertex shader");
         }
 
         // First load and compile the vertex shader
@@ -101,7 +102,7 @@ public class Shader {
             Logger.log("ERROR: '" + this.filepath + "'\n\tFragment shader compilation failed.");
             Logger.log(glGetShaderInfoLog(fragmentID, len));
 
-            throw new RuntimeException();
+            throw new RenderException("Error compiling fragment shader");
         }
 
         // Link shaders and check for errors
@@ -118,7 +119,7 @@ public class Shader {
             Logger.log("ERROR: '" + this.filepath + "'\n\tLinking of shaders failed.");
             Logger.log(glGetProgramInfoLog(this.shaderProgramID, len));
 
-            throw new RuntimeException();
+            throw new RenderException("Error linking vertex and fragment shader");
         }
     }
 

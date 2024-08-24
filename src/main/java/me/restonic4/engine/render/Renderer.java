@@ -1,5 +1,6 @@
 package me.restonic4.engine.render;
 
+import me.restonic4.engine.exceptions.RenderException;
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.Mesh;
 import me.restonic4.engine.object.components.ModelRendererComponent;
@@ -57,7 +58,7 @@ public class Renderer {
         RenderBatch.AddFailureTypes addFailureTypes = newBatch.addModel(modelRenderer);
 
         if (addFailureTypes != RenderBatch.AddFailureTypes.PASS) {
-            throw new IllegalStateException("Failed adding a game object to a render batch (" + addFailureTypes.getMessage() + ")");
+            throw new RenderException("Failed adding a game object to a render batch (" + addFailureTypes.getMessage() + ")");
         }
     }
 

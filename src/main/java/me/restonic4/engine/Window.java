@@ -147,6 +147,10 @@ public class Window {
 
             // Use the FPS cap
             if (!SharedConstants.VSYNC) {
+                if (SharedConstants.FPS_CAP <= 0) {
+                    throw new IllegalStateException("The FPS cap can't be set to 0 or lower!");
+                }
+
                 double desiredDuration = (double) 1 / SharedConstants.FPS_CAP;
 
                 Logger.log(Time.getDeltaTime() + " < " + desiredDuration);
