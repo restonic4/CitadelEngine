@@ -141,7 +141,35 @@ public class WorldScene extends Scene {
                 new Vector4f(0, 1, 0, 1)  // Green
         });
 
-        Mesh[] list = new Mesh[]{mesh, pyramidMesh, testMesh};
+        Mesh testMesh2 = OBJLoader.loadMesh("resources/models/test2.obj");
+        testMesh2.setVerticesColors(new Vector4f[] {           // Colors for each vertex
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(0, 0, 1, 1), // Blue
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(1, 0, 1, 1),  // Magenta
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(0, 0, 1, 1), // Blue
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(0, 1, 0, 1),  // Green
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(0, 0, 1, 1), // Blue
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(1, 0, 1, 1),  // Magenta
+        });
+
+        Mesh[] list = new Mesh[]{mesh, pyramidMesh, testMesh, testMesh2};
 
         int amount = 16;
 
