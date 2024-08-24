@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'java'
     id 'application'
@@ -93,15 +95,65 @@ tasks.register('buildAndPackage') {
     dependsOn 'packageApp'
 }
 
+// Utility function to get formatted date string
+static def getFormattedDateString(Date date) {
+    def dateFormat = new SimpleDateFormat("\"yyyy-MM-dd HH:mm:ss\"")
+    return dateFormat.format(date)
+}
+
+// Function to get date based on mode
+static def getStartDate(mode) {
+    Calendar calendar = Calendar.getInstance()
+    switch (mode) {
+        case "lastHour":
+            calendar.add(Calendar.HOUR, -1)
+            break
+        case "last24Hours":
+            calendar.add(Calendar.DATE, -1)
+            break
+        case "lastWeek":
+            calendar.add(Calendar.WEEK_OF_YEAR, -1)
+            break
+        case "lastMonth":
+            calendar.add(Calendar.MONTH, -1)
+            break
+        case "lastYear":
+            calendar.add(Calendar.YEAR, -1)
+            break
+        case "all":
+            return null
+        default:
+            throw new GradleException("Invalid time mode: $mode")
+    }
+    return getFormattedDateString(calendar.getTime())
+}
+
 tasks.register('gource', Exec) {
-    commandLine 'cmd', '/c',
+    // Set the desired mode
+    def mode = 'lastHour'
+    def startDate = getStartDate(mode)
+
+    // Build the list of arguments
+    def args = [
             'gource',
             '-f', '-1920x1080',
-            '--seconds-per-day', '3',
+            '--seconds-per-day', '4',
             '--title', "${appName}",
             '--hide', 'mouse,progress',
             '--highlight-colour', 'FFD700',
             '--highlight-user', 'restonic4',
             '--caption-file', 'gource/captions.txt',
             '--font-scale', '2'
+    ]
+
+    // Add the start date argument if it's not null
+    if (startDate != null) {
+        args += ['--start-date', startDate]
+    }
+
+    println args.join(' ')
+
+    // Configure the command line
+    commandLine 'cmd', '/c', args.join(' ')
 }
+
