@@ -28,6 +28,8 @@ public class Shader {
 
         this.filepath = filepath;
 
+        PlatformManager platformManager = PlatformManager.getInstance();
+
         try {
             // Reading the shader file and splitting it into a vertex and fragment shader
             String source = FileManager.readFile(filepath);
@@ -35,12 +37,12 @@ public class Shader {
 
             // Find the first pattern after #type 'pattern'
             int index = source.indexOf("#type") + 6;
-            int endOfTheLine = source.indexOf(PlatformManager.getEndOfLine(), index);
+            int endOfTheLine = source.indexOf(platformManager.getEndOfLine(), index);
             String firstPattern = source.substring(index, endOfTheLine).trim();
 
             // Find the second pattern after #type 'pattern'
             index = source.indexOf("#type", endOfTheLine) + 6;
-            endOfTheLine = source.indexOf(PlatformManager.getEndOfLine(), index);
+            endOfTheLine = source.indexOf(platformManager.getEndOfLine(), index);
             String secondPattern = source.substring(index, endOfTheLine).trim();
 
             // Sets the shaders into the correct variables
