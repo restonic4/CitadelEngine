@@ -94,5 +94,14 @@ tasks.register('buildAndPackage') {
 }
 
 tasks.register('gource', Exec) {
-    commandLine 'cmd', '/c', 'gource', '-f', '-1920x1080'
+    commandLine 'cmd', '/c',
+            'gource',
+            '-f', '-1920x1080',
+            '--seconds-per-day', '4',
+            '--title', "${appName}",
+            '--hide', 'mouse,progress',
+            '--highlight-colour', 'FFD700',
+            '--highlight-user', 'restonic4',
+            '--caption-file', 'gource/captions.txt',
+            '--font-scale', '2'
 }
