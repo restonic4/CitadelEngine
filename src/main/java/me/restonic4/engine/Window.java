@@ -105,8 +105,11 @@ public class Window {
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(glfwWindowAddress);
+
         // Enable v-sync
-        glfwSwapInterval(1);
+        if (SharedConstants.VSYNC) {
+            glfwSwapInterval(1);
+        }
 
         // Make the window visible
         glfwShowWindow(glfwWindowAddress);
@@ -141,6 +144,22 @@ public class Window {
             glfwSwapBuffers(glfwWindowAddress);
 
             Time.onFrameEnded();
+
+            // Use the FPS cap
+            if (!SharedConstants.VSYNC) {
+                double desiredDuration = (double) 1 / SharedConstants.FPS_CAP;
+
+                Logger.log(Time.getDeltaTime() + " < " + desiredDuration);
+
+                double timeToSleep = desiredDuration - Time.getDeltaTime();
+                if (timeToSleep > 0) {
+                    try {
+                        Thread.sleep((long) (timeToSleep * 1000.0));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
