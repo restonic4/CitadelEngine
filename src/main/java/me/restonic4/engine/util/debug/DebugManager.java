@@ -12,6 +12,8 @@ import java.util.Locale;
 
 public class DebugManager {
     private static boolean DEBUG_MODE = false;
+    private static boolean WIREFRAME_MODE = false;
+    private static boolean VERTICES_MODE = false;
 
     public static void setDebugMode(boolean value) {
         DEBUG_MODE = value;
@@ -62,5 +64,29 @@ public class DebugManager {
                 ex.printStackTrace();
             }
         }
+    }
+
+    public static boolean isWireframeMode() {
+        return WIREFRAME_MODE;
+    }
+
+    public static void setWireFrameMode(boolean value) {
+        WIREFRAME_MODE = value;
+    }
+
+    public static void toggleWireFrameMode() {
+        setWireFrameMode(!WIREFRAME_MODE);
+    }
+
+    public static boolean isVerticesMode() {
+        return VERTICES_MODE;
+    }
+
+    public static void setVerticesMode(boolean value) {
+        VERTICES_MODE = value;
+    }
+
+    public static void toggleVerticesMode() {
+        setVerticesMode(!VERTICES_MODE);
     }
 }

@@ -169,13 +169,17 @@ public class RenderBatch {
         glEnableVertexAttribArray(1);
 
         // Wireframe mode
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        if (DebugManager.isWireframeMode()) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
 
         //glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
         glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
 
         // Debug
-        glDrawArrays(GL_POINTS, 0, this.currentVertexCount);
+        if (DebugManager.isVerticesMode()) {
+            glDrawArrays(GL_POINTS, 0, this.currentVertexCount);
+        }
 
         // Cleanup
         glDisableVertexAttribArray(0);
