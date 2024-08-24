@@ -128,16 +128,37 @@ static def getStartDate(mode) {
     return getFormattedDateString(calendar.getTime())
 }
 
+// Function to get seconds per day based on mode
+static def getSecondsPerDay(mode) {
+    switch (mode) {
+        case "lastHour":
+            return 20
+        case "last24Hours":
+            return 20
+        case "lastWeek":
+            return 8
+        case "lastMonth":
+            return 4
+        case "lastYear":
+            return 1
+        case "all":
+            return 1
+        default:
+            throw new GradleException("Invalid time mode: $mode")
+    }
+}
+
 tasks.register('gource', Exec) {
     // Set the desired mode
     def mode = 'lastHour'
     def startDate = getStartDate(mode)
+    def secondsPerDay = getSecondsPerDay(mode)
 
     // Build the list of arguments
     def args = [
             'gource',
             '-f', '-1920x1080',
-            '--seconds-per-day', '4',
+            '--seconds-per-day', "${secondsPerDay}",
             '--title', "${appName}",
             '--hide', 'mouse,progress',
             '--highlight-colour', 'FFD700',
