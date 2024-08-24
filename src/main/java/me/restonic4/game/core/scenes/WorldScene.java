@@ -8,6 +8,7 @@ import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.Mesh;
 import me.restonic4.engine.object.Transform;
 import me.restonic4.engine.object.components.ModelRendererComponent;
+import me.restonic4.engine.object.loaders.ModelLoader;
 import me.restonic4.engine.object.loaders.OBJLoader;
 import me.restonic4.engine.render.PerspectiveCamera;
 import me.restonic4.engine.util.Time;
@@ -121,7 +122,7 @@ public class WorldScene extends Scene {
     }
 
     public void generate() {
-        Mesh testMesh = OBJLoader.loadMesh("resources/models/test.obj");
+        Mesh testMesh = ModelLoader.loadMesh("resources/models/test.obj");
         testMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 0, 0, 1), // Red
                 new Vector4f(0, 1, 0, 1), // Green
@@ -141,7 +142,7 @@ public class WorldScene extends Scene {
                 new Vector4f(0, 1, 0, 1)  // Green
         });
 
-        Mesh testMesh2 = OBJLoader.loadMesh("resources/models/test2.obj");
+        Mesh testMesh2 = ModelLoader.loadMesh("resources/models/test2.obj");
         testMesh2.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 0, 0, 1), // Red
                 new Vector4f(0, 1, 0, 1), // Green

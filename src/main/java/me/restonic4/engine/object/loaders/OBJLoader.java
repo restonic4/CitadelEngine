@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OBJLoader {
-
-    public static Mesh loadMesh(String fileName) {
+public class OBJLoader extends GenericModelLoader {
+    @Override
+    public Mesh loadMesh(String fileName) {
         List<Vector3f> vertices = new ArrayList<>();
         List<Vector2f> textures = new ArrayList<>();
         List<Vector3f> normals = new ArrayList<>();
