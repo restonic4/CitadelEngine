@@ -48,6 +48,10 @@ public class Mesh {
         this.tint = vector4f;
     }
 
+    public void setVerticesColors(Vector4f[] verticesColors) {
+        this.verticesColors = verticesColors;
+    }
+
     public Mesh copy() {
         Mesh mesh = new Mesh(this.vertices, this.indices, this.verticesColors);
         mesh.setTint(mesh.getTint());
