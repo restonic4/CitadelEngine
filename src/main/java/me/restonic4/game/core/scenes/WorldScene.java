@@ -1,6 +1,7 @@
 package me.restonic4.game.core.scenes;
 
 import me.restonic4.engine.Scene;
+import me.restonic4.engine.SceneManager;
 import me.restonic4.engine.Window;
 import me.restonic4.engine.input.KeyListener;
 import me.restonic4.engine.object.GameObject;
@@ -37,6 +38,90 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public class WorldScene extends Scene {
     GameObject player;
 
+    Mesh mesh = new Mesh(
+            new Vector3f[] {
+                    new Vector3f(-1, 1, -1),  // 0
+                    new Vector3f( 1, 1, -1),  // 1
+                    new Vector3f( -1, 1,  1),  // 2
+                    new Vector3f(1, 1,  1),  // 3
+
+                    new Vector3f(-1, -1, -1),  // 4
+                    new Vector3f( 1, -1, -1),  // 5
+                    new Vector3f( -1, -1,  1),  // 6
+                    new Vector3f(1, -1,  1)   // 7
+            },
+            new int[] {
+                    0, 3, 1, 0, 2, 3,
+                    5, 7, 4, 7, 6, 4,
+                    3, 7, 1, 7, 5, 1,
+                    6, 0, 4, 6, 2, 0,
+                    6, 7, 3, 6, 3, 2,
+                    0, 1, 5, 0, 5, 4
+            },
+            new Vector4f[] {           // Colors for each vertex
+                    new Vector4f(1, 0, 0, 1), // Red
+                    new Vector4f(0, 1, 0, 1), // Green
+                    new Vector4f(0, 0, 1, 1), // Blue
+                    new Vector4f(1, 1, 0, 1), // Yellow
+                    new Vector4f(1, 0, 1, 1), // Magenta
+                    new Vector4f(0, 1, 1, 1), // Cyan
+                    new Vector4f(0.5f, 0.5f, 0.5f, 1), // Gray
+                    new Vector4f(1, 1, 1, 1)  // White
+            }
+    );
+
+    Mesh pyramidMesh = new Mesh(
+            new Vector3f[] {
+                    // Base
+                    new Vector3f(-1, -1, -1), // Vértice 0
+                    new Vector3f( 1, -1, -1), // Vértice 1
+                    new Vector3f( 1, -1,  1), // Vértice 2
+                    new Vector3f(-1, -1,  1), // Vértice 3
+
+                    // Cima
+                    new Vector3f(0, 1, 0)     // Vértice 4
+            },
+            new int[] {
+                    // Base
+                    1, 2, 0,
+                    2, 3, 0,
+
+                    // Caras laterales
+                    0, 4, 1,
+                    1, 4, 2,
+                    2, 4, 3,
+                    3, 4, 0
+            },
+            new Vector4f[] {
+                    new Vector4f(1, 0, 0, 1), // Color para Vértice 0
+                    new Vector4f(0, 1, 0, 1), // Color para Vértice 1
+                    new Vector4f(0, 0, 1, 1), // Color para Vértice 2
+                    new Vector4f(1, 1, 0, 1), // Color para Vértice 3
+                    new Vector4f(1, 0, 1, 1)  // Color para Vértice 4
+            }
+    );
+
+    Mesh quad = new Mesh(
+            new Vector3f[] {
+                    // Base
+                    new Vector3f(-1, -1, 0), // Vértice 0
+                    new Vector3f( 1, -1, 0), // Vértice 1
+                    new Vector3f( 1, 1,  0), // Vértice 2
+                    new Vector3f(-1, 1,  0), // Vértice 3
+            },
+            new int[] {
+                    // Base
+                    0, 1, 2,
+                    2, 3, 0
+            },
+            new Vector4f[] {
+                    new Vector4f(1, 0, 0, 1), // Color para Vértice 0
+                    new Vector4f(0, 1, 0, 1), // Color para Vértice 1
+                    new Vector4f(0, 0, 1, 1), // Color para Vértice 2
+                    new Vector4f(1, 1, 0, 1), // Color para Vértice 3
+            }
+    );
+
     @Override
     public void init() {
         Logger.log("Starting the world scene");
@@ -46,89 +131,7 @@ public class WorldScene extends Scene {
         camTransform.setScale(1, 1, 1);
         camera = new PerspectiveCamera(camTransform);
 
-        Mesh mesh = new Mesh(
-                new Vector3f[] {
-                        new Vector3f(-1, 1, -1),  // 0
-                        new Vector3f( 1, 1, -1),  // 1
-                        new Vector3f( -1, 1,  1),  // 2
-                        new Vector3f(1, 1,  1),  // 3
 
-                        new Vector3f(-1, -1, -1),  // 4
-                        new Vector3f( 1, -1, -1),  // 5
-                        new Vector3f( -1, -1,  1),  // 6
-                        new Vector3f(1, -1,  1)   // 7
-                },
-                new int[] {
-                        0, 3, 1, 0, 2, 3,
-                        5, 7, 4, 7, 6, 4,
-                        3, 7, 1, 7, 5, 1,
-                        6, 0, 4, 6, 2, 0,
-                        6, 7, 3, 6, 3, 2,
-                        0, 1, 5, 0, 5, 4
-                },
-                new Vector4f[] {           // Colors for each vertex
-                        new Vector4f(1, 0, 0, 1), // Red
-                        new Vector4f(0, 1, 0, 1), // Green
-                        new Vector4f(0, 0, 1, 1), // Blue
-                        new Vector4f(1, 1, 0, 1), // Yellow
-                        new Vector4f(1, 0, 1, 1), // Magenta
-                        new Vector4f(0, 1, 1, 1), // Cyan
-                        new Vector4f(0.5f, 0.5f, 0.5f, 1), // Gray
-                        new Vector4f(1, 1, 1, 1)  // White
-                }
-        );
-
-        Mesh pyramidMesh = new Mesh(
-                new Vector3f[] {
-                        // Base
-                        new Vector3f(-1, -1, -1), // Vértice 0
-                        new Vector3f( 1, -1, -1), // Vértice 1
-                        new Vector3f( 1, -1,  1), // Vértice 2
-                        new Vector3f(-1, -1,  1), // Vértice 3
-
-                        // Cima
-                        new Vector3f(0, 1, 0)     // Vértice 4
-                },
-                new int[] {
-                        // Base
-                        1, 2, 0,
-                        2, 3, 0,
-
-                        // Caras laterales
-                        0, 4, 1,
-                        1, 4, 2,
-                        2, 4, 3,
-                        3, 4, 0
-                },
-                new Vector4f[] {
-                        new Vector4f(1, 0, 0, 1), // Color para Vértice 0
-                        new Vector4f(0, 1, 0, 1), // Color para Vértice 1
-                        new Vector4f(0, 0, 1, 1), // Color para Vértice 2
-                        new Vector4f(1, 1, 0, 1), // Color para Vértice 3
-                        new Vector4f(1, 0, 1, 1)  // Color para Vértice 4
-                }
-        );
-
-        Mesh quad = new Mesh(
-                new Vector3f[] {
-                        // Base
-                        new Vector3f(-1, -1, 0), // Vértice 0
-                        new Vector3f( 1, -1, 0), // Vértice 1
-                        new Vector3f( 1, 1,  0), // Vértice 2
-                        new Vector3f(-1, 1,  0), // Vértice 3
-                },
-                new int[] {
-                        // Base
-                        0, 1, 2,
-                        2, 3, 0
-                },
-                new Vector4f[] {
-                        new Vector4f(1, 0, 0, 1), // Color para Vértice 0
-                        new Vector4f(0, 1, 0, 1), // Color para Vértice 1
-                        new Vector4f(0, 0, 1, 1), // Color para Vértice 2
-                        new Vector4f(1, 1, 0, 1), // Color para Vértice 3
-                }
-        );
 
         /*player = new GameObject("player", false, new Transform(new Vector3f(0, 0, 0), new Vector3f(1,1,1)));
         player.addComponent(new ModelRendererComponent(pyramidMesh));
@@ -142,25 +145,48 @@ public class WorldScene extends Scene {
         test3.addComponent(new ModelRendererComponent(pyramidMesh));
         this.addGameObject(test3);*/
 
-        int amount = 6;
 
-        GameObject player = new GameObject(false);
+
+        /*GameObject player = new GameObject(false);
         player.transform.setScale(10, 10, 10);
         player.addComponent(new ModelRendererComponent(pyramidMesh));
         //player.transform.setPosition(0, 100, 100);
         player.transform.setPosition(0, 0, 0);
-        this.addGameObject(player);
+        //this.addGameObject(player);
+
+        GameObject player2 = new GameObject(false);
+        player2.transform.setScale(10, 10, 10);
+        player2.addComponent(new ModelRendererComponent(pyramidMesh));
+        //player.transform.setPosition(0, 100, 100);
+        player2.transform.setPosition(0, 50, 0);
+
+        int in = 0;
 
         for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
                 for (int w = 0; w < amount; w++) {
+                    if (in == 25) {
+                        this.addGameObject(player2);
+                    }
 
                     GameObject test = new GameObject("test:" + i + ":" + j + ":" + w, false, new Transform(new Vector3f(i * 20, w * 20, j * 20), new Vector3f(1, 1, 1)));
                     test.addComponent(new ModelRendererComponent(mesh));
+                    //this.addGameObject(test);
+
+                    if (i == 5 && j == 5 && w == 5) {
+                        test.transform.setScale(5,5,5);
+                        test.transform.addPositionY(50);
+                        this.addGameObject(player);
+                    }
+
                     this.addGameObject(test);
+
+                    in++;
                 }
             }
-        }
+        }*/
+
+        generate();
 
         /*for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
@@ -272,6 +298,36 @@ public class WorldScene extends Scene {
         }
     }*/
 
+    public void generate() {
+        Mesh[] list = new Mesh[]{mesh, pyramidMesh};
+
+        int amount = 16;
+
+        for (int i = 0; i < amount; i++) {
+            for (int j = 0; j < amount; j++) {
+                for (int w = 0; w < amount; w++) {
+                    Mesh selected = RandomUtil.getRandom(list);
+
+                    if (i == 0 && j == 0 && w == 0) {
+                        selected = mesh;
+                    }
+
+                    if (i == amount - 1 && j == amount - 1 && w == amount - 1) {
+                        selected = pyramidMesh;
+                    }
+
+                    GameObject test = new GameObject(false);
+                    test.addComponent(new ModelRendererComponent(selected));
+                    test.setName("test:"+i+":"+j+":"+w);
+                    test.transform.setPosition(i*5, j*5, w*5);
+                    test.transform.setScale(1,1,1);
+
+                    this.addGameObject(test);
+                }
+            }
+        }
+    }
+
     int index = 0;
 
     @Override
@@ -281,10 +337,7 @@ public class WorldScene extends Scene {
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_U)) {
-            /*GameObject newGO = new GameObject("r" + index, true, new Transform(new Vector3f(RandomUtil.random(-100,100), RandomUtil.random(-100,100), RandomUtil.random(-100,100))));
-            newGO.addComponent(new ModelRendererComponent(new Mesh(null, null, new Vector4f(RandomUtil.randomTiny(),RandomUtil.randomTiny(),RandomUtil.randomTiny(),1))));
-            this.addGameObject(newGO);
-            index++;*/
+            SceneManager.getInstance().loadScene(new WorldScene());
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_R)) {

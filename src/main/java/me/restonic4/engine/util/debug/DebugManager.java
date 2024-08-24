@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 public class DebugManager {
     private static boolean DEBUG_MODE = false;

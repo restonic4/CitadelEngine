@@ -2,6 +2,7 @@ package me.restonic4.engine;
 
 import me.restonic4.engine.input.KeyListener;
 import me.restonic4.engine.input.MouseListener;
+import me.restonic4.engine.util.debug.OpenGLDebugOutput;
 import me.restonic4.game.Game;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.util.Time;
@@ -14,6 +15,8 @@ import org.lwjgl.system.MemoryUtil;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL43.GL_DEBUG_OUTPUT;
+import static org.lwjgl.opengl.GL43.GL_DEBUG_OUTPUT_SYNCHRONOUS;
 
 public class Window {
     private static Window instance = null;
@@ -97,6 +100,11 @@ public class Window {
 
         // OpenGL initialization
         GL.createCapabilities();
+
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        OpenGLDebugOutput debugOutput = new OpenGLDebugOutput();
+        debugOutput.setupDebugMessageCallback();
 
         Game game = Game.getInstance();
         game.start();

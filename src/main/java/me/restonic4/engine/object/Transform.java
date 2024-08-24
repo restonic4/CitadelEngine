@@ -16,7 +16,7 @@ public class Transform {
     ///////////////////////////////////////////////
 
     public Transform() {
-        create(new Vector3f(), new Vector3f(1, 1, 1));
+        create(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
     }
 
     public Transform(Vector3f position) {

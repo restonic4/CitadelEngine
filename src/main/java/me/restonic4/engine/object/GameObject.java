@@ -39,6 +39,14 @@ public class GameObject {
         this.isStatic = isStatic;
     }
 
+    public GameObject(String name, boolean isStatic, Transform transform, List<Component> components) {
+        this.name = name;
+        this.transform = transform;
+        this.startingTransform = transform.copy();
+        this.components = components;
+        this.isStatic = isStatic;
+    }
+
     public <T extends Component> T getComponent(Class<T> componentClass) {
         for (Component component : components) {
             if (componentClass.isAssignableFrom(component.getClass())) {

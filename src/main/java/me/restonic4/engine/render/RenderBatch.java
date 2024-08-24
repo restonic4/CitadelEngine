@@ -2,14 +2,13 @@ package me.restonic4.engine.render;
 
 import me.restonic4.engine.Scene;
 import me.restonic4.engine.SceneManager;
-import me.restonic4.engine.Window;
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.components.ModelRendererComponent;
+import me.restonic4.engine.util.debug.DebugManager;
 import me.restonic4.engine.util.debug.Logger;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +43,6 @@ public class RenderBatch {
     // This is just a stat
     private int dirtyModified = 0;
     private boolean areIndicesDirty;
-
-    public int debugOffset = 0;
 
     public RenderBatch(int maxBatchSize, boolean isStatic) {
         shader = new Shader("shaders/default.glsl");
@@ -171,17 +168,19 @@ public class RenderBatch {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
 
+        // Wireframe mode
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+        //glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
         glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
 
         // Debug
-        glDrawArrays(GL_POINTS, 0, currentVertexCount);
+        glDrawArrays(GL_POINTS, 0, this.currentVertexCount);
 
         // Cleanup
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         shader.detach();
     }
@@ -203,8 +202,7 @@ public class RenderBatch {
             currentPos.rotate(modelRenderer.gameObject.transform.getRotation());
 
             // Apply position
-            currentPos.add(new Vector3f(modelRenderer.gameObject.transform.getPosition().x + debugOffset, modelRenderer.gameObject.transform.getPosition().y + debugOffset, modelRenderer.gameObject.transform.getPosition().z + debugOffset));
-            //currentPos.add(modelRenderer.gameObject.transform.getPosition());
+            currentPos.add(modelRenderer.gameObject.transform.getPosition());
 
             // Load position into the vertices array
             vertices[offset] = currentPos.x;
@@ -267,7 +265,7 @@ public class RenderBatch {
     }
 
     public void pointer() {
-        Logger.log("This should be used with debug mode to check the variables and all of that");
+        //Logger.log("This should be used with debug mode to check the variables and all of that");
     }
 
     public enum AddFailureTypes {
