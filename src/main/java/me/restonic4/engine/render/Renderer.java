@@ -66,6 +66,9 @@ public class Renderer {
         drawCallsConsumed = 0;
         dirtyModifiedTotal = 0;
 
+        //Background, blue :D
+        glClearColor(0.267f, 0.741f, 1, 1.0f);
+
         // Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

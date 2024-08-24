@@ -115,9 +115,6 @@ public class Window {
             // Listen for input events
             glfwPollEvents();
 
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-
             updateAspectRatio();
 
             Scene scene = SceneManager.getInstance().getCurrentScene();
