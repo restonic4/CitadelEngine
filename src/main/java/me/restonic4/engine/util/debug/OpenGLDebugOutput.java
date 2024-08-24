@@ -9,14 +9,14 @@ public class OpenGLDebugOutput {
 
     public void setupDebugMessageCallback() {
         debugCallback = GLDebugMessageCallback.create((source, type, id, severity, length, message, userParam) -> {
-            Logger.log("--------------------------------------------");
-            Logger.log("OpenGL DEBUG MESSAGE:");
-            Logger.log("Source: " + getSourceString(source));
-            Logger.log("Type: " + getTypeString(type));
-            Logger.log("ID: " + id);
-            Logger.log("Severity: " + getSeverityString(severity));
-            Logger.log("Message: " + GLDebugMessageCallback.getMessage(length, message));
-            Logger.log("--------------------------------------------");
+            Logger.logExtra("--------------------------------------------");
+            Logger.logExtra("OpenGL DEBUG MESSAGE:");
+            Logger.logExtra("Source: " + getSourceString(source));
+            Logger.logExtra("Type: " + getTypeString(type));
+            Logger.logExtra("ID: " + id);
+            Logger.logExtra("Severity: " + getSeverityString(severity));
+            Logger.logExtra("Message: " + GLDebugMessageCallback.getMessage(length, message));
+            Logger.logExtra("--------------------------------------------");
         });
 
         glDebugMessageCallback(debugCallback, 0);
