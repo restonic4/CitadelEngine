@@ -95,6 +95,15 @@ tasks.register('buildAndPackage') {
     dependsOn 'packageApp'
 }
 
+// Define a map to hold configurations for each mode
+def modeConfig = [
+        'last24Hours': [dateShift: [Calendar.DATE, -1], secondsPerDay: 20],
+        'lastWeek': [dateShift: [Calendar.WEEK_OF_YEAR, -1], secondsPerDay: 8],
+        'lastMonth': [dateShift: [Calendar.MONTH, -1], secondsPerDay: 4],
+        'lastYear': [dateShift: [Calendar.YEAR, -1], secondsPerDay: 1],
+        'all': [dateShift: null, secondsPerDay: 1]
+]
+
 // Utility function to get formatted date string
 static def getFormattedDateString(Date date) {
     def dateFormat = new SimpleDateFormat("\"yyyy-MM-dd HH:mm:ss\"")
@@ -102,52 +111,33 @@ static def getFormattedDateString(Date date) {
 }
 
 // Function to get date based on mode
-static def getStartDate(mode) {
-    Calendar calendar = Calendar.getInstance()
-    switch (mode) {
-        case "last24Hours":
-            calendar.add(Calendar.DATE, -1)
-            break
-        case "lastWeek":
-            calendar.add(Calendar.WEEK_OF_YEAR, -1)
-            break
-        case "lastMonth":
-            calendar.add(Calendar.MONTH, -1)
-            break
-        case "lastYear":
-            calendar.add(Calendar.YEAR, -1)
-            break
-        case "all":
-            return null
-        default:
-            throw new GradleException("Invalid time mode: $mode")
+static def getStartDate(mode, modeConfig) {
+    def config = modeConfig[mode]
+    if (config == null) {
+        throw new GradleException("Invalid time mode: $mode")
     }
+    if (config.dateShift == null) {
+        return null
+    }
+    Calendar calendar = Calendar.getInstance()
+    calendar.add(config.dateShift[0], config.dateShift[1])
     return getFormattedDateString(calendar.getTime())
 }
 
 // Function to get seconds per day based on mode
-static def getSecondsPerDay(mode) {
-    switch (mode) {
-        case "last24Hours":
-            return 20
-        case "lastWeek":
-            return 8
-        case "lastMonth":
-            return 4
-        case "lastYear":
-            return 1
-        case "all":
-            return 1
-        default:
-            throw new GradleException("Invalid time mode: $mode")
+static def getSecondsPerDay(mode, modeConfig) {
+    def config = modeConfig[mode]
+    if (config == null) {
+        throw new GradleException("Invalid time mode: $mode")
     }
+    return config.secondsPerDay
 }
 
 tasks.register('gource', Exec) {
     // Set the desired mode
-    def mode = 'last24Hours'
-    def startDate = getStartDate(mode)
-    def secondsPerDay = getSecondsPerDay(mode)
+    def mode = "${gourceMode}"
+    def startDate = getStartDate(mode, modeConfig)
+    def secondsPerDay = getSecondsPerDay(mode, modeConfig)
 
     // Build the list of arguments
     def args = [
