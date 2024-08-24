@@ -4,15 +4,13 @@ import me.restonic4.engine.object.Mesh;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OBJLoader extends GenericModelLoader {
+
     @Override
-    public Mesh loadMesh(String fileName) {
+    public Mesh loadMesh(String data) {
         List<Vector3f> vertices = new ArrayList<>();
         List<Vector2f> textures = new ArrayList<>();
         List<Vector3f> normals = new ArrayList<>();
@@ -20,51 +18,51 @@ public class OBJLoader extends GenericModelLoader {
         float[] textureArray = null;
         float[] normalsArray = null;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split("\\s+");
-                switch (tokens[0]) {
-                    case "v": // Vertex
-                        Vector3f vertex = new Vector3f(
-                                Float.parseFloat(tokens[1]),
-                                Float.parseFloat(tokens[2]),
-                                Float.parseFloat(tokens[3])
-                        );
-                        vertices.add(vertex);
-                        break;
-                    case "vt": // Texture
-                        Vector2f texture = new Vector2f(
-                                Float.parseFloat(tokens[1]),
-                                Float.parseFloat(tokens[2])
-                        );
-                        textures.add(texture);
-                        break;
-                    case "vn": // Normals
-                        Vector3f normal = new Vector3f(
-                                Float.parseFloat(tokens[1]),
-                                Float.parseFloat(tokens[2]),
-                                Float.parseFloat(tokens[3])
-                        );
-                        normals.add(normal);
-                        break;
-                    case "f":
-                        if (textureArray == null) {
-                            textureArray = new float[vertices.size() * 2];
-                        }
-                        if (normalsArray == null) {
-                            normalsArray = new float[vertices.size() * 3];
-                        }
-                        processFace(tokens, indices, textures, normals, textureArray, normalsArray);
-                        break;
-                    default:
-                        // Ignore other elements
-                        break;
-                }
+        // Divide el contenido del archivo en líneas
+        String[] lines = data.split("\n");
+
+        for (String line : lines) {
+            String[] tokens = line.trim().split("\\s+"); // trim elimina espacios en blanco al inicio y al final
+            if (tokens.length == 0) {
+                continue; // Salta líneas vacías
             }
-        } catch (IOException e) {
-            System.err.println("Error loading file: " + fileName);
-            e.printStackTrace();
+            switch (tokens[0]) {
+                case "v": // Vertex
+                    Vector3f vertex = new Vector3f(
+                            Float.parseFloat(tokens[1]),
+                            Float.parseFloat(tokens[2]),
+                            Float.parseFloat(tokens[3])
+                    );
+                    vertices.add(vertex);
+                    break;
+                case "vt": // Texture
+                    Vector2f texture = new Vector2f(
+                            Float.parseFloat(tokens[1]),
+                            Float.parseFloat(tokens[2])
+                    );
+                    textures.add(texture);
+                    break;
+                case "vn": // Normals
+                    Vector3f normal = new Vector3f(
+                            Float.parseFloat(tokens[1]),
+                            Float.parseFloat(tokens[2]),
+                            Float.parseFloat(tokens[3])
+                    );
+                    normals.add(normal);
+                    break;
+                case "f": // Face
+                    if (textureArray == null) {
+                        textureArray = new float[vertices.size() * 2];
+                    }
+                    if (normalsArray == null) {
+                        normalsArray = new float[vertices.size() * 3];
+                    }
+                    processFace(tokens, indices, textures, normals, textureArray, normalsArray);
+                    break;
+                default:
+                    // Ignora otros elementos
+                    break;
+            }
         }
 
         Vector3f[] verticesArray = vertices.toArray(new Vector3f[0]);

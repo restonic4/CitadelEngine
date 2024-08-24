@@ -6,7 +6,7 @@ import me.restonic4.game.Game;
 
 public class Main {
     public static void main(String[] args) {
-        DebugManager.setDebugMode(true);
+        DebugManager.setDebugMode(false);
 
         Logger.log("Starting the game");
 

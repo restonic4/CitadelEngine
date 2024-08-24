@@ -7,12 +7,10 @@ import me.restonic4.engine.util.debug.Logger;
 public class ModelLoader {
     public static Mesh loadMesh(String filepath) {
         String desiredPath = FileManager.toResources(filepath);
-
         GenericModelLoader loader = getDesiredLoader(desiredPath);
+        String data = FileManager.readFile(desiredPath);
 
-        Logger.log(desiredPath);
-
-        return loader.loadMesh(filepath);
+        return loader.loadMesh(data);
     }
 
     public static <T extends GenericModelLoader> T getDesiredLoader(String filePath) {
