@@ -45,7 +45,7 @@ public class RenderBatch {
     private boolean areIndicesDirty;
 
     public RenderBatch(int maxBatchSize, boolean isStatic) {
-        shader = new Shader("shaders/default.glsl");
+        shader = new Shader("assets/shaders/default.glsl");
         shader.compile();
 
         this.models = new ArrayList<>();

@@ -121,7 +121,7 @@ public class WorldScene extends Scene {
     }
 
     public void generate() {
-        Mesh testMesh = MeshLoader.loadMesh("resources/models/test.obj");
+        Mesh testMesh = MeshLoader.loadMesh("assets/models/test.obj");
         testMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 0, 0, 1), // Red
                 new Vector4f(0, 1, 0, 1), // Green
@@ -141,7 +141,7 @@ public class WorldScene extends Scene {
                 new Vector4f(0, 1, 0, 1)  // Green
         });
 
-        Mesh testMesh2 = MeshLoader.loadMesh("resources/models/test2.obj");
+        Mesh testMesh2 = MeshLoader.loadMesh("assets/models/test2.obj");
         testMesh2.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 0, 0, 1), // Red
                 new Vector4f(0, 1, 0, 1), // Green
