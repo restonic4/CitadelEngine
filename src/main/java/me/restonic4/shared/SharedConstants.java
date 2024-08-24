@@ -15,15 +15,7 @@ public class SharedConstants {
     public static final String LOG_FILE = "CurrentLog.txt";
     public static final String LOG_DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss";
 
-    public static final String[] CRASH_MESSAGES = {
-            "The game crashed.",
-            "RIP.",
-            "This game is so broken...",
-            "Crashed... cool i guess?",
-            "Pls, don't kill the devs...",
-            "This crash message is random.",
-            "This crash message is random. And you probably do not care at all."
-    };
+    public static final int CRASH_MESSAGES = 7;
 
     public static final int MAX_STATIC_BATCH_VERTEX_SIZE = 2048;
     public static final int MAX_DYNAMIC_BATCH_VERTEX_SIZE = 1024;

@@ -1,5 +1,6 @@
 package me.restonic4.engine.util.debug;
 
+import me.restonic4.engine.localization.Localizer;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.files.FileManager;
 import me.restonic4.engine.util.math.RandomUtil;
@@ -31,8 +32,11 @@ public class DebugManager {
     }
 
     public static void displayCrashDialog(Throwable e) {
+        String messageKey = "system.message.crash." + RandomUtil.random(1, SharedConstants.CRASH_MESSAGES);
+        String message = Localizer.localizeKey(messageKey);
+
         StringBuilder crashMessage = new StringBuilder();
-        crashMessage.append(RandomUtil.getRandom(SharedConstants.CRASH_MESSAGES) + "\n\n")
+        crashMessage.append(message + "\n\n")
                 .append("Error: ").append(e.toString()).append("\n\n")
                 .append("A detailed log has been saved to the logs folder.");
 
