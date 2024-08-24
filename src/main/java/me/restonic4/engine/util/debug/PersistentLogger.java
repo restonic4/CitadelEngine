@@ -1,7 +1,7 @@
 package me.restonic4.engine.util.debug;
 
 import me.restonic4.shared.SharedConstants;
-import me.restonic4.engine.util.FileManager;
+import me.restonic4.engine.files.FileManager;
 
 import java.io.BufferedWriter;
 import java.io.File;

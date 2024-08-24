@@ -1,19 +1,18 @@
-package me.restonic4.engine.object.loaders;
+package me.restonic4.engine.files.meshes;
 
 import me.restonic4.engine.object.Mesh;
-import me.restonic4.engine.util.FileManager;
-import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.engine.files.FileManager;
 
-public class ModelLoader {
+public class MeshLoader {
     public static Mesh loadMesh(String filepath) {
         String desiredPath = FileManager.toResources(filepath);
-        GenericModelLoader loader = getDesiredLoader(desiredPath);
+        GenericMeshLoader loader = getDesiredLoader(desiredPath);
         String data = FileManager.readFile(desiredPath);
 
         return loader.loadMesh(data);
     }
 
-    public static <T extends GenericModelLoader> T getDesiredLoader(String filePath) {
+    public static <T extends GenericMeshLoader> T getDesiredLoader(String filePath) {
         if (filePath.endsWith(".obj")) {
             return (T) new OBJLoader();
         }

@@ -1,10 +1,9 @@
 package me.restonic4.engine.sound;
 
-import me.restonic4.engine.util.FileManager;
+import me.restonic4.engine.files.FileManager;
 import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.system.*;
 
-import java.io.File;
 import java.nio.*;
 
 import static org.lwjgl.openal.AL10.*;

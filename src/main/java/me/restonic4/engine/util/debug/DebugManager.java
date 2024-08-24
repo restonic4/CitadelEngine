@@ -1,14 +1,13 @@
 package me.restonic4.engine.util.debug;
 
 import me.restonic4.shared.SharedConstants;
-import me.restonic4.engine.util.FileManager;
+import me.restonic4.engine.files.FileManager;
 import me.restonic4.engine.util.math.RandomUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 
 public class DebugManager {
     private static boolean DEBUG_MODE = false;

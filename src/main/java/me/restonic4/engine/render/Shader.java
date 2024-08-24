@@ -1,7 +1,7 @@
 package me.restonic4.engine.render;
 
 import me.restonic4.engine.platform.PlatformManager;
-import me.restonic4.engine.util.FileManager;
+import me.restonic4.engine.files.FileManager;
 import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.shared.SharedMathConstants;
 

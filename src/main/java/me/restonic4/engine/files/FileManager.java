@@ -1,4 +1,4 @@
-package me.restonic4.engine.util;
+package me.restonic4.engine.files;
 
 import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.shared.SharedConstants;
