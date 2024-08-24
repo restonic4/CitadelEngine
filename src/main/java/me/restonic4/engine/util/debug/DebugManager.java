@@ -17,6 +17,10 @@ public class DebugManager {
 
     public static void setDebugMode(boolean value) {
         DEBUG_MODE = value;
+
+        if (DEBUG_MODE) {
+            Logger.log("Modo sigma activado");
+        }
     }
 
     public static boolean isDebugMode() {

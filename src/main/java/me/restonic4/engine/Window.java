@@ -9,6 +9,7 @@ import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.game.core.scenes.WorldScene;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryUtil;
 
@@ -62,6 +63,10 @@ public class Window {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
+        GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        this.width = vidMode.width();
+        this.height = vidMode.height();
+
         // Create the window                   width        height       tile         monitor      share(idk what is this)
         glfwWindowAddress = glfwCreateWindow(this.width, this.height, this.title, MemoryUtil.NULL, MemoryUtil.NULL);
         if (glfwWindowAddress == MemoryUtil.NULL) {
@@ -70,17 +75,25 @@ public class Window {
 
         // Resize callback, gets the current width and height and updates it
         glfwSetFramebufferSizeCallback(glfwWindowAddress, (window, newWidth, newHeight) -> {
-            this.width = newWidth;
-            this.height = newHeight;
-            updateAspectRatio();
+            updateWindowSize(newWidth, newHeight);
         });
 
         glfwSetWindowSizeCallback(glfwWindowAddress, (window, newWidth, newHeight) -> {
-            this.width = newWidth;
-            this.height = newHeight;
-            updateAspectRatio();
+            updateWindowSize(newWidth, newHeight);
         });
 
+        glfwSetWindowMaximizeCallback(glfwWindowAddress, (window, maximized) -> {
+            if (maximized) {
+                Logger.log("Window maximized");
+
+                int[] newWidth = new int[1];
+                int[] newHeight = new int[1];
+
+                glfwGetWindowSize(glfwWindowAddress, newWidth, newHeight);
+
+                updateWindowSize(newWidth[0], newHeight[0]);
+            }
+        });
 
         // Listen to mouse input
         glfwSetCursorPosCallback(glfwWindowAddress, MouseListener::mousePosCallback);
@@ -118,7 +131,6 @@ public class Window {
             updateAspectRatio();
 
             Scene scene = SceneManager.getInstance().getCurrentScene();
-
             if (scene != null) {
                 scene.update();
             }
@@ -142,6 +154,12 @@ public class Window {
         // Terminate GLFW and the free the error callback
         glfwTerminate();
         glfwSetErrorCallback(null).free();
+    }
+
+    private void updateWindowSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        updateAspectRatio();
     }
 
     private void updateAspectRatio() {
