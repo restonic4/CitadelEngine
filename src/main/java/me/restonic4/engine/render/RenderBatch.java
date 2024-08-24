@@ -45,6 +45,8 @@ public class RenderBatch {
     private int dirtyModified = 0;
     private boolean areIndicesDirty;
 
+    public int debugOffset = 0;
+
     public RenderBatch(int maxBatchSize, boolean isStatic) {
         shader = new Shader("shaders/default.glsl");
         shader.compile();
@@ -172,11 +174,14 @@ public class RenderBatch {
         glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
 
         // Debug
-        //glDrawArrays(GL_POINTS, 0, currentVertexCount);
+        glDrawArrays(GL_POINTS, 0, currentVertexCount);
 
+        // Cleanup
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         shader.detach();
     }
@@ -198,7 +203,8 @@ public class RenderBatch {
             currentPos.rotate(modelRenderer.gameObject.transform.getRotation());
 
             // Apply position
-            currentPos.add(modelRenderer.gameObject.transform.getPosition());
+            currentPos.add(new Vector3f(modelRenderer.gameObject.transform.getPosition().x + debugOffset, modelRenderer.gameObject.transform.getPosition().y + debugOffset, modelRenderer.gameObject.transform.getPosition().z + debugOffset));
+            //currentPos.add(modelRenderer.gameObject.transform.getPosition());
 
             // Load position into the vertices array
             vertices[offset] = currentPos.x;
@@ -258,6 +264,10 @@ public class RenderBatch {
 
     public int getDirtyModified() {
         return dirtyModified;
+    }
+
+    public void pointer() {
+        Logger.log("This should be used with debug mode to check the variables and all of that");
     }
 
     public enum AddFailureTypes {

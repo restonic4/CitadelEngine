@@ -2,6 +2,7 @@ package me.restonic4.engine.render;
 
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.components.ModelRendererComponent;
+import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.shared.SharedConstants;
 
@@ -65,11 +66,19 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Render batches
-        renderBatches(this.staticBatches);
+        //renderBatches(this.staticBatches);
         renderBatches(this.dynamicBatches);
     }
 
     private void renderBatches(List<RenderBatch> batches) {
+        //debug
+        /*batches.get(1).debugOffset = -150;
+
+        batches.get(0).render();
+        batches.get(1).render();
+
+        batches.get(1).pointer();*/
+
         for (RenderBatch batch : batches) {
             batch.render();
 
