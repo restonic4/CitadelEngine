@@ -4,6 +4,7 @@ import me.restonic4.engine.Scene;
 import me.restonic4.engine.SceneManager;
 import me.restonic4.engine.Window;
 import me.restonic4.engine.input.KeyListener;
+import me.restonic4.engine.localization.Localizer;
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.Mesh;
 import me.restonic4.engine.object.Transform;
@@ -115,7 +116,6 @@ public class WorldScene extends Scene {
         camTransform.setPosition(0, 0, 100);
         camTransform.setScale(1, 1, 1);
         camera = new PerspectiveCamera(camTransform);
-
 
         generate();
     }
