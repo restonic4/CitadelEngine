@@ -4,6 +4,7 @@ import me.restonic4.engine.Scene;
 import me.restonic4.engine.SceneManager;
 import me.restonic4.engine.Window;
 import me.restonic4.engine.input.KeyListener;
+import me.restonic4.engine.localization.Locales;
 import me.restonic4.engine.localization.Localizer;
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.Mesh;
@@ -118,6 +119,9 @@ public class WorldScene extends Scene {
         camera = new PerspectiveCamera(camTransform);
 
         generate();
+
+        Logger.log(Localizer.localizeKey("system.message.crash.5"));
+        Logger.log(Localizer.localizeKey("system.message.crash.59"));
     }
 
     public void generate() {

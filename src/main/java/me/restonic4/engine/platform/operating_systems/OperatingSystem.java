@@ -1,11 +1,12 @@
 package me.restonic4.engine.platform.operating_systems;
 
-import me.restonic4.engine.exceptions.UnknownPlatformException;
-import me.restonic4.engine.localization.Locale;
+import me.restonic4.engine.localization.Locales;
+
+import java.util.Locale;
 
 public class OperatingSystem {
-    public Locale getSystemLocale() {
-        java.util.Locale locale = java.util.Locale.getDefault();
-        return Locale.fromJavaLocale(locale);
+    public Locales getSystemLocale() {
+        Locale locale = Locale.getDefault();
+        return Locales.fromJavaLocale(locale);
     }
 }
