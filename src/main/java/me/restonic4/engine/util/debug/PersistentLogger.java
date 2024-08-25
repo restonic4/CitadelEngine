@@ -122,4 +122,8 @@ public class PersistentLogger {
         running = false;
         writeLogsToFile();
     }
+
+    public List<String> getLogBuffer() {
+        return this.logBuffer;
+    }
 }

@@ -36,4 +36,8 @@ public abstract class Logger {
             persistentLogger.stop();
         }
     }
+
+    public static PersistentLogger getPersistentLogger() {
+        return persistentLogger;
+    }
 }

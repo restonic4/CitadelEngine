@@ -1,6 +1,7 @@
 package me.restonic4.engine.util.debug;
 
 import me.restonic4.engine.localization.Localizer;
+import me.restonic4.engine.util.diagnosis.DiagnosticManager;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.files.FileManager;
 import me.restonic4.engine.util.math.RandomUtil;
@@ -40,7 +41,7 @@ public class DebugManager {
                 .append("Error: ").append(e.toString()).append("\n\n")
                 .append("A detailed log has been saved to the logs folder.");
 
-        Object[] options = {"View Log", "Open Log Folder", "Close"};
+        Object[] options = {"View Log", "Open Log Folder", "Report the issue", "Close"};
 
         int choice = JOptionPane.showOptionDialog(
                 null,
@@ -70,6 +71,8 @@ public class DebugManager {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+        } else if (choice == 2) {
+            DiagnosticManager.send();
         }
     }
 
