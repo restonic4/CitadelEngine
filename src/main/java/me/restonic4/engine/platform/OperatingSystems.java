@@ -1,31 +1,35 @@
 package me.restonic4.engine.platform;
 
-import me.restonic4.engine.platform.operating_systems.OperatingSystem;
+import me.restonic4.engine.platform.operating_systems.*;
 
 public enum OperatingSystems {
     WINDOWS(
             "windows",
             new String[]{
                 "win"
-            }
+            },
+            new Windows()
     ),
     LINUX(
             "linux",
             new String[]{
                 "linux", "unix"
-            }
+            },
+            new Linux()
     ),
     MAC(
             "mac",
             new String[]{
                 "mac"
-            }
+            },
+            new Mac()
     ),
     SOLARIS(
             "solaris",
             new String[]{
                 "solaris", "sunos"
-            }
+            },
+            new Solaris()
     ),
     UNKNOWN("unknown");
 
