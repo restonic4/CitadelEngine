@@ -14,6 +14,7 @@ import java.util.List;
 
 public class PersistentLogger {
     private final List<String> logBuffer = new ArrayList<>();
+    private final List<String> completeLogBuffer = new ArrayList<>();
     private final File logFile;
     private boolean running = true;
 
@@ -46,6 +47,7 @@ public class PersistentLogger {
 
     public synchronized void log(String message) {
         logBuffer.add(message);
+        completeLogBuffer.add(message);
     }
 
     private void logWriter() {
@@ -125,5 +127,9 @@ public class PersistentLogger {
 
     public List<String> getLogBuffer() {
         return this.logBuffer;
+    }
+
+    public List<String> getCompleteLogBuffer() {
+        return this.completeLogBuffer;
     }
 }
