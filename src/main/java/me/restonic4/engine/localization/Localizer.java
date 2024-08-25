@@ -1,14 +1,18 @@
 package me.restonic4.engine.localization;
 
-public class Localizer {
-    // TODO: A way of getting your pc language
+import me.restonic4.engine.platform.PlatformManager;
 
-    public static String localizeKey(String key, Local local) {
-        return key + "." + local;
+public class Localizer {
+    public static String localizeKey(String key, Locale locale) {
+        return key + "." + locale;
     }
 
     public static String localizeKey(String key) {
-        // TODO: Read the files on the data folder, the current language you use
-        return localizeKey(key, Local.EN_US);
+        return localizeKey(key, getCurrentLocale());
+    }
+
+    public static Locale getCurrentLocale() {
+        // TODO: Config system to read from
+        return PlatformManager.getInstance().getOperatingSystem().get().getSystemLocale();
     }
 }

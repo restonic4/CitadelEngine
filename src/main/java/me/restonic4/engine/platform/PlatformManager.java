@@ -8,7 +8,7 @@ import java.util.Locale;
 public class PlatformManager {
     private static PlatformManager instance;
 
-    private OperatingSystem operatingSystem = getOperatingSystem();
+    private OperatingSystems operatingSystem = getOperatingSystem();
 
     public static PlatformManager getInstance() {
         if (PlatformManager.instance == null) {
@@ -17,21 +17,21 @@ public class PlatformManager {
         return PlatformManager.instance;
     }
 
-    public OperatingSystem getOperatingSystem() {
+    public OperatingSystems getOperatingSystem() {
         if (this.operatingSystem != null) {
             return this.operatingSystem;
         }
 
         String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
 
-        for (OperatingSystem os : OperatingSystem.values()) {
+        for (OperatingSystems os : OperatingSystems.values()) {
             if (os.matches(osName)) {
                 Logger.log("Playing on " + os.getId());
                 return os;
             }
         }
 
-        return OperatingSystem.UNKNOWN;
+        return OperatingSystems.UNKNOWN;
     }
 
     public String getEndOfLine() {
