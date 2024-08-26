@@ -40,6 +40,10 @@ public class SoundSource {
         alSourcef(sourceId, AL_GAIN, gain);
     }
 
+    public void setPitch(float pitch) {
+        alSourcef(sourceId, AL_PITCH, pitch);
+    }
+
     public void setPosition(Vector3f position) {
         alSource3f(sourceId, AL_POSITION, position.x, position.y, position.z);
     }

@@ -36,7 +36,7 @@ public class WorldScene extends Scene {
         camera = new PerspectiveCamera(camTransform);
 
         // Music
-        music = Sounds.TEMPLATE.createSource(false, true);
+        music = Sounds.TEMPLATE.createSource(true, true);
         music.setPosition(new Vector3f(0, 0, 0));
         music.play();
 
@@ -131,6 +131,10 @@ public class WorldScene extends Scene {
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_K)) {
             music.stop();
+        }
+
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_P)) {
+            music.setPitch(RandomUtil.randomTiny() + RandomUtil.randomTiny());
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_U)) {
