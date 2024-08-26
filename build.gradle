@@ -110,7 +110,8 @@ def modeConfig = [
 
 // Utility function to get formatted date string
 static def getFormattedDateString(Date date) {
-    def dateFormat = new SimpleDateFormat("\"yyyy-MM-dd HH:mm:ss\"")
+    def dateFormat = new SimpleDateFormat("\"yyyy-MM-dd HH:mm:ss Z\"")
+    dateFormat.setTimeZone(TimeZone.getDefault())
     return dateFormat.format(date)
 }
 
@@ -160,8 +161,6 @@ tasks.register('gource', Exec) {
     if (startDate != null) {
         args += ['--start-date', startDate]
     }
-
-    println args.join(' ')
 
     // Configure the command line
     commandLine 'cmd', '/c', args.join(' ')

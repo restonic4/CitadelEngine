@@ -128,6 +128,14 @@ public class FileManager {
         }
     }
 
+    public static String getOrExtractFile(String resourcePath) {
+        if (FileManager.isFileInJar(resourcePath)) {
+            resourcePath = FileManager.extractFileFromJar(resourcePath);
+        }
+
+        return resourcePath;
+    }
+
     public static String getMainDirectory() {
         String appDataDir = System.getenv("LOCALAPPDATA");
         if (appDataDir == null) {

@@ -41,10 +41,7 @@ public class SoundBuffer {
             IntBuffer error = stack.mallocInt(1);
 
             String resourcePath = FileManager.toResources(filePath);
-
-            if (FileManager.isFileInJar(resourcePath)) {
-                resourcePath = FileManager.extractFileFromJar(resourcePath);
-            }
+            resourcePath = FileManager.getOrExtractFile(resourcePath);
 
             long decoder = stb_vorbis_open_filename(resourcePath, error, null);
             if (decoder == NULL) {
