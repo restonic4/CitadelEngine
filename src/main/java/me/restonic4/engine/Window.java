@@ -2,6 +2,7 @@ package me.restonic4.engine;
 
 import me.restonic4.engine.input.KeyListener;
 import me.restonic4.engine.input.MouseListener;
+import me.restonic4.engine.sound.SoundManager;
 import me.restonic4.engine.util.debug.diagnosis.OpenGLDebugOutput;
 import me.restonic4.engine.world.Scene;
 import me.restonic4.engine.world.SceneManager;
@@ -171,6 +172,7 @@ public class Window {
 
     private void cleanup() {
         SceneManager.unLoadCurrentScene();
+        SoundManager.getInstance().cleanup();
 
         // Free the memory
         glfwFreeCallbacks(glfwWindowAddress);

@@ -1,5 +1,7 @@
 package me.restonic4.engine.sound;
 
+import me.restonic4.engine.render.Camera;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 import org.joml.*;
 import org.lwjgl.openal.*;
 
@@ -11,6 +13,7 @@ import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class SoundManager {
+    private static SoundManager instance;
 
     private final List<SoundBuffer> soundBufferList;
     private final Map<String, SoundSource> soundSourceMap;
@@ -33,6 +36,20 @@ public class SoundManager {
         }
         alcMakeContextCurrent(context);
         AL.createCapabilities(deviceCaps);
+
+        setAttenuationModel(AL11.AL_EXPONENT_DISTANCE);
+        setListener(new SoundListener(new Vector3f(0, 0, 0)));
+    }
+
+    public static SoundManager getInstance() {
+        if (SoundManager.instance == null) {
+            SoundManager.instance = new SoundManager();
+        }
+        return SoundManager.instance;
+    }
+
+    public void init() {
+        Logger.log("Starting the audio engine");
     }
 
     public void addSoundBuffer(SoundBuffer soundBuffer) {
@@ -83,13 +100,13 @@ public class SoundManager {
         this.listener = listener;
     }
 
-    /*public void updateListenerPosition(Camera camera) {
+    public void updateListenerPosition(Camera camera) {
         Matrix4f viewMatrix = camera.getViewMatrix();
-        listener.setPosition(camera.getPosition());
+        listener.setPosition(camera.transform.getPosition());
         Vector3f at = new Vector3f();
         viewMatrix.positiveZ(at).negate();
         Vector3f up = new Vector3f();
         viewMatrix.positiveY(up);
         listener.setOrientation(at, up);
-    }*/
+    }
 }

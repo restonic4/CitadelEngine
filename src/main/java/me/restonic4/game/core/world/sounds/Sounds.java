@@ -8,10 +8,12 @@ import me.restonic4.engine.registries.Registry;
 
 public class Sounds {
     public static Sound GLASS;
+    public static Sound TEMPLATE;
 
     public static void register() {
         Logger.log("Registering sounds");
 
         GLASS = Registry.register(Registries.SOUND, new AssetLocation(SharedConstants.VANILLA_NAMESPACE, "glass"), new Sound());
+        TEMPLATE = Registry.register(Registries.MUSIC, new AssetLocation(SharedConstants.VANILLA_NAMESPACE, "template"), new Sound());
     }
 }

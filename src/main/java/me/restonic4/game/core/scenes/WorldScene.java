@@ -1,5 +1,7 @@
 package me.restonic4.game.core.scenes;
 
+import me.restonic4.engine.sound.SoundManager;
+import me.restonic4.engine.sound.SoundSource;
 import me.restonic4.engine.world.Scene;
 import me.restonic4.engine.world.SceneManager;
 import me.restonic4.engine.Window;
@@ -13,6 +15,8 @@ import me.restonic4.engine.render.PerspectiveCamera;
 import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.diagnosis.Logger;
 import me.restonic4.engine.util.math.RandomUtil;
+import me.restonic4.game.core.world.sounds.Sounds;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
@@ -112,6 +116,12 @@ public class WorldScene extends Scene {
             throw new RuntimeException("lol");
         }
 
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_T)) {
+            SoundSource soundSource = Sounds.GLASS.createSource(false, false);
+            soundSource.setPosition(new Vector3f(0, 0, 0));
+            soundSource.play();
+        }
+
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_U)) {
             SceneManager.loadScene(new WorldScene());
         }
@@ -163,6 +173,8 @@ public class WorldScene extends Scene {
                 + ", h: " + Window.getInstance().getHeight()
                 + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
         );
+
+        SoundManager.getInstance().updateListenerPosition(camera);
 
         super.update();
     }

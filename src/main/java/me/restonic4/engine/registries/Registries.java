@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Registries {
-    public static final RegistryKey<Sound> SOUND = new RegistryKey<>("sound");
+    public static final RegistryKey<Sound> SOUND = new RegistryKey<>("sound", "assets/sounds", "ogg");
+    public static final RegistryKey<Sound> MUSIC = new RegistryKey<>("music", "assets/sounds/music", "ogg");
 
     private static final List<RegistryKey<?>> customKeys = new ArrayList<>();
 
-    public static <T extends RegistryObject> RegistryKey<T> registerCustomKey(String id) {
-        RegistryKey<T> customKey = new RegistryKey<>(id);
+    public static <T extends RegistryObject> RegistryKey<T> registerCustomKey(String id, String rootDirectory, String assetFileExtension) {
+        RegistryKey<T> customKey = new RegistryKey<>(id, rootDirectory, assetFileExtension);
         customKeys.add(customKey);
 
         return customKey;

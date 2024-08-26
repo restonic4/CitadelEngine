@@ -15,15 +15,6 @@ public class RegistryManager {
     public static String getAssetPath(RegistryObject registryObject) {
         RegistryKey<?> registryKey = registryObject.getAssetLocation().getRegistryKey();
 
-        String path;
-
-        if (Objects.equals(registryKey.getKey(), "sound")) {
-            path = "sounds/" + registryObject.getAssetLocation().getPath() + ".ogg";
-        }
-        else {
-            path = registryObject.getAssetLocation().getPath();
-        }
-
-        return path;
+        return registryKey.getRootDirectory() + "/" + registryObject.getAssetLocation().getPath() + "." + registryKey.getAssetFileExtension();
     }
 }
