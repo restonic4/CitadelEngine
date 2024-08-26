@@ -1,7 +1,7 @@
 package me.restonic4.game.core.world.sounds;
 
 import me.restonic4.engine.sound.SoundBuffer;
-import me.restonic4.game.core.registries.RegistryObject;
+import me.restonic4.engine.registries.RegistryObject;
 
 public class Sound extends RegistryObject {
     private SoundBuffer soundBuffer;

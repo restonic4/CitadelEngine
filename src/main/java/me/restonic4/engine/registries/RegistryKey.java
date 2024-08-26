@@ -1,4 +1,4 @@
-package me.restonic4.game.core.registries;
+package me.restonic4.engine.registries;
 
 public class RegistryKey<T> {
     private final String key;

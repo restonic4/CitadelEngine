@@ -2,9 +2,9 @@ package me.restonic4.game.core.world.sounds;
 
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.util.debug.diagnosis.Logger;
-import me.restonic4.game.core.registries.AssetLocation;
-import me.restonic4.game.core.registries.Registries;
-import me.restonic4.game.core.registries.Registry;
+import me.restonic4.engine.registries.AssetLocation;
+import me.restonic4.engine.registries.Registries;
+import me.restonic4.engine.registries.Registry;
 
 public class Sounds {
     public static Sound GLASS;

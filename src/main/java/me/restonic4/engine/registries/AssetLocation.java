@@ -1,8 +1,7 @@
-package me.restonic4.game.core.registries;
+package me.restonic4.engine.registries;
 
 import me.restonic4.shared.SharedConstants;
-import me.restonic4.game.core.exceptions.AssetLocationException;
-import me.restonic4.game.core.registries.RegistryKey;
+import me.restonic4.engine.exceptions.AssetLocationException;
 
 //This is used to locate assets
 public class AssetLocation {

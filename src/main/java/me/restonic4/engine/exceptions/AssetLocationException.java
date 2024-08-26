@@ -1,4 +1,4 @@
-package me.restonic4.game.core.exceptions;
+package me.restonic4.engine.exceptions;
 
 
 public class AssetLocationException extends RuntimeException {

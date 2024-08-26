@@ -1,4 +1,4 @@
-package me.restonic4.game.core.registries;
+package me.restonic4.engine.registries;
 
 import me.restonic4.engine.util.debug.diagnosis.Logger;
 import me.restonic4.game.core.world.sounds.Sounds;

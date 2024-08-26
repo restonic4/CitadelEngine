@@ -1,6 +1,6 @@
-package me.restonic4.game.core.registries;
+package me.restonic4.engine.registries;
 
-import me.restonic4.game.core.exceptions.RegistryItemException;
+import me.restonic4.engine.exceptions.RegistryItemException;
 
 public abstract class RegistryObject {
     private AssetLocation assetLocation;

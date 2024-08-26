@@ -104,7 +104,8 @@ def modeConfig = [
         'lastWeek': [dateShift: [Calendar.WEEK_OF_YEAR, -1], secondsPerDay: 8],
         'lastMonth': [dateShift: [Calendar.MONTH, -1], secondsPerDay: 4],
         'lastYear': [dateShift: [Calendar.YEAR, -1], secondsPerDay: 1],
-        'all': [dateShift: null, secondsPerDay: 1]
+        'all': [dateShift: null, secondsPerDay: 1],
+        'allSlow': [dateShift: null, secondsPerDay: 4]
 ]
 
 // Utility function to get formatted date string

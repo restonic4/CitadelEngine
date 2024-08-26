@@ -1,4 +1,4 @@
-package me.restonic4.game.core.registries;
+package me.restonic4.engine.registries;
 
 import java.util.HashMap;
 import java.util.Map;
