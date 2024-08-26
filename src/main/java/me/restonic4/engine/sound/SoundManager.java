@@ -60,11 +60,17 @@ public class SoundManager {
         this.soundSourceMap.put(name, soundSource);
     }
 
-    public void cleanup() {
+    public void reset() {
         soundSourceMap.values().forEach(SoundSource::cleanup);
         soundSourceMap.clear();
+    }
+
+    public void cleanup() {
+        reset();
+
         soundBufferList.forEach(SoundBuffer::cleanup);
         soundBufferList.clear();
+
         if (context != NULL) {
             alcDestroyContext(context);
         }

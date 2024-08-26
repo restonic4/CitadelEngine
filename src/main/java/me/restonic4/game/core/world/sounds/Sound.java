@@ -9,8 +9,11 @@ import me.restonic4.engine.util.debug.diagnosis.Logger;
 
 public class Sound extends RegistryObject {
     private SoundBuffer soundBuffer;
+    private float volume;
 
-    public Sound() {}
+    public Sound(float volume) {
+        this.volume = volume;
+    }
 
     public SoundBuffer getBuffer() {
         if (soundBuffer != null) {
@@ -40,6 +43,7 @@ public class Sound extends RegistryObject {
 
         SoundSource soundSource = new SoundSource(loop, relative);
         soundSource.setBuffer(this.soundBuffer.getBufferId());
+        soundSource.setGain(volume);
         soundManager.addSoundSource(getAssetLocation().toString(), soundSource);
 
         return soundSource;

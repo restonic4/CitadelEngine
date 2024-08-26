@@ -13,7 +13,7 @@ public class Sounds {
     public static void register() {
         Logger.log("Registering sounds");
 
-        GLASS = Registry.register(Registries.SOUND, new AssetLocation(SharedConstants.VANILLA_NAMESPACE, "glass"), new Sound());
-        TEMPLATE = Registry.register(Registries.MUSIC, new AssetLocation(SharedConstants.VANILLA_NAMESPACE, "template"), new Sound());
+        GLASS = Registry.register(Registries.SOUND, new AssetLocation(SharedConstants.VANILLA_NAMESPACE, "glass"), new Sound(1));
+        TEMPLATE = Registry.register(Registries.MUSIC, new AssetLocation(SharedConstants.VANILLA_NAMESPACE, "template"), new Sound(0.25f));
     }
 }

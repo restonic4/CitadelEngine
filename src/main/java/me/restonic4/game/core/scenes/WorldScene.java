@@ -24,6 +24,8 @@ import org.lwjgl.glfw.GLFW;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
 
 public class WorldScene extends Scene {
+    SoundSource music;
+
     @Override
     public void init() {
         Logger.log("Starting the world scene");
@@ -32,6 +34,11 @@ public class WorldScene extends Scene {
         camTransform.setPosition(0, 0, 100);
         camTransform.setScale(1, 1, 1);
         camera = new PerspectiveCamera(camTransform);
+
+        // Music
+        music = Sounds.TEMPLATE.createSource(false, true);
+        music.setPosition(new Vector3f(0, 0, 0));
+        music.play();
 
         Mesh testMesh = MeshLoader.loadMesh("assets/models/test.obj");
         testMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
@@ -120,6 +127,10 @@ public class WorldScene extends Scene {
             SoundSource soundSource = Sounds.GLASS.createSource(false, false);
             soundSource.setPosition(new Vector3f(0, 0, 0));
             soundSource.play();
+        }
+
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_K)) {
+            music.stop();
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_U)) {

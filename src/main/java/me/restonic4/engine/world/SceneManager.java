@@ -16,6 +16,10 @@ public abstract class SceneManager {
     public static void loadScene(Scene scene) {
         Logger.log("Loading the scene: " + scene);
 
+        if (currentScene != null) {
+            currentScene.unload();
+        }
+
         setScene(scene);
 
         scene.init();

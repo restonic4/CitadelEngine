@@ -1,9 +1,11 @@
 package me.restonic4.engine.world;
 
+import me.restonic4.engine.sound.SoundManager;
 import me.restonic4.engine.world.object.GameObject;
 import me.restonic4.engine.render.Camera;
 import me.restonic4.engine.render.Renderer;
 import me.restonic4.engine.util.debug.diagnosis.Logger;
+import me.restonic4.game.core.world.sounds.Sounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,8 @@ public abstract class Scene {
 
     public void unload() {
         Logger.log("Unloading the scene");
+
+        SoundManager.getInstance().reset();
     }
 
     public void addGameObject(GameObject gameObject) {

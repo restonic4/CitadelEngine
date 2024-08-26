@@ -1,5 +1,6 @@
 package me.restonic4.engine.sound;
 
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 import org.joml.Vector3f;
 
 import static org.lwjgl.openal.AL10.*;
