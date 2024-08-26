@@ -1,6 +1,8 @@
 package me.restonic4.engine.render;
 
 import me.restonic4.engine.exceptions.RenderException;
+import me.restonic4.engine.world.Scene;
+import me.restonic4.engine.world.SceneManager;
 import me.restonic4.engine.world.object.GameObject;
 import me.restonic4.engine.world.object.components.ModelRendererComponent;
 import me.restonic4.shared.SharedConstants;
@@ -17,6 +19,7 @@ public class Renderer {
     // This is just a stat
     private int drawCallsConsumed = 0;
     private int dirtyModifiedTotal = 0;
+    private int dirtySkippedTotal = 0;
 
     public Renderer() {
         this.staticBatches = new ArrayList<>();
@@ -61,12 +64,22 @@ public class Renderer {
         // Stats
         drawCallsConsumed = 0;
         dirtyModifiedTotal = 0;
+        dirtySkippedTotal = 0;
 
         //Background, blue :D
         glClearColor(0.267f, 0.741f, 1, 1.0f);
 
         // Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        Scene scene = SceneManager.getCurrentScene();
+        if (scene == null) {
+            return;
+        }
+
+        // Updating the frustum culling
+        FrustumCullingFilter.getInstance().updateFrustum(scene.getCamera().projectionMatrix, scene.getCamera().viewMatrix);
+        FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), 1);
 
         // Render batches
         renderBatches(this.staticBatches);
@@ -79,6 +92,7 @@ public class Renderer {
 
             drawCallsConsumed++;
             dirtyModifiedTotal += batch.getDirtyModified();
+            dirtySkippedTotal += batch.getDirtySkipped();
         }
     }
 
@@ -88,6 +102,10 @@ public class Renderer {
 
     public int getDirtyModified() {
         return dirtyModifiedTotal;
+    }
+
+    public int getDirtySkipped() {
+        return dirtySkippedTotal;
     }
 }
 

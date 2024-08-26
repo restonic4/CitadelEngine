@@ -10,7 +10,7 @@ import me.restonic4.engine.world.object.GameObject;
 import me.restonic4.engine.world.object.Mesh;
 import me.restonic4.engine.world.object.Transform;
 import me.restonic4.engine.world.object.components.ModelRendererComponent;
-import me.restonic4.engine.files.meshes.MeshLoader;
+import me.restonic4.engine.files.MeshLoader;
 import me.restonic4.engine.render.PerspectiveCamera;
 import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.diagnosis.Logger;
@@ -21,10 +21,15 @@ import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
 
 public class WorldScene extends Scene {
     SoundSource music;
+
+    List<GameObject> moving = new ArrayList<>();
 
     @Override
     public void init() {
@@ -88,9 +93,46 @@ public class WorldScene extends Scene {
                 new Vector4f(1, 0, 1, 1),  // Magenta
         });
 
+        Mesh cameraMesh = MeshLoader.loadMesh("assets/models/camera.fbx");
+        /*cameraMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(0, 0, 1, 1), // Blue
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(1, 0, 1, 1),  // Magenta
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(0, 0, 1, 1), // Blue
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(0, 1, 0, 1),  // Green
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(0, 0, 1, 1), // Blue
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 0, 0, 1), // Red
+                new Vector4f(1, 0, 1, 1),  // Magenta
+        });*/
+
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        int amount = 16;
+        //int amount = 16;
+        int amount = 4;
+
+        GameObject test2 = new GameObject(false);
+        test2.addComponent(new ModelRendererComponent(cameraMesh));
+        test2.setName("test:");
+        test2.transform.setPosition(-15, -15, -15);
+        test2.transform.setScale(10,10,10);
+
+        this.addGameObject(test2);
 
         for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
@@ -110,6 +152,8 @@ public class WorldScene extends Scene {
                     test.setName("test:"+i+":"+j+":"+w);
                     test.transform.setPosition(i*5, j*5, w*5);
                     test.transform.setScale(1,1,1);
+
+                    moving.add(test);
 
                     this.addGameObject(test);
                 }
@@ -179,7 +223,8 @@ public class WorldScene extends Scene {
         glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
                 "FPS: " + Time.getFPS()
                 + ", DrawCalls: " + this.renderer.getDrawCalls()
-                + ", Dirty objects: " + this.renderer.getDirtyModified()
+                + ", Dirty objects modified: " + this.renderer.getDirtyModified()
+                + ", Dirty objects skipped: " + this.renderer.getDirtySkipped()
                 + ", Game objects: " + this.getGameObjects().size()
                 + ", Static objects: " + this.getStaticGameObjects().size()
                 + ", Dynamic objects: " + this.getDynamicGameObjects().size()
@@ -190,6 +235,11 @@ public class WorldScene extends Scene {
         );
 
         SoundManager.getInstance().updateListenerPosition(camera);
+
+        float theMath = (float) Math.sin(Time.getRunningTime());
+        for (int i = 0; i < moving.size(); i++) {
+            moving.get(i).transform.setPosition(theMath + (i * 3), theMath + (i * 3), theMath + (i * 3));
+        }
 
         super.update();
     }

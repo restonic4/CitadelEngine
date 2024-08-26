@@ -41,6 +41,7 @@ public class RenderBatch {
 
     // This is just a stat
     private int dirtyModified = 0;
+    private int dirtySkipped = 0;
     private boolean areIndicesDirty;
 
     public RenderBatch(int maxBatchSize, boolean isStatic) {
@@ -133,6 +134,11 @@ public class RenderBatch {
         for (ModelRendererComponent modelRendererComponent : models) {
             GameObject gameObject = modelRendererComponent.gameObject;
 
+            if (!gameObject.isInsideFrustum()) {
+                dirtySkipped++;
+                continue;
+            }
+
             if (gameObject.transform.isDirty()) {
                 loadVertexProperties(modelRendererComponent);
 
@@ -145,11 +151,9 @@ public class RenderBatch {
 
     public void render() {
         dirtyModified = 0; // Stat
+        dirtySkipped = 0; // Stat
 
         Scene scene = SceneManager.getCurrentScene();
-        if (scene == null) {
-            return;
-        }
 
         updateDirtyModels();
 
@@ -265,6 +269,10 @@ public class RenderBatch {
 
     public int getDirtyModified() {
         return dirtyModified;
+    }
+
+    public int getDirtySkipped() {
+        return dirtySkipped;
     }
 
     public void pointer() {

@@ -1,5 +1,7 @@
 package me.restonic4.engine.world.object;
 
+import me.restonic4.engine.util.math.RandomUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ public class GameObject {
     private String name;
     private List<Component> components;
     private boolean isStatic;
+    private boolean isInsideFrustum;
 
     private Transform startingTransform;
 
@@ -102,5 +105,13 @@ public class GameObject {
 
     public String getName() {
         return this.name;
+    }
+
+    public void setInsideFrustum(boolean value) {
+        this.isInsideFrustum = value;
+    }
+
+    public boolean isInsideFrustum() {
+        return this.isInsideFrustum;
     }
 }
