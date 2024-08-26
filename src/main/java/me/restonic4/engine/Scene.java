@@ -3,7 +3,7 @@ package me.restonic4.engine;
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.render.Camera;
 import me.restonic4.engine.render.Renderer;
-import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

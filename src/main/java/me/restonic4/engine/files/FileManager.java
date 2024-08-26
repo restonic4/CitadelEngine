@@ -1,7 +1,7 @@
 package me.restonic4.engine.files;
 
 import me.restonic4.engine.exceptions.FileException;
-import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 import me.restonic4.shared.SharedConstants;
 
 import java.io.File;

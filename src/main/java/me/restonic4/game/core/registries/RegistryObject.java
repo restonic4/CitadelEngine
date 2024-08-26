@@ -1,9 +1,8 @@
 package me.restonic4.game.core.registries;
 
-import me.restonic4.game.core.AssetLocation;
 import me.restonic4.game.core.exceptions.RegistryItemException;
 
-public abstract class RegistryItem {
+public abstract class RegistryObject {
     private AssetLocation assetLocation;
 
     public AssetLocation getAssetLocation() {

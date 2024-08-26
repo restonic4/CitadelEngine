@@ -1,4 +1,4 @@
-package me.restonic4.game.core;
+package me.restonic4.game.core.registries;
 
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.game.core.exceptions.AssetLocationException;

@@ -1,4 +1,4 @@
-package me.restonic4.engine.util.debug;
+package me.restonic4.engine.util.debug.diagnosis;
 
 import static org.lwjgl.opengl.GL43.*;
 

@@ -5,7 +5,6 @@ import me.restonic4.engine.SceneManager;
 import me.restonic4.engine.object.GameObject;
 import me.restonic4.engine.object.components.ModelRendererComponent;
 import me.restonic4.engine.util.debug.DebugManager;
-import me.restonic4.engine.util.debug.Logger;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -147,7 +146,7 @@ public class RenderBatch {
     public void render() {
         dirtyModified = 0; // Stat
 
-        Scene scene = SceneManager.getInstance().getCurrentScene();
+        Scene scene = SceneManager.getCurrentScene();
         if (scene == null) {
             return;
         }

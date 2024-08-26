@@ -1,8 +1,8 @@
 package me.restonic4.game.core.world.sounds;
 
 import me.restonic4.shared.SharedConstants;
-import me.restonic4.engine.util.debug.Logger;
-import me.restonic4.game.core.AssetLocation;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
+import me.restonic4.game.core.registries.AssetLocation;
 import me.restonic4.game.core.registries.Registries;
 import me.restonic4.game.core.registries.Registry;
 

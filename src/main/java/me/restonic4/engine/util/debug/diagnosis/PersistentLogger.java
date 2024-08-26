@@ -1,5 +1,6 @@
-package me.restonic4.engine.util.debug;
+package me.restonic4.engine.util.debug.diagnosis;
 
+import me.restonic4.engine.util.debug.DebugManager;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.files.FileManager;
 

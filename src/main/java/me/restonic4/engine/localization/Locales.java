@@ -1,7 +1,7 @@
 package me.restonic4.engine.localization;
 
 import me.restonic4.engine.files.FileManager;
-import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 import org.json.JSONObject;
 
 import java.util.Locale;

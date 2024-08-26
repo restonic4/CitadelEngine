@@ -1,7 +1,7 @@
 package me.restonic4.engine.object.components;
 
 import me.restonic4.engine.object.Component;
-import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 
 public class DebugComponent extends Component {
     @Override

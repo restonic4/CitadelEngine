@@ -1,28 +1,19 @@
 package me.restonic4.engine;
 
-import me.restonic4.engine.util.debug.Logger;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 
-public class SceneManager {
-    private static SceneManager instance;
+public abstract class SceneManager {
+    private static Scene currentScene;
 
-    private Scene currentScene;
-
-    public static SceneManager getInstance() {
-        if (SceneManager.instance == null) {
-            SceneManager.instance = new SceneManager();
-        }
-        return SceneManager.instance;
+    public static Scene getCurrentScene() {
+        return currentScene;
     }
 
-    public Scene getCurrentScene() {
-        return this.currentScene;
+    private static void setScene(Scene scene) {
+        currentScene = scene;
     }
 
-    private void setScene(Scene scene) {
-        this.currentScene = scene;
-    }
-
-    public void loadScene(Scene scene) {
+    public static void loadScene(Scene scene) {
         Logger.log("Loading the scene: " + scene);
 
         setScene(scene);
@@ -31,17 +22,17 @@ public class SceneManager {
         scene.activate();
     }
 
-    public void unLoadScene(Scene scene) {
+    public static void unLoadScene(Scene scene) {
         scene.unload();
 
-        if (this.currentScene == scene) {
-            this.currentScene = null;
+        if (currentScene == scene) {
+            currentScene = null;
         }
     }
 
-    public void unLoadCurrentScene() {
-        if (this.currentScene != null) {
-            unLoadScene(this.currentScene);
+    public static void unLoadCurrentScene() {
+        if (currentScene != null) {
+            unLoadScene(currentScene);
         }
     }
 }

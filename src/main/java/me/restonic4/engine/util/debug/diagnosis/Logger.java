@@ -1,4 +1,6 @@
-package me.restonic4.engine.util.debug;
+package me.restonic4.engine.util.debug.diagnosis;
+
+import me.restonic4.engine.util.debug.DebugManager;
 
 public abstract class Logger {
     private static final PersistentLogger persistentLogger = new PersistentLogger();

@@ -1,14 +1,12 @@
 package me.restonic4.game.core.registries;
 
-import me.restonic4.game.core.AssetLocation;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class Registry {
     private static final Map<RegistryKey<?>, Map<AssetLocation, ?>> registries = new HashMap<>();
 
-    public static <T extends RegistryItem> T register(RegistryKey<T> registryKey, AssetLocation assetLocation, T object) {
+    public static <T extends RegistryObject> T register(RegistryKey<T> registryKey, AssetLocation assetLocation, T object) {
         Map<AssetLocation, T> registry = getOrCreateRegistry(registryKey);
 
         assetLocation.setRegistryKey(registryKey);
@@ -25,7 +23,7 @@ public class Registry {
         return object;
     }
 
-    public static <T extends RegistryItem> T get(RegistryKey<T> registryKey, AssetLocation assetLocation) {
+    public static <T extends RegistryObject> T get(RegistryKey<T> registryKey, AssetLocation assetLocation) {
         Map<AssetLocation, T> registry = getRegistry(registryKey);
 
         if (registry == null) return null;
@@ -34,12 +32,12 @@ public class Registry {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends RegistryItem> Map<AssetLocation, T> getOrCreateRegistry(RegistryKey<T> registryKey) {
+    private static <T extends RegistryObject> Map<AssetLocation, T> getOrCreateRegistry(RegistryKey<T> registryKey) {
         return (Map<AssetLocation, T>) registries.computeIfAbsent(registryKey, k -> new HashMap<>());
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends RegistryItem> Map<AssetLocation, T> getRegistry(RegistryKey<T> registryKey) {
+    private static <T extends RegistryObject> Map<AssetLocation, T> getRegistry(RegistryKey<T> registryKey) {
         return (Map<AssetLocation, T>) registries.get(registryKey);
     }
 }

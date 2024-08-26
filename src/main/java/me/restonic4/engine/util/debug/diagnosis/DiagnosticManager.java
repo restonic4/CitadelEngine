@@ -1,7 +1,4 @@
-package me.restonic4.engine.util.diagnosis;
-
-import me.restonic4.engine.util.debug.Logger;
-import me.restonic4.engine.util.debug.PersistentLogger;
+package me.restonic4.engine.util.debug.diagnosis;
 
 import java.awt.*;
 import java.io.IOException;

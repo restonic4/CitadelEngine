@@ -1,9 +1,7 @@
 package me.restonic4.engine.localization;
 
-import me.restonic4.engine.files.FileManager;
 import me.restonic4.engine.platform.PlatformManager;
-import me.restonic4.engine.util.debug.Logger;
-import org.json.JSONObject;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 
 public class Localizer {
     private static Locales currentLocal;
@@ -24,7 +22,7 @@ public class Localizer {
 
     public static Locales getCurrentLocale() {
         if (currentLocal == null) {
-            currentLocal = PlatformManager.getInstance().getOperatingSystem().get().getSystemLocale();
+            currentLocal = PlatformManager.getOperatingSystem().get().getSystemLocale();
             currentLocal.populate();
         }
 

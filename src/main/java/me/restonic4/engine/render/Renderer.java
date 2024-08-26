@@ -2,13 +2,8 @@ package me.restonic4.engine.render;
 
 import me.restonic4.engine.exceptions.RenderException;
 import me.restonic4.engine.object.GameObject;
-import me.restonic4.engine.object.Mesh;
 import me.restonic4.engine.object.components.ModelRendererComponent;
-import me.restonic4.engine.util.Time;
-import me.restonic4.engine.util.debug.Logger;
 import me.restonic4.shared.SharedConstants;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;

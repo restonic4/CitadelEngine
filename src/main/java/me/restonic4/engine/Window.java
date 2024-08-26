@@ -2,12 +2,11 @@ package me.restonic4.engine;
 
 import me.restonic4.engine.input.KeyListener;
 import me.restonic4.engine.input.MouseListener;
-import me.restonic4.engine.util.debug.OpenGLDebugOutput;
+import me.restonic4.engine.util.debug.diagnosis.OpenGLDebugOutput;
 import me.restonic4.game.Game;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.util.Time;
-import me.restonic4.engine.util.debug.Logger;
-import me.restonic4.game.core.scenes.WorldScene;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -117,13 +116,14 @@ public class Window {
         // OpenGL initialization
         GL.createCapabilities();
 
+        // Enables OpenGL advanced logs
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         OpenGLDebugOutput debugOutput = new OpenGLDebugOutput();
         debugOutput.setupDebugMessageCallback();
 
-        Game game = Game.getInstance();
-        game.start();
+        // Starts the game logic
+        Game.start();
     }
 
     public void loop() {
@@ -133,7 +133,7 @@ public class Window {
 
             updateAspectRatio();
 
-            Scene scene = SceneManager.getInstance().getCurrentScene();
+            Scene scene = SceneManager.getCurrentScene();
             if (scene != null) {
                 scene.update();
             }
@@ -168,7 +168,7 @@ public class Window {
     }
 
     private void cleanup() {
-        SceneManager.getInstance().unLoadCurrentScene();
+        SceneManager.unLoadCurrentScene();
 
         // Free the memory
         glfwFreeCallbacks(glfwWindowAddress);

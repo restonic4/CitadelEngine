@@ -1,7 +1,8 @@
 package me.restonic4.engine.util.debug;
 
 import me.restonic4.engine.localization.Localizer;
-import me.restonic4.engine.util.diagnosis.DiagnosticManager;
+import me.restonic4.engine.util.debug.diagnosis.DiagnosticManager;
+import me.restonic4.engine.util.debug.diagnosis.Logger;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.files.FileManager;
 import me.restonic4.engine.util.math.RandomUtil;
@@ -35,6 +36,10 @@ public class DebugManager {
     public static void displayCrashDialog(Throwable e) {
         String messageKey = "system.message.crash." + RandomUtil.random(1, SharedConstants.CRASH_MESSAGES);
         String message = Localizer.localizeKey(messageKey);
+
+        Logger.log("///////////////////////////");
+        Logger.log("CRASHED -> " + message);
+        Logger.log("///////////////////////////");
 
         StringBuilder crashMessage = new StringBuilder();
         crashMessage.append(message + "\n\n")
