@@ -30,6 +30,7 @@ public class WorldScene extends Scene {
     SoundSource music;
 
     List<GameObject> moving = new ArrayList<>();
+    GameObject test2;
 
     @Override
     public void init() {
@@ -126,7 +127,7 @@ public class WorldScene extends Scene {
         //int amount = 16;
         int amount = 4;
 
-        GameObject test2 = new GameObject(false);
+        test2 = new GameObject(false);
         test2.addComponent(new ModelRendererComponent(cameraMesh));
         test2.setName("test:");
         test2.transform.setPosition(-15, -15, -15);
@@ -240,6 +241,8 @@ public class WorldScene extends Scene {
         for (int i = 0; i < moving.size(); i++) {
             moving.get(i).transform.setPosition(theMath + (i * 3), theMath + (i * 3), theMath + (i * 3));
         }
+
+        test2.transform.addLocalPositionX((float) (10 * Time.getDeltaTime()));
 
         super.update();
     }
