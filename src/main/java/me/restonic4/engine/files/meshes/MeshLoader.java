@@ -1,7 +1,7 @@
 package me.restonic4.engine.files.meshes;
 
 import me.restonic4.engine.exceptions.FileException;
-import me.restonic4.engine.object.Mesh;
+import me.restonic4.engine.world.object.Mesh;
 import me.restonic4.engine.files.FileManager;
 
 public class MeshLoader {

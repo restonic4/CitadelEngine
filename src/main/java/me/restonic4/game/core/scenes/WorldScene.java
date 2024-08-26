@@ -1,19 +1,18 @@
 package me.restonic4.game.core.scenes;
 
-import me.restonic4.engine.Scene;
-import me.restonic4.engine.SceneManager;
+import me.restonic4.engine.world.Scene;
+import me.restonic4.engine.world.SceneManager;
 import me.restonic4.engine.Window;
 import me.restonic4.engine.input.KeyListener;
-import me.restonic4.engine.object.GameObject;
-import me.restonic4.engine.object.Mesh;
-import me.restonic4.engine.object.Transform;
-import me.restonic4.engine.object.components.ModelRendererComponent;
+import me.restonic4.engine.world.object.GameObject;
+import me.restonic4.engine.world.object.Mesh;
+import me.restonic4.engine.world.object.Transform;
+import me.restonic4.engine.world.object.components.ModelRendererComponent;
 import me.restonic4.engine.files.meshes.MeshLoader;
 import me.restonic4.engine.render.PerspectiveCamera;
 import me.restonic4.engine.util.Time;
 import me.restonic4.engine.util.debug.diagnosis.Logger;
 import me.restonic4.engine.util.math.RandomUtil;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 

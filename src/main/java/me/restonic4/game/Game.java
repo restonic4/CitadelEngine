@@ -1,6 +1,6 @@
 package me.restonic4.game;
 
-import me.restonic4.engine.SceneManager;
+import me.restonic4.engine.world.SceneManager;
 import me.restonic4.engine.util.debug.diagnosis.Logger;
 import me.restonic4.engine.registries.RegistryManager;
 import me.restonic4.game.core.scenes.WorldScene;

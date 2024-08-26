@@ -1,8 +1,8 @@
 package me.restonic4.engine.render;
 
 import me.restonic4.engine.exceptions.RenderException;
-import me.restonic4.engine.object.GameObject;
-import me.restonic4.engine.object.components.ModelRendererComponent;
+import me.restonic4.engine.world.object.GameObject;
+import me.restonic4.engine.world.object.components.ModelRendererComponent;
 import me.restonic4.shared.SharedConstants;
 
 import java.util.ArrayList;

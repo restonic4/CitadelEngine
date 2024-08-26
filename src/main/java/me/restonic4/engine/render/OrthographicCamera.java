@@ -1,10 +1,6 @@
 package me.restonic4.engine.render;
 
-import me.restonic4.engine.object.Transform;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
+import me.restonic4.engine.world.object.Transform;
 
 public class OrthographicCamera extends Camera {
     public OrthographicCamera(Transform transform) {

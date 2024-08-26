@@ -1,6 +1,6 @@
 package me.restonic4.engine.files.meshes;
 
-import me.restonic4.engine.object.Mesh;
+import me.restonic4.engine.world.object.Mesh;
 
 public class GenericMeshLoader {
     public Mesh loadMesh(String data) {

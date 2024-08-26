@@ -1,6 +1,6 @@
-package me.restonic4.engine;
+package me.restonic4.engine.world;
 
-import me.restonic4.engine.object.GameObject;
+import me.restonic4.engine.world.object.GameObject;
 import me.restonic4.engine.render.Camera;
 import me.restonic4.engine.render.Renderer;
 import me.restonic4.engine.util.debug.diagnosis.Logger;

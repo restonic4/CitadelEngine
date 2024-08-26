@@ -1,7 +1,4 @@
-package me.restonic4.engine.object;
-
-import me.restonic4.engine.SceneManager;
-import me.restonic4.engine.util.Time;
+package me.restonic4.engine.world.object;
 
 import java.util.ArrayList;
 import java.util.List;

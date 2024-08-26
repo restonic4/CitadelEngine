@@ -1,6 +1,6 @@
-package me.restonic4.engine.object.components;
+package me.restonic4.engine.world.object.components;
 
-import me.restonic4.engine.object.Component;
+import me.restonic4.engine.world.object.Component;
 import me.restonic4.engine.util.debug.diagnosis.Logger;
 
 public class DebugComponent extends Component {

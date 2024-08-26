@@ -1,4 +1,4 @@
-package me.restonic4.engine;
+package me.restonic4.engine.world;
 
 import me.restonic4.engine.util.debug.diagnosis.Logger;
 

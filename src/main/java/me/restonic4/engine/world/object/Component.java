@@ -1,4 +1,4 @@
-package me.restonic4.engine.object;
+package me.restonic4.engine.world.object;
 
 public abstract class Component {
     public GameObject gameObject = null;

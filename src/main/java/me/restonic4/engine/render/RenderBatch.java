@@ -1,9 +1,9 @@
 package me.restonic4.engine.render;
 
-import me.restonic4.engine.Scene;
-import me.restonic4.engine.SceneManager;
-import me.restonic4.engine.object.GameObject;
-import me.restonic4.engine.object.components.ModelRendererComponent;
+import me.restonic4.engine.world.Scene;
+import me.restonic4.engine.world.SceneManager;
+import me.restonic4.engine.world.object.GameObject;
+import me.restonic4.engine.world.object.components.ModelRendererComponent;
 import me.restonic4.engine.util.debug.DebugManager;
 import org.joml.Vector3f;
 import org.joml.Vector4f;

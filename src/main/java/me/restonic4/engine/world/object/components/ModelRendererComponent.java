@@ -1,8 +1,7 @@
-package me.restonic4.engine.object.components;
+package me.restonic4.engine.world.object.components;
 
-import me.restonic4.engine.object.Component;
-import me.restonic4.engine.object.Mesh;
-import org.joml.Vector4f;
+import me.restonic4.engine.world.object.Component;
+import me.restonic4.engine.world.object.Mesh;
 
 public class ModelRendererComponent extends Component {
     private Mesh mesh;

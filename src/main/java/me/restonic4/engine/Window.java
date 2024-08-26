@@ -3,6 +3,8 @@ package me.restonic4.engine;
 import me.restonic4.engine.input.KeyListener;
 import me.restonic4.engine.input.MouseListener;
 import me.restonic4.engine.util.debug.diagnosis.OpenGLDebugOutput;
+import me.restonic4.engine.world.Scene;
+import me.restonic4.engine.world.SceneManager;
 import me.restonic4.game.Game;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.engine.util.Time;

@@ -1,6 +1,6 @@
 package me.restonic4.engine.files.meshes;
 
-import me.restonic4.engine.object.Mesh;
+import me.restonic4.engine.world.object.Mesh;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 

@@ -1,4 +1,4 @@
-package me.restonic4.engine.object;
+package me.restonic4.engine.world.object;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
