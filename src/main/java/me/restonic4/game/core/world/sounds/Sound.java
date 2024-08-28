@@ -1,11 +1,11 @@
 package me.restonic4.game.core.world.sounds;
 
-import me.restonic4.engine.registries.RegistryManager;
-import me.restonic4.engine.sound.SoundBuffer;
-import me.restonic4.engine.registries.RegistryObject;
-import me.restonic4.engine.sound.SoundManager;
-import me.restonic4.engine.sound.SoundSource;
-import me.restonic4.engine.util.debug.diagnosis.Logger;
+import me.restonic4.citadel.registries.RegistryManager;
+import me.restonic4.citadel.sound.SoundBuffer;
+import me.restonic4.citadel.registries.RegistryObject;
+import me.restonic4.citadel.sound.SoundManager;
+import me.restonic4.citadel.sound.SoundSource;
+import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public class Sound extends RegistryObject {
     private SoundBuffer soundBuffer;

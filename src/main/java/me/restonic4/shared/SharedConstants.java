@@ -1,8 +1,8 @@
 package me.restonic4.shared;
 
 public class SharedConstants {
-    public static final String WINDOW_TITLE = "EpicAmazingCoolGameTestIGues";
-    public static final String APP_NAME = "YourGame";
+    public static final String WINDOW_TITLE = "Citadel engine";
+    public static final String APP_NAME = "Citadel";
 
     public static final String VANILLA_NAMESPACE = "game";
     public static final String ASSETS_PATH = "resources";
