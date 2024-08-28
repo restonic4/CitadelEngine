@@ -9,7 +9,7 @@ import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scene {
+public abstract class Scene {
     protected Renderer renderer = new Renderer();
     protected Camera camera;
 

@@ -43,8 +43,9 @@ public class Window {
         return Window.instance;
     }
 
-    public void run() {
+    public void run(IGameLogic iGameLogic) {
         init();
+        iGameLogic.start(); // Starts your game logic
         loop();
         cleanup();
     }
@@ -131,9 +132,6 @@ public class Window {
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         OpenGLDebugOutput debugOutput = new OpenGLDebugOutput();
         debugOutput.setupDebugMessageCallback();*/
-
-        // Starts the game logic
-        Game.start();
     }
 
     public void loop() {
