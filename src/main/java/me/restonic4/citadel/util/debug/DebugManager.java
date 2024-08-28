@@ -16,6 +16,7 @@ public class DebugManager {
     private static boolean DEBUG_MODE = false;
     private static boolean WIREFRAME_MODE = false;
     private static boolean VERTICES_MODE = false;
+    private static boolean STOP_BATCH_RENDER = false;
 
     public static void setDebugMode(boolean value) {
         DEBUG_MODE = value;
@@ -103,5 +104,17 @@ public class DebugManager {
 
     public static void toggleVerticesMode() {
         setVerticesMode(!VERTICES_MODE);
+    }
+
+    public static boolean isBatchRenderingDisabled() {
+        return STOP_BATCH_RENDER;
+    }
+
+    public static void setBatchRenderingDisabled(boolean value) {
+        STOP_BATCH_RENDER = value;
+    }
+
+    public static void toggleBatchRenderingDisabled() {
+        setVerticesMode(!STOP_BATCH_RENDER);
     }
 }

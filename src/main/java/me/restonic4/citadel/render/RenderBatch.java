@@ -170,8 +170,9 @@ public class RenderBatch {
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         }
 
-        //glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
-        glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
+        if (!DebugManager.isBatchRenderingDisabled()) {
+            glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
+        }
 
         // Debug
         if (DebugManager.isVerticesMode()) {
@@ -267,10 +268,6 @@ public class RenderBatch {
 
     public int getDirtySkipped() {
         return dirtySkipped;
-    }
-
-    public void pointer() {
-        //Logger.log("This should be used with debug mode to check the variables and all of that");
     }
 
     public enum AddFailureTypes {

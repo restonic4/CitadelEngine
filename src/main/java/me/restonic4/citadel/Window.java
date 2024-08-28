@@ -7,6 +7,7 @@ import me.restonic4.citadel.util.debug.diagnosis.OpenGLDebugOutput;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.game.Game;
+import me.restonic4.game.core.scenes.WorldScene;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -119,11 +120,17 @@ public class Window {
         // OpenGL initialization
         GL.createCapabilities();
 
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+
         // Enables OpenGL advanced logs
-        glEnable(GL_DEBUG_OUTPUT);
+        /*glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         OpenGLDebugOutput debugOutput = new OpenGLDebugOutput();
-        debugOutput.setupDebugMessageCallback();
+        debugOutput.setupDebugMessageCallback();*/
 
         // Starts the game logic
         Game.start();

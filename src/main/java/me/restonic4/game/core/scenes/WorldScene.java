@@ -34,8 +34,6 @@ public class WorldScene extends Scene {
 
     @Override
     public void init() {
-        Logger.log("Starting the world scene");
-
         Transform camTransform = new Transform();
         camTransform.setPosition(0, 0, 100);
         camTransform.setScale(1, 1, 1);
@@ -125,14 +123,14 @@ public class WorldScene extends Scene {
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
         //int amount = 16;
-        int amount = 4;
+        int amount = 16;
 
-        test2 = new GameObject(false);
+        /*test2 = new GameObject(false);
         test2.addComponent(new ModelRendererComponent(cameraMesh));
         test2.setName("test:");
         test2.transform.setPosition(-15, -15, -15);
         test2.transform.setScale(10,10,10);
-        this.addGameObject(test2);
+        this.addGameObject(test2);*/
 
         /*GameObject testDebug = new GameObject(false);
         testDebug.addComponent(new ModelRendererComponent(testMesh));
@@ -166,6 +164,73 @@ public class WorldScene extends Scene {
                 }
             }
         }
+
+        /*for (int i = 0; i < 4; i++) {
+            GameObject test = new GameObject(false);
+            test.addComponent(new ModelRendererComponent((RandomUtil.random(0,1) == 0) ? testMesh : testMesh2));
+            test.setName("test");
+            test.transform.setPosition(5*i, 5, 5);
+            test.transform.setScale(1,1,1);
+            this.addGameObject(test);
+        }*/
+
+        /*GameObject test = new GameObject(false);
+        test.addComponent(new ModelRendererComponent(testMesh2));
+        test.setName("test");
+        test.transform.setPosition(5, 5, 5);
+        test.transform.setScale(1,1,1);
+        this.addGameObject(test);
+
+        GameObject test2 = new GameObject(false);
+        test2.addComponent(new ModelRendererComponent(testMesh));
+        test2.setName("test");
+        test2.transform.setPosition(10, 5, 5);
+        test2.transform.setScale(1,1,1);
+        this.addGameObject(test2);
+
+        GameObject test3 = new GameObject(false);
+        test3.addComponent(new ModelRendererComponent(testMesh));
+        test3.setName("test");
+        test3.transform.setPosition(10, 5, 10);
+        test3.transform.setScale(1,1,1);
+        this.addGameObject(test3);
+
+        GameObject test4 = new GameObject(false);
+        test4.addComponent(new ModelRendererComponent(testMesh));
+        test4.setName("test");
+        test4.transform.setPosition(5, 5, 10);
+        test4.transform.setScale(1,1,1);
+        this.addGameObject(test4);
+
+        GameObject test5 = new GameObject(false);
+        test5.addComponent(new ModelRendererComponent(testMesh));
+        test5.setName("test");
+        test5.transform.setPosition(5, 10, 5);
+        test5.transform.setScale(1,1,1);
+        this.addGameObject(test5);
+
+        GameObject test6 = new GameObject(false);
+        test6.addComponent(new ModelRendererComponent(testMesh));
+        test6.setName("test");
+        test6.transform.setPosition(10, 10, 5);
+        test6.transform.setScale(1,1,1);
+        this.addGameObject(test6);
+
+        GameObject test7 = new GameObject(false);
+        test7.addComponent(new ModelRendererComponent(testMesh));
+        test7.setName("test");
+        test7.transform.setPosition(10, 10, 10);
+        test7.transform.setScale(1,1,1);
+        this.addGameObject(test7);
+
+        GameObject test8 = new GameObject(false);
+        test8.addComponent(new ModelRendererComponent(testMesh2));
+        test8.setName("test");
+        test8.transform.setPosition(5, 10, 10);
+        test8.transform.setScale(1,1,1);
+        this.addGameObject(test8);*/
+
+        super.init();
     }
 
     @Override
@@ -188,7 +253,7 @@ public class WorldScene extends Scene {
             music.setPitch(RandomUtil.randomTiny() + RandomUtil.randomTiny());
         }
 
-        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_U)) {
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_U)) {
             SceneManager.loadScene(new WorldScene());
         }
 
@@ -239,16 +304,17 @@ public class WorldScene extends Scene {
                 + ", w: " + Window.getInstance().getWidth()
                 + ", h: " + Window.getInstance().getHeight()
                 + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
+                + ", Scene changed: " + SceneManager.changes
         );
 
         SoundManager.getInstance().updateListenerPosition(camera);
 
         float theMath = (float) Math.sin(Time.getRunningTime());
         for (int i = 0; i < moving.size(); i++) {
-            moving.get(i).transform.setPosition(theMath + (i * 3), theMath + (i * 3), theMath + (i * 3));
+            //moving.get(i).transform.setPosition(theMath + (i * 3), theMath + (i * 3), theMath + (i * 3));
         }
 
-        test2.transform.addLocalPositionX((float) (10 * Time.getDeltaTime()));
+        //test2.transform.addLocalPositionX((float) (10 * Time.getDeltaTime()));
 
         super.update();
     }

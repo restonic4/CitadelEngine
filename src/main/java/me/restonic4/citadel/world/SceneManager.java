@@ -4,12 +4,14 @@ import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public abstract class SceneManager {
     private static Scene currentScene;
+    public static int changes = 0;
 
     public static Scene getCurrentScene() {
         return currentScene;
     }
 
     private static void setScene(Scene scene) {
+        changes++;
         currentScene = scene;
     }
 

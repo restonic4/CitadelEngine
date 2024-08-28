@@ -5,7 +5,7 @@ import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public class Main {
     public static void main(String[] args) {
-        DebugManager.setDebugMode(false);
+        DebugManager.setDebugMode(true);
 
         Logger.log("Starting the engine");
 

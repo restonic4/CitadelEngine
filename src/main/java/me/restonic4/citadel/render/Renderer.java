@@ -1,6 +1,7 @@
 package me.restonic4.citadel.render;
 
 import me.restonic4.citadel.exceptions.RenderException;
+import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.world.object.GameObject;
@@ -8,6 +9,7 @@ import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import me.restonic4.shared.SharedConstants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -80,11 +82,9 @@ public class Renderer {
         FrustumCullingFilter.getInstance().updateFrustum(scene.getCamera().projectionMatrix, scene.getCamera().viewMatrix);
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), 1);
 
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
+        //DebugManager.setWireFrameMode(true);
+        DebugManager.setVerticesMode(true);
+        //DebugManager.setBatchRenderingDisabled(true);
 
         // Render batches
         renderBatches(this.staticBatches);

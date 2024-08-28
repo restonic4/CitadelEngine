@@ -9,7 +9,7 @@ import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Scene {
+public class Scene {
     protected Renderer renderer = new Renderer();
     protected Camera camera;
 
@@ -19,11 +19,14 @@ public abstract class Scene {
     private boolean isActivated = false;
 
     public void init() {
-        Logger.log("Initializing the scene");
+        Logger.log("Initializing the scene " + this);
     }
 
     public void activate() {
+        Logger.log("Trying to activate the scene " + this);
+
         if (isActivated) {
+            Logger.log("The scene " + this + " was already activated");
             return;
         }
 
@@ -31,6 +34,8 @@ public abstract class Scene {
         activateGameObjects(dynamicGameObjects);
 
         isActivated = true;
+
+        Logger.log("The scene " + this + " was activated");
     }
 
     private void activateGameObjects(List<GameObject> gameObjects) {
