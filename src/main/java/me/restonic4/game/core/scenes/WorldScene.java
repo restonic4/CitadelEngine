@@ -44,7 +44,7 @@ public class WorldScene extends Scene {
         // Music
         music = Sounds.TEMPLATE.createSource(true, true);
         music.setPosition(new Vector3f(0, 0, 0));
-        music.play();
+        //music.play();
 
         Mesh testMesh = MeshLoader.loadMesh("assets/models/test.obj");
         testMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
@@ -132,8 +132,14 @@ public class WorldScene extends Scene {
         test2.setName("test:");
         test2.transform.setPosition(-15, -15, -15);
         test2.transform.setScale(10,10,10);
-
         this.addGameObject(test2);
+
+        /*GameObject testDebug = new GameObject(false);
+        testDebug.addComponent(new ModelRendererComponent(testMesh));
+        testDebug.setName("debug");
+        testDebug.transform.setPosition(-15, -15, -15);
+        testDebug.transform.setScale(10,10,10);
+        this.addGameObject(testDebug);*/
 
         for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {

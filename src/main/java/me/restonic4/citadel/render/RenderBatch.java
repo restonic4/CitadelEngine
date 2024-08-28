@@ -37,7 +37,7 @@ public class RenderBatch {
 
     private int vaoID, vboID, eboID;
     private int maxBatchSize; // Max vertices allowed per batch
-    private Shader shader;
+    protected Shader shader;
 
     // This is just a stat
     private int dirtyModified = 0;
@@ -82,12 +82,6 @@ public class RenderBatch {
 
         glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, COLOR_OFFSET);
         glEnableVertexAttribArray(1);
-
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
     }
 
     public int getModelVertexOffset(ModelRendererComponent modelRenderer) {

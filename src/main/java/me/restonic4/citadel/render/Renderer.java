@@ -13,8 +13,7 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
-    private List<RenderBatch> staticBatches;
-    private List<RenderBatch> dynamicBatches;
+    private List<RenderBatch> staticBatches, dynamicBatches;
 
     // This is just a stat
     private int drawCallsConsumed = 0;
@@ -34,7 +33,7 @@ public class Renderer {
     }
 
     private void add(ModelRendererComponent modelRenderer) {
-        List<RenderBatch> batches = modelRenderer.gameObject.isStatic() ? this.staticBatches : this.dynamicBatches;
+        List<RenderBatch> batches = (modelRenderer.gameObject.isStatic() ? this.staticBatches : this.dynamicBatches);
         int maxBatchSize = modelRenderer.gameObject.isStatic() ? SharedConstants.MAX_STATIC_BATCH_VERTEX_SIZE : SharedConstants.MAX_DYNAMIC_BATCH_VERTEX_SIZE;
 
         // Trying adding it to an existing one
@@ -81,12 +80,18 @@ public class Renderer {
         FrustumCullingFilter.getInstance().updateFrustum(scene.getCamera().projectionMatrix, scene.getCamera().viewMatrix);
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), 1);
 
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+
         // Render batches
         renderBatches(this.staticBatches);
         renderBatches(this.dynamicBatches);
     }
 
-    private void renderBatches(List<RenderBatch> batches) {
+    private <T extends RenderBatch> void renderBatches(List<T> batches) {
         for (RenderBatch batch : batches) {
             batch.render();
 
