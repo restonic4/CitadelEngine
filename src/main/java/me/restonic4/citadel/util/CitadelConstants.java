@@ -1,11 +1,7 @@
-package me.restonic4.shared;
+package me.restonic4.citadel.util;
 
-public class SharedConstants {
-    public static final String WINDOW_TITLE = "Citadel engine";
-    public static final String APP_NAME = "Citadel";
-
-    public static final String VANILLA_NAMESPACE = "game";
-    public static final String ASSETS_PATH = "resources";
+public class CitadelConstants {
+    public static final String DEFAULT_WINDOW_TITLE = "Citadel engine";
 
     public static final String VALID_NAMESPACE_CHARS = "_-abcdefghijklmnopqrstuvwxyz0123456789.";
     public static final String VALID_PATH_CHARS = VALID_NAMESPACE_CHARS + "/";
@@ -15,11 +11,18 @@ public class SharedConstants {
     public static final String LOG_FILE = "CurrentLog.txt";
     public static final String LOG_DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss";
 
-    public static final int CRASH_MESSAGES = 7;
-
     public static final int MAX_STATIC_BATCH_VERTEX_SIZE = 2048;
     public static final int MAX_DYNAMIC_BATCH_VERTEX_SIZE = 1024;
 
-    public static final boolean VSYNC = true;
-    public static final int FPS_CAP = 60;
+    public static final double NANOSECOND_CONVERSION_FACTOR = 1E-9;
+
+    public static final int MATRIX4F_CAPACITY = 16;
+    public static final int MATRIX3F_CAPACITY = 9;
+
+    // Can be modified
+
+    public static int CRASH_MESSAGES_AMOUNT = 7;
+
+    public static boolean VSYNC = true;
+    public static int FPS_CAP = 60;
 }

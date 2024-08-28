@@ -5,7 +5,7 @@ import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
-import me.restonic4.shared.SharedConstants;
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -28,7 +28,7 @@ public class Window {
     public Window() {
         this.width = 1000;
         this.height = 1000;
-        this.title = SharedConstants.WINDOW_TITLE;
+        this.title = CitadelConstants.DEFAULT_WINDOW_TITLE;
     }
 
     public static Window getInstance() {
@@ -106,7 +106,7 @@ public class Window {
         glfwMakeContextCurrent(glfwWindowAddress);
 
         // Enable v-sync
-        if (SharedConstants.VSYNC) {
+        if (CitadelConstants.VSYNC) {
             glfwSwapInterval(1);
         }
 
@@ -149,12 +149,12 @@ public class Window {
             Time.onFrameEnded();
 
             // Use the FPS cap
-            if (!SharedConstants.VSYNC) {
-                if (SharedConstants.FPS_CAP <= 0) {
+            if (!CitadelConstants.VSYNC) {
+                if (CitadelConstants.FPS_CAP <= 0) {
                     continue;
                 }
 
-                double desiredDuration = (double) 1 / SharedConstants.FPS_CAP;
+                double desiredDuration = (double) 1 / CitadelConstants.FPS_CAP;
 
                 Logger.log(Time.getDeltaTime() + " < " + desiredDuration);
 

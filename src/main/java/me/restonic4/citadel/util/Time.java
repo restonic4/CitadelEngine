@@ -1,7 +1,5 @@
 package me.restonic4.citadel.util;
 
-import me.restonic4.shared.SharedMathConstants;
-
 public class Time {
     private static long timeStarted = System.nanoTime();
 
@@ -16,7 +14,7 @@ public class Time {
 
     // Gets the time passed between the start and right now in nanoseconds and converts it to seconds with the CONVERSION_FACTOR
     public static double getRunningTime() {
-        return ((System.nanoTime() - timeStarted) * SharedMathConstants.NANOSECOND_CONVERSION_FACTOR);
+        return ((System.nanoTime() - timeStarted) * CitadelConstants.NANOSECOND_CONVERSION_FACTOR);
     }
 
     public static double getDeltaTime() {

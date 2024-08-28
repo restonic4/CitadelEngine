@@ -3,7 +3,7 @@ package me.restonic4.citadel.util.debug;
 import me.restonic4.citadel.localization.Localizer;
 import me.restonic4.citadel.util.debug.diagnosis.DiagnosticManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
-import me.restonic4.shared.SharedConstants;
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.files.FileManager;
 import me.restonic4.citadel.util.math.RandomUtil;
 
@@ -35,7 +35,7 @@ public class DebugManager {
     }
 
     public static void displayCrashDialog(Throwable e) {
-        String messageKey = "system.message.crash." + RandomUtil.random(1, SharedConstants.CRASH_MESSAGES);
+        String messageKey = "system.message.crash." + RandomUtil.random(1, CitadelConstants.CRASH_MESSAGES_AMOUNT);
         String message = Localizer.localizeKey(messageKey);
 
         Logger.log("///////////////////////////");
@@ -60,8 +60,8 @@ public class DebugManager {
                 options[0]
         );
 
-        File logFile = new File(FileManager.getMainDirectory() + "/" + SharedConstants.LOG_DIRECTORY + "/" + SharedConstants.LOG_FILE);
-        File logDir = new File(FileManager.getMainDirectory() + "/" + SharedConstants.LOG_DIRECTORY);
+        File logFile = new File(FileManager.getMainDirectory() + "/" + CitadelConstants.LOG_DIRECTORY + "/" + CitadelConstants.LOG_FILE);
+        File logDir = new File(FileManager.getMainDirectory() + "/" + CitadelConstants.LOG_DIRECTORY);
 
         if (choice == 0) {
             // View Log button clicked

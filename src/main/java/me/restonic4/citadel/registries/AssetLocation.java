@@ -1,6 +1,6 @@
 package me.restonic4.citadel.registries;
 
-import me.restonic4.shared.SharedConstants;
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.exceptions.AssetLocationException;
 
 //This is used to locate assets
@@ -41,11 +41,11 @@ public class AssetLocation {
     }
 
     public static boolean isValidNamespace(String string) {
-        return isValidString(string, SharedConstants.VALID_NAMESPACE_CHARS);
+        return isValidString(string, CitadelConstants.VALID_NAMESPACE_CHARS);
     }
 
     public static boolean isValidNPath(String string) {
-        return isValidString(string, SharedConstants.VALID_PATH_CHARS);
+        return isValidString(string, CitadelConstants.VALID_PATH_CHARS);
     }
 
     private static boolean isValidString(String string, String validChars) {

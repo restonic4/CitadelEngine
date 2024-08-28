@@ -1,8 +1,9 @@
 package me.restonic4.citadel.files;
 
+import me.restonic4.citadel.core.CitadelLauncher;
 import me.restonic4.citadel.exceptions.FileException;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
-import me.restonic4.shared.SharedConstants;
+import me.restonic4.citadel.util.CitadelConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,7 +111,7 @@ public class FileManager {
             Path relativePath = Paths.get(resourcePath);
             String fileName = relativePath.getFileName().toString();
 
-            Path tempDir = Paths.get(System.getProperty("java.io.tmpdir"), SharedConstants.APP_NAME);
+            Path tempDir = Paths.get(System.getProperty("java.io.tmpdir"), CitadelLauncher.getInstance().getAppName());
             if (!Files.exists(tempDir)) {
                 Files.createDirectory(tempDir);
             }
@@ -146,7 +147,7 @@ public class FileManager {
             throw new FileException("appDataDir is null. Could not create the directory");
         }
 
-        appDataDir = appDataDir + "/" + SharedConstants.APP_NAME;
+        appDataDir = appDataDir + "/" + CitadelLauncher.getInstance().getAppName();
 
         return appDataDir;
     }

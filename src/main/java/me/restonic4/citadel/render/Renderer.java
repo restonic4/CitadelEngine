@@ -6,10 +6,9 @@ import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.world.object.GameObject;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
-import me.restonic4.shared.SharedConstants;
+import me.restonic4.citadel.util.CitadelConstants;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -36,7 +35,7 @@ public class Renderer {
 
     private void add(ModelRendererComponent modelRenderer) {
         List<RenderBatch> batches = (modelRenderer.gameObject.isStatic() ? this.staticBatches : this.dynamicBatches);
-        int maxBatchSize = modelRenderer.gameObject.isStatic() ? SharedConstants.MAX_STATIC_BATCH_VERTEX_SIZE : SharedConstants.MAX_DYNAMIC_BATCH_VERTEX_SIZE;
+        int maxBatchSize = modelRenderer.gameObject.isStatic() ? CitadelConstants.MAX_STATIC_BATCH_VERTEX_SIZE : CitadelConstants.MAX_DYNAMIC_BATCH_VERTEX_SIZE;
 
         // Trying adding it to an existing one
         for (RenderBatch batch : batches) {

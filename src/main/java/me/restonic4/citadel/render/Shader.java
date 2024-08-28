@@ -3,8 +3,8 @@ package me.restonic4.citadel.render;
 import me.restonic4.citadel.exceptions.RenderException;
 import me.restonic4.citadel.platform.PlatformManager;
 import me.restonic4.citadel.files.FileManager;
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
-import me.restonic4.shared.SharedMathConstants;
 
 import org.joml.*;
 import org.lwjgl.BufferUtils;
@@ -143,7 +143,7 @@ public class Shader {
         use(); // Use the shader in case is not being used
 
         // Convert the matrix into a "simple float array"
-        FloatBuffer matBuffer = BufferUtils.createFloatBuffer(SharedMathConstants.MATRIX4F_CAPACITY);
+        FloatBuffer matBuffer = BufferUtils.createFloatBuffer(CitadelConstants.MATRIX4F_CAPACITY);
         mat4.get(matBuffer);
 
         glUniformMatrix4fv(varLocation, false, matBuffer);
@@ -155,7 +155,7 @@ public class Shader {
         use(); // Use the shader in case is not being used
 
         // Convert the matrix into a "simple float array"
-        FloatBuffer matBuffer = BufferUtils.createFloatBuffer(SharedMathConstants.MATRIX3F_CAPACITY);
+        FloatBuffer matBuffer = BufferUtils.createFloatBuffer(CitadelConstants.MATRIX3F_CAPACITY);
         mat3.get(matBuffer);
 
         glUniformMatrix3fv(varLocation, false, matBuffer);

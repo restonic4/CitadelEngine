@@ -1,7 +1,7 @@
 package me.restonic4.citadel.util.debug.diagnosis;
 
 import me.restonic4.citadel.util.debug.DebugManager;
-import me.restonic4.shared.SharedConstants;
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.files.FileManager;
 
 import java.io.BufferedWriter;
@@ -21,12 +21,12 @@ public class PersistentLogger {
 
     public PersistentLogger() {
         if (DebugManager.isDevEnvironment()) {
-            logFile = new File(SharedConstants.LOG_FILE);
+            logFile = new File(CitadelConstants.LOG_FILE);
             return;
         }
 
-        File logDir = new File(FileManager.createDirectory(SharedConstants.LOG_DIRECTORY));
-        logFile = new File(logDir, SharedConstants.LOG_FILE);
+        File logDir = new File(FileManager.createDirectory(CitadelConstants.LOG_DIRECTORY));
+        logFile = new File(logDir, CitadelConstants.LOG_FILE);
 
         archiveOldLog();
         clearLogFile();
@@ -54,7 +54,7 @@ public class PersistentLogger {
     private void logWriter() {
         while (running) {
             try {
-                Thread.sleep(SharedConstants.LOG_INTERVAL_MS);
+                Thread.sleep(CitadelConstants.LOG_INTERVAL_MS);
                 writeLogsToFile();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -64,7 +64,7 @@ public class PersistentLogger {
 
     private void archiveOldLog() {
         if (logFile.exists()) {
-            String timestamp = new SimpleDateFormat(SharedConstants.LOG_DATE_FORMAT).format(new Date(logFile.lastModified()));
+            String timestamp = new SimpleDateFormat(CitadelConstants.LOG_DATE_FORMAT).format(new Date(logFile.lastModified()));
             File archivedFile = new File(logFile.getParent(), "Log_" + timestamp + ".txt");
             boolean renamed = logFile.renameTo(archivedFile);
             if (!renamed) {
