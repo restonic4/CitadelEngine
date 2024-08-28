@@ -1,13 +1,10 @@
-package me.restonic4.citadel;
+package me.restonic4.citadel.core;
 
 import me.restonic4.citadel.input.KeyListener;
 import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.sound.SoundManager;
-import me.restonic4.citadel.util.debug.diagnosis.OpenGLDebugOutput;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
-import me.restonic4.game.Game;
-import me.restonic4.game.core.scenes.WorldScene;
 import me.restonic4.shared.SharedConstants;
 import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -19,8 +16,6 @@ import org.lwjgl.system.MemoryUtil;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL43.GL_DEBUG_OUTPUT;
-import static org.lwjgl.opengl.GL43.GL_DEBUG_OUTPUT_SYNCHRONOUS;
 
 public class Window {
     private static Window instance = null;

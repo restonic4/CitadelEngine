@@ -1,6 +1,6 @@
 package me.restonic4.game;
 
-import me.restonic4.citadel.IGameLogic;
+import me.restonic4.citadel.core.IGameLogic;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;

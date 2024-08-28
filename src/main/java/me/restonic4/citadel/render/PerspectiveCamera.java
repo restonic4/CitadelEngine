@@ -1,6 +1,6 @@
 package me.restonic4.citadel.render;
 
-import me.restonic4.citadel.Window;
+import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.world.object.Transform;
 
 public class PerspectiveCamera extends Camera {
