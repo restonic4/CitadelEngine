@@ -123,12 +123,6 @@ public class Window {
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
-
-        // Enables OpenGL advanced logs
-        /*glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-        OpenGLDebugOutput debugOutput = new OpenGLDebugOutput();
-        debugOutput.setupDebugMessageCallback();*/
     }
 
     public void loop() {

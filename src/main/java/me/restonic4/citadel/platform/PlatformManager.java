@@ -17,7 +17,6 @@ public abstract class PlatformManager {
 
         for (OperatingSystems os : OperatingSystems.values()) {
             if (os.matches(osName)) {
-                Logger.log("Playing on " + os.getId());
                 return os;
             }
         }

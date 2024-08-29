@@ -20,14 +20,6 @@ public abstract class SceneManager {
     public static void loadScene(Scene scene) {
         Logger.log("Loading the scene: " + scene);
 
-        /*for (int i = 0; i < 1000; i++) {
-            try {
-                Thread.sleep((long) (1));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }*/
-
         if (currentScene != null) {
             currentScene.unload();
         }

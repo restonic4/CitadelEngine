@@ -14,7 +14,7 @@ Features:
 - Frustum culling. (In progress)
 - Registry system to add content dynamically. (In progress)
 - Sound, OGG files.
-- Log system that saves the date into a log file and prevents crashes without a "crash-log file"
+- Log system that saves the log-buffer into a log file and prevents crashes without a "crash-log file"
 
 Planned:
 - Textures.

@@ -2,6 +2,7 @@ package me.restonic4.game.core.scenes;
 
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
+import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.core.Window;

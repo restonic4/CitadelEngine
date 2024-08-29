@@ -1,5 +1,6 @@
 package me.restonic4.citadel.core;
 
+import me.restonic4.citadel.platform.PlatformManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public class CitadelLauncher {
@@ -24,6 +25,7 @@ public class CitadelLauncher {
 
     public void launch() {
         Logger.log("Starting Citadel engine");
+        Logger.log("Platform: " + PlatformManager.getOperatingSystem());
 
         Window.getInstance().run(this.citadelSettings.getiGameLogic());
     }

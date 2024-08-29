@@ -35,9 +35,5 @@ public class Time {
         endFrameTime = Time.getRunningTime();
         deltaTime = endFrameTime - startFrameTime;
         startFrameTime = endFrameTime;
-
-        if (deltaTime > 0.1) {
-            Logger.log("lag?");
-        }
     }
 }

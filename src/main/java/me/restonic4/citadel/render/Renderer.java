@@ -85,10 +85,6 @@ public class Renderer {
         FrustumCullingFilter.getInstance().updateFrustum(scene.getCamera().projectionMatrix, scene.getCamera().viewMatrix);
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), 1);
 
-        //DebugManager.setWireFrameMode(true);
-        //DebugManager.setVerticesMode(true);
-        //DebugManager.setBatchRenderingDisabled(true);
-
         // Render batches
         renderBatches(this.staticBatches);
         renderBatches(this.dynamicBatches);

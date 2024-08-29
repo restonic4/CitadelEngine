@@ -5,6 +5,7 @@ import me.restonic4.citadel.util.debug.diagnosis.DiagnosticManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.files.FileManager;
+import me.restonic4.citadel.util.debug.diagnosis.OpenGLDebugOutput;
 import me.restonic4.citadel.util.math.RandomUtil;
 
 import javax.swing.*;
@@ -12,11 +13,19 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL43.GL_DEBUG_OUTPUT;
+import static org.lwjgl.opengl.GL43.GL_DEBUG_OUTPUT_SYNCHRONOUS;
+
 public class DebugManager {
     private static boolean DEBUG_MODE = false;
     private static boolean WIREFRAME_MODE = false;
     private static boolean VERTICES_MODE = false;
     private static boolean STOP_BATCH_RENDER = false;
+
+    private static OpenGLDebugOutput openGLDebugOutput = new OpenGLDebugOutput();
+    private static boolean openGLDebugOutputStarted = false;
 
     public static void setDebugMode(boolean value) {
         DEBUG_MODE = value;
@@ -116,5 +125,21 @@ public class DebugManager {
 
     public static void toggleBatchRenderingDisabled() {
         setVerticesMode(!STOP_BATCH_RENDER);
+    }
+
+    public static void enableOpenGLAdvancedLogOutput(boolean value) {
+        if (value) {
+            glEnable(GL_DEBUG_OUTPUT);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+            if (!openGLDebugOutputStarted) {
+                openGLDebugOutputStarted = true;
+                openGLDebugOutput.setupDebugMessageCallback();
+            }
+        }
+        else {
+            glDisable(GL_DEBUG_OUTPUT);
+            glDisable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        }
     }
 }
