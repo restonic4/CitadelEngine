@@ -6,6 +6,7 @@ import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.registries.RegistryManager;
 import me.restonic4.game.core.scenes.WorldScene;
+import me.restonic4.game.core.world.sounds.Sounds;
 
 public class Game implements IGameLogic {
     public void start() {
@@ -13,7 +14,8 @@ public class Game implements IGameLogic {
 
         SoundManager.getInstance().init();
 
-        RegistryManager.registerAll();
+        RegistryManager.registerRegistrySet(new Sounds());
+        RegistryManager.registerCustom();
 
         SceneManager.loadScene(new WorldScene());
     }

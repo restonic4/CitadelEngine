@@ -6,7 +6,7 @@ import me.restonic4.citadel.util.debug.DebugManager;
 
 public class Main {
     public static void main(String[] args) {
-        DebugManager.setDebugMode(true);
+        DebugManager.setDebugMode(false);
 
         CitadelSettings citadelSettings = new CitadelSettings(new Game(), "Citadel");
         citadelSettings.setVsync(true);

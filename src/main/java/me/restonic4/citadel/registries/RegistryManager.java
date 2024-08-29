@@ -3,16 +3,34 @@ package me.restonic4.citadel.registries;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.game.core.world.sounds.Sounds;
 
-public class RegistryManager {
-    public static void registerAll() {
-        Logger.log("Starting all the registries");
+import java.util.ArrayList;
+import java.util.List;
 
-        Sounds.register();
+public class RegistryManager {
+    private static List<AbstractRegistryInitializer> builtInRegistries = new ArrayList<>();
+    private static List<AbstractRegistryInitializer> customRegistries = new ArrayList<>();
+
+    public static void registerBuiltIn() {
+        Logger.log("Starting all the built-in registries");
+
+        for (AbstractRegistryInitializer abstractRegistryInitializer : builtInRegistries) {
+            abstractRegistryInitializer.register();
+        }
     }
 
-    public static String getAssetPath(RegistryObject registryObject) {
-        RegistryKey<?> registryKey = registryObject.getAssetLocation().getRegistryKey();
+    public static void registerCustom() {
+        Logger.log("Starting all the custom registries");
 
-        return registryKey.getRootDirectory() + "/" + registryObject.getAssetLocation().getPath() + "." + registryKey.getAssetFileExtension();
+        for (AbstractRegistryInitializer abstractRegistryInitializer : customRegistries) {
+            abstractRegistryInitializer.register();
+        }
+    }
+
+    public static void registerBuiltInRegistrySet(AbstractRegistryInitializer abstractRegistryInitializer) {
+        builtInRegistries.add(abstractRegistryInitializer);
+    }
+
+    public static void registerRegistrySet(AbstractRegistryInitializer abstractRegistryInitializer) {
+        customRegistries.add(abstractRegistryInitializer);
     }
 }

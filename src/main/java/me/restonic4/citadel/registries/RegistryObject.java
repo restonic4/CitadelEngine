@@ -17,6 +17,12 @@ public abstract class RegistryObject {
         this.assetLocation = assetLocation;
     }
 
+    public String getAssetPath() {
+        RegistryKey<?> registryKey = this.getAssetLocation().getRegistryKey();
+
+        return registryKey.getRootDirectory() + "/" + this.getAssetLocation().getPath() + "." + registryKey.getAssetFileExtension();
+    }
+
     //Gets called when the game registers the item
     public void onPopulate() {
         return;

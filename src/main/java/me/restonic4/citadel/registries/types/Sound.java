@@ -1,4 +1,4 @@
-package me.restonic4.game.core.world.sounds;
+package me.restonic4.citadel.registries.types;
 
 import me.restonic4.citadel.registries.RegistryManager;
 import me.restonic4.citadel.sound.SoundBuffer;
@@ -9,10 +9,21 @@ import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public class Sound extends RegistryObject {
     private SoundBuffer soundBuffer;
-    private float volume;
+    private float volume, pitch;
+
+    public Sound() {
+        this.volume = 1;
+        this.pitch = 1;
+    }
 
     public Sound(float volume) {
         this.volume = volume;
+        this.pitch = 1;
+    }
+
+    public Sound(float volume, float pitch) {
+        this.volume = volume;
+        this.pitch = pitch;
     }
 
     public SoundBuffer getBuffer() {
@@ -26,7 +37,7 @@ public class Sound extends RegistryObject {
     }
 
     private SoundBuffer createBuffer() {
-        SoundBuffer soundBuffer = new SoundBuffer(RegistryManager.getAssetPath(this));
+        SoundBuffer soundBuffer = new SoundBuffer(this.getAssetPath());
 
         SoundManager soundManager =  SoundManager.getInstance();
         soundManager.addSoundBuffer(soundBuffer);
@@ -44,6 +55,7 @@ public class Sound extends RegistryObject {
         SoundSource soundSource = new SoundSource(loop, relative);
         soundSource.setBuffer(this.soundBuffer.getBufferId());
         soundSource.setGain(volume);
+        soundSource.setPitch(pitch);
         soundManager.addSoundSource(getAssetLocation().toString(), soundSource);
 
         return soundSource;
