@@ -34,10 +34,11 @@ public abstract class SceneManager {
 
         setScene(scene);
 
+        // Makes sure OpenGL finishes his things, so it doesn't break
+        glFinish();
+
         scene.init();
         scene.activate();
-
-        glFinish();
     }
 
     public static void unLoadScene(Scene scene) {
