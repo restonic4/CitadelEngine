@@ -15,6 +15,7 @@ Features:
 - Registry system to add content dynamically. (In progress)
 - Sound, OGG files.
 - Log system that saves the log-buffer into a log file and prevents crashes without a "crash-log file"
+- Profiler
 
 Planned:
 - Textures.
@@ -23,6 +24,7 @@ Planned:
 - Integrated event system.
 - Better configuration for initializing the engine.
 - Config system.
+- Steamworks compatibility
 
 ## License
 

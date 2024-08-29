@@ -5,6 +5,7 @@ import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.render.Shader;
 import me.restonic4.citadel.sound.SoundManager;
+import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.util.CitadelConstants;
@@ -147,6 +148,7 @@ public class Window {
             glfwSwapBuffers(glfwWindowAddress);
 
             Time.onFrameEnded();
+            ProfilerManager.update();
 
             // Use the FPS cap
             if (!CitadelConstants.VSYNC) {

@@ -5,9 +5,7 @@ import me.restonic4.citadel.exceptions.FileException;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.util.CitadelConstants;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -127,6 +125,21 @@ public class FileManager {
         } catch (IOException e) {
             throw new FileException("Failed to extract file from JAR: " + resourcePath, e);
         }
+    }
+
+    public static String exportFile(String name, String data) {
+        File dir = new File(FileManager.createDirectory("exports"));
+        File file = new File(dir, name);
+
+        try {
+            FileWriter myWriter = new FileWriter(file);
+            myWriter.write(data);
+            myWriter.close();
+        } catch (IOException e) {
+            throw new FileException("Failed to export file to " + name, e);
+        }
+
+        return file.getAbsolutePath();
     }
 
     public static String getOrExtractFile(String resourcePath) {

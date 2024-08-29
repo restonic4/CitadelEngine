@@ -1,0 +1,68 @@
+package me.restonic4.citadel.util.debug.diagnosis;
+
+import me.restonic4.citadel.files.FileManager;
+import me.restonic4.citadel.registries.types.ProfilerStat;
+import me.restonic4.citadel.util.Time;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProfilerManager {
+    private static boolean isEnabled;
+    private static float timeThreshold = 0;
+
+    private static List<ProfilerStat> profilerStatsRegistered = new ArrayList<>();
+
+    public static void setEnabled(boolean value) {
+        isEnabled = value;
+    }
+
+    public static boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public static void registerStat(ProfilerStat profilerStat, float value) {
+        if (!isEnabled) {
+            return;
+        }
+
+        profilerStat.register(value);
+
+        for (ProfilerStat profilerStatFound : profilerStatsRegistered) {
+            if (profilerStatFound.getAssetLocation() == profilerStat.getAssetLocation()) {
+                return;
+            }
+        }
+
+        profilerStatsRegistered.add(profilerStat);
+    }
+
+    public static void update() {
+        if (!isEnabled) {
+            return;
+        }
+
+        timeThreshold = (float) (Time.getRunningTime() - 60);
+
+        for (ProfilerStat profilerStat : profilerStatsRegistered) {
+            profilerStat.clearBefore(timeThreshold);
+        }
+    }
+
+    public static void export() {
+        if (!isEnabled) {
+            return;
+        }
+
+        for (ProfilerStat profilerStat : profilerStatsRegistered) {
+            JSONObject jsonObject = profilerStat.toJSON();
+
+            String fileName = (profilerStat.getAssetLocation().toString() + "_" + Time.getRunningTime()).replace(":", "_") + ".json";
+
+            Logger.log(fileName);
+
+            FileManager.exportFile(fileName, jsonObject.toString());
+        }
+    }
+}

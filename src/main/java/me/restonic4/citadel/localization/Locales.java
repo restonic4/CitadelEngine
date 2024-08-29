@@ -29,7 +29,6 @@ public enum Locales {
         String data = FileManager.readFile(path);
 
         this.setData(new JSONObject(data));
-
     }
 
     @Override

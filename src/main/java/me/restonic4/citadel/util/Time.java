@@ -1,6 +1,8 @@
 package me.restonic4.citadel.util;
 
+import me.restonic4.citadel.registries.built_in.ProfilerStats;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
+import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
@@ -35,5 +37,9 @@ public class Time {
         endFrameTime = Time.getRunningTime();
         deltaTime = endFrameTime - startFrameTime;
         startFrameTime = endFrameTime;
+
+        // Sending data to the profiler in case its on
+        ProfilerManager.registerStat(ProfilerStats.DELTA_TIME, (float) deltaTime);
+        ProfilerManager.registerStat(ProfilerStats.FPS, getFPS());
     }
 }
