@@ -37,7 +37,6 @@ public class RenderBatch {
 
     private int vaoID, vboID, eboID;
     private int maxBatchSize; // Max vertices allowed per batch
-    protected Shader shader;
 
     // This is just a stat
     private int dirtyModified = 0;
@@ -45,9 +44,6 @@ public class RenderBatch {
     private boolean areIndicesDirty;
 
     public RenderBatch(int maxBatchSize, boolean isStatic) {
-        shader = new Shader("assets/shaders/default.glsl");
-        shader.compile();
-
         this.models = new ArrayList<>();
         this.maxBatchSize = maxBatchSize;
 
@@ -151,13 +147,15 @@ public class RenderBatch {
 
         updateDirtyModels();
 
-        glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+        if (dirtyModified > 0) {
+            glBindBuffer(GL_ARRAY_BUFFER, vboID);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
 
-        updateIndices();
+            updateIndices();
+        }
 
         // Use shader
-        shader.use();
+        Shader shader = Renderer.getCurrentShader();
         shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
         shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());
 

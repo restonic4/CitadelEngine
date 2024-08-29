@@ -16,6 +16,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class Renderer {
     private List<RenderBatch> staticBatches, dynamicBatches;
 
+    private static Shader currentShader;
+
     // This is just a stat
     private int drawCallsConsumed = 0;
     private int dirtyModifiedTotal = 0;
@@ -66,6 +68,8 @@ public class Renderer {
         dirtyModifiedTotal = 0;
         dirtySkippedTotal = 0;
 
+        currentShader.use();
+
         //Background, blue :D
         glClearColor(0.267f, 0.741f, 1, 1.0f);
 
@@ -82,7 +86,7 @@ public class Renderer {
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), 1);
 
         //DebugManager.setWireFrameMode(true);
-        DebugManager.setVerticesMode(true);
+        //DebugManager.setVerticesMode(true);
         //DebugManager.setBatchRenderingDisabled(true);
 
         // Render batches
@@ -98,6 +102,14 @@ public class Renderer {
             dirtyModifiedTotal += batch.getDirtyModified();
             dirtySkippedTotal += batch.getDirtySkipped();
         }
+    }
+
+    public static void setShader(Shader shader) {
+        currentShader = shader;
+    }
+
+    public static Shader getCurrentShader() {
+        return currentShader;
     }
 
     public int getDrawCalls() {

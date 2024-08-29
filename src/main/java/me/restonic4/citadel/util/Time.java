@@ -1,5 +1,9 @@
 package me.restonic4.citadel.util;
 
+import me.restonic4.citadel.util.debug.diagnosis.Logger;
+
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
+
 public class Time {
     private static long timeStarted = System.nanoTime();
 
@@ -14,7 +18,8 @@ public class Time {
 
     // Gets the time passed between the start and right now in nanoseconds and converts it to seconds with the CONVERSION_FACTOR
     public static double getRunningTime() {
-        return ((System.nanoTime() - timeStarted) * CitadelConstants.NANOSECOND_CONVERSION_FACTOR);
+        //return ((System.nanoTime() - timeStarted) * CitadelConstants.NANOSECOND_CONVERSION_FACTOR);
+        return glfwGetTime();
     }
 
     public static double getDeltaTime() {
@@ -30,5 +35,9 @@ public class Time {
         endFrameTime = Time.getRunningTime();
         deltaTime = endFrameTime - startFrameTime;
         startFrameTime = endFrameTime;
+
+        if (deltaTime > 0.1) {
+            Logger.log("lag?");
+        }
     }
 }

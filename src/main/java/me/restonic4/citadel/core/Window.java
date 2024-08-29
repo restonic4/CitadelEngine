@@ -2,6 +2,8 @@ package me.restonic4.citadel.core;
 
 import me.restonic4.citadel.input.KeyListener;
 import me.restonic4.citadel.input.MouseListener;
+import me.restonic4.citadel.render.Renderer;
+import me.restonic4.citadel.render.Shader;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
@@ -130,6 +132,9 @@ public class Window {
     }
 
     public void loop() {
+        Shader defaultShader = new Shader("assets/shaders/default.glsl");
+        defaultShader.compile();
+
         while (!glfwWindowShouldClose(glfwWindowAddress)) {
             // Listen for input events
             glfwPollEvents();
@@ -137,7 +142,8 @@ public class Window {
             updateAspectRatio();
 
             Scene scene = SceneManager.getCurrentScene();
-            if (scene != null) {
+            if (scene != null && Time.getDeltaTime() > 0) {
+                Renderer.setShader(defaultShader);
                 scene.update();
             }
 

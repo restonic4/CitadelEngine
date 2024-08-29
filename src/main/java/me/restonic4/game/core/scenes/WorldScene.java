@@ -291,7 +291,7 @@ public class WorldScene extends Scene {
             camera.transform.addLocalRotationEuler(0, (float) (2 * Time.getDeltaTime()), 0);
         }
 
-        glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
+        /*glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
                 "FPS: " + Time.getFPS()
                 + ", DrawCalls: " + this.renderer.getDrawCalls()
                 + ", Dirty objects modified: " + this.renderer.getDirtyModified()
@@ -304,16 +304,9 @@ public class WorldScene extends Scene {
                 + ", h: " + Window.getInstance().getHeight()
                 + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
                 + ", Scene changed: " + SceneManager.changes
-        );
+        );*/
 
         SoundManager.getInstance().updateListenerPosition(camera);
-
-        float theMath = (float) Math.sin(Time.getRunningTime());
-        for (int i = 0; i < moving.size(); i++) {
-            //moving.get(i).transform.setPosition(theMath + (i * 3), theMath + (i * 3), theMath + (i * 3));
-        }
-
-        //test2.transform.addLocalPositionX((float) (10 * Time.getDeltaTime()));
 
         super.update();
     }
