@@ -44,29 +44,29 @@ public class DebugManager {
     }
 
     public static void displayCrashDialog(Throwable e) {
-        String messageKey = "system.message.crash." + RandomUtil.random(1, CitadelConstants.CRASH_MESSAGES_AMOUNT);
+        String messageKey = "citadel:system.message.crash." + RandomUtil.random(1, CitadelConstants.CRASH_MESSAGES_AMOUNT);
         String message = Localizer.localizeKey(messageKey);
 
         Logger.log("///////////////////////////");
-        Logger.log("CRASHED -> " + message);
+        Logger.log(Localizer.localizeKey("citadel:system.message.crash") + " -> " + message);
         Logger.log("///////////////////////////");
 
         StringBuilder crashMessage = new StringBuilder();
         crashMessage.append(message + "\n\n")
                 .append("Error: ").append(e.toString()).append("\n\n")
-                .append(Localizer.localizeKey("system.message.crash.details"));
+                .append(Localizer.localizeKey("citadel:system.message.crash.details"));
 
         Object[] options = {
-            Localizer.localizeKey("system.ui.crash.button.1"),
-            Localizer.localizeKey("system.ui.crash.button.2"),
-            Localizer.localizeKey("system.ui.crash.button.3"),
-            Localizer.localizeKey("system.ui.crash.button.4")
+            Localizer.localizeKey("citadel:system.ui.crash.button.1"),
+            Localizer.localizeKey("citadel:system.ui.crash.button.2"),
+            Localizer.localizeKey("citadel:system.ui.crash.button.3"),
+            Localizer.localizeKey("citadel:system.ui.crash.button.4")
         };
 
         int choice = JOptionPane.showOptionDialog(
                 null,
                 crashMessage.toString(),
-                "Game Crash",
+                Localizer.localizeKey("citadel:system.message.crash.title"),
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.ERROR_MESSAGE,
                 null,

@@ -6,6 +6,7 @@ import me.restonic4.citadel.platform.operating_systems.OperatingSystem;
 import me.restonic4.citadel.registries.RegistryManager;
 import me.restonic4.citadel.registries.built_in.managers.Locales;
 import me.restonic4.citadel.registries.built_in.managers.ProfilerStats;
+import me.restonic4.citadel.util.GradleUtil;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public class CitadelLauncher {
@@ -34,6 +35,8 @@ public class CitadelLauncher {
         Logger.log("Starting Citadel engine");
         Logger.log("Platform: " + operatingSystem);
         Logger.log("Java locale: " + operatingSystem.getSystemLocale());
+
+        GradleUtil.logInfo();
 
         RegistryManager.registerBuiltInRegistrySet(new ProfilerStats());
         RegistryManager.registerBuiltInRegistrySet(new Locales());

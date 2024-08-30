@@ -12,7 +12,7 @@ public class Main {
 
         CitadelSettings citadelSettings = new CitadelSettings(new Game(), "Citadel");
         citadelSettings.setVsync(true);
-        citadelSettings.setVsyncFPSCap(60);
+        citadelSettings.setFPSCap(60);
         citadelSettings.setCrashMessagesAmount(7);
 
         CitadelLauncher citadelLauncher = CitadelLauncher.create(citadelSettings);

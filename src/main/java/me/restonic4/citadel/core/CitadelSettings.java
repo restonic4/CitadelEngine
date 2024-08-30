@@ -23,7 +23,7 @@ public class CitadelSettings {
         return this;
     }
 
-    public CitadelSettings setVsyncFPSCap(int value) {
+    public CitadelSettings setFPSCap(int value) {
         CitadelConstants.FPS_CAP = value;
         return this;
     }

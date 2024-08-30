@@ -5,6 +5,7 @@ import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.render.Shader;
 import me.restonic4.citadel.sound.SoundManager;
+import me.restonic4.citadel.util.GradleUtil;
 import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
@@ -31,7 +32,7 @@ public class Window {
     public Window() {
         this.width = 1000;
         this.height = 1000;
-        this.title = CitadelConstants.DEFAULT_WINDOW_TITLE;
+        this.title = CitadelConstants.DEFAULT_WINDOW_TITLE + " | " + GradleUtil.VERSION;
     }
 
     public static Window getInstance() {
@@ -135,6 +136,9 @@ public class Window {
             glfwPollEvents();
 
             updateAspectRatio();
+
+            //glfwSetCursorPos(glfwWindowAddress, this.width / 2, this.height / 2);
+            glfwSetInputMode(glfwWindowAddress, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
             Scene scene = SceneManager.getCurrentScene();
             if (scene != null && Time.getDeltaTime() > 0) {

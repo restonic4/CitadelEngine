@@ -1,5 +1,6 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.world.object.GameObject;
@@ -147,12 +148,10 @@ public class RenderBatch {
 
         updateDirtyModels();
 
-        if (dirtyModified > 0) {
-            glBindBuffer(GL_ARRAY_BUFFER, vboID);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
 
-            updateIndices();
-        }
+        updateIndices();
 
         // Use shader
         Shader shader = Renderer.getCurrentShader();
@@ -191,6 +190,9 @@ public class RenderBatch {
         Vector3f[] vertexPositions = modelRenderer.getMesh().getVertices();
         Vector4f[] vertexColors = modelRenderer.getMesh().getVerticesColors();
         Vector4f tint = modelRenderer.getMesh().getTint();
+
+        Logger.log(vertexPositions.length);
+        Logger.log(vertexColors.length);
 
         for (int i = 0; i < vertexPositions.length; i++) {
             Vector3f currentPos = new Vector3f(vertexPositions[i]);

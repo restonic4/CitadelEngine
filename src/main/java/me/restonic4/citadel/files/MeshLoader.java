@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIScene;
+import org.lwjgl.assimp.AIVector3D;
 import org.lwjgl.assimp.Assimp;
 
 import java.nio.IntBuffer;
@@ -16,7 +17,8 @@ import java.util.List;
 import static org.lwjgl.assimp.Assimp.*;
 
 public class MeshLoader {
-    private static int defaultMeshFlags = (aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FixInfacingNormals | aiProcess_CalcTangentSpace | aiProcess_LimitBoneWeights | aiProcess_GenBoundingBoxes);
+    //private static int defaultMeshFlags = (aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FixInfacingNormals | aiProcess_CalcTangentSpace | aiProcess_LimitBoneWeights | aiProcess_GenBoundingBoxes);
+    private static int defaultMeshFlags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices;
 
     public static Mesh loadMesh(String filePath) {
         String resourcePath = FileManager.toResources(filePath);
@@ -37,6 +39,12 @@ public class MeshLoader {
 
         for (int i = 0; i < aiScene.mNumMeshes(); i++) {
             AIMesh mesh = AIMesh.create(aiScene.mMeshes().get(i));
+
+            for (AIVector3D vector3f : mesh.mVertices()) {
+                Logger.log("x:" + vector3f.x() + ", y:" + vector3f.y() + ", z:" + vector3f.z());
+            }
+
+            Logger.log("ola " + mesh.mNumVertices());
 
             // Read vertex
             for (int v = 0; v < mesh.mNumVertices(); v++) {

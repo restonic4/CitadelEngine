@@ -1,5 +1,7 @@
 package me.restonic4.citadel.input;
 
+import me.restonic4.citadel.util.debug.diagnosis.Logger;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseListener {

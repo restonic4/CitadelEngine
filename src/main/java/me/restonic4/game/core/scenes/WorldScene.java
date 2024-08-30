@@ -1,5 +1,6 @@
 package me.restonic4.game.core.scenes;
 
+import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.localization.Localizer;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
@@ -19,6 +20,7 @@ import me.restonic4.citadel.render.PerspectiveCamera;
 import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.math.RandomUtil;
 import me.restonic4.game.core.world.sounds.Sounds;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
@@ -27,6 +29,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
 
 public class WorldScene extends Scene {
@@ -47,7 +50,7 @@ public class WorldScene extends Scene {
         music.setPosition(new Vector3f(0, 0, 0));
         //music.play();
 
-        Mesh testMesh = MeshLoader.loadMesh("assets/models/test.obj");
+       /* Mesh testMesh = MeshLoader.loadMesh("assets/models/test.obj");
         testMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 0, 0, 1), // Red
                 new Vector4f(0, 1, 0, 1), // Green
@@ -93,9 +96,9 @@ public class WorldScene extends Scene {
                 new Vector4f(0, 1, 1, 1), // Cyan
                 new Vector4f(1, 0, 0, 1), // Red
                 new Vector4f(1, 0, 1, 1),  // Magenta
-        });
+        });*/
 
-        Mesh cameraMesh = MeshLoader.loadMesh("assets/models/camera.fbx");
+        //Mesh cameraMesh = MeshLoader.loadMesh("assets/models/camera.fbx");
         /*cameraMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 0, 0, 1), // Red
                 new Vector4f(0, 1, 0, 1), // Green
@@ -123,10 +126,9 @@ public class WorldScene extends Scene {
                 new Vector4f(1, 0, 1, 1),  // Magenta
         });*/
 
-        Mesh[] list = new Mesh[]{testMesh, testMesh2};
+        //Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
         //int amount = 16;
-        int amount = 16;
 
         /*test2 = new GameObject(false);
         test2.addComponent(new ModelRendererComponent(cameraMesh));
@@ -141,6 +143,8 @@ public class WorldScene extends Scene {
         testDebug.transform.setPosition(-15, -15, -15);
         testDebug.transform.setScale(10,10,10);
         this.addGameObject(testDebug);*/
+
+        int amount = 4;
 
         /*for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
@@ -168,44 +172,128 @@ public class WorldScene extends Scene {
             }
         }*/
 
-        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/citadel.obj");
+        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/agucate/coso.obj");
         citadelMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
                 new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 1, 1, 1), // White
                 new Vector4f(0, 1, 0, 1), // Green
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
                 new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 1, 1, 1), // White
                 new Vector4f(0, 1, 0, 1), // Green
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
                 new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 1, 1, 1), // White
                 new Vector4f(0, 1, 0, 1), // Green
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
                 new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 1, 1, 1), // White
                 new Vector4f(0, 1, 0, 1), // Green
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
                 new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 1, 1, 1), // White
                 new Vector4f(0, 1, 0, 1), // Green
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
                 new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 1, 1, 1), // White
                 new Vector4f(0, 1, 0, 1), // Green
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
                 new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 1, 1, 1), // White
                 new Vector4f(0, 1, 0, 1), // Green
-
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(0, 1, 0, 1), // Green
         });
 
         GameObject test = new GameObject(false);
@@ -280,6 +368,36 @@ public class WorldScene extends Scene {
         test8.transform.setScale(1,1,1);
         this.addGameObject(test8);*/
 
+        DebugManager.setVerticesMode(true);
+        DebugManager.setWireFrameMode(true);
+
+        /*Mesh olaMesh = new Mesh(
+                new Vector3f[]{
+                        new Vector3f(0, 0, 0), new Vector3f(0, 1, 0), new Vector3f(1, 0, 0),
+                        new Vector3f(1, 1, 1), new Vector3f(1, 2, 1), new Vector3f(2, 1, 1),
+                        new Vector3f(2, 2, 2), new Vector3f(2, 3, 2), new Vector3f(3, 2, 2),
+                        new Vector3f(3, 3, 3), new Vector3f(3, 4, 3), new Vector3f(4, 3, 3)
+                },
+                new int[] {
+                    0, 2, 1,
+                    3, 5, 4,
+                    6, 8, 7,
+                    9, 11, 10,
+                },
+                new Vector4f[]{
+                    new Vector4f(1, 0, 0, 1), new Vector4f(0, 1, 0, 1), new Vector4f(0, 0, 1, 1),
+                    new Vector4f(1, 0, 0, 1), new Vector4f(0, 1, 0, 1), new Vector4f(0, 0, 1, 1),
+                    new Vector4f(1, 0, 0, 1), new Vector4f(0, 1, 0, 1), new Vector4f(0, 0, 1, 1),
+                    new Vector4f(1, 0, 0, 1), new Vector4f(0, 1, 0, 1), new Vector4f(0, 0, 1, 1)
+                }
+        );
+
+        GameObject ola = new GameObject("ola", true);
+        ola.addComponent(new ModelRendererComponent(olaMesh));
+        ola.transform.setScale(10, 10, 10);
+        ola.transform.setPosition(0, 0, 0);
+        this.addGameObject(ola);*/
+
         super.init();
     }
 
@@ -311,25 +429,27 @@ public class WorldScene extends Scene {
             SceneManager.loadScene(new WorldScene());
         }
 
+        float velocity = 50;
+
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
-            camera.transform.addLocalPositionX((float) (-10 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (-velocity * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_D)) {
-            camera.transform.addLocalPositionX((float) (10 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (velocity * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_W)) {
-            camera.transform.addLocalPositionZ((float) (-10 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (-velocity * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_S)) {
-            camera.transform.addLocalPositionZ((float) (10 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (velocity * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_Q)) {
-            camera.transform.addLocalPositionY((float) (-10 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionY((float) (-velocity * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_E)) {
-            camera.transform.addLocalPositionY((float) (10 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionY((float) (velocity * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {
@@ -345,6 +465,23 @@ public class WorldScene extends Scene {
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT)) {
             camera.transform.addLocalRotationEuler(0, (float) (2 * Time.getDeltaTime()), 0);
         }
+
+        float sensitivity = 0.005f;
+
+        float xMouseDelta = MouseListener.getDy() * sensitivity;
+        float yMouseDelta = MouseListener.getDx() * sensitivity;
+
+        Quaternionf pitchRotation = new Quaternionf().rotateX(xMouseDelta);
+        Quaternionf yawRotation = new Quaternionf().rotateY(yMouseDelta);
+
+        camera.transform.addRotationQuaternion(yawRotation);
+        camera.transform.addRotationQuaternion(pitchRotation);
+
+        //camera.transform.addLocalRotationEuler(xMouseDelta, yMouseDelta, 0);
+
+        glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
+                "Rot: (" + camera.transform.getRotation().x + ", " + camera.transform.getRotation().y + ", " + camera.transform.getRotation().z + ")"
+        );
 
         /*glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
                 "FPS: " + Time.getFPS()

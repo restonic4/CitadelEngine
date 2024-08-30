@@ -168,3 +168,25 @@ tasks.register('gource', Exec) {
     commandLine 'cmd', '/c', args.join(' ')
 }
 
+// Auto update common constants between gradle and java
+task updateGradleUtil {
+    def filePath = "src/main/java/me/restonic4/citadel/util/GradleUtil.java"
+    def versionRegex = /public static final String VERSION = ".*";/
+    def nameRegex = /public static final String APP_NAME = ".*";/
+
+    doLast {
+        def file = file(filePath)
+        if (!file.exists()) {
+            throw new GradleException("File not found: $filePath")
+        }
+
+        def content = file.text
+        content = content.replaceAll(versionRegex, "public static final String VERSION = \"${project.version}\";")
+        content = content.replaceAll(nameRegex, "public static final String APP_NAME = \"${project.appName}\";")
+
+        file.text = content
+        println "Updated GradleUtil.java"
+    }
+}
+
+compileJava.dependsOn(updateGradleUtil)

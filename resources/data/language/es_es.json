@@ -1,16 +1,18 @@
 {
-  "system.message.crash.details": "Los detalles del error se han guardado en un archivo.",
+  "citadel:system.message.crash": "CRASHEADO",
+  "citadel:system.message.crash.title": "El juego ha crasheado",
+  "citadel:system.message.crash.details": "Los detalles del error se han guardado en un archivo.",
 
-  "system.message.crash.1": "El juego ha crasheado.",
-  "system.message.crash.2": "RIP.",
-  "system.message.crash.3": "Este juego esta rotisimo...",
-  "system.message.crash.4": "Ha petao... ok?",
-  "system.message.crash.5": "Porfi, no te cargues a los devs...",
-  "system.message.crash.6": "Este mensaje es random.",
-  "system.message.crash.7": "Este mensaje es random. Y lo mas probable es que no te importe.",
+  "citadel:system.message.crash.1": "El juego ha crasheado.",
+  "citadel:system.message.crash.2": "RIP.",
+  "citadel:system.message.crash.3": "Este juego esta rotisimo...",
+  "citadel:system.message.crash.4": "Ha petao... ok?",
+  "citadel:system.message.crash.5": "Porfi, no te cargues a los devs...",
+  "citadel:system.message.crash.6": "Este mensaje es random.",
+  "citadel:system.message.crash.7": "Este mensaje es random. Y lo mas probable es que no te importe.",
 
-  "system.ui.crash.button.1": "Ver registro",
-  "system.ui.crash.button.2": "Abrir capeta de registros",
-  "system.ui.crash.button.3": "Avisar del problema",
-  "system.ui.crash.button.4": "Cerrar"
+  "citadel:system.ui.crash.button.1": "Ver registro",
+  "citadel:system.ui.crash.button.2": "Abrir capeta de registros",
+  "citadel:system.ui.crash.button.3": "Avisar del problema",
+  "citadel:system.ui.crash.button.4": "Cerrar"
 }
