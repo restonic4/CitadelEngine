@@ -1,4 +1,6 @@
 {
+  "system.message.crash.details": "A detailed log has been saved to the logs folder.",
+
   "system.message.crash.1": "The game crashed.",
   "system.message.crash.2": "RIP.",
   "system.message.crash.3": "This game is so broken...",

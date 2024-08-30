@@ -54,7 +54,7 @@ public class DebugManager {
         StringBuilder crashMessage = new StringBuilder();
         crashMessage.append(message + "\n\n")
                 .append("Error: ").append(e.toString()).append("\n\n")
-                .append("A detailed log has been saved to the logs folder.");
+                .append(Localizer.localizeKey("system.message.crash.details"));
 
         Object[] options = {
             Localizer.localizeKey("system.ui.crash.button.1"),

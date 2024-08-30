@@ -1,4 +1,6 @@
 {
+  "system.message.crash.details": "Los detalles del error se han guardado en un archivo.",
+
   "system.message.crash.1": "El juego ha crasheado.",
   "system.message.crash.2": "RIP.",
   "system.message.crash.3": "Este juego esta rotisimo...",

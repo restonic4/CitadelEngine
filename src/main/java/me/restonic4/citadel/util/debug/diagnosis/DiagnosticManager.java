@@ -1,5 +1,7 @@
 package me.restonic4.citadel.util.debug.diagnosis;
 
+import me.restonic4.citadel.util.CitadelConstants;
+
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
@@ -25,7 +27,7 @@ public class DiagnosticManager {
         String encodedDescription = encodeURIComponent(issueDescription);
 
         String urlString = String.format(
-                "https://github.com/restonic4/EpicAmazingCoolGameTestIGues/issues/new?title=%s&body=%s",
+                CitadelConstants.REPOSITORY_URL + "/issues/new?title=%s&body=%s",
                 encodedTitle, encodedDescription
         );
 

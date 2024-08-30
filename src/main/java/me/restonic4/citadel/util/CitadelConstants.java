@@ -4,6 +4,8 @@ public class CitadelConstants {
     public static final String REGISTRY_NAMESPACE = "citadel";
     public static final String DEFAULT_WINDOW_TITLE = "Citadel engine";
 
+    public static final String REPOSITORY_URL = "https://github.com/restonic4/CitadelEngine";
+
     public static final String VALID_NAMESPACE_CHARS = "_-abcdefghijklmnopqrstuvwxyz0123456789.";
     public static final String VALID_PATH_CHARS = VALID_NAMESPACE_CHARS + "/";
 
