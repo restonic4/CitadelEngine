@@ -56,7 +56,12 @@ public class DebugManager {
                 .append("Error: ").append(e.toString()).append("\n\n")
                 .append("A detailed log has been saved to the logs folder.");
 
-        Object[] options = {"View Log", "Open Log Folder", "Report the issue", "Close"};
+        Object[] options = {
+            Localizer.localizeKey("system.ui.crash.button.1"),
+            Localizer.localizeKey("system.ui.crash.button.2"),
+            Localizer.localizeKey("system.ui.crash.button.3"),
+            Localizer.localizeKey("system.ui.crash.button.4")
+        };
 
         int choice = JOptionPane.showOptionDialog(
                 null,

@@ -23,7 +23,7 @@ public class Registry {
         return object;
     }
 
-    public static <T extends RegistryObject> T get(RegistryKey<T> registryKey, AssetLocation assetLocation) {
+    public static <T extends RegistryObject> T getRegistryObject(RegistryKey<T> registryKey, AssetLocation assetLocation) {
         Map<AssetLocation, T> registry = getRegistry(registryKey);
 
         if (registry == null) return null;
@@ -37,7 +37,7 @@ public class Registry {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends RegistryObject> Map<AssetLocation, T> getRegistry(RegistryKey<T> registryKey) {
+    public static <T extends RegistryObject> Map<AssetLocation, T> getRegistry(RegistryKey<T> registryKey) {
         return (Map<AssetLocation, T>) registries.get(registryKey);
     }
 }

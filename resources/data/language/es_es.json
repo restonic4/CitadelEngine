@@ -5,5 +5,10 @@
   "system.message.crash.4": "Ha petao... ok?",
   "system.message.crash.5": "Porfi, no te cargues a los devs...",
   "system.message.crash.6": "Este mensaje es random.",
-  "system.message.crash.7": "Este mensaje es random. Y lo mas probable es que no te importe."
+  "system.message.crash.7": "Este mensaje es random. Y lo mas probable es que no te importe.",
+
+  "system.ui.crash.button.1": "Ver registro",
+  "system.ui.crash.button.2": "Abrir capeta de registros",
+  "system.ui.crash.button.3": "Avisar del problema",
+  "system.ui.crash.button.4": "Cerrar"
 }

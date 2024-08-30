@@ -1,7 +1,6 @@
 package me.restonic4.citadel.util;
 
-import me.restonic4.citadel.registries.built_in.ProfilerStats;
-import me.restonic4.citadel.util.debug.diagnosis.Logger;
+import me.restonic4.citadel.registries.built_in.managers.ProfilerStats;
 import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;

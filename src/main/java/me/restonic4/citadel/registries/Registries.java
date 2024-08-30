@@ -1,7 +1,8 @@
 package me.restonic4.citadel.registries;
 
-import me.restonic4.citadel.registries.types.ProfilerStat;
-import me.restonic4.citadel.registries.types.Sound;
+import me.restonic4.citadel.registries.built_in.types.Locale;
+import me.restonic4.citadel.registries.built_in.types.ProfilerStat;
+import me.restonic4.citadel.registries.built_in.types.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class Registries {
     public static final RegistryKey<Sound> SOUND = new RegistryKey<>("sound", "assets/sounds", "ogg");
     public static final RegistryKey<Sound> MUSIC = new RegistryKey<>("music", "assets/sounds/music", "ogg");
     public static final RegistryKey<ProfilerStat> PROFILER_STAT = new RegistryKey<>("profiler_stat");
+    public static final RegistryKey<Locale> LOCALE = new RegistryKey<>("locale");
 
     // Custom key system, where you can register your own keys
 

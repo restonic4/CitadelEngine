@@ -1,7 +1,8 @@
 package me.restonic4.citadel.util.debug.diagnosis;
 
 import me.restonic4.citadel.files.FileManager;
-import me.restonic4.citadel.registries.types.ProfilerStat;
+import me.restonic4.citadel.registries.built_in.types.ProfilerStat;
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.Time;
 import org.json.JSONObject;
 
@@ -43,7 +44,7 @@ public class ProfilerManager {
             return;
         }
 
-        timeThreshold = (float) (Time.getRunningTime() - 60);
+        timeThreshold = (float) (Time.getRunningTime() - CitadelConstants.PROFILER_TIME_CAPACITY);
 
         for (ProfilerStat profilerStat : profilerStatsRegistered) {
             profilerStat.clearBefore(timeThreshold);

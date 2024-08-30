@@ -1,6 +1,7 @@
 package me.restonic4.citadel.util;
 
 public class CitadelConstants {
+    public static final String REGISTRY_NAMESPACE = "citadel";
     public static final String DEFAULT_WINDOW_TITLE = "Citadel engine";
 
     public static final String VALID_NAMESPACE_CHARS = "_-abcdefghijklmnopqrstuvwxyz0123456789.";
@@ -18,6 +19,8 @@ public class CitadelConstants {
 
     public static final int MATRIX4F_CAPACITY = 16;
     public static final int MATRIX3F_CAPACITY = 9;
+
+    public static final float PROFILER_TIME_CAPACITY = 60;
 
     // Can be modified
 

@@ -1,10 +1,9 @@
-package me.restonic4.citadel.registries.types;
+package me.restonic4.citadel.registries.built_in.types;
 
 import me.restonic4.citadel.registries.RegistryObject;
 import me.restonic4.citadel.util.Time;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

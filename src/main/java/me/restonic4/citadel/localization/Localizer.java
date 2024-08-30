@@ -1,12 +1,20 @@
 package me.restonic4.citadel.localization;
 
 import me.restonic4.citadel.platform.PlatformManager;
+import me.restonic4.citadel.registries.AssetLocation;
+import me.restonic4.citadel.registries.Registries;
+import me.restonic4.citadel.registries.Registry;
+import me.restonic4.citadel.registries.built_in.managers.Locales;
+import me.restonic4.citadel.registries.built_in.types.Locale;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
-public class Localizer {
-    private static Locales currentLocal;
+import java.util.Map;
+import java.util.Objects;
 
-    public static String localizeKey(String key, Locales locale) {
+public class Localizer {
+    private static Locale currentLocale;
+
+    public static String localizeKey(String key, Locale locale) {
         if (!locale.getData().has(key)) {
             Logger.logExtra("Could not find the translation key for " + key);
 
@@ -20,12 +28,22 @@ public class Localizer {
         return localizeKey(key, getCurrentLocale());
     }
 
-    public static Locales getCurrentLocale() {
-        if (currentLocal == null) {
-            currentLocal = PlatformManager.getOperatingSystem().get().getSystemLocale();
-            currentLocal.populate();
+    public static Locale getCurrentLocale() {
+        if (currentLocale == null) {
+            currentLocale = fromJavaLocale(PlatformManager.getOperatingSystem().get().getSystemLocale());
         }
 
-        return currentLocal;
+        return currentLocale;
+    }
+
+    public static Locale fromJavaLocale(java.util.Locale locale) {
+        String langCountry = (locale.getLanguage() + "_" + locale.getCountry()).toLowerCase();
+
+        Map<AssetLocation, Locale> locales = Registry.getRegistry(Registries.LOCALE);
+
+        return locales.values().stream()
+                .filter(localeFound -> localeFound.getAssetLocation().getPath().equals(langCountry))
+                .findFirst()
+                .orElse(Locales.EN_US);
     }
 }

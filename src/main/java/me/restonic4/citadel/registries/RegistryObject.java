@@ -4,6 +4,7 @@ import me.restonic4.citadel.exceptions.RegistryItemException;
 
 public abstract class RegistryObject {
     private AssetLocation assetLocation;
+    private boolean isPopulated = false;
 
     public AssetLocation getAssetLocation() {
         if (assetLocation == null) {
@@ -25,6 +26,6 @@ public abstract class RegistryObject {
 
     //Gets called when the game registers the item
     public void onPopulate() {
-        return;
+        this.isPopulated = true;
     }
 }

@@ -1,6 +1,5 @@
-package me.restonic4.citadel.registries.types;
+package me.restonic4.citadel.registries.built_in.types;
 
-import me.restonic4.citadel.registries.RegistryManager;
 import me.restonic4.citadel.sound.SoundBuffer;
 import me.restonic4.citadel.registries.RegistryObject;
 import me.restonic4.citadel.sound.SoundManager;

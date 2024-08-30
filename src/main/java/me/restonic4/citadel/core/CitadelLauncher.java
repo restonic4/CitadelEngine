@@ -2,7 +2,8 @@ package me.restonic4.citadel.core;
 
 import me.restonic4.citadel.platform.PlatformManager;
 import me.restonic4.citadel.registries.RegistryManager;
-import me.restonic4.citadel.registries.built_in.ProfilerStats;
+import me.restonic4.citadel.registries.built_in.managers.Locales;
+import me.restonic4.citadel.registries.built_in.managers.ProfilerStats;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public class CitadelLauncher {
@@ -30,6 +31,7 @@ public class CitadelLauncher {
         Logger.log("Platform: " + PlatformManager.getOperatingSystem());
 
         RegistryManager.registerBuiltInRegistrySet(new ProfilerStats());
+        RegistryManager.registerBuiltInRegistrySet(new Locales());
         RegistryManager.registerBuiltIn();
 
         Window.getInstance().run(this.citadelSettings.getiGameLogic());

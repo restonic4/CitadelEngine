@@ -1,7 +1,8 @@
 package me.restonic4.game.core.world.sounds;
 
 import me.restonic4.citadel.registries.AbstractRegistryInitializer;
-import me.restonic4.citadel.registries.types.Sound;
+import me.restonic4.citadel.registries.built_in.types.Locale;
+import me.restonic4.citadel.registries.built_in.types.Sound;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.registries.AssetLocation;
 import me.restonic4.citadel.registries.Registries;
