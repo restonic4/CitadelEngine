@@ -142,7 +142,7 @@ public class WorldScene extends Scene {
         testDebug.transform.setScale(10,10,10);
         this.addGameObject(testDebug);*/
 
-        for (int i = 0; i < amount; i++) {
+        /*for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
                 for (int w = 0; w < amount; w++) {
                     Mesh selected = RandomUtil.getRandom(list);
@@ -166,7 +166,54 @@ public class WorldScene extends Scene {
                     this.addGameObject(test);
                 }
             }
-        }
+        }*/
+
+        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/citadel.obj");
+        citadelMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 1, 1, 1), // White
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 1, 1, 1), // White
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 1, 1, 1), // White
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 1, 1, 1), // White
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 1, 1, 1), // White
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 1, 1, 1), // White
+                new Vector4f(0, 1, 0, 1), // Green
+                new Vector4f(1, 1, 0, 1), // Yellow
+                new Vector4f(1, 0, 1, 1), // Magenta
+                new Vector4f(0, 1, 1, 1), // Cyan
+                new Vector4f(1, 1, 1, 1), // White
+                new Vector4f(0, 1, 0, 1), // Green
+
+        });
+
+        GameObject test = new GameObject(false);
+        test.addComponent(new ModelRendererComponent(citadelMesh));
+        test.setName("test");
+        test.transform.setPosition(0, 0, 0);
+        test.transform.setScale(1,1,1);
+        this.addGameObject(test);
 
         /*for (int i = 0; i < 4; i++) {
             GameObject test = new GameObject(false);
@@ -265,24 +312,24 @@ public class WorldScene extends Scene {
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
-            camera.transform.addLocalPositionX((float) (-100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (-10 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_D)) {
-            camera.transform.addLocalPositionX((float) (100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionX((float) (10 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_W)) {
-            camera.transform.addLocalPositionZ((float) (-100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (-10 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_S)) {
-            camera.transform.addLocalPositionZ((float) (100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionZ((float) (10 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_Q)) {
-            camera.transform.addLocalPositionY((float) (-100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionY((float) (-10 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_E)) {
-            camera.transform.addLocalPositionY((float) (100 * Time.getDeltaTime()));
+            camera.transform.addLocalPositionY((float) (10 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {

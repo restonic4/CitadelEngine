@@ -75,6 +75,7 @@ tasks.register('packageApp', Exec) {
     def appVersion = project.version
 
     def outputDir = "$buildDir/app"
+    def iconPath = "$projectDir/resources/assets/textures/icons/icon.ico"
 
     doFirst {
         file(outputDir).mkdirs()
@@ -90,6 +91,7 @@ tasks.register('packageApp', Exec) {
             '--win-shortcut',
             '--win-menu',
             '--app-version', appVersion,
+            '--icon', iconPath,
             '--dest', outputDir
 }
 
