@@ -1,11 +1,9 @@
 package me.restonic4.game.core.scenes;
 
 import me.restonic4.citadel.input.MouseListener;
-import me.restonic4.citadel.localization.Localizer;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
 import me.restonic4.citadel.util.debug.DebugManager;
-import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
@@ -15,7 +13,7 @@ import me.restonic4.citadel.world.object.GameObject;
 import me.restonic4.citadel.world.object.Mesh;
 import me.restonic4.citadel.world.object.Transform;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
-import me.restonic4.citadel.files.MeshLoader;
+import me.restonic4.citadel.files.parsers.mesh.MeshLoader;
 import me.restonic4.citadel.render.PerspectiveCamera;
 import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.math.RandomUtil;
@@ -29,7 +27,6 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
 
 public class WorldScene extends Scene {
@@ -172,7 +169,7 @@ public class WorldScene extends Scene {
             }
         }*/
 
-        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/agucate/coso.obj");
+        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/citadel.obj");
         citadelMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
@@ -369,7 +366,7 @@ public class WorldScene extends Scene {
         this.addGameObject(test8);*/
 
         DebugManager.setVerticesMode(true);
-        DebugManager.setWireFrameMode(true);
+        //DebugManager.setWireFrameMode(true);
 
         /*Mesh olaMesh = new Mesh(
                 new Vector3f[]{
