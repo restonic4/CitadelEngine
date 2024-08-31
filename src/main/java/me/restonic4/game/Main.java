@@ -7,7 +7,7 @@ import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
 
 public class Main {
     public static void main(String[] args) {
-        DebugManager.setDebugMode(false);
+        DebugManager.setDebugMode(true);
         ProfilerManager.setEnabled(true);
 
         CitadelSettings citadelSettings = new CitadelSettings(new Game(), "Citadel");

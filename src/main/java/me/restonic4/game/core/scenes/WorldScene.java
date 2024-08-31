@@ -47,7 +47,7 @@ public class WorldScene extends Scene {
         music.setPosition(new Vector3f(0, 0, 0));
         //music.play();
 
-       /* Mesh testMesh = MeshLoader.loadMesh("assets/models/test.obj");
+        Mesh testMesh = MeshLoader.loadMesh("assets/models/test.obj");
         testMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 0, 0, 1), // Red
                 new Vector4f(0, 1, 0, 1), // Green
@@ -93,7 +93,7 @@ public class WorldScene extends Scene {
                 new Vector4f(0, 1, 1, 1), // Cyan
                 new Vector4f(1, 0, 0, 1), // Red
                 new Vector4f(1, 0, 1, 1),  // Magenta
-        });*/
+        });
 
         //Mesh cameraMesh = MeshLoader.loadMesh("assets/models/camera.fbx");
         /*cameraMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
@@ -123,25 +123,9 @@ public class WorldScene extends Scene {
                 new Vector4f(1, 0, 1, 1),  // Magenta
         });*/
 
-        //Mesh[] list = new Mesh[]{testMesh, testMesh2};
+        Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        //int amount = 16;
-
-        /*test2 = new GameObject(false);
-        test2.addComponent(new ModelRendererComponent(cameraMesh));
-        test2.setName("test:");
-        test2.transform.setPosition(-15, -15, -15);
-        test2.transform.setScale(10,10,10);
-        this.addGameObject(test2);*/
-
-        /*GameObject testDebug = new GameObject(false);
-        testDebug.addComponent(new ModelRendererComponent(testMesh));
-        testDebug.setName("debug");
-        testDebug.transform.setPosition(-15, -15, -15);
-        testDebug.transform.setScale(10,10,10);
-        this.addGameObject(testDebug);*/
-
-        int amount = 4;
+        int amount = 16;
 
         /*for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
@@ -169,7 +153,7 @@ public class WorldScene extends Scene {
             }
         }*/
 
-        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/citadel.obj");
+        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/camera.obj");
         citadelMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
@@ -235,62 +219,9 @@ public class WorldScene extends Scene {
                 new Vector4f(1, 0, 1, 1), // Magenta
                 new Vector4f(0, 1, 1, 1), // Cyan
                 new Vector4f(0, 1, 0, 1), // Green
+
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
         });
 
         GameObject test = new GameObject(false);
@@ -476,11 +407,11 @@ public class WorldScene extends Scene {
 
         //camera.transform.addLocalRotationEuler(xMouseDelta, yMouseDelta, 0);
 
-        glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
-                "Rot: (" + camera.transform.getRotation().x + ", " + camera.transform.getRotation().y + ", " + camera.transform.getRotation().z + ")"
-        );
-
         /*glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
+                "Rot: (" + camera.transform.getRotation().x + ", " + camera.transform.getRotation().y + ", " + camera.transform.getRotation().z + ")"
+        );*/
+
+        glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
                 "FPS: " + Time.getFPS()
                 + ", DrawCalls: " + this.renderer.getDrawCalls()
                 + ", Dirty objects modified: " + this.renderer.getDirtyModified()
@@ -493,7 +424,7 @@ public class WorldScene extends Scene {
                 + ", h: " + Window.getInstance().getHeight()
                 + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
                 + ", Scene changed: " + SceneManager.changes
-        );*/
+        );
 
         SoundManager.getInstance().updateListenerPosition(camera);
 
