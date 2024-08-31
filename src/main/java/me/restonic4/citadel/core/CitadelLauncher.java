@@ -4,6 +4,7 @@ import me.restonic4.citadel.localization.Localizer;
 import me.restonic4.citadel.platform.PlatformManager;
 import me.restonic4.citadel.platform.operating_systems.OperatingSystem;
 import me.restonic4.citadel.registries.RegistryManager;
+import me.restonic4.citadel.registries.built_in.managers.Events;
 import me.restonic4.citadel.registries.built_in.managers.Locales;
 import me.restonic4.citadel.registries.built_in.managers.ProfilerStats;
 import me.restonic4.citadel.util.GradleUtil;
@@ -40,6 +41,7 @@ public class CitadelLauncher {
 
         RegistryManager.registerBuiltInRegistrySet(new ProfilerStats());
         RegistryManager.registerBuiltInRegistrySet(new Locales());
+        RegistryManager.registerBuiltInRegistrySet(new Events());
         RegistryManager.registerBuiltIn();
 
         Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());
