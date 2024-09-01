@@ -154,10 +154,10 @@ public class WorldScene extends Scene {
             }
         }*/
 
-        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/camera.obj");
-        /*citadelMesh.setTexture(
-                new Texture("assets/textures/testImage.png")
-        );*/
+        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/cube.obj");
+        citadelMesh.setTexture(
+                new Texture("assets/textures/testImage2.png")
+        );
         citadelMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta

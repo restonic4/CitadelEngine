@@ -3,6 +3,7 @@ package me.restonic4.citadel.files.parsers.mesh;
 import me.restonic4.citadel.exceptions.FileException;
 import me.restonic4.citadel.files.FileManager;
 import me.restonic4.citadel.world.object.Mesh;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -37,6 +38,7 @@ public class OBJLoader {
         Scanner scanner = new Scanner(fileData);
 
         List<Vector3f> vertexList = new ArrayList<>();
+        List<Vector2f> uvList = new ArrayList<>();
         List<Integer> indicesList = new ArrayList<>();
 
         while (scanner.hasNextLine()) {
@@ -44,6 +46,8 @@ public class OBJLoader {
 
             if (line.startsWith("v ")) { // Vertex
                 parseVertex(vertexList, line);
+            } else if (line.startsWith("vt ")) { // UVs
+                parseUV(uvList, line);
             } else if (line.startsWith("f ")) { // Indices
                 parseIndices(indicesList, line);
             }
@@ -51,7 +55,10 @@ public class OBJLoader {
 
         scanner.close();
 
-        return new Mesh(convertVectorListToArray(vertexList), convertIntListToArray(indicesList));
+        Mesh mesh = new Mesh(vertexList.toArray(new Vector3f[0]), indicesList.stream().mapToInt(i -> i).toArray());
+        mesh.setUVs(uvList.toArray(new Vector2f[0]));
+
+        return mesh;
     }
 
     /**
@@ -66,6 +73,22 @@ public class OBJLoader {
 
         // I am doing +1 because 0 is the keyword, v
         Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]), Float.parseFloat(currentLine[3]));
+
+        list.add(vertex);
+    }
+
+    /**
+     * Parses the uv data, which has a 'vt' as an indicator to a Vector2f and adds it to the desired list.
+     * @param list The list where the new Vector2f should be placed.
+     * @param line The line of text to parse and translate to a Vector2f.
+     *
+     * @author restonic4
+     */
+    public static void parseUV(List<Vector2f> list, String line) {
+        String[] currentLine = line.split(" ");
+
+        // I am doing +1 because 0 is the keyword, vt
+        Vector2f vertex = new Vector2f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]));
 
         list.add(vertex);
     }
@@ -94,39 +117,5 @@ public class OBJLoader {
         list.add(first);
         list.add(second);
         list.add(third);
-    }
-
-    /**
-     * Converts a List into an array.
-     * @param list The list.
-     * @return The array.
-     *
-     * @author restonic4
-     */
-    public static Vector3f[] convertVectorListToArray(List<Vector3f> list) {
-        Vector3f[] array = new Vector3f[list.size()];
-
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-
-        return array;
-    }
-
-    /**
-     * Converts a List into an array.
-     * @param list The list.
-     * @return The array.
-     *
-     * @author restonic4
-     */
-    public static int[] convertIntListToArray(List<Integer> list) {
-        int[] array = new int[list.size()];
-
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-
-        return array;
     }
 }

@@ -42,25 +42,25 @@ void main()
         color = fColor;
         break;
         case 1:
-        color = vec4(1, 0, 0, 1);
+        color = fColor * texture(uTextures[1], fUV);
         break;
         case 2:
-        color = vec4(0, 1, 0, 1);
+        color = fColor * texture(uTextures[2], fUV);
         break;
         case 3:
-        color = vec4(0, 0, 1, 1);
+        color = fColor * texture(uTextures[3], fUV);
         break;
         case 4:
-        color = vec4(1, 0, 1, 1);
+        color = fColor * texture(uTextures[4], fUV);
         break;
         case 5:
-        color = vec4(1, 1, 0, 1);
+        color = fColor * texture(uTextures[5], fUV);
         break;
         case 6:
-        color = vec4(1, 1, 1, 1);
+        color = fColor * texture(uTextures[6], fUV);
         break;
         case 7:
-        color = vec4(0.639, 0.412, 0.161, 1);
+        color = fColor * texture(uTextures[7], fUV);
         break;
     }
 }
