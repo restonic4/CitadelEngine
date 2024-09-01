@@ -4,6 +4,7 @@ import me.restonic4.citadel.core.IGameLogic;
 import me.restonic4.citadel.events.EventResult;
 import me.restonic4.citadel.events.types.WindowEvents;
 import me.restonic4.citadel.sound.SoundManager;
+import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.registries.RegistryManager;
@@ -13,6 +14,9 @@ import me.restonic4.game.core.world.sounds.Sounds;
 public class Game implements IGameLogic {
     public void start() {
         Logger.log("Starting the game");
+
+        DebugManager.setDebugMode(true);
+        //ProfilerManager.setEnabled(true);
 
         SoundManager.getInstance().init();
 

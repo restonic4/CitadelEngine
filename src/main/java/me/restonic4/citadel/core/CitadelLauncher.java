@@ -27,6 +27,10 @@ public class CitadelLauncher {
     }
 
     public static CitadelLauncher getInstance() {
+        if (CitadelLauncher.instance == null) {
+            throw new IllegalStateException("There no engine instanced");
+        }
+
         return CitadelLauncher.instance;
     }
 

@@ -4,14 +4,16 @@ import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public class GradleUtil {
     // These variables are generated with a gradle task
-    public static final String VERSION = "0.3.7";
+    public static final String VERSION = "0.3.10";
     public static final String APP_NAME = "Citadel";
+    public static final Boolean CONSOLE_ENABLED = true;
 
     public static void logInfo() {
         Logger.log("/###### | COMPILED GRADLE DATA | ######/");
         Logger.log(".                                      .");
-        Logger.log("Version: " + VERSION);
-        Logger.log("AppName: " + APP_NAME);
+        Logger.log("VERSION: " + VERSION);
+        Logger.log("APP_NAME: " + APP_NAME);
+        Logger.log("CONSOLE_ENABLED: " + CONSOLE_ENABLED);
         Logger.log(".                                      .");
         Logger.log("/###### | #################### | ######/");
     }

@@ -11,23 +11,36 @@ This engine is going to be used for my future games and projects, but if people 
 Features:
 - 3D rendering.
 - Batching.
-- Frustum culling. (In progress)
-- Registry system to add content dynamically. (In progress)
 - Sound, OGG files.
 - Log system that saves the log-buffer into a log file and prevents crashes without a "crash-log file"
 - Profiler
 - Event system
 
-Planned:
+Working on:
 - Textures.
-- Object culling.
+- Frustum culling.
+- Registry system to add content dynamically.
 - Optimization.
 - Integrated event system.
+
+Planned:
+- Object culling.
 - Better configuration for initializing the engine.
 - Config system.
 - Steamworks compatibility
 - Mipmaps
 - Lighting
+
+## Credits
+
+Coded with love by <a href="https://github.com/restonic4">restonic4</a>.
+
+Libraries and tools used:
+- <a href="https://www.lwjgl.org">LWJGL 3</a>
+- <a href="https://www.glfw.org">GLFW</a>
+- <a href="https://www.khronos.org/about/">OpenGL</a>
+- <a href="https://www.openal.org">OpenAL</a>
+- <a href="https://github.com/nothings/stb">STB</a>
 
 ## License
 

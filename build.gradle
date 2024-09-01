@@ -79,7 +79,8 @@ tasks.register('packageApp', Exec) {
         file(outputDir).mkdirs()
     }
 
-    commandLine 'jpackage',
+    def args = [
+            'jpackage',
             '--input', 'build/libs/',
             '--main-jar', jarName,
             '--main-class', "${mainClass}",
@@ -91,6 +92,13 @@ tasks.register('packageApp', Exec) {
             '--app-version', appVersion,
             '--icon', iconPath,
             '--dest', outputDir
+    ]
+
+    if (consoleEnabled) {
+        args += ['--win-console']
+    }
+
+    commandLine 'cmd', '/c', args.join(' ')
 }
 
 tasks.register('buildAndPackage') {
@@ -171,6 +179,7 @@ task updateGradleUtil {
     def filePath = "src/main/java/me/restonic4/citadel/util/GradleUtil.java"
     def versionRegex = /public static final String VERSION = ".*";/
     def nameRegex = /public static final String APP_NAME = ".*";/
+    def consoleRegex = /public static final Boolean CONSOLE_ENABLED = .*/
 
     doLast {
         def file = file(filePath)
@@ -180,7 +189,8 @@ task updateGradleUtil {
 
         def content = file.text
         content = content.replaceAll(versionRegex, "public static final String VERSION = \"${project.version}\";")
-        content = content.replaceAll(nameRegex, "public static final String APP_NAME = \"${project.appName}\";")
+        content = content.replaceAll(nameRegex, "public static final String APP_NAME = \"${appName}\";")
+        content = content.replaceAll(consoleRegex, "public static final Boolean CONSOLE_ENABLED = ${consoleEnabled};")
 
         file.text = content
         println "Updated GradleUtil.java"
