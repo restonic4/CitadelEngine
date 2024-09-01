@@ -1,5 +1,7 @@
 package me.restonic4.citadel.world.object;
 
+import me.restonic4.citadel.render.Texture;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -8,17 +10,23 @@ public class Mesh {
     private int[] indices;
     private Vector4f[] verticesColors;
     private Vector4f tint;
+    private Texture texture;
+    private Vector2f[] uvs;
 
     public Mesh(Vector3f[] vertices, int[] indices) {
         this.vertices = vertices;
         this.indices = indices;
         this.tint = new Vector4f(1, 1, 1, 1);
+        this.texture = null;
+        this.uvs = new Vector2f[vertices.length];
     }
 
     public Mesh(Vector3f[] vertices, int[] indices, Vector4f tint) {
         this.vertices = vertices;
         this.indices = indices;
         this.tint = tint;
+        this.texture = null;
+        this.uvs = new Vector2f[vertices.length];
     }
 
     public Mesh(Vector3f[] vertices, int[] indices, Vector4f[] verticesColors) {
@@ -26,6 +34,16 @@ public class Mesh {
         this.indices = indices;
         this.verticesColors = verticesColors;
         this.tint = new Vector4f(1, 1, 1, 1);
+        this.texture = null;
+        this.uvs = new Vector2f[vertices.length];
+    }
+
+    public Mesh(Vector3f[] vertices, int[] indices, Texture texture, Vector2f[] uvs) {
+        this.vertices = vertices;
+        this.indices = indices;
+        this.tint = new Vector4f(1, 1, 1, 1);
+        this.texture = texture;
+        this.uvs = uvs;
     }
 
     public Vector3f[] getVertices() {
@@ -44,12 +62,28 @@ public class Mesh {
         return this.tint;
     }
 
+    public Texture getTexture() {
+        return this.texture;
+    }
+
+    public Vector2f[] getUVs() {
+        return this.uvs;
+    }
+
     public void setTint(Vector4f vector4f) {
         this.tint = vector4f;
     }
 
     public void setVerticesColors(Vector4f[] verticesColors) {
         this.verticesColors = verticesColors;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
+    public void setUVs(Vector2f[] uvs) {
+        this.uvs = uvs;
     }
 
     public Mesh copy() {

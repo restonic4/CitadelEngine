@@ -6,7 +6,6 @@ import me.restonic4.citadel.world.object.Mesh;
 public class ModelRendererComponent extends Component {
     private Mesh mesh;
 
-
     public ModelRendererComponent(Mesh mesh) {
         this.mesh = mesh;
     }

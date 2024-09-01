@@ -12,7 +12,9 @@ import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("pls no");
         DebugManager.setDebugMode(true);
+        //DebugManager.enableOpenGLAdvancedLogOutput(true);
         ProfilerManager.setEnabled(true);
 
         CitadelSettings citadelSettings = new CitadelSettings(new Game(), "Citadel");

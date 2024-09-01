@@ -185,19 +185,31 @@ public class Shader {
         glUniform2f(varLocation, vec.x, vec.y);
     }
 
-    public void uploadFloat(String varName, float val) {
+    public void uploadFloat(String varName, float value) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
 
         use(); // Use the shader in case is not being used
 
-        glUniform1f(varLocation, val);
+        glUniform1f(varLocation, value);
     }
 
-    public void uploadInt(String varName, int val) {
+    public void uploadInt(String varName, int value) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
 
         use(); // Use the shader in case is not being used
 
-        glUniform1i(varLocation, val);
+        glUniform1i(varLocation, value);
+    }
+
+    public void uploadTexture(String varName, int slot) {
+        uploadInt(varName, slot);
+    }
+
+    public void uploadIntArray(String varName, int[] array) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+
+        use(); // Use the shader in case is not being used
+
+        glUniform1iv(varLocation, array);
     }
 }

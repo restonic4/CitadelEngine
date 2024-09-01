@@ -30,7 +30,6 @@ dependencies {
     implementation "org.lwjgl:lwjgl-opengl"    // OpenGL 3D
     implementation "org.lwjgl:lwjgl-stb"       // Images/assets loader
     implementation "org.lwjgl:lwjgl-openal"    // OpenAL for audio
-    //implementation "org.lwjgl:lwjgl-assimp" // Assimp for complex models
     //implementation "io.github.spair:imgui-java-binding:${imguiJavaVersion}" // ImGui for GUI
 
 
@@ -40,7 +39,6 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-opengl::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-stb::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-openal::${lwjglNatives}"
-    //runtimeOnly "org.lwjgl:lwjgl-assimp::${lwjglNatives}"
     //runtimeOnly "io.github.spair:imgui-java-${imguiNatives}:${imguiJavaVersion}"
 }
 
@@ -63,7 +61,7 @@ jar {
         into 'resources'
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveBaseName.set("EpicGameiGues")
+    archiveBaseName.set("CitadelEngine")
 }
 
 tasks.register('buildJar', Exec) {

@@ -26,6 +26,8 @@ Planned:
 - Better configuration for initializing the engine.
 - Config system.
 - Steamworks compatibility
+- Mipmaps
+- Lighting
 
 ## License
 
