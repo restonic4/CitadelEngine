@@ -5,6 +5,9 @@ import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.events.Event;
 import me.restonic4.citadel.events.EventFactory;
 
+/**
+ * List of events related to the lifecycle of the engine.
+ */
 public class CitadelLifecycleEvents {
     /**
      * Gets triggered when the engine is starting.

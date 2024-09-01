@@ -1,5 +1,7 @@
 package me.restonic4.citadel.util.debug;
 
+import me.restonic4.citadel.events.EventResult;
+import me.restonic4.citadel.events.types.DebugEvents;
 import me.restonic4.citadel.localization.Localizer;
 import me.restonic4.citadel.util.debug.diagnosis.DiagnosticManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -28,8 +30,22 @@ public class DebugManager {
     private static boolean openGLDebugOutputStarted = false;
 
     public static void setDebugMode(boolean value) {
+        EventResult eventResult = DebugEvents.DEBUG_MODE_CHANGED.invoker().onDebugModeChanged(DEBUG_MODE, value);
+        if (eventResult == EventResult.CANCELED) {
+            /*
+
+            If you are a modder/game dev, do not remove this log print. (Logger.log())
+            Because maybe there is something canceling the debug mode toggle that isn't supposed to.
+            If you really need to remove it for some reason, contact us, create an issue on our repo at {@link https://github.com/restonic4/CitadelEngine/issues}
+
+            */
+            Logger.log("The debug mode setter was canceled by event");
+            return;
+        }
+
         DEBUG_MODE = value;
 
+        // PekeUranga suggested this, it's beautiful.
         if (DEBUG_MODE) {
             Logger.log("Modo sigma activado");
         }

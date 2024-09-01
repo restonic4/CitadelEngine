@@ -1,5 +1,7 @@
 package me.restonic4.citadel.registries;
 
+import me.restonic4.citadel.events.EventResult;
+import me.restonic4.citadel.events.types.RegistriesEvents;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.game.core.world.sounds.Sounds;
 
@@ -27,10 +29,24 @@ public class RegistryManager {
     }
 
     public static void registerBuiltInRegistrySet(AbstractRegistryInitializer abstractRegistryInitializer) {
+        EventResult eventResult = RegistriesEvents.REGISTERING_SET.invoker().onRegisteringSet(abstractRegistryInitializer, true);
+        if (eventResult == EventResult.CANCELED) {
+            return;
+        }
+
         builtInRegistries.add(abstractRegistryInitializer);
+
+        RegistriesEvents.SET_REGISTERED.invoker().onSetRegistered(abstractRegistryInitializer, true);
     }
 
     public static void registerRegistrySet(AbstractRegistryInitializer abstractRegistryInitializer) {
+        EventResult eventResult = RegistriesEvents.REGISTERING_SET.invoker().onRegisteringSet(abstractRegistryInitializer, false);
+        if (eventResult == EventResult.CANCELED) {
+            return;
+        }
+
         customRegistries.add(abstractRegistryInitializer);
+
+        RegistriesEvents.SET_REGISTERED.invoker().onSetRegistered(abstractRegistryInitializer, false);
     }
 }

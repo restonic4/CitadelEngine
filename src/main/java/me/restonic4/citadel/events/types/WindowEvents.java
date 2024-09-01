@@ -1,11 +1,13 @@
 package me.restonic4.citadel.events.types;
 
-import me.restonic4.citadel.core.CitadelLauncher;
 import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.events.Event;
 import me.restonic4.citadel.events.EventFactory;
 import me.restonic4.citadel.events.EventResult;
 
+/**
+ * List of events related to the window.
+ */
 public class WindowEvents {
     /**
      * Gets triggered when the window gets created.
