@@ -16,6 +16,7 @@ Features:
 - Sound, OGG files.
 - Log system that saves the log-buffer into a log file and prevents crashes without a "crash-log file"
 - Profiler
+- Event system
 
 Planned:
 - Textures.
