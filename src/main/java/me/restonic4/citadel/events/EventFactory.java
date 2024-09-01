@@ -1,6 +1,6 @@
 package me.restonic4.citadel.events;
 
-import me.restonic4.citadel.events.types.CitadelLifecycleEvents;
+import me.restonic4.citadel.events.types.*;
 
 import java.lang.FunctionalInterface;
 import java.util.function.Function;
@@ -23,6 +23,8 @@ import java.util.function.Function;
  *     }}</pre>
  * <p>
  * As you can see, you need a variable to store your event by calling the {@link EventFactory#createArray(Class, Function)}}, then you will need a {@link FunctionalInterface} so you can pass it into the {@link EventFactory}
+ * <p>
+ * You can also take a look at {@link WindowEvents#RESIZED}, it uses {@link EventResult} to change the state of the event and potentially cancel the behaviour of the engine.
  */
 public class EventFactory {
     public static <T> Event<T> createArray(Class<T> type, Function<T[], T> invokerFactory) {

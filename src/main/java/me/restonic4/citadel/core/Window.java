@@ -1,6 +1,8 @@
 package me.restonic4.citadel.core;
 
+import me.restonic4.citadel.events.EventResult;
 import me.restonic4.citadel.events.types.CitadelLifecycleEvents;
+import me.restonic4.citadel.events.types.WindowEvents;
 import me.restonic4.citadel.input.KeyListener;
 import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.render.Renderer;
@@ -76,6 +78,8 @@ public class Window {
         if (glfwWindowAddress == MemoryUtil.NULL) {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
+
+        WindowEvents.CREATED.invoker().onWindowCreated(this);
 
         // Resize callback, gets the current width and height and updates it
         glfwSetFramebufferSizeCallback(glfwWindowAddress, (window, newWidth, newHeight) -> {
@@ -178,6 +182,7 @@ public class Window {
             }
         }
 
+        WindowEvents.CLOSED.invoker().onWindowClosed(this);
         CitadelLifecycleEvents.CITADEL_STOPPING.invoker().onCitadelStopping(CitadelLauncher.getInstance(), this);
     }
 
@@ -199,6 +204,13 @@ public class Window {
     }
 
     private void updateWindowSize(int width, int height) {
+        EventResult eventResult = WindowEvents.RESIZED.invoker().onWindowResized(this, width, height);
+
+        if (eventResult == EventResult.CANCELED) {
+            glfwSetWindowSize(glfwWindowAddress, this.width, this.height);
+            return;
+        }
+
         this.width = width;
         this.height = height;
         updateAspectRatio();
