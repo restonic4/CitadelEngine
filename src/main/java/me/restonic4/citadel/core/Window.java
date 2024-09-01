@@ -1,5 +1,6 @@
 package me.restonic4.citadel.core;
 
+import me.restonic4.citadel.events.types.CitadelLifecycleEvents;
 import me.restonic4.citadel.input.KeyListener;
 import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.render.Renderer;
@@ -125,6 +126,8 @@ public class Window {
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
+
+        CitadelLifecycleEvents.CITADEL_STARTED.invoker().onCitadelStarted(CitadelLauncher.getInstance(), this);
     }
 
     public void loop() {
@@ -174,9 +177,13 @@ public class Window {
                 }
             }
         }
+
+        CitadelLifecycleEvents.CITADEL_STOPPING.invoker().onCitadelStopping(CitadelLauncher.getInstance(), this);
     }
 
     private void cleanup() {
+        CitadelLifecycleEvents.CITADEL_CLEANING_UP.invoker().onCitadelCleaningUp(CitadelLauncher.getInstance(), this);
+
         SceneManager.unLoadCurrentScene();
         SoundManager.getInstance().cleanup();
 
@@ -187,6 +194,8 @@ public class Window {
         // Terminate GLFW and the free the error callback
         glfwTerminate();
         glfwSetErrorCallback(null).free();
+
+        CitadelLifecycleEvents.CITADEL_CLEANED_UP.invoker().onCitadelCleanedUp(CitadelLauncher.getInstance(), this);
     }
 
     private void updateWindowSize(int width, int height) {

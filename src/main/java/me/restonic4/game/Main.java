@@ -2,7 +2,9 @@ package me.restonic4.game;
 
 import me.restonic4.citadel.core.CitadelLauncher;
 import me.restonic4.citadel.core.CitadelSettings;
+import me.restonic4.citadel.events.types.CitadelLifecycleEvents;
 import me.restonic4.citadel.util.debug.DebugManager;
+import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
 
 public class Main {

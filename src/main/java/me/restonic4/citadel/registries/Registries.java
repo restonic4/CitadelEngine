@@ -1,6 +1,6 @@
 package me.restonic4.citadel.registries;
 
-import me.restonic4.citadel.registries.built_in.types.Event;
+import me.restonic4.citadel.events.Event;
 import me.restonic4.citadel.registries.built_in.types.Locale;
 import me.restonic4.citadel.registries.built_in.types.ProfilerStat;
 import me.restonic4.citadel.registries.built_in.types.Sound;
