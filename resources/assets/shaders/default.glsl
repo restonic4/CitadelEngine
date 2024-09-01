@@ -18,6 +18,7 @@ void main()
     fUV = aUV;
     fTextureId = aTextureId;
 
+
     gl_Position = uProjection * uView * vec4(aPos, 1.0);
 }
 
@@ -34,7 +35,7 @@ out vec4 color;
 
 void main()
 {
-    int id = int((fTextureId));
+    int id = int(fTextureId);
 
     switch (id) {
         case 0:

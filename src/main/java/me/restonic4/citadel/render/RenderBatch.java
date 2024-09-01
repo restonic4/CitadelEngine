@@ -30,8 +30,8 @@ public class RenderBatch {
 
     private final int POS_OFFSET = 0;
     private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
-    private final int UV_OFFSET = COLOR_OFFSET + UV_SIZE * Float.BYTES;
-    private final int TEXTURE_ID_OFFSET = UV_OFFSET + TEXTURE_ID_SIZE * Float.BYTES;
+    private final int UV_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
+    private final int TEXTURE_ID_OFFSET = UV_OFFSET + UV_SIZE * Float.BYTES;
 
     // Change this in case adding new data to the VBO
     private final int VERTEX_SIZE = POS_SIZE + COLOR_SIZE + UV_SIZE + TEXTURE_ID_SIZE;
