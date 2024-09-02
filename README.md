@@ -40,6 +40,7 @@ Libraries and tools used:
 - <a href="https://www.khronos.org/about/">OpenGL</a>
 - <a href="https://www.openal.org">OpenAL</a>
 - <a href="https://github.com/nothings/stb">STB</a>
+- <a href="https://gource.io">Gource</a>
 
 Knowledge:
 - <a href="https://www.youtube.com/@GamesWithGabe">Youtube: @GamesWithGabe</a>
@@ -52,3 +53,8 @@ For more information, check out the [docs](./resources/docs) in the `resources/d
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## Gource
+
+100 commits:
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ai7zSsb1ELU?si=7wBIvbMZ6-HGnPNP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
