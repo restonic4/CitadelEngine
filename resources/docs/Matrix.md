@@ -1,4 +1,4 @@
-# Info about matrix
+# Info about matrices
 
 Videos:
 - https://www.youtube.com/watch?v=f05PwswO7qc
