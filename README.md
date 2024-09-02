@@ -57,4 +57,10 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 ## Gource
 
 100 commits:
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ai7zSsb1ELU?si=7wBIvbMZ6-HGnPNP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+[![100 commits](https://img.youtube.com/vi/ai7zSsb1ELU/0.jpg)](https://www.youtube.com/watch?v=ai7zSsb1ELU)
+
+Next gources:
+- 500 commits.
+- 1k commits.
+- 1 year of development.
