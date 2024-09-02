@@ -41,6 +41,7 @@ Libraries and tools used:
 - <a href="https://www.openal.org">OpenAL</a>
 - <a href="https://github.com/nothings/stb">STB</a>
 - <a href="https://gource.io">Gource</a>
+- <a href="https://visualvm.github.io">VisualVM</a>
 
 Knowledge:
 - <a href="https://www.youtube.com/@GamesWithGabe">Youtube: @GamesWithGabe</a>

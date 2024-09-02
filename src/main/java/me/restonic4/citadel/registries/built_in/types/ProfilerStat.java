@@ -20,6 +20,7 @@ public class ProfilerStat extends RegistryObject {
     }
 
     public void clearBefore(float threshold) {
+        // TODO: Optimize this to use less CPU
         buffer.entrySet().removeIf(entry -> entry.getKey() < threshold);
     }
 

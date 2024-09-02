@@ -419,6 +419,7 @@ public class WorldScene extends Scene {
                 "Rot: (" + camera.transform.getRotation().x + ", " + camera.transform.getRotation().y + ", " + camera.transform.getRotation().z + ")"
         );*/
 
+        // TODO: Optimize this, this should be called less frequent
         glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
                 "FPS: " + Time.getFPS()
                 + ", DrawCalls: " + this.renderer.getDrawCalls()
