@@ -1,10 +1,12 @@
 package me.restonic4.game.core.scenes;
 
+import me.restonic4.citadel.files.parsers.mesh.OBJLoader;
 import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.render.Texture;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
 import me.restonic4.citadel.util.debug.DebugManager;
+import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
@@ -154,11 +156,13 @@ public class WorldScene extends Scene {
             }
         }*/
 
-        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/cube.obj");
+        Mesh citadelMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
         citadelMesh.setTexture(
-                new Texture("assets/textures/testImage2.png")
+                new Texture("assets/textures/persus.png")
         );
-        citadelMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
+        //citadelMesh = OBJLoader.optimizeToRender(citadelMesh);
+        Logger.log("Vertex: " + citadelMesh.getVertices().length);
+        /*citadelMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
                 new Vector4f(0, 1, 1, 1), // Cyan
@@ -226,7 +230,7 @@ public class WorldScene extends Scene {
 
                 new Vector4f(1, 1, 0, 1), // Yellow
                 new Vector4f(1, 0, 1, 1), // Magenta
-        });
+        });*/
 
         GameObject test = new GameObject(false);
         test.addComponent(new ModelRendererComponent(citadelMesh));

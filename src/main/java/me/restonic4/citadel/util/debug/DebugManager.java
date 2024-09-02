@@ -66,9 +66,9 @@ public class DebugManager {
         String messageKey = "citadel:system.message.crash." + RandomUtil.random(1, CitadelConstants.CRASH_MESSAGES_AMOUNT);
         String message = Localizer.localizeKey(messageKey);
 
-        /*SoundSource soundSource = Sounds.GLASS.createSource(false, true);
+        SoundSource soundSource = Sounds.GLASS.createSource(false, true);
         soundSource.setPosition(new Vector3f(0, 0, 0));
-        soundSource.play();*/
+        soundSource.play();
 
         Logger.log("///////////////////////////");
         Logger.log(Localizer.localizeKey("citadel:system.message.crash") + " -> " + message);

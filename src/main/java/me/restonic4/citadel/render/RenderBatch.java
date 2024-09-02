@@ -235,8 +235,6 @@ public class RenderBatch {
             }
         }
 
-        Logger.log("id: " + textureId);
-
         for (int i = 0; i < vertexPositions.length; i++) {
             Vector3f currentPos = new Vector3f(vertexPositions[i]);
 

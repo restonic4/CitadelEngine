@@ -12,24 +12,23 @@ Features:
 - 3D rendering.
 - Batching.
 - Sound, OGG files.
-- Log system that saves the log-buffer into a log file and prevents crashes without a "crash-log file"
-- Profiler
-- Event system
+- Log system that saves the log-buffer into a log file and prevents crashes without a "crash-log file".
+- Profiler.
+- Event system.
 
 Working on:
 - Textures.
 - Frustum culling.
 - Registry system to add content dynamically.
 - Optimization.
-- Integrated event system.
 
 Planned:
 - Object culling.
 - Better configuration for initializing the engine.
 - Config system.
-- Steamworks compatibility
-- Mipmaps
-- Lighting
+- Steamworks compatibility.
+- Mipmaps.
+- Lighting.
 
 ## Credits
 

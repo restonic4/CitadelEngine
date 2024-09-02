@@ -12,6 +12,7 @@ public class Mesh {
     private Vector4f tint;
     private Texture texture;
     private Vector2f[] uvs;
+    private Vector3f[] normals;
 
     public Mesh(Vector3f[] vertices, int[] indices) {
         this.vertices = vertices;
@@ -19,6 +20,7 @@ public class Mesh {
         this.tint = new Vector4f(1, 1, 1, 1);
         this.texture = null;
         this.uvs = new Vector2f[vertices.length];
+        this.normals = new Vector3f[vertices.length];
     }
 
     public Mesh(Vector3f[] vertices, int[] indices, Vector4f tint) {
@@ -27,6 +29,7 @@ public class Mesh {
         this.tint = tint;
         this.texture = null;
         this.uvs = new Vector2f[vertices.length];
+        this.normals = new Vector3f[vertices.length];
     }
 
     public Mesh(Vector3f[] vertices, int[] indices, Vector4f[] verticesColors) {
@@ -36,6 +39,7 @@ public class Mesh {
         this.tint = new Vector4f(1, 1, 1, 1);
         this.texture = null;
         this.uvs = new Vector2f[vertices.length];
+        this.normals = new Vector3f[vertices.length];
     }
 
     public Mesh(Vector3f[] vertices, int[] indices, Texture texture, Vector2f[] uvs) {
@@ -44,6 +48,7 @@ public class Mesh {
         this.tint = new Vector4f(1, 1, 1, 1);
         this.texture = texture;
         this.uvs = uvs;
+        this.normals = new Vector3f[vertices.length];
     }
 
     public Vector3f[] getVertices() {
@@ -70,6 +75,10 @@ public class Mesh {
         return this.uvs;
     }
 
+    public Vector3f[] getNormals() {
+        return this.normals;
+    }
+
     public void setTint(Vector4f vector4f) {
         this.tint = vector4f;
     }
@@ -84,6 +93,10 @@ public class Mesh {
 
     public void setUVs(Vector2f[] uvs) {
         this.uvs = uvs;
+    }
+
+    public void setNormals(Vector3f[] normals) {
+        this.normals = normals;
     }
 
     public Mesh copy() {

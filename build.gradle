@@ -94,7 +94,7 @@ tasks.register('packageApp', Exec) {
             '--dest', outputDir
     ]
 
-    if (consoleEnabled) {
+    if (consoleEnabled == "true") {
         args += ['--win-console']
     }
 
