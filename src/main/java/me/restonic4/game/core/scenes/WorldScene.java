@@ -2,6 +2,7 @@ package me.restonic4.game.core.scenes;
 
 import me.restonic4.citadel.files.parsers.mesh.OBJLoader;
 import me.restonic4.citadel.input.MouseListener;
+import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import me.restonic4.citadel.render.Texture;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
@@ -339,8 +340,8 @@ public class WorldScene extends Scene {
 
     @Override
     public void update() {
-        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_C)) {
-            throw new RuntimeException("lol");
+        if (KeyBinds.CRASH.isPressed()) {
+            throw new RuntimeException("lol, but now is using the registry system");
         }
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_T)) {

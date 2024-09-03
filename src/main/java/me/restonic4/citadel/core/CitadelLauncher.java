@@ -5,9 +5,11 @@ import me.restonic4.citadel.localization.Localizer;
 import me.restonic4.citadel.platform.PlatformManager;
 import me.restonic4.citadel.platform.operating_systems.OperatingSystem;
 import me.restonic4.citadel.registries.RegistryManager;
+import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import me.restonic4.citadel.registries.built_in.managers.Locales;
 import me.restonic4.citadel.registries.built_in.managers.ProfilerStats;
 import me.restonic4.citadel.registries.built_in.managers.Sounds;
+import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.util.GradleUtil;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
@@ -46,9 +48,12 @@ public class CitadelLauncher {
 
         GradleUtil.logInfo();
 
+        SoundManager.getInstance().init();
+
         RegistryManager.registerBuiltInRegistrySet(new Sounds());
         RegistryManager.registerBuiltInRegistrySet(new ProfilerStats());
         RegistryManager.registerBuiltInRegistrySet(new Locales());
+        RegistryManager.registerBuiltInRegistrySet(new KeyBinds());
         RegistryManager.registerBuiltIn();
 
         Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());

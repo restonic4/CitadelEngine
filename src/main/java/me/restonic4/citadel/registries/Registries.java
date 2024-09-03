@@ -1,6 +1,7 @@
 package me.restonic4.citadel.registries;
 
 import me.restonic4.citadel.events.Event;
+import me.restonic4.citadel.registries.built_in.types.KeyBind;
 import me.restonic4.citadel.registries.built_in.types.Locale;
 import me.restonic4.citadel.registries.built_in.types.ProfilerStat;
 import me.restonic4.citadel.registries.built_in.types.Sound;
@@ -15,7 +16,7 @@ public class Registries {
     public static final RegistryKey<Sound> MUSIC = new RegistryKey<>("music", "assets/sounds/music", "ogg");
     public static final RegistryKey<ProfilerStat> PROFILER_STAT = new RegistryKey<>("profiler_stat");
     public static final RegistryKey<Locale> LOCALE = new RegistryKey<>("locale");
-    public static final RegistryKey<Event> EVENT = new RegistryKey<>("event");
+    public static final RegistryKey<KeyBind> KEY_BIND = new RegistryKey<>("key_bind");
 
     // Custom key system, where you can register your own keys
 

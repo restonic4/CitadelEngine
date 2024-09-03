@@ -49,7 +49,6 @@ public class Window {
 
     public void run(IGameLogic iGameLogic) {
         init();
-        SoundManager.getInstance().init();
         iGameLogic.start(); // Starts your game logic
         loop();
         cleanup();
