@@ -6,6 +6,7 @@ import me.restonic4.citadel.registries.Registries;
 import me.restonic4.citadel.registries.Registry;
 import me.restonic4.citadel.registries.built_in.managers.Locales;
 import me.restonic4.citadel.registries.built_in.types.Locale;
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.util.Map;
@@ -44,6 +45,6 @@ public class Localizer {
         return locales.values().stream()
                 .filter(localeFound -> localeFound.getAssetLocation().getPath().equals(langCountry))
                 .findFirst()
-                .orElse(Locales.EN_US);
+                .orElse(CitadelConstants.DEFAULT_LOCALE);
     }
 }

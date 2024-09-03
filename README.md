@@ -21,10 +21,10 @@ This engine is going to be used for my future games and projects, but if people 
 - Frustum culling.
 - Registry system to add content dynamically.
 - Optimization.
+- Better configuration for initializing the engine.
 
 <b>Planned</b>:
 - Object culling.
-- Better configuration for initializing the engine.
 - Config system.
 - Steamworks compatibility.
 - Mipmaps.

@@ -49,6 +49,7 @@ public class Window {
 
     public void run(IGameLogic iGameLogic) {
         init();
+        SoundManager.getInstance().init();
         iGameLogic.start(); // Starts your game logic
         loop();
         cleanup();
@@ -223,12 +224,12 @@ public class Window {
     }
 
     public void setWindowTitleForced(String newTitle) {
-       this.lastTimeTitleChange = Time.getRunningTime() - CitadelConstants.WINDOW_TITLE_CHANGE_TIME;
+       this.lastTimeTitleChange = Time.getRunningTime() - CitadelConstants.WINDOW_TITLE_CHANGE_FREQUENCY;
        setWindowTitle(newTitle);
     }
 
     public boolean setWindowTitle(String newTitle) {
-        if (Time.getRunningTime() - this.lastTimeTitleChange < CitadelConstants.WINDOW_TITLE_CHANGE_TIME) {
+        if (Time.getRunningTime() - this.lastTimeTitleChange < CitadelConstants.WINDOW_TITLE_CHANGE_FREQUENCY) {
             return false;
         }
 

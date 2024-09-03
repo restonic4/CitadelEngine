@@ -19,8 +19,6 @@ public class Game implements IGameLogic {
         DebugManager.setDebugMode(true);
         ProfilerManager.setEnabled(false);
 
-        SoundManager.getInstance().init();
-
         RegistryManager.registerRegistrySet(new Sounds());
         RegistryManager.registerCustom();
 

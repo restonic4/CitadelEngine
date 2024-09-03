@@ -1,5 +1,8 @@
 package me.restonic4.citadel.util;
 
+import me.restonic4.citadel.registries.built_in.managers.Locales;
+import me.restonic4.citadel.registries.built_in.types.Locale;
+
 public class CitadelConstants {
     public static final String REGISTRY_NAMESPACE = "citadel";
     public static final String DEFAULT_WINDOW_TITLE = "Citadel engine";
@@ -24,12 +27,14 @@ public class CitadelConstants {
 
     public static final float PROFILER_TIME_CAPACITY = 60;
 
-    public static final int WINDOW_TITLE_CHANGE_TIME = 3;
-
     // Can be modified
 
     public static int CRASH_MESSAGES_AMOUNT = 7;
 
     public static boolean VSYNC = true;
     public static int FPS_CAP = 60;
+
+    public static int WINDOW_TITLE_CHANGE_FREQUENCY = 3;
+
+    public static Locale DEFAULT_LOCALE = Locales.EN_US;
 }

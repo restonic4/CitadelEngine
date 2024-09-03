@@ -16,6 +16,8 @@ public class Main {
         citadelSettings.setVsync(true);
         citadelSettings.setFPSCap(60);
         citadelSettings.setCrashMessagesAmount(7);
+        citadelSettings.setWindowTitleChangeFrequency(3);
+        citadelSettings.setDefaultLocale(Locales.EN_US);
 
         CitadelLauncher citadelLauncher = CitadelLauncher.create(citadelSettings);
         citadelLauncher.launch();
