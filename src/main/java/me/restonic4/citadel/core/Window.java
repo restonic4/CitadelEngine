@@ -228,13 +228,19 @@ public class Window {
     }
 
     public boolean setWindowTitle(String newTitle) {
-        if (Time.getRunningTime() - this.lastTimeTitleChange >= CitadelConstants.WINDOW_TITLE_CHANGE_TIME) {
-            this.lastTimeTitleChange = Time.getRunningTime();
-            glfwSetWindowTitle(this.glfwWindowAddress, newTitle);
-            return true;
+        if (Time.getRunningTime() - this.lastTimeTitleChange < CitadelConstants.WINDOW_TITLE_CHANGE_TIME) {
+            return false;
         }
 
-        return false;
+        EventResult eventResult = WindowEvents.TITLE_CHANGING.invoker().onWindowTitleChanging(this, this.title, newTitle);
+        if (eventResult == EventResult.CANCELED) {
+            return false;
+        }
+
+        this.lastTimeTitleChange = Time.getRunningTime();
+        this.title = newTitle;
+        glfwSetWindowTitle(this.glfwWindowAddress, newTitle);
+        return true;
     }
 
     public float getAspectRatio() {

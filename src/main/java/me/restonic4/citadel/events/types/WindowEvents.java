@@ -56,4 +56,24 @@ public class WindowEvents {
     public interface WindowResized {
         EventResult onWindowResized(Window window, int newWidth, int newHeight);
     }
+
+    /**
+     * Gets triggered when the window title wants to be changed.
+     */
+    public static final Event<WindowTitleChanging> TITLE_CHANGING = EventFactory.createArray(WindowTitleChanging.class, callbacks -> (window, oldTitle, newTitle) -> {
+        for (WindowTitleChanging callback : callbacks) {
+            EventResult result = callback.onWindowTitleChanging(window, oldTitle, newTitle);
+
+            if (result == EventResult.CANCELED) {
+                return EventResult.CANCELED;
+            }
+        }
+
+        return EventResult.SUCCEEDED;
+    });
+
+    @FunctionalInterface
+    public interface WindowTitleChanging {
+        EventResult onWindowTitleChanging(Window window, String oldTitle, String newTitle);
+    }
 }
