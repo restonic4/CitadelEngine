@@ -17,7 +17,7 @@ public class Game implements IGameLogic {
         Logger.log("Starting the game");
 
         DebugManager.setDebugMode(true);
-        ProfilerManager.setEnabled(true);
+        ProfilerManager.setEnabled(false);
 
         SoundManager.getInstance().init();
 

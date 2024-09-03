@@ -3,6 +3,7 @@ package me.restonic4.citadel.util.debug;
 import me.restonic4.citadel.events.EventResult;
 import me.restonic4.citadel.events.types.DebugEvents;
 import me.restonic4.citadel.localization.Localizer;
+import me.restonic4.citadel.registries.built_in.managers.Sounds;
 import me.restonic4.citadel.sound.SoundSource;
 import me.restonic4.citadel.util.debug.diagnosis.DiagnosticManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -10,7 +11,7 @@ import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.files.FileManager;
 import me.restonic4.citadel.util.debug.diagnosis.OpenGLDebugOutput;
 import me.restonic4.citadel.util.math.RandomUtil;
-import me.restonic4.game.core.world.sounds.Sounds;
+
 import org.joml.Vector3f;
 
 import javax.swing.*;
@@ -66,7 +67,7 @@ public class DebugManager {
         String messageKey = "citadel:system.message.crash." + RandomUtil.random(1, CitadelConstants.CRASH_MESSAGES_AMOUNT);
         String message = Localizer.localizeKey(messageKey);
 
-        SoundSource soundSource = Sounds.GLASS.createSource(false, true);
+        SoundSource soundSource = Sounds.CRASH.createSource(false, true);
         soundSource.setPosition(new Vector3f(0, 0, 0));
         soundSource.play();
 
