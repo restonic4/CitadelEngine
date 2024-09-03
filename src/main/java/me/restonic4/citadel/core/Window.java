@@ -32,6 +32,8 @@ public class Window {
     private long glfwWindowAddress; // This is the created window, but it saves as a long because is not an object, it's a Memory address, where C saves it.
     private float aspectRatio;
 
+    private double lastTimeTitleChange = Time.getRunningTime();
+
     public Window() {
         this.width = 1000;
         this.height = 1000;
@@ -218,6 +220,21 @@ public class Window {
 
     private void updateAspectRatio() {
         this.aspectRatio = (float) this.width / (float) this.height;
+    }
+
+    public void setWindowTitleForced(String newTitle) {
+       this.lastTimeTitleChange = Time.getRunningTime() - CitadelConstants.WINDOW_TITLE_CHANGE_TIME;
+       setWindowTitle(newTitle);
+    }
+
+    public boolean setWindowTitle(String newTitle) {
+        if (Time.getRunningTime() - this.lastTimeTitleChange >= CitadelConstants.WINDOW_TITLE_CHANGE_TIME) {
+            this.lastTimeTitleChange = Time.getRunningTime();
+            glfwSetWindowTitle(this.glfwWindowAddress, newTitle);
+            return true;
+        }
+
+        return false;
     }
 
     public float getAspectRatio() {

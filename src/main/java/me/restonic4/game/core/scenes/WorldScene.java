@@ -419,20 +419,19 @@ public class WorldScene extends Scene {
                 "Rot: (" + camera.transform.getRotation().x + ", " + camera.transform.getRotation().y + ", " + camera.transform.getRotation().z + ")"
         );*/
 
-        // TODO: Optimize this, this should be called less frequent
-        glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
+        Window.getInstance().setWindowTitle(
                 "FPS: " + Time.getFPS()
-                + ", DrawCalls: " + this.renderer.getDrawCalls()
-                + ", Dirty objects modified: " + this.renderer.getDirtyModified()
-                + ", Dirty objects skipped: " + this.renderer.getDirtySkipped()
-                + ", Game objects: " + this.getGameObjects().size()
-                + ", Static objects: " + this.getStaticGameObjects().size()
-                + ", Dynamic objects: " + this.getDynamicGameObjects().size()
-                + ", AspectRatio: " + Window.getInstance().getAspectRatio()
-                + ", w: " + Window.getInstance().getWidth()
-                + ", h: " + Window.getInstance().getHeight()
-                + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
-                + ", Scene changed: " + SceneManager.changes
+                        + ", DrawCalls: " + this.renderer.getDrawCalls()
+                        + ", Dirty objects modified: " + this.renderer.getDirtyModified()
+                        + ", Dirty objects skipped: " + this.renderer.getDirtySkipped()
+                        + ", Game objects: " + this.getGameObjects().size()
+                        + ", Static objects: " + this.getStaticGameObjects().size()
+                        + ", Dynamic objects: " + this.getDynamicGameObjects().size()
+                        + ", AspectRatio: " + Window.getInstance().getAspectRatio()
+                        + ", w: " + Window.getInstance().getWidth()
+                        + ", h: " + Window.getInstance().getHeight()
+                        + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
+                        + ", Scene changed: " + SceneManager.changes
         );
 
         SoundManager.getInstance().updateListenerPosition(camera);

@@ -24,6 +24,8 @@ public class CitadelConstants {
 
     public static final float PROFILER_TIME_CAPACITY = 60;
 
+    public static final int WINDOW_TITLE_CHANGE_TIME = 3;
+
     // Can be modified
 
     public static int CRASH_MESSAGES_AMOUNT = 7;
