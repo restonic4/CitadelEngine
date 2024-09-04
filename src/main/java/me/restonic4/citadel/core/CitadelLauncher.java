@@ -9,6 +9,7 @@ import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import me.restonic4.citadel.registries.built_in.managers.Locales;
 import me.restonic4.citadel.registries.built_in.managers.ProfilerStats;
 import me.restonic4.citadel.registries.built_in.managers.Sounds;
+import me.restonic4.citadel.render.TextureAtlas;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.util.GradleUtil;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -57,6 +58,13 @@ public class CitadelLauncher {
         RegistryManager.registerBuiltIn();
 
         Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());
+
+        TextureAtlas textureAtlas = new TextureAtlas(1024, 1024);
+        textureAtlas.addTexture("assets/textures/persus.png");
+        textureAtlas.addTexture("assets/textures/testImage.png");
+        textureAtlas.addTexture("assets/textures/testImage2.png");
+
+        textureAtlas.exportAtlasAsImage("compiled_atlas.png");
 
         Window.getInstance().run(this.citadelSettings.getiGameLogic());
 

@@ -18,7 +18,6 @@ void main()
     fUV = aUV;
     fTextureId = aTextureId;
 
-
     gl_Position = uProjection * uView * vec4(aPos, 1.0);
 }
 

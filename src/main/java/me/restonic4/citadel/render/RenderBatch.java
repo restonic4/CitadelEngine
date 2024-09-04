@@ -119,7 +119,13 @@ public class RenderBatch {
 
         int modelVertexCount = modelRenderer.getMesh().getVertices().length;
 
+        // If max vertex
         if (currentVertexCount + modelVertexCount > this.maxBatchSize) {
+            return AddFailureTypes.FULL;
+        }
+
+        // If max textures
+        if (modelRenderer.getMesh().getTexture() != null && !hasTextureRoom() && !hasTexture(modelRenderer.getMesh().getTexture())) {
             return AddFailureTypes.FULL;
         }
 
@@ -308,6 +314,14 @@ public class RenderBatch {
 
     public boolean hasRoom() {
         return currentVertexCount < maxBatchSize;
+    }
+
+    public boolean hasTextureRoom() {
+        return this.textures.size() < this.texureSlots.length;
+    }
+
+    public boolean hasTexture(Texture texture) {
+        return this.textures.contains(texture);
     }
 
     public int getDirtyModified() {

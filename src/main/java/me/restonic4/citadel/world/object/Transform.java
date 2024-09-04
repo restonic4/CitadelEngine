@@ -212,14 +212,6 @@ public class Transform {
         setDirty();
     }
 
-    public void addLocalRotationEuler(float pitch, float yaw, float roll) {
-        Quaternionf localRotation = new Quaternionf().rotationXYZ(pitch, yaw, roll);
-
-        this.rotation.mul(localRotation);
-
-        setDirty();
-    }
-
     public void setRotation(Quaternionf quaternion) {
         this.rotation.set(quaternion);
 
@@ -228,6 +220,18 @@ public class Transform {
 
     public void addRotationQuaternion(Quaternionf quaternion) {
         this.rotation.mul(quaternion);
+
+        setDirty();
+    }
+
+    ///////////////////////////////////////////////
+    //          LOCAL ROTATION SETTERS           //
+    ///////////////////////////////////////////////
+
+    public void addLocalRotationEuler(float pitch, float yaw, float roll) {
+        Quaternionf localRotation = new Quaternionf().rotationXYZ(pitch, yaw, roll);
+
+        this.rotation.mul(localRotation);
 
         setDirty();
     }
