@@ -7,12 +7,14 @@ import org.lwjgl.BufferUtils;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import static org.lwjgl.opengl.ARBBindlessTexture.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
     private String filepath;
     private int texID;
+    private long texHandleID;
 
     public Texture(String filepath) {
         this.filepath = FileManager.getOrExtractFile(
@@ -61,6 +63,14 @@ public class Texture {
 
         // When shrinking an image, pixelate
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        texHandleID = glGetTextureHandleARB(texID);
+
+        glMakeTextureHandleResidentARB(texHandleID);
+    }
+
+    public long getBindlessHandle() {
+        return texHandleID;
     }
 
     public void bind() {
@@ -69,5 +79,10 @@ public class Texture {
 
     public void unbind() {
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    public void cleanup() {
+        glMakeTextureHandleNonResidentARB(texHandleID);
+        glDeleteTextures(texID);
     }
 }

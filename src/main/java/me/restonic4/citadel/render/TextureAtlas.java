@@ -1,10 +1,16 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.citadel.exceptions.FileException;
 import me.restonic4.citadel.files.FileManager;
+import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.stb.STBImage;
 import org.lwjgl.stb.STBImageWrite;
 import org.lwjgl.system.MemoryStack;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -16,25 +22,30 @@ import static org.lwjgl.stb.STBImage.stbi_load;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_set_flip_vertically_on_load;
 
-public class TextureAtlas {
-    private int atlasWidth;
-    private int atlasHeight;
+/*public class TextureAtlas {
     private int maxWidth;
     private int maxHeight;
+
+    private int atlasWidth;
+    private int atlasHeight;
+
     private int texID;
+
     private ByteBuffer atlasBuffer;
     private List<TextureRegion> regions;
 
     public TextureAtlas(int maxWidth, int maxHeight) {
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
+
         this.atlasWidth = 0;
         this.atlasHeight = 0;
+
         this.regions = new ArrayList<>();
         this.atlasBuffer = BufferUtils.createByteBuffer(maxWidth * maxHeight * 4); // RGBA
     }
 
-    public TextureRegion addTexture(String filepath) {
+    public void addTexture(String filepath) {
         String resourcePath = FileManager.getOrExtractFile(
                 FileManager.toResources(filepath)
         );
@@ -44,45 +55,30 @@ public class TextureAtlas {
         IntBuffer channels = BufferUtils.createIntBuffer(1);
 
         stbi_set_flip_vertically_on_load(true);
-        ByteBuffer image = stbi_load(resourcePath, width, height, channels, 4); // Load as RGBA
-
+        ByteBuffer image = stbi_load(resourcePath, width, height, channels, 0);
         if (image == null) {
             throw new RuntimeException("Failed to load texture file: " + resourcePath);
         }
 
-        int imageWidth = width.get(0);
-        int imageHeight = height.get(0);
+        int texWidth = width.get(0);
+        int texHeight = height.get(0);
 
-        // Check if the texture fits in the current row
-        if (atlasWidth + imageWidth > maxWidth) {
-            atlasWidth = 0;
-            atlasHeight += imageHeight;
-        }
-
-        if (atlasHeight + imageHeight > maxHeight) {
-            throw new RuntimeException("Texture atlas is full, cannot add texture: " + resourcePath);
-        }
-
-        // Copy image data into the atlas buffer
-        for (int y = 0; y < imageHeight; y++) {
-            for (int x = 0; x < imageWidth; x++) {
-                int atlasIndex = ((atlasHeight + y) * maxWidth + (atlasWidth + x)) * 4;
-                int imageIndex = (y * imageWidth + x) * 4;
-                atlasBuffer.put(atlasIndex, image.get(imageIndex));
-                atlasBuffer.put(atlasIndex + 1, image.get(imageIndex + 1));
-                atlasBuffer.put(atlasIndex + 2, image.get(imageIndex + 2));
-                atlasBuffer.put(atlasIndex + 3, image.get(imageIndex + 3));
+        if (atlasWidth + texWidth > maxWidth) {
+            if (atlasHeight + texHeight > maxHeight) {
+                throw new FileException("Full atlas");
             }
+
+            atlasHeight += texHeight;
         }
-
-        TextureRegion region = new TextureRegion(atlasWidth, atlasHeight, imageWidth, imageHeight);
-        regions.add(region);
-
-        atlasWidth += imageWidth;
+        else {
+            atlasWidth += texWidth;
+        }
 
         stbi_image_free(image);
 
-        return region;
+        atlasBuffer = image;
+
+        //return region;
     }
 
     public void build() {
@@ -108,28 +104,23 @@ public class TextureAtlas {
         return regions;
     }
 
-    public void exportAtlasAsImage(String fileName) {
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            ByteBuffer imageBuffer = BufferUtils.createByteBuffer(atlasWidth * atlasHeight * 4);
+    public void saveImage(String filePath) {
+        String fileExport = FileManager.createDirectory("exports") + "/" + filePath;
 
-            // Copy the atlasBuffer content to imageBuffer
-            for (int y = 0; y < atlasHeight; y++) {
-                for (int x = 0; x < atlasWidth; x++) {
-                    int atlasIndex = (y * maxWidth + x) * 4;
-                    int imageIndex = (y * atlasWidth + x) * 4;
-                    imageBuffer.put(imageIndex, atlasBuffer.get(atlasIndex));
-                    imageBuffer.put(imageIndex + 1, atlasBuffer.get(atlasIndex + 1));
-                    imageBuffer.put(imageIndex + 2, atlasBuffer.get(atlasIndex + 2));
-                    imageBuffer.put(imageIndex + 3, atlasBuffer.get(atlasIndex + 3));
-                }
-            }
+        // Guardar la imagen en formato PNG utilizando STBImageWrite
+        boolean success = STBImageWrite.stbi_write_png(
+                fileExport, // La ruta donde se guardará la imagen
+                atlasWidth,      // Ancho de la imagen
+                atlasHeight,     // Alto de la imagen
+                4,          // Número de canales (4 para RGBA)
+                atlasBuffer, // Buffer que contiene los datos de la imagen
+                atlasWidth * 4   // Stride: el número de bytes por fila (ancho * número de canales)
+        );
 
-            String filePath = FileManager.createDirectory("exports") + "/" + fileName;
-            if (!STBImageWrite.stbi_write_png(filePath, atlasWidth, atlasHeight, 4, imageBuffer, atlasWidth * 4)) {
-                throw new RuntimeException("Failed to write texture atlas image to " + filePath);
-            }
-
-            System.out.println("Atlas exported as " + filePath);
+        if (!success) {
+            throw new RuntimeException("Error al guardar la imagen PNG en: " + fileExport);
+        } else {
+            System.out.println("Imagen guardada en: " + fileExport);
         }
     }
 
@@ -139,6 +130,123 @@ public class TextureAtlas {
         public TextureRegion(int x, int y, int width, int height) {
             this.x = x;
             this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+    }
+}*/
+
+public class TextureAtlas {
+    private List<TextureData> textures;
+    private int width, height;
+
+    private ByteBuffer bakedAtlas;
+
+    public TextureAtlas(int width, int height) {
+        this.textures = new ArrayList<>();
+        this.width = width;
+        this.height = height;
+    }
+
+    public ByteBuffer loadTexture(String filepath) {
+        String resourcePath = FileManager.getOrExtractFile(
+                FileManager.toResources(filepath)
+        );
+
+        IntBuffer width = BufferUtils.createIntBuffer(1);
+        IntBuffer height = BufferUtils.createIntBuffer(1);
+        IntBuffer channels = BufferUtils.createIntBuffer(1);
+
+        STBImage.stbi_set_flip_vertically_on_load(true);
+        ByteBuffer image = STBImage.stbi_load(resourcePath, width, height, channels, 4); // 4 para RGBA
+        if (image == null) {
+            throw new RuntimeException("Failed to load texture: " + STBImage.stbi_failure_reason());
+        }
+
+        textures.add(new TextureData(image, width.get(0), height.get(0)));
+
+        return image;
+    }
+
+    public ByteBuffer createTextureAtlas() {
+        ByteBuffer atlas = ByteBuffer.allocateDirect(this.width * this.height * 4); // RGBA
+
+        ByteBuffer[] byteBuffers = new ByteBuffer[this.textures.size()];
+        int[] widths = new int[this.textures.size()];
+        int[] heights = new int[this.textures.size()];
+
+        for (int i = 0; i < this.textures.size(); i++) {
+            TextureData textureData = this.textures.get(i);
+
+            byteBuffers[i] = textureData.buffer;
+            widths[i] = textureData.width;
+            heights[i] = textureData.height;
+        }
+
+        int currentX = 0;
+        int currentY = 0;
+        int maxRowHeight = 0;
+
+        for (int i = 0; i < byteBuffers.length; i++) {
+            ByteBuffer texture = byteBuffers[i];
+            int width = widths[i];
+            int height = heights[i];
+
+            String text = (currentX + width) + " > " + this.width + "; " + (currentY + height) + " > " + this.height;
+            System.out.println(text);
+
+            // Verifica que no sobrepase los límites del atlas
+            if (currentX + width > this.width || currentY + height > this.height) {
+                throw new RuntimeException("Texture atlas overflow: not enough space to place texture.");
+            }
+
+            // Copia los píxeles de la textura al atlas
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int srcIndex = (y * width + x) * 4; // RGBA
+                    int dstIndex = ((currentY + y) * this.width + (currentX + x)) * 4;
+
+                    // Verifica si los índices están dentro de los límites
+                    if (srcIndex >= texture.capacity()) {
+                        throw new RuntimeException("Attempting to read outside the bounds of the texture buffer.");
+                    }
+                    if (dstIndex >= atlas.capacity()) {
+                        throw new RuntimeException("Attempting to write outside the bounds of the atlas buffer.");
+                    }
+
+                    atlas.put(dstIndex, texture.get(srcIndex));     // R
+                    atlas.put(dstIndex + 1, texture.get(srcIndex + 1)); // G
+                    atlas.put(dstIndex + 2, texture.get(srcIndex + 2)); // B
+                    atlas.put(dstIndex + 3, texture.get(srcIndex + 3)); // A
+                }
+            }
+
+            currentX += width;
+            maxRowHeight = Math.max(maxRowHeight, height);
+
+            if (currentX + width > this.width) {
+                currentX = 0;
+                currentY += maxRowHeight;
+                maxRowHeight = 0;
+            }
+        }
+
+        this.bakedAtlas = atlas;
+        return atlas;
+    }
+
+    public void saveAtlasToPNG(String filepath) {
+        String fileExport = FileManager.createDirectory("exports") + "/" + filepath;
+
+        STBImageWrite.stbi_write_png(fileExport, this.width, this.height, 4, this.bakedAtlas, this.width * 4); // 4 para RGBA
+    }
+
+    public class TextureData {
+        private ByteBuffer buffer;
+        private int width, height;
+
+        public TextureData(ByteBuffer buffer, int width, int height) {
+            this.buffer = buffer;
             this.width = width;
             this.height = height;
         }

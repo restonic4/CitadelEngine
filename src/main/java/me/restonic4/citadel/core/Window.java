@@ -133,6 +133,10 @@ public class Window {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
 
+        if (!GL.getCapabilities().GL_ARB_bindless_texture) {
+            throw new IllegalStateException("Bindless textures not compatible with your graphics cards. Tell the devs pls!");
+        }
+
         CitadelLifecycleEvents.CITADEL_STARTED.invoker().onCitadelStarted(CitadelLauncher.getInstance(), this);
     }
 

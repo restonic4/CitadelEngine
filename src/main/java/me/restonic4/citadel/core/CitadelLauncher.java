@@ -14,6 +14,12 @@ import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.util.GradleUtil;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+import static me.restonic4.citadel.render.TextureAtlas.*;
+
 public class CitadelLauncher {
     private static CitadelLauncher instance;
 
@@ -59,12 +65,25 @@ public class CitadelLauncher {
 
         Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());
 
-        TextureAtlas textureAtlas = new TextureAtlas(1024, 1024);
+        /*TextureAtlas textureAtlas = new TextureAtlas(1024, 1024);
         textureAtlas.addTexture("assets/textures/persus.png");
         textureAtlas.addTexture("assets/textures/testImage.png");
-        textureAtlas.addTexture("assets/textures/testImage2.png");
+        //textureAtlas.addTexture("assets/textures/testImage2.png");
 
-        textureAtlas.exportAtlasAsImage("compiled_atlas.png");
+        textureAtlas.saveImage("compiled_atlas.png");*/
+
+        /*TextureAtlas textureAtlas = new TextureAtlas(1024, 1024);
+
+        for (int i = 0; i < 6; i++) {
+            textureAtlas.loadTexture("assets/textures/persus.png");
+            textureAtlas.loadTexture("assets/textures/testImage.png");
+            textureAtlas.loadTexture("assets/textures/testImage2.png");
+        }
+
+        ByteBuffer buffer = textureAtlas.createTextureAtlas();
+        textureAtlas.saveAtlasToPNG("test.png");
+
+        throw new RuntimeException("test");*/
 
         Window.getInstance().run(this.citadelSettings.getiGameLogic());
 
