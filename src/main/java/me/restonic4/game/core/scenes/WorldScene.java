@@ -52,24 +52,7 @@ public class WorldScene extends Scene {
         //music.play();
 
         Mesh testMesh = MeshLoader.loadMesh("assets/models/test.obj");
-        testMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(0, 0, 1, 1), // Blue
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(1, 0, 1, 1),  // Magenta
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(0, 0, 1, 1), // Blue
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(0, 1, 0, 1)  // Green
-        });
+        testMesh.setTexture(new Texture("assets/textures/test.png"));
 
         Mesh testMesh2 = MeshLoader.loadMesh("assets/models/test2.obj");
         testMesh2.setVerticesColors(new Vector4f[] {           // Colors for each vertex
@@ -99,39 +82,13 @@ public class WorldScene extends Scene {
                 new Vector4f(1, 0, 1, 1),  // Magenta
         });
 
-        //Mesh cameraMesh = MeshLoader.loadMesh("assets/models/camera.fbx");
-        /*cameraMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(0, 0, 1, 1), // Blue
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(1, 0, 1, 1),  // Magenta
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(0, 0, 1, 1), // Blue
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(0, 1, 0, 1),  // Green
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(0, 0, 1, 1), // Blue
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(1, 0, 0, 1), // Red
-                new Vector4f(1, 0, 1, 1),  // Magenta
-        });*/
+
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
         int amount = 16;
 
-        /*for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
                 for (int w = 0; w < amount; w++) {
                     Mesh selected = RandomUtil.getRandom(list);
@@ -155,185 +112,20 @@ public class WorldScene extends Scene {
                     this.addGameObject(test);
                 }
             }
-        }*/
+        }
 
         Mesh citadelMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
-        citadelMesh.setTexture(
-                new Texture("assets/textures/persus.png")
-        );
-        //citadelMesh = OBJLoader.optimizeToRender(citadelMesh);
-        Logger.log("Vertex: " + citadelMesh.getVertices().length);
-        /*citadelMesh.setVerticesColors(new Vector4f[] {           // Colors for each vertex
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-                new Vector4f(0, 1, 1, 1), // Cyan
-                new Vector4f(0, 1, 0, 1), // Green
-
-                new Vector4f(1, 1, 0, 1), // Yellow
-                new Vector4f(1, 0, 1, 1), // Magenta
-        });*/
+        citadelMesh.setTexture(new Texture("assets/textures/persus.png"));
 
         GameObject test = new GameObject(false);
         test.addComponent(new ModelRendererComponent(citadelMesh));
         test.setName("test");
-        test.transform.setPosition(0, 0, 0);
-        test.transform.setScale(1,1,1);
+        test.transform.setPosition(0, -10, 0);
+        test.transform.setScale(1.2f,1.2f,1.2f);
         this.addGameObject(test);
-
-        /*for (int i = 0; i < 4; i++) {
-            GameObject test = new GameObject(false);
-            test.addComponent(new ModelRendererComponent((RandomUtil.random(0,1) == 0) ? testMesh : testMesh2));
-            test.setName("test");
-            test.transform.setPosition(5*i, 5, 5);
-            test.transform.setScale(1,1,1);
-            this.addGameObject(test);
-        }*/
-
-        /*GameObject test = new GameObject(false);
-        test.addComponent(new ModelRendererComponent(testMesh2));
-        test.setName("test");
-        test.transform.setPosition(5, 5, 5);
-        test.transform.setScale(1,1,1);
-        this.addGameObject(test);
-
-        GameObject test2 = new GameObject(false);
-        test2.addComponent(new ModelRendererComponent(testMesh));
-        test2.setName("test");
-        test2.transform.setPosition(10, 5, 5);
-        test2.transform.setScale(1,1,1);
-        this.addGameObject(test2);
-
-        GameObject test3 = new GameObject(false);
-        test3.addComponent(new ModelRendererComponent(testMesh));
-        test3.setName("test");
-        test3.transform.setPosition(10, 5, 10);
-        test3.transform.setScale(1,1,1);
-        this.addGameObject(test3);
-
-        GameObject test4 = new GameObject(false);
-        test4.addComponent(new ModelRendererComponent(testMesh));
-        test4.setName("test");
-        test4.transform.setPosition(5, 5, 10);
-        test4.transform.setScale(1,1,1);
-        this.addGameObject(test4);
-
-        GameObject test5 = new GameObject(false);
-        test5.addComponent(new ModelRendererComponent(testMesh));
-        test5.setName("test");
-        test5.transform.setPosition(5, 10, 5);
-        test5.transform.setScale(1,1,1);
-        this.addGameObject(test5);
-
-        GameObject test6 = new GameObject(false);
-        test6.addComponent(new ModelRendererComponent(testMesh));
-        test6.setName("test");
-        test6.transform.setPosition(10, 10, 5);
-        test6.transform.setScale(1,1,1);
-        this.addGameObject(test6);
-
-        GameObject test7 = new GameObject(false);
-        test7.addComponent(new ModelRendererComponent(testMesh));
-        test7.setName("test");
-        test7.transform.setPosition(10, 10, 10);
-        test7.transform.setScale(1,1,1);
-        this.addGameObject(test7);
-
-        GameObject test8 = new GameObject(false);
-        test8.addComponent(new ModelRendererComponent(testMesh2));
-        test8.setName("test");
-        test8.transform.setPosition(5, 10, 10);
-        test8.transform.setScale(1,1,1);
-        this.addGameObject(test8);*/
 
         DebugManager.setVerticesMode(true);
         //DebugManager.setWireFrameMode(true);
-
-        /*Mesh olaMesh = new Mesh(
-                new Vector3f[]{
-                        new Vector3f(0, 0, 0), new Vector3f(0, 1, 0), new Vector3f(1, 0, 0),
-                        new Vector3f(1, 1, 1), new Vector3f(1, 2, 1), new Vector3f(2, 1, 1),
-                        new Vector3f(2, 2, 2), new Vector3f(2, 3, 2), new Vector3f(3, 2, 2),
-                        new Vector3f(3, 3, 3), new Vector3f(3, 4, 3), new Vector3f(4, 3, 3)
-                },
-                new int[] {
-                    0, 2, 1,
-                    3, 5, 4,
-                    6, 8, 7,
-                    9, 11, 10,
-                },
-                new Vector4f[]{
-                    new Vector4f(1, 0, 0, 1), new Vector4f(0, 1, 0, 1), new Vector4f(0, 0, 1, 1),
-                    new Vector4f(1, 0, 0, 1), new Vector4f(0, 1, 0, 1), new Vector4f(0, 0, 1, 1),
-                    new Vector4f(1, 0, 0, 1), new Vector4f(0, 1, 0, 1), new Vector4f(0, 0, 1, 1),
-                    new Vector4f(1, 0, 0, 1), new Vector4f(0, 1, 0, 1), new Vector4f(0, 0, 1, 1)
-                }
-        );
-
-        GameObject ola = new GameObject("ola", true);
-        ola.addComponent(new ModelRendererComponent(olaMesh));
-        ola.transform.setScale(10, 10, 10);
-        ola.transform.setPosition(0, 0, 0);
-        this.addGameObject(ola);*/
 
         super.init();
     }

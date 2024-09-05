@@ -20,25 +20,24 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class RenderBatch {
-    // Pos                    Color                         UV              Texture id
-    // float, float, float    float, float, float, float    float, float    float
+    // Pos                    Color                         UV              Texture handle id
+    // float, float, float    float, float, float, float    float, float    float, float
 
     private final int POS_SIZE = 3;
     private final int COLOR_SIZE = 4;
     private final int UV_SIZE = 2;
-    private final int TEXTURE_ID_SIZE = 1;
+    private final int TEXTURE_HANDLER_ID_SIZE = 2;
 
     private final int POS_OFFSET = 0;
     private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
     private final int UV_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
-    private final int TEXTURE_ID_OFFSET = UV_OFFSET + UV_SIZE * Float.BYTES;
+    private final int TEXTURE_HANDLER_ID_OFFSET = UV_OFFSET + UV_SIZE * Float.BYTES;
 
     // Change this in case adding new data to the VBO
-    private final int VERTEX_SIZE = POS_SIZE + COLOR_SIZE + UV_SIZE + TEXTURE_ID_SIZE;
+    private final int VERTEX_SIZE = POS_SIZE + COLOR_SIZE + UV_SIZE + TEXTURE_HANDLER_ID_SIZE;
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     private List<ModelRendererComponent> models;
-    private List<Texture> textures; // TODO: I think this should be a generated atlas, or something like that, maybe, idk, lol, idk what i am doing with my life.
 
     private float[] vertices;
     private int[] indices;
@@ -46,7 +45,6 @@ public class RenderBatch {
 
     private int vaoID, vboID, eboID;
     private int maxBatchSize; // Max vertex allowed per batch
-    private int[] texureSlots = {0, 1, 2, 3, 4, 5, 6, 7};
     private boolean isStatic;
 
     // This is just a stat
@@ -56,7 +54,6 @@ public class RenderBatch {
 
     public RenderBatch(int maxBatchSize, boolean isStatic) {
         this.models = new ArrayList<>();
-        this.textures = new ArrayList<>();
 
         this.maxBatchSize = maxBatchSize;
         this.isStatic = isStatic;
@@ -94,7 +91,7 @@ public class RenderBatch {
         glVertexAttribPointer(2, UV_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, UV_OFFSET);
         glEnableVertexAttribArray(2);
 
-        glVertexAttribPointer(3, TEXTURE_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEXTURE_ID_OFFSET);
+        glVertexAttribPointer(3, TEXTURE_HANDLER_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEXTURE_HANDLER_ID_OFFSET);
         glEnableVertexAttribArray(3);
     }
 
@@ -124,19 +121,9 @@ public class RenderBatch {
             return AddFailureTypes.FULL;
         }
 
-        // If max textures
-        if (modelRenderer.getMesh().getTexture() != null && !hasTextureRoom() && !hasTexture(modelRenderer.getMesh().getTexture())) {
-            return AddFailureTypes.FULL;
-        }
-
         // Add the model to the list
         this.models.add(modelRenderer);
         currentVertexCount += modelVertexCount;
-
-        // Add the texture to the list
-        if (modelRenderer.getMesh().getTexture() != null && !this.textures.contains(modelRenderer.getMesh().getTexture())) {
-            this.textures.add(modelRenderer.getMesh().getTexture());
-        }
 
         // Add properties to local vertices array
         loadVertexProperties(modelRenderer);
@@ -186,13 +173,6 @@ public class RenderBatch {
         shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
         shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());
 
-        for (int i=0; i < textures.size(); i++) {
-            glActiveTexture(GL_TEXTURE0 + i + 1);
-            textures.get(i).bind();
-        }
-
-        shader.uploadIntArray("uTextures", texureSlots);
-
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
@@ -216,10 +196,6 @@ public class RenderBatch {
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
 
-        for (int i=0; i < textures.size(); i++) {
-            textures.get(i).unbind();
-        }
-
         shader.detach();
     }
 
@@ -231,15 +207,13 @@ public class RenderBatch {
         Vector2f[] UVs = modelRenderer.getMesh().getUVs();
         Vector4f tint = modelRenderer.getMesh().getTint();
 
-        int textureId = 0;
+        long textureHandleId = 0L;
         if (modelRenderer.getMesh().getTexture() != null) {
-            for (int i = 0; i < textures.size(); i++) {
-                if (textures.get(i) == modelRenderer.getMesh().getTexture()) {
-                    textureId = i + 1;
-                    break;
-                }
-            }
+            textureHandleId = modelRenderer.getMesh().getTexture().getBindlessHandle();
         }
+
+        float textureHandleLow = Float.intBitsToFloat((int)(textureHandleId & 0xFFFFFFFF));
+        float textureHandleHigh = Float.intBitsToFloat((int)(textureHandleId >>> 32));
 
         for (int i = 0; i < vertexPositions.length; i++) {
             Vector3f currentPos = new Vector3f(vertexPositions[i]);
@@ -276,8 +250,9 @@ public class RenderBatch {
             vertices[offset + 7] = (UVs[i] != null) ? UVs[i].x : 0;
             vertices[offset + 8] = (UVs[i] != null) ? UVs[i].y : 0;
 
-            // Texture id
-            vertices[offset + 9] = textureId;
+            // Texture handle id
+            vertices[offset + 9] = textureHandleLow;
+            vertices[offset + 10] = textureHandleHigh;
 
             offset += VERTEX_SIZE;
         }
@@ -314,14 +289,6 @@ public class RenderBatch {
 
     public boolean hasRoom() {
         return currentVertexCount < maxBatchSize;
-    }
-
-    public boolean hasTextureRoom() {
-        return this.textures.size() < this.texureSlots.length;
-    }
-
-    public boolean hasTexture(Texture texture) {
-        return this.textures.contains(texture);
     }
 
     public int getDirtyModified() {

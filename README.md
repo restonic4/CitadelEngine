@@ -48,6 +48,7 @@ Knowledge:
 - <a href="https://www.youtube.com/@ThinMatrix">Youtube: @ThinMatrix</a>
 - <a href="https://www.youtube.com/watch?v=f05PwswO7qc">Youtube video by @KazeN64</a>
 - <a href="https://www.youtube.com/watch?v=1LCEiVDHJmc">Youtube video by @standupmaths</a>
+- <a href="https://www.youtube.com/watch?v=YTfdBSjitd8">Youtube video by @Aurailus</a>
 
 For more information, check out the [docs](./resources/docs) in the `resources/docs` folder.
 

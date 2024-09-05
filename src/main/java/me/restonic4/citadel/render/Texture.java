@@ -2,6 +2,7 @@ package me.restonic4.citadel.render;
 
 import me.restonic4.citadel.exceptions.FileException;
 import me.restonic4.citadel.files.FileManager;
+import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
@@ -44,6 +45,12 @@ public class Texture {
             throw new FileException("Could not load image '" + this.filepath + "'");
         }
 
+        texHandleID = glGetTextureHandleARB(texID);
+
+        Logger.logExtra("Texture: " + texID + "; " + "Handle: " + texHandleID);
+
+        glMakeTextureHandleResidentARB(texHandleID);
+
         // Free the memory, we don't want a memory leak, don't we?
         stbi_image_free(image);
     }
@@ -63,22 +70,10 @@ public class Texture {
 
         // When shrinking an image, pixelate
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-        texHandleID = glGetTextureHandleARB(texID);
-
-        glMakeTextureHandleResidentARB(texHandleID);
     }
 
     public long getBindlessHandle() {
         return texHandleID;
-    }
-
-    public void bind() {
-        glBindTexture(GL_TEXTURE_2D, texID);
-    }
-
-    public void unbind() {
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     public void cleanup() {

@@ -24,10 +24,10 @@ public abstract class SceneManager {
             currentScene.unload();
         }
 
-        setScene(scene);
-
-        // Makes sure OpenGL finishes his things, so it doesn't break
+        // Makes sure OpenGL finishes his things, so it doesn't break, Spoiler: It breaks at the start of the engine and if the scene changes every frame, cool I guess
         glFinish();
+
+        setScene(scene);
 
         scene.init();
         scene.activate();
