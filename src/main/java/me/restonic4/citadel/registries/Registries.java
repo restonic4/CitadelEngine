@@ -1,10 +1,7 @@
 package me.restonic4.citadel.registries;
 
 import me.restonic4.citadel.events.Event;
-import me.restonic4.citadel.registries.built_in.types.KeyBind;
-import me.restonic4.citadel.registries.built_in.types.Locale;
-import me.restonic4.citadel.registries.built_in.types.ProfilerStat;
-import me.restonic4.citadel.registries.built_in.types.Sound;
+import me.restonic4.citadel.registries.built_in.types.*;
 
 import java.util.ArrayList;
 import java.util.List;

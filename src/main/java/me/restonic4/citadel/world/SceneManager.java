@@ -43,6 +43,7 @@ public abstract class SceneManager {
 
     public static void unLoadCurrentScene() {
         if (currentScene != null) {
+            currentScene.cleanup();
             unLoadScene(currentScene);
         }
     }

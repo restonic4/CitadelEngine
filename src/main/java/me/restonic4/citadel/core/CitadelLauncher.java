@@ -5,10 +5,8 @@ import me.restonic4.citadel.localization.Localizer;
 import me.restonic4.citadel.platform.PlatformManager;
 import me.restonic4.citadel.platform.operating_systems.OperatingSystem;
 import me.restonic4.citadel.registries.RegistryManager;
-import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
-import me.restonic4.citadel.registries.built_in.managers.Locales;
-import me.restonic4.citadel.registries.built_in.managers.ProfilerStats;
-import me.restonic4.citadel.registries.built_in.managers.Sounds;
+import me.restonic4.citadel.registries.built_in.managers.*;
+import me.restonic4.citadel.render.Texture;
 import me.restonic4.citadel.render.TextureAtlas;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.util.GradleUtil;
@@ -64,26 +62,6 @@ public class CitadelLauncher {
         RegistryManager.registerBuiltIn();
 
         Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());
-
-        /*TextureAtlas textureAtlas = new TextureAtlas(1024, 1024);
-        textureAtlas.addTexture("assets/textures/persus.png");
-        textureAtlas.addTexture("assets/textures/testImage.png");
-        //textureAtlas.addTexture("assets/textures/testImage2.png");
-
-        textureAtlas.saveImage("compiled_atlas.png");*/
-
-        /*TextureAtlas textureAtlas = new TextureAtlas(1024, 1024);
-
-        for (int i = 0; i < 6; i++) {
-            textureAtlas.loadTexture("assets/textures/persus.png");
-            textureAtlas.loadTexture("assets/textures/testImage.png");
-            textureAtlas.loadTexture("assets/textures/testImage2.png");
-        }
-
-        ByteBuffer buffer = textureAtlas.createTextureAtlas();
-        textureAtlas.saveAtlasToPNG("test.png");
-
-        throw new RuntimeException("test");*/
 
         Window.getInstance().run(this.citadelSettings.getiGameLogic());
 

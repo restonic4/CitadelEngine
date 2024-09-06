@@ -38,5 +38,8 @@ public abstract class Camera {
         return this.projectionMatrix;
     }
 
-
+    public void load() {
+        getViewMatrix();
+        getProjectionMatrix();
+    }
 }

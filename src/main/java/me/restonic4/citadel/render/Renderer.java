@@ -20,6 +20,7 @@ public class Renderer {
 
     // This is just a stat
     private int drawCallsConsumed = 0;
+    private int drawCallsSkipped = 0;
     private int dirtyModifiedTotal = 0;
     private int dirtySkippedTotal = 0;
 
@@ -65,6 +66,7 @@ public class Renderer {
     public void render() {
         // Stats
         drawCallsConsumed = 0;
+        drawCallsSkipped = 0;
         dirtyModifiedTotal = 0;
         dirtySkippedTotal = 0;
 
@@ -88,10 +90,16 @@ public class Renderer {
         // Render batches
         renderBatches(this.staticBatches);
         renderBatches(this.dynamicBatches);
+
     }
 
     private <T extends RenderBatch> void renderBatches(List<T> batches) {
         for (RenderBatch batch : batches) {
+            if (batch.shouldBeSkipped()) {
+                drawCallsSkipped++;
+                continue;
+            }
+
             batch.render();
 
             drawCallsConsumed++;
@@ -112,12 +120,26 @@ public class Renderer {
         return this.drawCallsConsumed;
     }
 
+    public int getDrawCallsSkipped() {
+        return this.drawCallsSkipped;
+    }
+
     public int getDirtyModified() {
         return dirtyModifiedTotal;
     }
 
     public int getDirtySkipped() {
         return dirtySkippedTotal;
+    }
+
+    public void cleanup() {
+        for (RenderBatch batch : this.staticBatches) {
+            batch.cleanup();
+        }
+
+        for (RenderBatch batch : this.dynamicBatches) {
+            batch.cleanup();
+        }
     }
 }
 

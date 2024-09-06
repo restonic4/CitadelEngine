@@ -45,6 +45,7 @@ public class WorldScene extends Scene {
         camTransform.setPosition(0, 0, 100);
         camTransform.setScale(1, 1, 1);
         camera = new PerspectiveCamera(camTransform);
+        camera.load();
 
         // Music
         music = Sounds.TEMPLATE.createSource(true, true);
@@ -206,15 +207,24 @@ public class WorldScene extends Scene {
         camera.transform.addRotationQuaternion(yawRotation);
         camera.transform.addRotationQuaternion(pitchRotation);
 
+        for (int i = 0; i < this.getDynamicGameObjects().size(); i++) {
+            float offset = (float) Math.sin(Time.getRunningTime() + i);
+            float offset2 = (float) Math.cos(Time.getRunningTime() + i);
+
+            GameObject gameObject = this.getDynamicGameObjects().get(i);
+            gameObject.transform.setPosition(i * offset, i + offset, i * offset2);
+        }
+
         //camera.transform.addLocalRotationEuler(xMouseDelta, yMouseDelta, 0);
 
         /*glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
                 "Rot: (" + camera.transform.getRotation().x + ", " + camera.transform.getRotation().y + ", " + camera.transform.getRotation().z + ")"
         );*/
 
-        Window.getInstance().setWindowTitle(
+        Window.getInstance().setWindowTitleForced(
                 "FPS: " + Time.getFPS()
                         + ", DrawCalls: " + this.renderer.getDrawCalls()
+                        + ", DrawCalls skipped: " + this.renderer.getDrawCallsSkipped()
                         + ", Dirty objects modified: " + this.renderer.getDirtyModified()
                         + ", Dirty objects skipped: " + this.renderer.getDirtySkipped()
                         + ", Game objects: " + this.getGameObjects().size()
@@ -224,7 +234,6 @@ public class WorldScene extends Scene {
                         + ", w: " + Window.getInstance().getWidth()
                         + ", h: " + Window.getInstance().getHeight()
                         + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
-                        + ", Scene changed: " + SceneManager.changes
         );
 
         SoundManager.getInstance().updateListenerPosition(camera);

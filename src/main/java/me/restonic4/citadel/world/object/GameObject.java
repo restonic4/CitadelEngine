@@ -1,5 +1,7 @@
 package me.restonic4.citadel.world.object;
 
+import me.restonic4.citadel.util.Time;
+
 import java.util.ArrayList;
 import java.util.List;
 

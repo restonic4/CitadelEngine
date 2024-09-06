@@ -97,4 +97,8 @@ public abstract class Scene {
     public int getGameObjectsAmount() {
         return this.staticGameObjects.size() + this.dynamicGameObjects.size();
     }
+
+    public void cleanup() {
+        this.renderer.cleanup();
+    }
 }

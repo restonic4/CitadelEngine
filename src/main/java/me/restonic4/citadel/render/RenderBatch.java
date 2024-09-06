@@ -141,7 +141,10 @@ public class RenderBatch {
             GameObject gameObject = modelRendererComponent.gameObject;
 
             if (!gameObject.isInsideFrustum()) {
-                dirtySkipped++;
+                if (gameObject.transform.isDirty()) {
+                    dirtySkipped++;
+                }
+
                 continue;
             }
 
@@ -297,6 +300,30 @@ public class RenderBatch {
 
     public int getDirtySkipped() {
         return dirtySkipped;
+    }
+
+    public boolean isOutsideFrustum() {
+        for (ModelRendererComponent modelRendererComponent : this.models) {
+            if (modelRendererComponent.gameObject.isInsideFrustum()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean shouldBeSkipped() {
+        return isOutsideFrustum();
+    }
+
+    public void cleanup() {
+        for (ModelRendererComponent modelRendererComponent : models) {
+            Texture texture = modelRendererComponent.getMesh().getTexture();
+
+            if (texture != null) {
+                texture.cleanup();
+            }
+        }
     }
 
     public enum AddFailureTypes {
