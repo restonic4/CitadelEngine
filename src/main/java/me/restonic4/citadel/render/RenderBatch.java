@@ -1,5 +1,6 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
@@ -140,7 +141,8 @@ public class RenderBatch {
         for (ModelRendererComponent modelRendererComponent : models) {
             GameObject gameObject = modelRendererComponent.gameObject;
 
-            if (!gameObject.isInsideFrustum() && !FrustumCullingFilter.getInstance().insideFrustum(gameObject.transform.getCleanPosition().x, gameObject.transform.getCleanPosition().y, gameObject.transform.getCleanPosition().z, 1)) {
+            Vector3f cleanPos = gameObject.transform.getCleanPosition();
+            if (!gameObject.isInsideFrustum() && !FrustumCullingFilter.getInstance().insideFrustum(cleanPos.x, cleanPos.y, cleanPos.z, CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS)) {
                 if (gameObject.transform.isDirty()) {
                     dirtySkipped++;
                 }

@@ -88,7 +88,7 @@ public class WorldScene extends Scene {
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        int amount = 20;
+        int amount = 30;
 
         for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
@@ -103,7 +103,7 @@ public class WorldScene extends Scene {
                         selected = testMesh2;
                     }
 
-                    GameObject test = new GameObject(false);
+                    GameObject test = new GameObject(true);
                     test.addComponent(new ModelRendererComponent(selected));
                     test.setName("test:"+i+":"+j+":"+w);
                     test.transform.setPosition(i*5, j*5, w*5);
@@ -228,7 +228,7 @@ public class WorldScene extends Scene {
         camera.transform.addRotationQuaternion(yawRotation);
         camera.transform.addRotationQuaternion(pitchRotation);
 
-        float mult = 1;
+        float mult = 0.2F;
         for (int i = 0; i < this.getDynamicGameObjects().size(); i++) {
             if (this.getDynamicGameObjects().get(i) == test2) {
                 continue;

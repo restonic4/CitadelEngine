@@ -101,7 +101,7 @@ public class Renderer {
         }
 
         FrustumCullingFilter.getInstance().updateFrustum(projection, view);
-        FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), 1);
+        FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS);
 
         // Render batches
         renderBatches(this.staticBatches);
