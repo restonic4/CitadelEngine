@@ -1,7 +1,10 @@
 package me.restonic4.citadel.world.object.components;
 
+import me.restonic4.citadel.world.object.AABB;
 import me.restonic4.citadel.world.object.Component;
 import me.restonic4.citadel.world.object.Mesh;
+import me.restonic4.citadel.world.object.Transform;
+import org.joml.Vector3f;
 
 public class ModelRendererComponent extends Component {
     private Mesh mesh;

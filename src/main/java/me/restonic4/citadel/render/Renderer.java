@@ -7,6 +7,8 @@ import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.world.object.GameObject;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import me.restonic4.citadel.util.CitadelConstants;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,14 +85,27 @@ public class Renderer {
             return;
         }
 
+        Camera camera = scene.getCamera();
+
         // Updating the frustum culling
-        FrustumCullingFilter.getInstance().updateFrustum(scene.getCamera().projectionMatrix, scene.getCamera().viewMatrix);
+
+        Matrix4f projection = camera.projectionMatrix;
+        Matrix4f view = camera.viewMatrix;
+
+        if (camera.isSimulated()) {
+            projection = camera.fakeProjectionMatrix;
+            view = camera.fakeViewMatrix;
+
+            Vector3f[] vertex = FrustumRenderer.extractFrustumCorners(projection, view);
+            FrustumRenderer.renderFrustum(vertex);
+        }
+
+        FrustumCullingFilter.getInstance().updateFrustum(projection, view);
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), 1);
 
         // Render batches
         renderBatches(this.staticBatches);
         renderBatches(this.dynamicBatches);
-
     }
 
     private <T extends RenderBatch> void renderBatches(List<T> batches) {
@@ -130,6 +145,20 @@ public class Renderer {
 
     public int getDirtySkipped() {
         return dirtySkippedTotal;
+    }
+
+    public int getByteSize() {
+        int bytes = 0;
+
+        for (RenderBatch renderBatch : staticBatches) {
+            bytes += renderBatch.getByteSize();
+        }
+
+        for (RenderBatch renderBatch : dynamicBatches) {
+            bytes += renderBatch.getByteSize();
+        }
+
+        return bytes;
     }
 
     public void cleanup() {

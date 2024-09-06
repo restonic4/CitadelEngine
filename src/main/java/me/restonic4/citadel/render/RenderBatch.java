@@ -140,7 +140,7 @@ public class RenderBatch {
         for (ModelRendererComponent modelRendererComponent : models) {
             GameObject gameObject = modelRendererComponent.gameObject;
 
-            if (!gameObject.isInsideFrustum()) {
+            if (!gameObject.isInsideFrustum() && !FrustumCullingFilter.getInstance().insideFrustum(gameObject.transform.getCleanPosition().x, gameObject.transform.getCleanPosition().y, gameObject.transform.getCleanPosition().z, 1)) {
                 if (gameObject.transform.isDirty()) {
                     dirtySkipped++;
                 }
@@ -300,6 +300,10 @@ public class RenderBatch {
 
     public int getDirtySkipped() {
         return dirtySkipped;
+    }
+
+    public int getByteSize() {
+        return VERTEX_SIZE_BYTES * maxBatchSize;
     }
 
     public boolean isOutsideFrustum() {

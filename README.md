@@ -18,7 +18,7 @@ This engine is going to be used for my future games and projects, but if people 
 
 <b>Working on</b>:
 - Textures.
-- Frustum culling. (AABB)
+- Frustum culling.
 - Registry system to add content dynamically.
 - Optimization.
 - Better configuration for initializing the engine.

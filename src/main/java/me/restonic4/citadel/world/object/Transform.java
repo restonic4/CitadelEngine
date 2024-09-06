@@ -8,6 +8,10 @@ public class Transform {
     private Vector3f scale;
     private Quaternionf rotation;
 
+    private Vector3f cleanPosition;
+    private Vector3f cleanScale;
+    private Quaternionf cleanRotation;
+
     // Tells to the render system if it needs to update something
     private boolean dirty = true;
 
@@ -240,10 +244,26 @@ public class Transform {
     //                   OTHER                   //
     ///////////////////////////////////////////////
 
+    public Vector3f getCleanPosition() {
+        return this.cleanPosition;
+    }
+
+    public Vector3f getCleanScale() {
+        return this.cleanScale;
+    }
+
+    public Quaternionf getCleanRotation() {
+        return this.cleanRotation;
+    }
+
     public void create(Vector3f position, Vector3f scale) {
         this.position = position;
         this.scale = scale;
         this.rotation = new Quaternionf();
+
+        this.cleanPosition = new Vector3f(position);
+        this.cleanScale = new Vector3f(scale);
+        this.cleanRotation = new Quaternionf();
     }
 
     public Transform copy() {
@@ -275,6 +295,10 @@ public class Transform {
     }
 
     public void setClean() {
+        this.cleanPosition.set(this.position);
+        this.cleanScale.set(this.scale);
+        this.cleanRotation.set(this.rotation);
+
         this.dirty = false;
     }
 

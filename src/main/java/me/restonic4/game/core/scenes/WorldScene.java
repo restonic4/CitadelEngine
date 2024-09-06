@@ -9,6 +9,7 @@ import me.restonic4.citadel.sound.SoundSource;
 import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
+import me.restonic4.citadel.util.math.PerlinNoise;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.core.Window;
@@ -87,7 +88,7 @@ public class WorldScene extends Scene {
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        int amount = 16;
+        int amount = 20;
 
         for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
@@ -125,6 +126,8 @@ public class WorldScene extends Scene {
         test.transform.setScale(1.2f,1.2f,1.2f);
         this.addGameObject(test);
 
+        test2 = test;
+
         DebugManager.setVerticesMode(true);
         //DebugManager.setWireFrameMode(true);
 
@@ -134,7 +137,17 @@ public class WorldScene extends Scene {
     @Override
     public void update() {
         if (KeyBinds.CRASH.isPressed()) {
+            Logger.log("Size: " + renderer.getByteSize());
             throw new RuntimeException("lol, but now is using the registry system");
+        }
+
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_F)) {
+            if (camera.isSimulated()) {
+                camera.setSimulated(false);
+            }
+            else {
+                camera.setSimulated(true);
+            }
         }
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_T)) {
@@ -160,6 +173,10 @@ public class WorldScene extends Scene {
         }
 
         float velocity = 50;
+
+        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+            velocity = 200;
+        }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
             camera.transform.addLocalPositionX((float) (-velocity * Time.getDeltaTime()));
@@ -196,6 +213,10 @@ public class WorldScene extends Scene {
             camera.transform.addLocalRotationEuler(0, (float) (2 * Time.getDeltaTime()), 0);
         }
 
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_R)) {
+            test2.transform.setPosition(RandomUtil.random(-20, 20), RandomUtil.random(-20, 20), RandomUtil.random(-20, 20));
+        }
+
         float sensitivity = 0.005f;
 
         float xMouseDelta = MouseListener.getDy() * sensitivity;
@@ -207,12 +228,19 @@ public class WorldScene extends Scene {
         camera.transform.addRotationQuaternion(yawRotation);
         camera.transform.addRotationQuaternion(pitchRotation);
 
+        float mult = 1;
         for (int i = 0; i < this.getDynamicGameObjects().size(); i++) {
-            float offset = (float) Math.sin(Time.getRunningTime() + i);
-            float offset2 = (float) Math.cos(Time.getRunningTime() + i);
+            if (this.getDynamicGameObjects().get(i) == test2) {
+                continue;
+            }
+
+            float multR = mult * i;
+
+            float offset = (float) Math.sin(Time.getRunningTime() + multR);
+            float offset2 = (float) Math.cos(Time.getRunningTime() + multR);
 
             GameObject gameObject = this.getDynamicGameObjects().get(i);
-            gameObject.transform.setPosition(i * offset, i + offset, i * offset2);
+            gameObject.transform.setPosition(multR * offset, multR + offset, multR * offset2);
         }
 
         //camera.transform.addLocalRotationEuler(xMouseDelta, yMouseDelta, 0);

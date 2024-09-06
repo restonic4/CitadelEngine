@@ -18,7 +18,6 @@ public class GameObject {
     public GameObject(boolean isStatic) {
         this.name = "GameObject";
         this.transform = new Transform();
-        this.startingTransform = new Transform();
         this.components = new ArrayList<>();
         this.isStatic = isStatic;
     }
@@ -26,7 +25,6 @@ public class GameObject {
     public GameObject(String name, boolean isStatic) {
         this.name = name;
         this.transform = new Transform();
-        this.startingTransform = new Transform();
         this.components = new ArrayList<>();
         this.isStatic = isStatic;
     }
@@ -34,7 +32,6 @@ public class GameObject {
     public GameObject(String name, boolean isStatic, Transform transform) {
         this.name = name;
         this.transform = transform;
-        this.startingTransform = transform.copy();
         this.components = new ArrayList<>();
         this.isStatic = isStatic;
     }
@@ -42,7 +39,6 @@ public class GameObject {
     public GameObject(String name, boolean isStatic, Transform transform, List<Component> components) {
         this.name = name;
         this.transform = transform;
-        this.startingTransform = transform.copy();
         this.components = components;
         this.isStatic = isStatic;
     }
@@ -79,6 +75,10 @@ public class GameObject {
     }
 
     public void update() {
+        if (this.startingTransform == null) {
+            this.startingTransform = this.transform.copy();
+        }
+
         // Reset the transform if it changed and is static
         if (isStatic() && !this.transform.equals(this.startingTransform)) {
             this.transform.set(this.startingTransform);

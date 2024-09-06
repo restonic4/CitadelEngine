@@ -1,6 +1,8 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.citadel.world.object.AABB;
 import me.restonic4.citadel.world.object.GameObject;
+import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import org.joml.FrustumIntersection;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -41,6 +43,12 @@ public class FrustumCullingFilter {
         return frustumIntersection.testSphere(x0, y0, z0, boundingRadius);
     }
 
+    // AABB bounding
+    public boolean insideFrustum(Vector3f min, Vector3f max) {
+        return frustumIntersection.testAab(min.x, min.y, min.z, max.x, max.y, max.z);
+    }
+
+    // Sphere
     public void filter(List<GameObject> gameItems, float meshBoundingRadius) {
         float boundingRadius;
         Vector3f pos;
@@ -48,6 +56,7 @@ public class FrustumCullingFilter {
             float maxComponent = Math.max(gameObject.transform.getScale().x, Math.max(gameObject.transform.getScale().y, gameObject.transform.getScale().z));
 
             boundingRadius = maxComponent * meshBoundingRadius;
+
             pos = gameObject.transform.getPosition();
             gameObject.setInsideFrustum(insideFrustum(pos.x, pos.y, pos.z, boundingRadius));
         }
