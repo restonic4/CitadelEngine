@@ -26,7 +26,7 @@ public class Time {
         return deltaTime;
     }
 
-    public static int getFPS() {
+    public static float getFPS() {
         return (int) (1 / deltaTime);
     }
 

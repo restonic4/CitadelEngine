@@ -168,6 +168,12 @@ public class Window {
 
         setCursorLocked(true);
 
+        Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
+        for (Map.Entry<AssetLocation, ImGuiScreen> entry : guis.entrySet()) {
+            ImGuiScreen screen = entry.getValue();
+            screen.start();
+        }
+
         CitadelLifecycleEvents.CITADEL_STARTED.invoker().onCitadelStarted(CitadelLauncher.getInstance(), this);
     }
 

@@ -2,6 +2,7 @@ package me.restonic4.game.core.scenes;
 
 import me.restonic4.citadel.files.parsers.mesh.OBJLoader;
 import me.restonic4.citadel.input.MouseListener;
+import me.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import me.restonic4.citadel.render.Texture;
 import me.restonic4.citadel.sound.SoundManager;
@@ -219,6 +220,10 @@ public class WorldScene extends Scene {
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_X)) {
             Window.getInstance().setCursorLocked(!Window.getInstance().isCursorLocked());
+        }
+
+        if (KeyBinds.TOGGLE_STATISTICS_GUI.isPressed()) {
+            ImGuiScreens.RENDER_STATISTICS.show();
         }
 
         if (Window.getInstance().isCursorLocked()) {

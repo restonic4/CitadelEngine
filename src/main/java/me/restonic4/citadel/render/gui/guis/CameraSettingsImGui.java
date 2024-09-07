@@ -10,9 +10,13 @@ import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 
-public class CameraSettingsImGui extends ImGuiScreen {
+public class CameraSettingsImGui extends ToggleableImGuiScreen {
     @Override
     public void render() {
+        if (!isVisible()) {
+            return;
+        }
+
         ImGui.begin("Camera Settings");
 
         float[] fov = { CitadelConstants.CAMERA_FOV };

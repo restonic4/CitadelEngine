@@ -29,6 +29,12 @@ public class CitadelConstants {
 
     public static final float FRUSTUM_BOUNDING_SPHERE_RADIUS = 2;
 
+    public static final int IM_GUI_INDENT = 20;
+
+    public static final int HEX_COLOR_BLUE = 0x7290fc;
+    public static final int HEX_COLOR_GREEN = 0x91e562;
+    public static final int HEX_COLOR_RED = 0xff64ad;
+
     // Can be modified
 
     public static float CAMERA_NEAR_PLANE = 0.1f;

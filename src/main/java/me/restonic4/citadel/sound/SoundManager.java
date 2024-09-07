@@ -115,4 +115,8 @@ public class SoundManager {
         viewMatrix.positiveY(up);
         listener.setOrientation(at, up);
     }
+
+    public int getSourcesAmount() {
+        return this.soundSourceMap.size();
+    }
 }
