@@ -5,6 +5,7 @@ import me.restonic4.citadel.registries.RegistryObject;
 
 public class KeyBind extends RegistryObject {
     private int[] defaultKeyCombination;
+    private boolean wasPressedOnce = false;
 
     public KeyBind(int... defaultKeyCombination) {
         this.defaultKeyCombination = defaultKeyCombination;
@@ -23,14 +24,15 @@ public class KeyBind extends RegistryObject {
     }
 
     public boolean isPressedOnce() {
-        int pressed = 0;
-
-        for (int i : defaultKeyCombination) {
-            if (KeyListener.isKeyPressedOnce(i)) {
-                pressed++;
-            }
+        if (isPressed() && !wasPressedOnce) {
+            wasPressedOnce = true;
+            return true;
         }
 
-        return pressed == defaultKeyCombination.length;
+        if (!isPressed()) {
+            wasPressedOnce = false;
+        }
+
+        return false;
     }
 }

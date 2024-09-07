@@ -1,6 +1,10 @@
 package me.restonic4.citadel.input;
 
+import me.restonic4.citadel.registries.built_in.types.KeyBind;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 

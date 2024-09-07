@@ -222,8 +222,8 @@ public class WorldScene extends Scene {
             Window.getInstance().setCursorLocked(!Window.getInstance().isCursorLocked());
         }
 
-        if (KeyBinds.TOGGLE_STATISTICS_GUI.isPressed()) {
-            ImGuiScreens.RENDER_STATISTICS.show();
+        if (KeyBinds.TOGGLE_STATISTICS_GUI.isPressedOnce()) {
+            ImGuiScreens.RENDER_STATISTICS.toggle();
         }
 
         if (Window.getInstance().isCursorLocked()) {

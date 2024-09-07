@@ -204,6 +204,7 @@ public class RenderBatch {
         shader.detach();
     }
 
+    // TODO: Optimize this, CPU usage
     private void loadVertexProperties(ModelRendererComponent modelRenderer) {
         int offset = getModelVertexOffset(modelRenderer);
 
@@ -227,7 +228,7 @@ public class RenderBatch {
             currentPos.mul(modelRenderer.gameObject.transform.getScale());
 
             // Apply rotation
-            currentPos.rotate(modelRenderer.gameObject.transform.getRotation());
+            currentPos.rotate(modelRenderer.gameObject.transform.getRotation()); // TODO: Optimize
 
             // Apply position
             currentPos.add(modelRenderer.gameObject.transform.getPosition());

@@ -13,6 +13,10 @@ public class ToggleableImGuiScreen extends ImGuiScreen {
         isVisible = false;
     }
 
+    public void toggle() {
+        this.isVisible = !this.isVisible;
+    }
+
     public boolean isVisible() {
         return this.isVisible;
     }
