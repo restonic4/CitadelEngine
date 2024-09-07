@@ -15,6 +15,7 @@ This engine is going to be used for my future games and projects, but if people 
 - Log system that saves the log-buffer into a log file and prevents crashes without a "crash-log file".
 - Profiler.
 - Event system.
+- ImGui.
 
 <b>Working on</b>:
 - Textures.
@@ -22,7 +23,6 @@ This engine is going to be used for my future games and projects, but if people 
 - Registry system to add content dynamically.
 - Optimization.
 - Better configuration for initializing the engine.
-- ImGUI
 
 <b>Planned</b>:
 - Object culling.
@@ -40,6 +40,7 @@ Libraries and tools used:
 - <a href="https://www.khronos.org/about/">OpenGL</a>
 - <a href="https://www.openal.org">OpenAL</a>
 - <a href="https://github.com/nothings/stb">STB</a>
+- <a href="https://github.com/ocornut/imgui">Original ImGui</a>, <a href="https://github.com/SpaiR/imgui-java">Java ImGui</a>
 - <a href="https://gource.io">Gource</a>
 - <a href="https://visualvm.github.io">VisualVM</a>
 
