@@ -5,9 +5,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public abstract class Camera {
-    protected float nearPlane = 0.1f;
-    protected float farPlane = 10000.0f;
-
     protected Matrix4f projectionMatrix, viewMatrix;
     public Transform transform;
 

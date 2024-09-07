@@ -1,10 +1,19 @@
 package me.restonic4.citadel.core;
 
+import imgui.ImGui;
+import imgui.ImGuiIO;
+import imgui.flag.ImGuiConfigFlags;
+import imgui.gl3.ImGuiImplGl3;
+import imgui.glfw.ImGuiImplGlfw;
 import me.restonic4.citadel.events.EventResult;
 import me.restonic4.citadel.events.types.CitadelLifecycleEvents;
 import me.restonic4.citadel.events.types.WindowEvents;
 import me.restonic4.citadel.input.KeyListener;
 import me.restonic4.citadel.input.MouseListener;
+import me.restonic4.citadel.registries.AssetLocation;
+import me.restonic4.citadel.registries.Registries;
+import me.restonic4.citadel.registries.Registry;
+import me.restonic4.citadel.registries.built_in.types.ImGuiScreen;
 import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.render.Shader;
 import me.restonic4.citadel.sound.SoundManager;
@@ -15,10 +24,13 @@ import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryUtil;
+
+import java.util.Map;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -31,8 +43,14 @@ public class Window {
     private String title;
     private long glfwWindowAddress; // This is the created window, but it saves as a long because is not an object, it's a Memory address, where C saves it.
     private float aspectRatio;
+    private boolean isCursorLocked;
 
     private double lastTimeTitleChange = Time.getRunningTime();
+
+    protected ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
+    protected ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
+
+    private String glslVersion = "#version 330 core";
 
     public Window() {
         this.width = 1000;
@@ -70,6 +88,9 @@ public class Window {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // Invisible window at the start, is not created yet
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
         GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         this.width = vidMode.width();
@@ -137,6 +158,16 @@ public class Window {
             throw new IllegalStateException("Bindless textures not compatible with your graphics card. Tell the devs pls!");
         }
 
+        ImGui.createContext();
+
+        ImGuiIO io = ImGui.getIO();
+        io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
+
+        imGuiGlfw.init(glfwWindowAddress, true);
+        imGuiGl3.init(glslVersion);
+
+        setCursorLocked(true);
+
         CitadelLifecycleEvents.CITADEL_STARTED.invoker().onCitadelStarted(CitadelLauncher.getInstance(), this);
     }
 
@@ -150,14 +181,13 @@ public class Window {
 
             updateAspectRatio();
 
-            //glfwSetCursorPos(glfwWindowAddress, this.width / 2, this.height / 2);
-            glfwSetInputMode(glfwWindowAddress, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
             Scene scene = SceneManager.getCurrentScene();
             if (scene != null && Time.getDeltaTime() > 0) {
                 Renderer.setShader(defaultShader);
                 scene.update();
             }
+
+            runImGuiFrame();
 
             KeyListener.endFrame();
             MouseListener.endFrame();
@@ -192,11 +222,38 @@ public class Window {
         CitadelLifecycleEvents.CITADEL_STOPPING.invoker().onCitadelStopping(CitadelLauncher.getInstance(), this);
     }
 
+    private void runImGuiFrame() {
+        imGuiGl3.newFrame();
+        imGuiGlfw.newFrame();
+        ImGui.newFrame();
+
+        Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
+        for (Map.Entry<AssetLocation, ImGuiScreen> entry : guis.entrySet()) {
+            ImGuiScreen screen = entry.getValue();
+            screen.render();
+        }
+
+        ImGui.render();
+        imGuiGl3.renderDrawData(ImGui.getDrawData());
+
+        if (ImGui.getIO().hasConfigFlags(ImGuiConfigFlags.ViewportsEnable)) {
+            final long backupWindowPtr = org.lwjgl.glfw.GLFW.glfwGetCurrentContext();
+            ImGui.updatePlatformWindows();
+            ImGui.renderPlatformWindowsDefault();
+            org.lwjgl.glfw.GLFW.glfwMakeContextCurrent(backupWindowPtr);
+        }
+    }
+
     private void cleanup() {
         CitadelLifecycleEvents.CITADEL_CLEANING_UP.invoker().onCitadelCleaningUp(CitadelLauncher.getInstance(), this);
 
         SceneManager.unLoadCurrentScene();
         SoundManager.getInstance().cleanup();
+
+        // Clean ImGui
+        imGuiGl3.shutdown();
+        imGuiGlfw.shutdown();
+        ImGui.destroyContext();
 
         // Free the memory
         glfwFreeCallbacks(glfwWindowAddress);
@@ -245,6 +302,21 @@ public class Window {
         this.title = newTitle;
         glfwSetWindowTitle(this.glfwWindowAddress, newTitle);
         return true;
+    }
+
+    public void setCursorLocked(boolean locked) {
+        this.isCursorLocked = locked;
+
+        if (locked) {
+            GLFW.glfwSetInputMode(glfwWindowAddress, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+        } else {
+            GLFW.glfwSetInputMode(glfwWindowAddress, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+            glfwSetCursorPos(glfwWindowAddress, this.width / 2, this.height / 2);
+        }
+    }
+
+    public boolean isCursorLocked() {
+        return this.isCursorLocked;
     }
 
     public float getAspectRatio() {

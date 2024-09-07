@@ -6,17 +6,9 @@ import me.restonic4.citadel.platform.PlatformManager;
 import me.restonic4.citadel.platform.operating_systems.OperatingSystem;
 import me.restonic4.citadel.registries.RegistryManager;
 import me.restonic4.citadel.registries.built_in.managers.*;
-import me.restonic4.citadel.render.Texture;
-import me.restonic4.citadel.render.TextureAtlas;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.util.GradleUtil;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
-
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
-
-import static me.restonic4.citadel.render.TextureAtlas.*;
 
 public class CitadelLauncher {
     private static CitadelLauncher instance;
@@ -59,6 +51,7 @@ public class CitadelLauncher {
         RegistryManager.registerBuiltInRegistrySet(new ProfilerStats());
         RegistryManager.registerBuiltInRegistrySet(new Locales());
         RegistryManager.registerBuiltInRegistrySet(new KeyBinds());
+        RegistryManager.registerBuiltInRegistrySet(new ImGuiScreens());
         RegistryManager.registerBuiltIn();
 
         Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());

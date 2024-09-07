@@ -88,7 +88,7 @@ public class WorldScene extends Scene {
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        int amount = 30;
+        int amount = 20;
 
         for (int i = 0; i < amount; i++) {
             for (int j = 0; j < amount; j++) {
@@ -103,7 +103,7 @@ public class WorldScene extends Scene {
                         selected = testMesh2;
                     }
 
-                    GameObject test = new GameObject(true);
+                    GameObject test = new GameObject(false);
                     test.addComponent(new ModelRendererComponent(selected));
                     test.setName("test:"+i+":"+j+":"+w);
                     test.transform.setPosition(i*5, j*5, w*5);
@@ -217,16 +217,22 @@ public class WorldScene extends Scene {
             test2.transform.setPosition(RandomUtil.random(-20, 20), RandomUtil.random(-20, 20), RandomUtil.random(-20, 20));
         }
 
-        float sensitivity = 0.005f;
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_X)) {
+            Window.getInstance().setCursorLocked(!Window.getInstance().isCursorLocked());
+        }
 
-        float xMouseDelta = MouseListener.getDy() * sensitivity;
-        float yMouseDelta = MouseListener.getDx() * sensitivity;
+        if (Window.getInstance().isCursorLocked()) {
+            float sensitivity = 0.005f;
 
-        Quaternionf pitchRotation = new Quaternionf().rotateX(xMouseDelta);
-        Quaternionf yawRotation = new Quaternionf().rotateY(yMouseDelta);
+            float xMouseDelta = MouseListener.getDy() * sensitivity;
+            float yMouseDelta = MouseListener.getDx() * sensitivity;
 
-        camera.transform.addRotationQuaternion(yawRotation);
-        camera.transform.addRotationQuaternion(pitchRotation);
+            Quaternionf pitchRotation = new Quaternionf().rotateX(xMouseDelta);
+            Quaternionf yawRotation = new Quaternionf().rotateY(yMouseDelta);
+
+            camera.transform.addRotationQuaternion(yawRotation);
+            camera.transform.addRotationQuaternion(pitchRotation);
+        }
 
         float mult = 0.2F;
         for (int i = 0; i < this.getDynamicGameObjects().size(); i++) {
@@ -244,25 +250,6 @@ public class WorldScene extends Scene {
         }
 
         //camera.transform.addLocalRotationEuler(xMouseDelta, yMouseDelta, 0);
-
-        /*glfwSetWindowTitle(Window.getInstance().getGlfwWindowAddress(),
-                "Rot: (" + camera.transform.getRotation().x + ", " + camera.transform.getRotation().y + ", " + camera.transform.getRotation().z + ")"
-        );*/
-
-        Window.getInstance().setWindowTitleForced(
-                "FPS: " + Time.getFPS()
-                        + ", DrawCalls: " + this.renderer.getDrawCalls()
-                        + ", DrawCalls skipped: " + this.renderer.getDrawCallsSkipped()
-                        + ", Dirty objects modified: " + this.renderer.getDirtyModified()
-                        + ", Dirty objects skipped: " + this.renderer.getDirtySkipped()
-                        + ", Game objects: " + this.getGameObjects().size()
-                        + ", Static objects: " + this.getStaticGameObjects().size()
-                        + ", Dynamic objects: " + this.getDynamicGameObjects().size()
-                        + ", AspectRatio: " + Window.getInstance().getAspectRatio()
-                        + ", w: " + Window.getInstance().getWidth()
-                        + ", h: " + Window.getInstance().getHeight()
-                        + ", Pos: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " + camera.transform.getPosition().z + ")"
-        );
 
         SoundManager.getInstance().updateListenerPosition(camera);
 

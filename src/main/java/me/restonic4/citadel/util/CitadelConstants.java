@@ -31,6 +31,10 @@ public class CitadelConstants {
 
     // Can be modified
 
+    public static float CAMERA_NEAR_PLANE = 0.1f;
+    public static float CAMERA_FAR_PLANE = 10000f;
+    public static float CAMERA_FOV = (float) Math.toRadians(60);
+
     public static int CRASH_MESSAGES_AMOUNT = 7;
 
     public static boolean VSYNC = true;

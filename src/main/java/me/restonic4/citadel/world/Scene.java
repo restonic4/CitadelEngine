@@ -77,6 +77,10 @@ public abstract class Scene {
         return this.camera;
     }
 
+    public Renderer getRenderer() {
+        return this.renderer;
+    }
+
     public List<GameObject> getGameObjects() {
         List<GameObject> allGameObjects = new ArrayList<>();
 
