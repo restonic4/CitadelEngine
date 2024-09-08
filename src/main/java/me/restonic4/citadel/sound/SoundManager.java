@@ -21,6 +21,10 @@ public class SoundManager {
     private long device;
     private SoundListener listener;
 
+    // Cache
+    Vector3f at = new Vector3f();
+    Vector3f up = new Vector3f();
+
     public SoundManager() {
         soundBufferList = new ArrayList<>();
         soundSourceMap = new HashMap<>();
@@ -109,9 +113,7 @@ public class SoundManager {
     public void updateListenerPosition(Camera camera) {
         Matrix4f viewMatrix = camera.getViewMatrix();
         listener.setPosition(camera.transform.getPosition());
-        Vector3f at = new Vector3f();
         viewMatrix.positiveZ(at).negate();
-        Vector3f up = new Vector3f();
         viewMatrix.positiveY(up);
         listener.setOrientation(at, up);
     }

@@ -39,19 +39,21 @@ public abstract class Scene {
     }
 
     private void activateGameObjects(List<GameObject> gameObjects) {
-        for (GameObject gameObject : gameObjects) {
+        for (int i = 0; i < gameObjects.size(); i++) {
+            GameObject gameObject = gameObjects.get(i);
+
             gameObject.start();
             renderer.add(gameObject);
         }
     }
 
     public void update() {
-        for (GameObject gameObjects : this.staticGameObjects) {
-            gameObjects.update();
+        for (int i = 0; i < this.staticGameObjects.size(); i++) {
+            this.staticGameObjects.get(i).update();
         }
 
-        for (GameObject gameObjects : this.dynamicGameObjects) {
-            gameObjects.update();
+        for (int i = 0; i < this.dynamicGameObjects.size(); i++) {
+            this.dynamicGameObjects.get(i).update();
         }
 
         this.renderer.render();

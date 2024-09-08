@@ -139,7 +139,7 @@ public class WorldScene extends Scene {
     public void update() {
         if (KeyBinds.CRASH.isPressed()) {
             Logger.log("Size: " + renderer.getByteSize());
-            throw new RuntimeException("lol, but now is using the registry system");
+            throw new RuntimeException("Manual crash triggered by using ESC + F9");
         }
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_F)) {
@@ -161,9 +161,6 @@ public class WorldScene extends Scene {
             music.stop();
         }
 
-        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_F6)) {
-            ProfilerManager.export();
-        }
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_P)) {
             music.setPitch(RandomUtil.randomTiny() + RandomUtil.randomTiny());
@@ -224,6 +221,10 @@ public class WorldScene extends Scene {
 
         if (KeyBinds.TOGGLE_STATISTICS_GUI.isPressedOnce()) {
             ImGuiScreens.RENDER_STATISTICS.toggle();
+        }
+
+        if (KeyBinds.TOGGLE_DEV_GUI.isPressedOnce()) {
+            ImGuiScreens.CAMERA_SETTINGS.toggle();
         }
 
         if (Window.getInstance().isCursorLocked()) {

@@ -43,7 +43,9 @@ public class Renderer {
         int maxBatchSize = modelRenderer.gameObject.isStatic() ? CitadelConstants.MAX_STATIC_BATCH_VERTEX_SIZE : CitadelConstants.MAX_DYNAMIC_BATCH_VERTEX_SIZE;
 
         // Trying adding it to an existing one
-        for (RenderBatch batch : batches) {
+        for (int i = 0; i < batches.size(); i++) {
+            RenderBatch batch = batches.get(i);
+
             if (batch.hasRoom()) {
                 RenderBatch.AddFailureTypes addFailureTypes = batch.addModel(modelRenderer);
 
@@ -109,7 +111,9 @@ public class Renderer {
     }
 
     private <T extends RenderBatch> void renderBatches(List<T> batches) {
-        for (RenderBatch batch : batches) {
+        for (int i = 0; i < batches.size(); i++) {
+            RenderBatch batch = batches.get(i);
+
             if (batch.shouldBeSkipped()) {
                 drawCallsSkipped++;
                 continue;
@@ -150,24 +154,24 @@ public class Renderer {
     public int getByteSize() {
         int bytes = 0;
 
-        for (RenderBatch renderBatch : staticBatches) {
-            bytes += renderBatch.getByteSize();
+        for (int i = 0; i < staticBatches.size(); i++) {
+            bytes += staticBatches.get(i).getByteSize();
         }
 
-        for (RenderBatch renderBatch : dynamicBatches) {
-            bytes += renderBatch.getByteSize();
+        for (int i = 0; i < dynamicBatches.size(); i++) {
+            bytes += dynamicBatches.get(i).getByteSize();
         }
 
         return bytes;
     }
 
     public void cleanup() {
-        for (RenderBatch batch : this.staticBatches) {
-            batch.cleanup();
+        for (int i = 0; i < staticBatches.size(); i++) {
+            staticBatches.get(i).cleanup();
         }
 
-        for (RenderBatch batch : this.dynamicBatches) {
-            batch.cleanup();
+        for (int i = 0; i < dynamicBatches.size(); i++) {
+            dynamicBatches.get(i).cleanup();
         }
     }
 }

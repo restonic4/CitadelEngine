@@ -5,6 +5,7 @@ import imgui.extension.implot.flag.ImPlotCol;
 import imgui.extension.implot.flag.ImPlotCond;
 import imgui.extension.implot.flag.ImPlotFlags;
 import me.restonic4.citadel.util.ColorHelper;
+import me.restonic4.citadel.util.StringBuilderHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,13 +44,15 @@ public class LineGraphImGui {
     }
 
     public void updateGraphData(String name, float newValue) {
-        for (GraphData graphData : dataList) {
-            if (Objects.equals(graphData.name, name)) {
-                for (int i = 0; i < size - 1; i++) {
-                    graphData.ys[i] = graphData.ys[i + 1];
+        for (int i = 0; i < dataList.size(); i++) {
+            GraphData graphData = dataList.get(i);
 
-                    if (graphData.ys[i] > highestNumber) {
-                        highestNumber = graphData.ys[i] + 1;
+            if (Objects.equals(graphData.name, name)) {
+                for (int j = 0; j < size - 1; j++) {
+                    graphData.ys[j] = graphData.ys[j + 1];
+
+                    if (graphData.ys[j] > highestNumber) {
+                        highestNumber = graphData.ys[j] + 1;
                     }
                 }
 
@@ -67,9 +70,11 @@ public class LineGraphImGui {
         ImPlot.setNextAxesLimits(0, this.maxX, 0, desiredHeight, ImPlotCond.Always);
 
         if (ImPlot.beginPlot(this.plotName, this.width, this.height, ImPlotFlags.NoInputs)) {
-            for (GraphData graphData : dataList) {
+            for (int i = 0; i < dataList.size(); i++) {
+                GraphData graphData = dataList.get(i);
+
                 ImPlot.pushStyleColor(ImPlotCol.Line, ColorHelper.hexToARGB(graphData.color));
-                ImPlot.plotLine(graphData.name + ": " + graphData.lastAdded, graphData.xs, graphData.ys, size);
+                ImPlot.plotLine(StringBuilderHelper.concatenate(graphData.name + ": ", graphData.lastAdded), graphData.xs, graphData.ys, size);
                 ImPlot.popStyleColor();
             }
 

@@ -11,6 +11,12 @@ public abstract class Camera {
     private boolean isSimulated;
     protected Matrix4f fakeProjectionMatrix, fakeViewMatrix;
 
+    // Cache
+
+    private Vector3f front = new Vector3f(0, 0, -1);
+    private Vector3f up = new Vector3f(0, 1, 0);
+    private Vector3f center = new Vector3f();
+
     public Camera(Transform transform) {
         this.transform = transform;
         this.projectionMatrix = new Matrix4f();
@@ -24,10 +30,10 @@ public abstract class Camera {
     public Matrix4f getViewMatrix() {
         this.viewMatrix.identity();
 
-        Vector3f front = new Vector3f(0, 0, -1).rotate(transform.getRotation());
-        Vector3f up = new Vector3f(0, 1, 0).rotate(transform.getRotation());
+        front.set(0, 0, -1).rotate(transform.getRotation());
+        up.set(0, 1, 0).rotate(transform.getRotation());
 
-        Vector3f center = new Vector3f(transform.getPosition()).add(front);
+        center.set(transform.getPosition()).add(front);
 
         this.viewMatrix.lookAt(transform.getPosition(), center, up);
 

@@ -84,9 +84,11 @@ public class GameObject {
             this.transform.set(this.startingTransform);
         }
 
-        for (Component component : components) {
-            component.update();
+        // Traditional for-loop, because GC explodes so badly lol
+        for (int i = 0; i < components.size(); i++) {
+            components.get(i).update();
         }
+
     }
 
     public void start() {

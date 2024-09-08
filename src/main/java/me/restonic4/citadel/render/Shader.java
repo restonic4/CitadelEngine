@@ -138,28 +138,29 @@ public class Shader {
         isUsed = false;
     }
 
+    private FloatBuffer mat4Buffer = BufferUtils.createFloatBuffer(CitadelConstants.MATRIX4F_CAPACITY);
     public void uploadMat4f(String varName, Matrix4f mat4) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
 
         use(); // Use the shader in case is not being used
 
-        // Convert the matrix into a "simple float array"
-        FloatBuffer matBuffer = BufferUtils.createFloatBuffer(CitadelConstants.MATRIX4F_CAPACITY);
-        mat4.get(matBuffer);
+        mat4Buffer.clear();
+        mat4.get(mat4Buffer);
 
-        glUniformMatrix4fv(varLocation, false, matBuffer);
+        glUniformMatrix4fv(varLocation, false, mat4Buffer);
     }
 
+    FloatBuffer mat3Buffer = BufferUtils.createFloatBuffer(CitadelConstants.MATRIX3F_CAPACITY);
     public void uploadMat3f(String varName, Matrix3f mat3) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
 
         use(); // Use the shader in case is not being used
 
         // Convert the matrix into a "simple float array"
-        FloatBuffer matBuffer = BufferUtils.createFloatBuffer(CitadelConstants.MATRIX3F_CAPACITY);
-        mat3.get(matBuffer);
+        mat3Buffer.clear();
+        mat3.get(mat3Buffer);
 
-        glUniformMatrix3fv(varLocation, false, matBuffer);
+        glUniformMatrix3fv(varLocation, false, mat3Buffer);
     }
 
     public void uploadVec4f(String varName, Vector4f vec) {

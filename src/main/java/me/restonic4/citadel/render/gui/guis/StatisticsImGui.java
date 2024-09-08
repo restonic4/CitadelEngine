@@ -9,6 +9,7 @@ import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.render.gui.LineGraphImGui;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.util.CitadelConstants;
+import me.restonic4.citadel.util.StringBuilderHelper;
 import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
@@ -50,7 +51,8 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
         if (ImGui.collapsingHeader("Performance")) {
             ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
-            ImGui.text("FPS: " + Time.getFPS());
+            ImGui.text(StringBuilderHelper.concatenate("FPS: ", Time.getFPS()));
+
 
             if (ImGui.collapsingHeader("FPS Graph")) {
                 ImGui.indent(CitadelConstants.IM_GUI_INDENT);
@@ -63,13 +65,13 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
 
             ImGui.separator();
 
-            ImGui.text("DrawCalls: " + renderer.getDrawCalls());
-            ImGui.text("DrawCalls skipped: " + renderer.getDrawCallsSkipped());
-            ImGui.text("Dirty objects modified: " + renderer.getDirtyModified());
-            ImGui.text("Dirty objects skipped: " + renderer.getDirtySkipped());
-            ImGui.text("Game objects: " + scene.getGameObjects().size());
-            ImGui.text("Static objects: " + scene.getStaticGameObjects().size());
-            ImGui.text("Dynamic objects: " + scene.getDynamicGameObjects().size());
+            ImGui.text(StringBuilderHelper.concatenate("DrawCalls: ", renderer.getDrawCalls()));
+            ImGui.text(StringBuilderHelper.concatenate("DrawCalls skipped: ", renderer.getDrawCallsSkipped()));
+            ImGui.text(StringBuilderHelper.concatenate("Dirty objects modified: ", renderer.getDirtyModified()));
+            ImGui.text(StringBuilderHelper.concatenate("Dirty objects skipped: ", renderer.getDirtySkipped()));
+            ImGui.text(StringBuilderHelper.concatenate("Game objects: ", scene.getGameObjects().size()));
+            ImGui.text(StringBuilderHelper.concatenate("Static objects: ", scene.getStaticGameObjects().size()));
+            ImGui.text(StringBuilderHelper.concatenate("Dynamic objects: " , scene.getDynamicGameObjects().size()));
 
             if (ImGui.collapsingHeader("Render Graph")) {
                 ImGui.indent(CitadelConstants.IM_GUI_INDENT);
@@ -90,10 +92,10 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
         if (ImGui.collapsingHeader("Window & Camera Info")) {
             ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
-            ImGui.text("AspectRatio: " + window.getAspectRatio());
-            ImGui.text("Width: " + window.getWidth());
-            ImGui.text("Height: " + window.getHeight());
-            ImGui.text("Camera position: (" + camera.transform.getPosition().x + ", " + camera.transform.getPosition().y + ", " +camera.transform.getPosition().z + ")");
+            ImGui.text(StringBuilderHelper.concatenate("AspectRatio: ", window.getAspectRatio()));
+            ImGui.text(StringBuilderHelper.concatenate("Width: ", window.getWidth()));
+            ImGui.text(StringBuilderHelper.concatenate("Height: ", window.getHeight()));
+            ImGui.text(StringBuilderHelper.concatenate("Camera position: (", camera.transform.getPosition().x, ", ", camera.transform.getPosition().y, ", ", camera.transform.getPosition().z, ")"));
 
             ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
         }
@@ -103,7 +105,7 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
         if (ImGui.collapsingHeader("Sounds")) {
             ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
-            ImGui.text("Sound sources: " + soundManager.getSourcesAmount());
+            ImGui.text(StringBuilderHelper.concatenate("Sound sources: ", soundManager.getSourcesAmount()));
 
             ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
         }

@@ -49,10 +49,13 @@ public class FrustumCullingFilter {
     }
 
     // Sphere
-    public void filter(List<GameObject> gameItems, float meshBoundingRadius) {
+    public void filter(List<GameObject> gameObjects, float meshBoundingRadius) {
         float boundingRadius;
         Vector3f pos;
-        for (GameObject gameObject : gameItems) {
+
+        for (int i = 0; i < gameObjects.size(); i++) {
+            GameObject gameObject = gameObjects.get(i);
+
             float maxComponent = Math.max(gameObject.transform.getScale().x, Math.max(gameObject.transform.getScale().y, gameObject.transform.getScale().z));
 
             boundingRadius = maxComponent * meshBoundingRadius;

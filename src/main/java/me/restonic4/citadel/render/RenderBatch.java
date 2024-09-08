@@ -53,6 +53,9 @@ public class RenderBatch {
     private int dirtySkipped = 0;
     private boolean areIndicesDirty;
 
+    // This vec3 is used to avoid huge memory leaks, this used to be inside the for-loop
+    Vector3f tempCacheVec = new Vector3f();
+
     public RenderBatch(int maxBatchSize, boolean isStatic) {
         this.models = new ArrayList<>();
 
@@ -99,7 +102,10 @@ public class RenderBatch {
     public int getModelVertexOffset(ModelRendererComponent modelRenderer) {
         int offset = 0;
 
-        for (ModelRendererComponent mrc : models) {
+        // Traditional for-loop, because GC explodes so badly lol
+        for (int i = 0; i < models.size(); i++) {
+            ModelRendererComponent mrc = models.get(i);
+
             if (mrc == modelRenderer) {
                 break;
             }
@@ -138,7 +144,9 @@ public class RenderBatch {
             return;
         }
 
-        for (ModelRendererComponent modelRendererComponent : models) {
+        // Traditional for-loop, because GC explodes so badly lol
+        for (int i = 0; i < models.size(); i++) {
+            ModelRendererComponent modelRendererComponent = models.get(i);
             GameObject gameObject = modelRendererComponent.gameObject;
 
             Vector3f cleanPos = gameObject.transform.getCleanPosition();
@@ -204,7 +212,7 @@ public class RenderBatch {
         shader.detach();
     }
 
-    // TODO: Optimize this, CPU usage
+    // TODO: Optimize this, CPU usage and Memory
     private void loadVertexProperties(ModelRendererComponent modelRenderer) {
         int offset = getModelVertexOffset(modelRenderer);
 
@@ -222,21 +230,21 @@ public class RenderBatch {
         float textureHandleHigh = Float.intBitsToFloat((int)(textureHandleId >>> 32));
 
         for (int i = 0; i < vertexPositions.length; i++) {
-            Vector3f currentPos = new Vector3f(vertexPositions[i]);
+            tempCacheVec.set(vertexPositions[i]);
 
             // Apply scale
-            currentPos.mul(modelRenderer.gameObject.transform.getScale());
+            tempCacheVec.mul(modelRenderer.gameObject.transform.getScale());
 
             // Apply rotation
-            currentPos.rotate(modelRenderer.gameObject.transform.getRotation()); // TODO: Optimize
+            tempCacheVec.rotate(modelRenderer.gameObject.transform.getRotation()); // TODO: Optimize, CPU
 
             // Apply position
-            currentPos.add(modelRenderer.gameObject.transform.getPosition());
+            tempCacheVec.add(modelRenderer.gameObject.transform.getPosition());
 
             // Load position into the vertices array
-            vertices[offset] = currentPos.x;
-            vertices[offset + 1] = currentPos.y;
-            vertices[offset + 2] = currentPos.z;
+            vertices[offset] = tempCacheVec.x;
+            vertices[offset + 1] = tempCacheVec.y;
+            vertices[offset + 2] = tempCacheVec.z;
 
             // Gets the vertex color and applies the tint
             Vector4f color;
@@ -274,7 +282,10 @@ public class RenderBatch {
         List<Integer> indicesList = new ArrayList<>();
         int vertexOffset = 0;
 
-        for (ModelRendererComponent model : models) {
+        // Traditional for-loop, because GC explodes so badly lol
+        for (int i = 0; i < models.size(); i++) {
+            ModelRendererComponent model = models.get(i);
+
             int[] modelIndices = model.getMesh().getIndices();
 
             for (int index : modelIndices) {
@@ -310,8 +321,9 @@ public class RenderBatch {
     }
 
     public boolean isOutsideFrustum() {
-        for (ModelRendererComponent modelRendererComponent : this.models) {
-            if (modelRendererComponent.gameObject.isInsideFrustum()) {
+        // Traditional for-loop, because GC explodes so badly lol
+        for (int i = 0; i < this.models.size(); i++) {
+            if (this.models.get(i).gameObject.isInsideFrustum()) {
                 return false;
             }
         }
