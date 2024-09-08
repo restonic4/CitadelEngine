@@ -11,6 +11,7 @@ import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.StringBuilderHelper;
 import me.restonic4.citadel.util.Time;
+import me.restonic4.citadel.util.math.UnitConverter;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 
@@ -83,6 +84,11 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
 
                 ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
             }
+
+            ImGui.separator();
+
+            ImGui.text(StringBuilderHelper.concatenate("Vertices: ", renderer.getVerticesAmount()));
+            ImGui.text(StringBuilderHelper.concatenate("Vertices bytes: ", renderer.getByteSize(), " -> ", UnitConverter.bytesToKilobytes(renderer.getByteSize()), "KB -> ", UnitConverter.bytesToMegabytes(renderer.getByteSize()), "MB"));
 
             ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
         }

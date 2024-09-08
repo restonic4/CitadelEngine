@@ -2,6 +2,7 @@ package me.restonic4.citadel.util;
 
 import me.restonic4.citadel.registries.built_in.managers.Locales;
 import me.restonic4.citadel.registries.built_in.types.Locale;
+import org.joml.Vector3f;
 
 public class CitadelConstants {
     public static final String REGISTRY_NAMESPACE = "citadel";
@@ -49,4 +50,7 @@ public class CitadelConstants {
     public static int WINDOW_TITLE_CHANGE_FREQUENCY = 3;
 
     public static Locale DEFAULT_LOCALE = Locales.EN_US;
+
+    public static Vector3f lightPos = new Vector3f(20, 20, 0);
+    public static Vector3f lightColor = new Vector3f(1, 1, 1);
 }

@@ -7,6 +7,7 @@ import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import me.restonic4.citadel.render.Texture;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
@@ -16,6 +17,7 @@ import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.input.KeyListener;
 import me.restonic4.citadel.world.object.GameObject;
+import me.restonic4.citadel.world.object.Material;
 import me.restonic4.citadel.world.object.Mesh;
 import me.restonic4.citadel.world.object.Transform;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
@@ -91,9 +93,9 @@ public class WorldScene extends Scene {
 
         int amount = 20;
 
-        for (int i = 0; i < amount; i++) {
-            for (int j = 0; j < amount; j++) {
-                for (int w = 0; w < amount; w++) {
+        for (int i = -(amount / 2); i < amount / 2; i++) {
+            for (int j = -(amount / 2); j < amount / 2; j++) {
+                for (int w = -(amount / 2); w < amount / 2; w++) {
                     Mesh selected = RandomUtil.getRandom(list);
 
                     if (i == 0 && j == 0 && w == 0) {
@@ -104,8 +106,8 @@ public class WorldScene extends Scene {
                         selected = testMesh2;
                     }
 
-                    GameObject test = new GameObject(false);
-                    test.addComponent(new ModelRendererComponent(selected));
+                    GameObject test = new GameObject(true);
+                    test.addComponent(new ModelRendererComponent(selected, new Material(1, 1)));
                     test.setName("test:"+i+":"+j+":"+w);
                     test.transform.setPosition(i*5, j*5, w*5);
                     test.transform.setScale(1,1,1);
@@ -123,13 +125,13 @@ public class WorldScene extends Scene {
         GameObject test = new GameObject(false);
         test.addComponent(new ModelRendererComponent(citadelMesh));
         test.setName("test");
-        test.transform.setPosition(0, -10, 0);
+        test.transform.setPosition(0, 0, 0);
         test.transform.setScale(1.2f,1.2f,1.2f);
         this.addGameObject(test);
 
         test2 = test;
 
-        DebugManager.setVerticesMode(true);
+        //DebugManager.setVerticesMode(true);
         //DebugManager.setWireFrameMode(true);
 
         super.init();
@@ -137,6 +139,14 @@ public class WorldScene extends Scene {
 
     @Override
     public void update() {
+        CitadelConstants.lightPos.set(test2.transform.getPosition());
+
+        float speed = 0.5f;
+        float radius = 75;
+        float x = (float) Math.sin(Time.getRunningTime() * speed);
+        float y = (float) Math.cos(Time.getRunningTime() * speed);
+        //test2.transform.setPosition(x * radius, y * radius, 0);
+
         if (KeyBinds.CRASH.isPressed()) {
             Logger.log("Size: " + renderer.getByteSize());
             throw new RuntimeException("Manual crash triggered by using ESC + F9");
@@ -197,23 +207,23 @@ public class WorldScene extends Scene {
             camera.transform.addLocalPositionY((float) (velocity * Time.getDeltaTime()));
         }
 
-        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {
-            camera.transform.addLocalRotationEuler((float) (2 * Time.getDeltaTime()), 0, 0);
+        /*if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {
+            test2.transform.addPositionZ((float) (10 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
-            camera.transform.addLocalRotationEuler((float) (-2 * Time.getDeltaTime()), 0, 0);
+            test2.transform.addPositionZ((float) (-10 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_RIGHT)) {
-            camera.transform.addLocalRotationEuler(0, (float) (-2 * Time.getDeltaTime()), 0);
+            test2.transform.addPositionX((float) (10 * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT)) {
-            camera.transform.addLocalRotationEuler(0, (float) (2 * Time.getDeltaTime()), 0);
+            test2.transform.addPositionX((float) (-10 * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_R)) {
             test2.transform.setPosition(RandomUtil.random(-20, 20), RandomUtil.random(-20, 20), RandomUtil.random(-20, 20));
-        }
+        }*/
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_X)) {
             Window.getInstance().setCursorLocked(!Window.getInstance().isCursorLocked());
@@ -240,7 +250,7 @@ public class WorldScene extends Scene {
             camera.transform.addRotationQuaternion(pitchRotation);
         }
 
-        float mult = 0.2F;
+        /*float mult = 0.2F;
         for (int i = 0; i < this.getDynamicGameObjects().size(); i++) {
             if (this.getDynamicGameObjects().get(i) == test2) {
                 continue;
@@ -253,7 +263,7 @@ public class WorldScene extends Scene {
 
             GameObject gameObject = this.getDynamicGameObjects().get(i);
             gameObject.transform.setPosition(multR * offset, multR + offset, multR * offset2);
-        }
+        }*/
 
         //camera.transform.addLocalRotationEuler(xMouseDelta, yMouseDelta, 0);
 

@@ -13,8 +13,8 @@ public class StringBuilderHelper {
     public static String concatenate(String... parts) {
         sb.setLength(0);
 
-        for (String part : parts) {
-            sb.append(part);
+        for (int i = 0; i < parts.length; i++) {
+            sb.append(parts[i]);
         }
 
         return sb.toString();
@@ -29,8 +29,8 @@ public class StringBuilderHelper {
     public static String concatenate(Object... parts) {
         sb.setLength(0);
 
-        for (Object part : parts) {
-            sb.append(part);
+        for (int i = 0; i < parts.length; i++) {
+            sb.append(parts[i]);
         }
 
         return sb.toString();

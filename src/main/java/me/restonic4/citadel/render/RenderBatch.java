@@ -5,8 +5,10 @@ import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.world.object.GameObject;
+import me.restonic4.citadel.world.object.Transform;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import me.restonic4.citadel.util.debug.DebugManager;
+import me.restonic4.game.core.scenes.WorldScene;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -14,6 +16,7 @@ import org.joml.Vector4f;
 import java.util.ArrayList;
 import java.util.List;
 
+import static me.restonic4.citadel.render.FrustumRenderer.drawLine;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL20.*;
@@ -21,21 +24,25 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class RenderBatch {
-    // Pos                    Color                         UV              Texture handle id
-    // float, float, float    float, float, float, float    float, float    float, float
+    //         Pos                       Color                   UV      Texture handle id        Normals          Reflectivity
+    // float, float, float    float, float, float, float    float, float    float, float    float, float, float    float, float
 
     private final int POS_SIZE = 3;
     private final int COLOR_SIZE = 4;
     private final int UV_SIZE = 2;
     private final int TEXTURE_HANDLER_ID_SIZE = 2;
+    private final int NORMALS_SIZE = 3;
+    private final int REFLECTIVITY_SIZE = 2;
 
     private final int POS_OFFSET = 0;
     private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
     private final int UV_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
     private final int TEXTURE_HANDLER_ID_OFFSET = UV_OFFSET + UV_SIZE * Float.BYTES;
+    private final int NORMALS_OFFSET = TEXTURE_HANDLER_ID_OFFSET + TEXTURE_HANDLER_ID_SIZE * Float.BYTES;
+    private final int REFLECTIVITY_OFFSET = NORMALS_OFFSET + NORMALS_SIZE * Float.BYTES;
 
     // Change this in case adding new data to the VBO
-    private final int VERTEX_SIZE = POS_SIZE + COLOR_SIZE + UV_SIZE + TEXTURE_HANDLER_ID_SIZE;
+    private final int VERTEX_SIZE = POS_SIZE + COLOR_SIZE + UV_SIZE + TEXTURE_HANDLER_ID_SIZE + NORMALS_SIZE + REFLECTIVITY_SIZE;
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     private List<ModelRendererComponent> models;
@@ -97,6 +104,12 @@ public class RenderBatch {
 
         glVertexAttribPointer(3, TEXTURE_HANDLER_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEXTURE_HANDLER_ID_OFFSET);
         glEnableVertexAttribArray(3);
+
+        glVertexAttribPointer(4, NORMALS_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, NORMALS_OFFSET);
+        glEnableVertexAttribArray(4);
+
+        glVertexAttribPointer(5, REFLECTIVITY_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, REFLECTIVITY_OFFSET);
+        glEnableVertexAttribArray(5);
     }
 
     public int getModelVertexOffset(ModelRendererComponent modelRenderer) {
@@ -185,10 +198,15 @@ public class RenderBatch {
         Shader shader = Renderer.getCurrentShader();
         shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
         shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());
+        shader.uploadVec3f("uLightPos", CitadelConstants.lightPos);
 
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
+        glEnableVertexAttribArray(4);
+        glEnableVertexAttribArray(5);
 
         // Wireframe mode
         if (DebugManager.isWireframeMode()) {
@@ -207,6 +225,11 @@ public class RenderBatch {
         // Cleanup
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+        glDisableVertexAttribArray(3);
+        glDisableVertexAttribArray(4);
+        glDisableVertexAttribArray(5);
+
         glBindVertexArray(0);
 
         shader.detach();
@@ -220,6 +243,7 @@ public class RenderBatch {
         Vector4f[] vertexColors = modelRenderer.getMesh().getVerticesColors();
         Vector2f[] UVs = modelRenderer.getMesh().getUVs();
         Vector4f tint = modelRenderer.getMesh().getTint();
+        Vector3f[] normals = modelRenderer.getMesh().getNormals();
 
         long textureHandleId = 0L;
         if (modelRenderer.getMesh().getTexture() != null) {
@@ -230,16 +254,8 @@ public class RenderBatch {
         float textureHandleHigh = Float.intBitsToFloat((int)(textureHandleId >>> 32));
 
         for (int i = 0; i < vertexPositions.length; i++) {
-            tempCacheVec.set(vertexPositions[i]);
-
-            // Apply scale
-            tempCacheVec.mul(modelRenderer.gameObject.transform.getScale());
-
-            // Apply rotation
-            tempCacheVec.rotate(modelRenderer.gameObject.transform.getRotation()); // TODO: Optimize, CPU
-
-            // Apply position
-            tempCacheVec.add(modelRenderer.gameObject.transform.getPosition());
+            // Vertex transformation
+            transformTempCacheVec3(modelRenderer.gameObject.transform, vertexPositions[i]);
 
             // Load position into the vertices array
             vertices[offset] = tempCacheVec.x;
@@ -268,8 +284,30 @@ public class RenderBatch {
             vertices[offset + 9] = textureHandleLow;
             vertices[offset + 10] = textureHandleHigh;
 
+            // Normals
+            vertices[offset + 11] = normals[i].x;
+            vertices[offset + 12] = normals[i].y;
+            vertices[offset + 13] = normals[i].z;
+
+            // Reflectivity
+            vertices[offset + 14] = modelRenderer.getMaterial().getReflectance();
+            vertices[offset + 15] = modelRenderer.getMaterial().getShineDamper();
+
             offset += VERTEX_SIZE;
         }
+    }
+
+    private void transformTempCacheVec3(Transform transform, Vector3f data) {
+        tempCacheVec.set(data);
+
+        // Apply scale
+        tempCacheVec.mul(transform.getScale());
+
+        // Apply rotation
+        tempCacheVec.rotate(transform.getRotation()); // TODO: Optimize, CPU
+
+        // Apply position
+        tempCacheVec.add(transform.getPosition());
     }
 
     private int[] updateIndices() {
@@ -318,6 +356,10 @@ public class RenderBatch {
 
     public int getByteSize() {
         return VERTEX_SIZE_BYTES * maxBatchSize;
+    }
+
+    public int getVerticesAmount() {
+        return this.vertices.length;
     }
 
     public boolean isOutsideFrustum() {

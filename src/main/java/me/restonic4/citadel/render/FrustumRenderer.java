@@ -53,7 +53,7 @@ public class FrustumRenderer {
         drawLine(corners[3], corners[7]);
     }
 
-    private static void drawLine(Vector3f start, Vector3f end) {
+    protected static void drawLine(Vector3f start, Vector3f end) {
         glBegin(GL_LINES);
         glVertex3f(start.x, start.y, start.z);
         glVertex3f(end.x, end.y, end.z);

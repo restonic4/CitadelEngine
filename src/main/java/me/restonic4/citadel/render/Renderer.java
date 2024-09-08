@@ -13,6 +13,7 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
+import static me.restonic4.citadel.render.FrustumRenderer.drawLine;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
@@ -163,6 +164,20 @@ public class Renderer {
         }
 
         return bytes;
+    }
+
+    public int getVerticesAmount() {
+        int vertices = 0;
+
+        for (int i = 0; i < staticBatches.size(); i++) {
+            vertices += staticBatches.get(i).getVerticesAmount();
+        }
+
+        for (int i = 0; i < dynamicBatches.size(); i++) {
+            vertices += dynamicBatches.get(i).getVerticesAmount();
+        }
+
+        return vertices;
     }
 
     public void cleanup() {
