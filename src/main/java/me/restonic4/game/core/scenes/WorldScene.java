@@ -106,7 +106,7 @@ public class WorldScene extends Scene {
                         selected = testMesh2;
                     }
 
-                    GameObject test = new GameObject(true);
+                    GameObject test = new GameObject(false);
                     test.addComponent(new ModelRendererComponent(selected, new Material(1, 1)));
                     test.setName("test:"+i+":"+j+":"+w);
                     test.transform.setPosition(i*5, j*5, w*5);
@@ -145,7 +145,7 @@ public class WorldScene extends Scene {
         float radius = 75;
         float x = (float) Math.sin(Time.getRunningTime() * speed);
         float y = (float) Math.cos(Time.getRunningTime() * speed);
-        //test2.transform.setPosition(x * radius, y * radius, 0);
+        test2.transform.setPosition(x * radius, y * radius, 0);
 
         if (KeyBinds.CRASH.isPressed()) {
             Logger.log("Size: " + renderer.getByteSize());
@@ -250,7 +250,7 @@ public class WorldScene extends Scene {
             camera.transform.addRotationQuaternion(pitchRotation);
         }
 
-        /*float mult = 0.2F;
+        float mult = 0.2F;
         for (int i = 0; i < this.getDynamicGameObjects().size(); i++) {
             if (this.getDynamicGameObjects().get(i) == test2) {
                 continue;
@@ -263,7 +263,7 @@ public class WorldScene extends Scene {
 
             GameObject gameObject = this.getDynamicGameObjects().get(i);
             gameObject.transform.setPosition(multR * offset, multR + offset, multR * offset2);
-        }*/
+        }
 
         //camera.transform.addLocalRotationEuler(xMouseDelta, yMouseDelta, 0);
 
