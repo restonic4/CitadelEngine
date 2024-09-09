@@ -198,7 +198,7 @@ public class RenderBatch {
         Shader shader = Renderer.getCurrentShader();
         shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
         shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());
-        shader.uploadVec3f("uLightPos", CitadelConstants.lightPos);
+        shader.uploadVec3fArray("uLightPos", CitadelConstants.lightPos);
 
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);

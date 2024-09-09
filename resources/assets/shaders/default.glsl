@@ -12,36 +12,41 @@ layout (location=5) in vec2 aReflectivity; // The first float is the reflectance
 
 uniform mat4 uProjection;
 uniform mat4 uView;
-uniform vec3 uLightPos;
+uniform vec3 uLightPos[4];
 
 out vec4 fColor;
 out vec2 fUV;
 flat out uvec2 fTextureHandle;
-out float fLightIntensity;
+out vec3 normalizedNormal;
+out vec3 toLightVector[4];
+out vec3 toCameraVector;
+out vec3 reflectedLightVector[4];
+out vec2 fReflectivity;
 
 void main()
 {
+    // Variables
     fColor = aColor;
     fUV = aUV;
     fTextureHandle = uvec2(floatBitsToUint(aTextureHandle.x), floatBitsToUint(aTextureHandle.y));
+    fReflectivity = aReflectivity;
 
-    float minLight = 0.1;
+    // Lighting
 
     vec3 cameraPos = (inverse(uView) * vec4(0, 0, 0, 1)).xyz;
 
-    vec3 normalizedNormal = normalize(aNormal);
+    normalizedNormal = normalize(aNormal);
 
-    vec3 toLightVector = normalize(uLightPos - aPos);
-    vec3 toCameraVector = normalize(cameraPos - aPos);
-    vec3 lightDirection = -toLightVector;
-    vec3 reflectedLightVector = reflect(lightDirection, normalizedNormal);
+    for (int i = 0; i < 4; i++) {
+        toLightVector[i] = normalize(uLightPos[i] - aPos);
 
-    float lightBrightnessFactor = max(minLight, dot(normalizedNormal, toLightVector));
-    float lightSpecularFactor = max(0, dot(reflectedLightVector, toCameraVector));
-    float lightDampedFactor = pow(lightSpecularFactor, aReflectivity.y);
-    float lightFinalSpecularFactor = lightDampedFactor * aReflectivity.x;
+        vec3 lightDirection = -toLightVector[i];
+        reflectedLightVector[i] = reflect(lightDirection, normalizedNormal);
+    }
 
-    fLightIntensity = lightBrightnessFactor + lightFinalSpecularFactor;
+    toCameraVector = normalize(cameraPos - aPos);
+
+    // Positioning
 
     gl_Position = uProjection * uView * vec4(aPos, 1);
 }
@@ -54,12 +59,17 @@ void main()
 in vec4 fColor;
 in vec2 fUV;
 flat in uvec2 fTextureHandle;
-in float fLightIntensity;
+in vec3 normalizedNormal;
+in vec3 toLightVector[4];
+in vec3 toCameraVector;
+in vec3 reflectedLightVector[4];
+in vec2 fReflectivity;
 
 out vec4 color;
 
 void main()
 {
+    // Texture
     uint64_t handle = (uint64_t(fTextureHandle.y) << 32) | uint64_t(fTextureHandle.x);
 
     vec4 baseColor;
@@ -71,5 +81,27 @@ void main()
         baseColor = fColor * texture(tex, fUV);
     }
 
-    color = baseColor * fLightIntensity;
+    // Lights
+
+    float minLight = 0.1;
+
+    float LightFinalBrightnessFactor = 0;
+    float lightFinalSpecularFactor = 0;
+
+    for (int i = 0; i < 4; i++) {
+        float lightBrightnessFactor = max(0, dot(normalizedNormal, toLightVector[i]));
+        float lightSpecularFactor = max(0, dot(reflectedLightVector[i], toCameraVector));
+        float lightDampedFactor = pow(lightSpecularFactor, fReflectivity.y);
+
+        lightFinalSpecularFactor += lightDampedFactor * fReflectivity.x;
+        LightFinalBrightnessFactor += lightBrightnessFactor;
+    }
+
+    lightFinalSpecularFactor = max(0, lightFinalSpecularFactor);
+    LightFinalBrightnessFactor = max(minLight, LightFinalBrightnessFactor);
+
+    float lightFactor = LightFinalBrightnessFactor + LightFinalBrightnessFactor;
+
+    // Result
+    color = baseColor * lightFactor;
 }

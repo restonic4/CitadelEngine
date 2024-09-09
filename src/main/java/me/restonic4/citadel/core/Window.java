@@ -8,6 +8,7 @@ import imgui.glfw.ImGuiImplGlfw;
 import me.restonic4.citadel.events.EventResult;
 import me.restonic4.citadel.events.types.CitadelLifecycleEvents;
 import me.restonic4.citadel.events.types.WindowEvents;
+import me.restonic4.citadel.files.FileManager;
 import me.restonic4.citadel.input.KeyListener;
 import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.registries.AssetLocation;
@@ -26,10 +27,15 @@ import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.Map;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -101,6 +107,8 @@ public class Window {
         if (glfwWindowAddress == MemoryUtil.NULL) {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
+
+        setWindowIcon(glfwWindowAddress, "assets/textures/icons/icon.png");
 
         WindowEvents.CREATED.invoker().onWindowCreated(this);
 
@@ -308,6 +316,32 @@ public class Window {
         this.title = newTitle;
         glfwSetWindowTitle(this.glfwWindowAddress, newTitle);
         return true;
+    }
+
+    public static void setWindowIcon(long window, String iconPath) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            String resourcePath = FileManager.getOrExtractFile(
+                    FileManager.toResources(iconPath)
+            );
+
+            IntBuffer width = stack.mallocInt(1);
+            IntBuffer height = stack.mallocInt(1);
+            IntBuffer channels = stack.mallocInt(1);
+
+            ByteBuffer icon = STBImage.stbi_load(resourcePath, width, height, channels, 4);
+            if (icon == null) {
+                throw new RuntimeException("Error loading the icon: " + STBImage.stbi_failure_reason());
+            }
+
+            GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
+            iconBuffer.width(width.get(0));
+            iconBuffer.height(height.get(0));
+            iconBuffer.pixels(icon);
+
+            GLFW.glfwSetWindowIcon(window, iconBuffer);
+
+            STBImage.stbi_image_free(icon);
+        }
     }
 
     public void setCursorLocked(boolean locked) {

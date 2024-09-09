@@ -107,7 +107,7 @@ public class WorldScene extends Scene {
                     }
 
                     GameObject test = new GameObject(false);
-                    test.addComponent(new ModelRendererComponent(selected, new Material(1, 1)));
+                    test.addComponent(new ModelRendererComponent(selected));
                     test.setName("test:"+i+":"+j+":"+w);
                     test.transform.setPosition(i*5, j*5, w*5);
                     test.transform.setScale(1,1,1);
@@ -139,7 +139,7 @@ public class WorldScene extends Scene {
 
     @Override
     public void update() {
-        CitadelConstants.lightPos.set(test2.transform.getPosition());
+        CitadelConstants.lightPos[0].set(test2.transform.getPosition());
 
         float speed = 0.5f;
         float radius = 75;

@@ -51,6 +51,6 @@ public class CitadelConstants {
 
     public static Locale DEFAULT_LOCALE = Locales.EN_US;
 
-    public static Vector3f lightPos = new Vector3f(20, 20, 0);
+    public static Vector3f[] lightPos = new Vector3f[]{new Vector3f(), new Vector3f(), new Vector3f(), new Vector3f()};
     public static Vector3f lightColor = new Vector3f(1, 1, 1);
 }

@@ -179,6 +179,24 @@ public class Shader {
         glUniform3f(varLocation, vec.x, vec.y, vec.z);
     }
 
+    public void uploadVec3fArray(String varName, Vector3f[] vecArray) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+
+        use(); // Use the shader in case is not being used
+
+        FloatBuffer vecBuffer = BufferUtils.createFloatBuffer(vecArray.length * 3);
+
+        for (int i = 0; i < vecArray.length; i++) {
+            Vector3f vec = vecArray[i];
+            vecBuffer.put(vec.x).put(vec.y).put(vec.z);
+        }
+
+        vecBuffer.flip();
+
+        glUniform3fv(varLocation, vecBuffer);
+    }
+
+
     public void uploadVec2f(String varName, Vector2f vec) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
 
