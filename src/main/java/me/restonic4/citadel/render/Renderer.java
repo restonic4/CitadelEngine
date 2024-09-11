@@ -20,6 +20,7 @@ public class Renderer {
     private List<RenderBatch> staticBatches, dynamicBatches;
 
     private static Shader currentShader;
+    private Scene scene;
 
     // This is just a stat
     private int drawCallsConsumed = 0;
@@ -27,7 +28,8 @@ public class Renderer {
     private int dirtyModifiedTotal = 0;
     private int dirtySkippedTotal = 0;
 
-    public Renderer() {
+    public Renderer(Scene scene) {
+        this.scene = scene;
         this.staticBatches = new ArrayList<>();
         this.dynamicBatches = new ArrayList<>();
     }
@@ -83,7 +85,6 @@ public class Renderer {
         // Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Scene scene = SceneManager.getCurrentScene();
         if (scene == null) {
             return;
         }

@@ -162,6 +162,7 @@ tasks.register('gource', Exec) {
             '--hide', 'mouse,progress',
             '--highlight-colour', 'FFD700',
             '--highlight-user', 'restonic4',
+            '--highlight-user', 'Dinax',
             '--caption-file', 'gource/captions.txt',
             '--font-scale', '2'
     ]

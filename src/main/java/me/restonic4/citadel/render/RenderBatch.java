@@ -1,5 +1,6 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.citadel.util.ArrayHelper;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
@@ -196,9 +197,9 @@ public class RenderBatch {
         shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
         shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());
         // TODO: I think this should not be updated every frame (Lights)
-        shader.uploadVec3fArray("uLightPos", scene.getLightPositions());
+        shader.uploadVec3fArray("uLightPos", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightPositions(), CitadelConstants.MAX_LIGHTS));
         shader.uploadInt("uLightAmount", scene.getLightsAmount());
-        shader.uploadVec3fArray("uLightColors", scene.getLightColors());
+        shader.uploadVec3fArray("uLightColors", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightColors(), CitadelConstants.MAX_LIGHTS));
 
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);

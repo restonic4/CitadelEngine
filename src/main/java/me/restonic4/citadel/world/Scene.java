@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Scene {
-    protected Renderer renderer = new Renderer();
+    protected Renderer renderer = new Renderer(this);
     protected Camera camera;
 
     private List<GameObject> staticGameObjects = new ArrayList<>();

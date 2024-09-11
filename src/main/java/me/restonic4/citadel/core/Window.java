@@ -189,13 +189,17 @@ public class Window {
         Shader defaultShader = new Shader("assets/shaders/default.glsl");
         defaultShader.compile();
 
+        // Cache
+
+        Scene scene;
+
         while (!glfwWindowShouldClose(glfwWindowAddress)) {
             // Listen for input events
             glfwPollEvents();
 
             updateAspectRatio();
 
-            Scene scene = SceneManager.getCurrentScene();
+            scene = SceneManager.getCurrentScene();
             if (scene != null && Time.getDeltaTime() > 0) {
                 Renderer.setShader(defaultShader);
                 scene.update();
@@ -241,6 +245,16 @@ public class Window {
         imGuiGlfw.newFrame();
         ImGui.newFrame();
 
+        // TODO: Optimize this for GC
+        /*
+        Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
+        Iterator<Map.Entry<AssetLocation, ImGuiScreen>> iterator = guis.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<AssetLocation, ImGuiScreen> entry = iterator.next();
+            ImGuiScreen screen = entry.getValue();
+            screen.render();
+        }
+         */
         Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
         for (Map.Entry<AssetLocation, ImGuiScreen> entry : guis.entrySet()) {
             ImGuiScreen screen = entry.getValue();

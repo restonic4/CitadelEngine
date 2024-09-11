@@ -179,21 +179,26 @@ public class Shader {
         glUniform3f(varLocation, vec.x, vec.y, vec.z);
     }
 
+    private FloatBuffer vec3Buffer = null;
     public void uploadVec3fArray(String varName, Vector3f[] vecArray) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
 
         use(); // Use the shader in case is not being used
 
-        FloatBuffer vecBuffer = BufferUtils.createFloatBuffer(vecArray.length * 3);
+        if (vec3Buffer == null || vec3Buffer.capacity() < vecArray.length * 3) {
+            vec3Buffer = BufferUtils.createFloatBuffer(vecArray.length * 3);
+        }
 
         for (int i = 0; i < vecArray.length; i++) {
             Vector3f vec = vecArray[i];
-            vecBuffer.put(vec.x).put(vec.y).put(vec.z);
+            if (vec != null) {
+                vec3Buffer.put(vec.x).put(vec.y).put(vec.z);
+            }
         }
 
-        vecBuffer.flip();
+        vec3Buffer.flip();
 
-        glUniform3fv(varLocation, vecBuffer);
+        glUniform3fv(varLocation, vec3Buffer);
     }
 
 
