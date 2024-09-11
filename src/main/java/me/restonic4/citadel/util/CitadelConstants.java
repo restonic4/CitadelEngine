@@ -36,6 +36,8 @@ public class CitadelConstants {
     public static final int HEX_COLOR_GREEN = 0x91e562;
     public static final int HEX_COLOR_RED = 0xff64ad;
 
+    public static final int MAX_LIGHTS = 4;
+
     // Can be modified
 
     public static float CAMERA_NEAR_PLANE = 0.1f;
@@ -50,7 +52,4 @@ public class CitadelConstants {
     public static int WINDOW_TITLE_CHANGE_FREQUENCY = 3;
 
     public static Locale DEFAULT_LOCALE = Locales.EN_US;
-
-    public static Vector3f[] lightPos = new Vector3f[]{new Vector3f(), new Vector3f(), new Vector3f(), new Vector3f()};
-    public static Vector3f lightColor = new Vector3f(1, 1, 1);
 }

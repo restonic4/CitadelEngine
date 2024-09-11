@@ -20,6 +20,7 @@ import me.restonic4.citadel.world.object.GameObject;
 import me.restonic4.citadel.world.object.Material;
 import me.restonic4.citadel.world.object.Mesh;
 import me.restonic4.citadel.world.object.Transform;
+import me.restonic4.citadel.world.object.components.LightComponent;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import me.restonic4.citadel.files.parsers.mesh.MeshLoader;
 import me.restonic4.citadel.render.PerspectiveCamera;
@@ -123,6 +124,7 @@ public class WorldScene extends Scene {
         citadelMesh.setTexture(new Texture("assets/textures/persus.png"));
 
         GameObject test = new GameObject(false);
+        test.addComponent(new LightComponent(LightComponent.LightType.POINT));
         test.addComponent(new ModelRendererComponent(citadelMesh));
         test.setName("test");
         test.transform.setPosition(0, 0, 0);
@@ -139,8 +141,6 @@ public class WorldScene extends Scene {
 
     @Override
     public void update() {
-        CitadelConstants.lightPos[0].set(test2.transform.getPosition());
-
         float speed = 0.5f;
         float radius = 75;
         float x = (float) Math.sin(Time.getRunningTime() * speed);

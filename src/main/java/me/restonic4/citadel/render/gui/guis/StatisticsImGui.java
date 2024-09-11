@@ -3,7 +3,6 @@ package me.restonic4.citadel.render.gui.guis;
 import imgui.ImGui;
 import imgui.extension.implot.ImPlot;
 import me.restonic4.citadel.core.Window;
-import me.restonic4.citadel.registries.built_in.types.ImGuiScreen;
 import me.restonic4.citadel.render.Camera;
 import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.render.gui.LineGraphImGui;
@@ -73,6 +72,7 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
             ImGui.text(StringBuilderHelper.concatenate("Game objects: ", scene.getGameObjects().size()));
             ImGui.text(StringBuilderHelper.concatenate("Static objects: ", scene.getStaticGameObjects().size()));
             ImGui.text(StringBuilderHelper.concatenate("Dynamic objects: " , scene.getDynamicGameObjects().size()));
+            ImGui.text(StringBuilderHelper.concatenate("Lights: " , scene.getLightsAmount()));
 
             if (ImGui.collapsingHeader("Render Graph")) {
                 ImGui.indent(CitadelConstants.IM_GUI_INDENT);

@@ -1,14 +1,12 @@
 package me.restonic4.citadel.render;
 
 import me.restonic4.citadel.util.CitadelConstants;
-import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.world.object.GameObject;
 import me.restonic4.citadel.world.object.Transform;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import me.restonic4.citadel.util.debug.DebugManager;
-import me.restonic4.game.core.scenes.WorldScene;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -16,7 +14,6 @@ import org.joml.Vector4f;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.restonic4.citadel.render.FrustumRenderer.drawLine;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL20.*;
@@ -198,7 +195,10 @@ public class RenderBatch {
         Shader shader = Renderer.getCurrentShader();
         shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
         shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());
-        shader.uploadVec3fArray("uLightPos", CitadelConstants.lightPos);
+        // TODO: I think this should not be updated every frame (Lights)
+        shader.uploadVec3fArray("uLightPos", scene.getLightPositions());
+        shader.uploadInt("uLightAmount", scene.getLightsAmount());
+        shader.uploadVec3fArray("uLightColors", scene.getLightColors());
 
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);

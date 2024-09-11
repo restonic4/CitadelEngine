@@ -1,10 +1,13 @@
 package me.restonic4.citadel.world;
 
 import me.restonic4.citadel.sound.SoundManager;
+import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.world.object.GameObject;
 import me.restonic4.citadel.render.Camera;
 import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
+import me.restonic4.citadel.world.object.components.LightComponent;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +18,7 @@ public abstract class Scene {
 
     private List<GameObject> staticGameObjects = new ArrayList<>();
     private List<GameObject> dynamicGameObjects = new ArrayList<>();
+    private List<LightComponent> lightComponents = new ArrayList<>();
 
     private boolean isActivated = false;
 
@@ -69,6 +73,11 @@ public abstract class Scene {
         List<GameObject> targetList = gameObject.isStatic() ? staticGameObjects : dynamicGameObjects;
         targetList.add(gameObject);
 
+        LightComponent lightComponent = gameObject.getComponent(LightComponent.class);
+        if (lightComponent != null) {
+            lightComponents.add(lightComponent);
+        }
+
         if (isActivated) {
             gameObject.start();
             renderer.add(gameObject);
@@ -98,6 +107,35 @@ public abstract class Scene {
 
     public List<GameObject> getDynamicGameObjects() {
         return this.dynamicGameObjects;
+    }
+
+    public List<LightComponent> getLightComponents() {
+        return this.lightComponents;
+    }
+
+    public Vector3f[] getLightPositions() {
+        Vector3f[] positions = new Vector3f[getLightsAmount()];
+
+        for (int i = 0; i < positions.length; i++) {
+            positions[i] = this.lightComponents.get(i).gameObject.transform.getPosition();
+        }
+
+        return positions;
+    }
+
+    public Vector3f[] getLightColors() {
+        Vector3f[] colors = new Vector3f[getLightsAmount()];
+
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = this.lightComponents.get(i).getColor();
+        }
+
+        return colors;
+    }
+
+    public int getLightsAmount() {
+        return Math.min(this.lightComponents.size(), CitadelConstants.MAX_LIGHTS);
+
     }
 
     public int getGameObjectsAmount() {
