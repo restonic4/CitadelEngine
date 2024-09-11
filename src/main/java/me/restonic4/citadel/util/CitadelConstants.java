@@ -21,8 +21,6 @@ public class CitadelConstants {
     public static final int MAX_STATIC_BATCH_VERTEX_SIZE = 2048; // 2048
     public static final int MAX_DYNAMIC_BATCH_VERTEX_SIZE = 1024; // 1024
 
-    public static final double NANOSECOND_CONVERSION_FACTOR = 1E-9;
-
     public static final int MATRIX4F_CAPACITY = 16;
     public static final int MATRIX3F_CAPACITY = 9;
 
