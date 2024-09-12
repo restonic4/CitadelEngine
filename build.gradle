@@ -3,6 +3,7 @@ import java.text.SimpleDateFormat
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = "${group}"
@@ -79,17 +80,47 @@ tasks.withType(JavaCompile).configureEach {
                 "-processor", "me.restonic4.AnnotationsProcessor",
                 "-AisServerBuild=true"
         ]
-
-        doLast {
-            def clientSideClasses = fileTree(dir: sourceSets.main.output.classesDirs, include: '**/*ClientSide.class')
-            clientSideClasses.each { File file ->
-                file.delete()
-            }
-        }
     }
 
     println "Is server build = ${project.hasProperty('serverBuild')}"
 }
+
+task modifyCompiledClasses {
+    doLast {
+        if (!project.hasProperty('serverBuild')) {
+            return
+        }
+
+        def sourceDir = file('src/main/java')
+        def buildOutputDir = file("${buildDir}/classes/java/main") // Directorio de compilación
+
+        if (!buildOutputDir.exists()) {
+            println "El directorio de clases compiladas no existe: " + buildOutputDir
+            return
+        }
+
+        sourceDir.eachFileRecurse { file ->
+            if (file.isFile() && file.name.endsWith('.java')) {
+                def lines = file.readLines()
+                def isClientSideClass = lines.any { it.contains('@ClientSide') }
+
+                if (isClientSideClass) {
+                    def relativePath = sourceDir.toURI().relativize(file.toURI()).getPath()
+
+                    def compiledClassFile = new File(buildOutputDir, relativePath.replace('.java', '.class'))
+
+                    println "Modifying ${compiledClassFile.absolutePath}: ${compiledClassFile.exists()}"
+
+                    if (compiledClassFile.exists()) {
+                        compiledClassFile.delete()
+                    }
+                }
+            }
+        }
+    }
+}
+
+compileJava.finalizedBy(modifyCompiledClasses)
 
 tasks.register('buildServerJar', Exec) {
     commandLine 'cmd', '/c', 'gradlew.bat clean build -PserverBuild'

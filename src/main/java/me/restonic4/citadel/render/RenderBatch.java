@@ -390,6 +390,7 @@ public class RenderBatch {
         }
     }
 
+    @ClientSide
     public enum AddFailureTypes {
         WRONG_TYPE("The batch type incorrect. (Static/Dynamic)"),
         FULL("The batch is full."),

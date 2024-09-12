@@ -22,8 +22,6 @@ public class AnnotationsProcessor extends AbstractProcessor  {
         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Custom annotation processor started");
 
         String isServerBuildOption = processingEnv.getOptions().get("isServerBuild");
-        processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "isServerBuild option: " + isServerBuildOption);
-
         boolean isServerBuild = Boolean.parseBoolean(isServerBuildOption);
 
         if (isServerBuild) {

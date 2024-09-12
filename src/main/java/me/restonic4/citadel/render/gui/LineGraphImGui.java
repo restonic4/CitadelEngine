@@ -86,6 +86,7 @@ public class LineGraphImGui {
         highestNumber--;
     }
 
+    @ClientSide
     public class GraphData {
         private String name;
         private float[] xs, ys;
