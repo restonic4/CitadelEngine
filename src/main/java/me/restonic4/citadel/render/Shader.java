@@ -1,5 +1,6 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.exceptions.RenderException;
 import me.restonic4.citadel.platform.PlatformManager;
 import me.restonic4.citadel.files.FileManager;
@@ -12,11 +13,11 @@ import org.lwjgl.BufferUtils;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 
-import static org.lwjgl.opengl.ARBBindlessTexture.glUniformHandleui64ARB;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
 
+@ClientSide
 public class Shader {
     private String filepath;
 

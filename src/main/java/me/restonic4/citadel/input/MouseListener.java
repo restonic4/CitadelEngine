@@ -1,9 +1,10 @@
 package me.restonic4.citadel.input;
 
-import me.restonic4.citadel.util.debug.diagnosis.Logger;
+import me.restonic4.ClientSide;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+@ClientSide
 public class MouseListener {
     private static double scrollX, scrollY = 0;
     private static double xPos, yPos, lastY, lastX = 0;

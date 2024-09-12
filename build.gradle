@@ -31,8 +31,7 @@ dependencies {
     implementation "org.lwjgl:lwjgl-stb"       // Images/assets loader
     implementation "org.lwjgl:lwjgl-openal"    // OpenAL for audio
     implementation "io.github.spair:imgui-java-binding:${imguiJavaVersion}" // ImGui for GUI
-    implementation "io.github.spair:imgui-java-lwjgl3:${imguiJavaVersion}" // ImGui for GUI
-
+    implementation "io.github.spair:imgui-java-lwjgl3:${imguiJavaVersion}"// ImGui for GUI
 
     // LWJGL Windows
     runtimeOnly "org.lwjgl:lwjgl::${lwjglNatives}"
@@ -41,12 +40,21 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-stb::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-openal::${lwjglNatives}"
     runtimeOnly "io.github.spair:imgui-java-${imguiNatives}:${imguiJavaVersion}"
+
+    // Auto service
+
+    /*annotationProcessor 'com.google.auto.service:auto-service:1.0-rc7'
+    implementation 'com.google.auto.service:auto-service-annotations:1.0-rc7'*/
+
+    annotationProcessor project(':processors')
+    implementation project(path: ':processors')
 }
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+    withSourcesJar()
 }
 
 jar {
@@ -62,11 +70,33 @@ jar {
         into 'resources'
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveBaseName.set("CitadelEngine")
+    archiveBaseName.set("CitadelEngine${project.hasProperty('serverBuild') ? '-Server' : ''}")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (project.hasProperty('serverBuild')) {
+        options.compilerArgs += [
+                "-processor", "me.restonic4.AnnotationsProcessor",
+                "-AisServerBuild=true"
+        ]
+
+        doLast {
+            def clientSideClasses = fileTree(dir: sourceSets.main.output.classesDirs, include: '**/*ClientSide.class')
+            clientSideClasses.each { File file ->
+                file.delete()
+            }
+        }
+    }
+
+    println "Is server build = ${project.hasProperty('serverBuild')}"
+}
+
+tasks.register('buildServerJar', Exec) {
+    commandLine 'cmd', '/c', 'gradlew.bat clean build -PserverBuild'
 }
 
 tasks.register('buildJar', Exec) {
-    commandLine 'cmd', '/c', 'gradlew.bat', 'clean', 'build'
+    commandLine 'cmd', '/c', 'gradlew.bat clean build'
 }
 
 tasks.register('packageApp', Exec) {

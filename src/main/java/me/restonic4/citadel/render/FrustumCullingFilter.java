@@ -1,14 +1,14 @@
 package me.restonic4.citadel.render;
 
-import me.restonic4.citadel.world.object.AABB;
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.world.object.GameObject;
-import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import org.joml.FrustumIntersection;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.List;
 
+@ClientSide
 public class FrustumCullingFilter {
     private static FrustumCullingFilter instance;
 

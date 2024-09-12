@@ -1,9 +1,8 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.exceptions.RenderException;
-import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.world.Scene;
-import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.world.object.GameObject;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import me.restonic4.citadel.util.CitadelConstants;
@@ -13,9 +12,9 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.restonic4.citadel.render.FrustumRenderer.drawLine;
 import static org.lwjgl.opengl.GL11.*;
 
+@ClientSide
 public class Renderer {
     private List<RenderBatch> staticBatches, dynamicBatches;
 

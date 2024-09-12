@@ -1,5 +1,7 @@
 package me.restonic4.citadel.util;
 
+import java.lang.annotation.Documented;
+
 // This class was made to avoid memory leaks doing string concatenations
 public class StringBuilderHelper {
     private static final StringBuilder sb = new StringBuilder();

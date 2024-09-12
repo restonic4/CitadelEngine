@@ -1,13 +1,12 @@
 package me.restonic4.citadel.input;
 
-import me.restonic4.citadel.registries.built_in.types.KeyBind;
+import me.restonic4.ClientSide;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+@ClientSide
 public abstract class KeyListener {
     private static boolean keyPressed[] = new boolean[GLFW_KEY_LAST + 1]; // Listen for keys registered in GLFW. The + 1 is because they added an offset
     private static boolean keyPressedOnce[] = new boolean[GLFW_KEY_LAST + 1];

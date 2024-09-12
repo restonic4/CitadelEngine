@@ -1,6 +1,7 @@
 package me.restonic4.citadel.sound;
 
 import me.restonic4.citadel.files.FileManager;
+import me.restonic4.ClientSide;
 import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.system.*;
 
@@ -10,6 +11,7 @@ import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.stb.STBVorbis.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+@ClientSide
 public class SoundBuffer {
     private final int bufferId;
 

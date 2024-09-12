@@ -1,5 +1,6 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.util.ArrayHelper;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.world.Scene;
@@ -21,6 +22,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+@ClientSide
 public class RenderBatch {
     //         Pos                       Color                   UV      Texture handle id        Normals          Reflectivity
     // float, float, float    float, float, float, float    float, float    float, float    float, float, float    float, float

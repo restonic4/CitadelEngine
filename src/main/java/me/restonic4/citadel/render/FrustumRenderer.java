@@ -1,10 +1,12 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.ClientSide;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 
+@ClientSide
 public class FrustumRenderer {
     public static Vector3f[] extractFrustumCorners(Matrix4f projMatrix, Matrix4f viewMatrix) {
         Matrix4f invProjView = new Matrix4f();

@@ -1,15 +1,10 @@
 package me.restonic4.citadel.render.gui.guis;
 
 import imgui.ImGui;
-import me.restonic4.citadel.core.Window;
-import me.restonic4.citadel.registries.built_in.types.ImGuiScreen;
-import me.restonic4.citadel.render.Camera;
-import me.restonic4.citadel.render.Renderer;
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.util.CitadelConstants;
-import me.restonic4.citadel.util.Time;
-import me.restonic4.citadel.world.Scene;
-import me.restonic4.citadel.world.SceneManager;
 
+@ClientSide
 public class CameraSettingsImGui extends ToggleableImGuiScreen {
     @Override
     public void render() {

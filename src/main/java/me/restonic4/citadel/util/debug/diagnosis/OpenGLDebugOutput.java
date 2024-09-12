@@ -2,8 +2,10 @@ package me.restonic4.citadel.util.debug.diagnosis;
 
 import static org.lwjgl.opengl.GL43.*;
 
+import me.restonic4.ClientSide;
 import org.lwjgl.opengl.GLDebugMessageCallback;
 
+@ClientSide
 public class OpenGLDebugOutput {
     private GLDebugMessageCallback debugCallback;
 

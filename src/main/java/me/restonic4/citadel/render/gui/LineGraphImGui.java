@@ -4,6 +4,7 @@ import imgui.extension.implot.ImPlot;
 import imgui.extension.implot.flag.ImPlotCol;
 import imgui.extension.implot.flag.ImPlotCond;
 import imgui.extension.implot.flag.ImPlotFlags;
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.util.ColorHelper;
 import me.restonic4.citadel.util.StringBuilderHelper;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@ClientSide
 public class LineGraphImGui {
     private String plotName;
     private int size;

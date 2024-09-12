@@ -1,5 +1,6 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.exceptions.FileException;
 import me.restonic4.citadel.files.FileManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -9,15 +10,13 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.ARBBindlessTexture.*;
-import static org.lwjgl.opengl.ARBSparseTexture.GL_TEXTURE_SPARSE_ARB;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL14.GL_TEXTURE_LOD_BIAS;
-import static org.lwjgl.opengl.GL30.GL_TEXTURE_2D_ARRAY;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
-import static org.lwjgl.opengl.GL42.glTexStorage3D;
 import static org.lwjgl.stb.STBImage.*;
 
+@ClientSide
 public class Texture {
     private String filepath;
     private int texID;

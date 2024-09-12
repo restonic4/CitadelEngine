@@ -1,9 +1,11 @@
 package me.restonic4.citadel.sound;
 
+import me.restonic4.ClientSide;
 import org.joml.Vector3f;
 
 import static org.lwjgl.openal.AL10.*;
 
+@ClientSide
 public class SoundListener {
 
     public SoundListener(Vector3f position) {

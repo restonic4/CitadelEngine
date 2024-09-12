@@ -1,9 +1,11 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.world.object.Transform;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+@ClientSide
 public abstract class Camera {
     protected Matrix4f projectionMatrix, viewMatrix;
     public Transform transform;

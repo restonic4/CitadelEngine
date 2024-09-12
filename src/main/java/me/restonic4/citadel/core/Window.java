@@ -5,6 +5,7 @@ import imgui.ImGuiIO;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.events.EventResult;
 import me.restonic4.citadel.events.types.CitadelLifecycleEvents;
 import me.restonic4.citadel.events.types.WindowEvents;
@@ -42,6 +43,7 @@ import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
+@ClientSide
 public class Window {
     private static Window instance = null;
 

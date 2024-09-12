@@ -67,6 +67,8 @@ public abstract class Scene {
         Logger.log("Unloading the scene");
 
         SoundManager.getInstance().reset();
+
+        System.gc();
     }
 
     public void addGameObject(GameObject gameObject) {

@@ -1,8 +1,10 @@
 package me.restonic4.citadel.render;
 
+import me.restonic4.ClientSide;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.world.object.Transform;
 
+@ClientSide
 public class OrthographicCamera extends Camera {
     public OrthographicCamera(Transform transform) {
         super(transform);

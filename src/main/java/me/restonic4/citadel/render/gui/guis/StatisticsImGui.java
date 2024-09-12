@@ -1,6 +1,7 @@
 package me.restonic4.citadel.render.gui.guis;
 
 import imgui.ImGui;
+import me.restonic4.ClientSide;
 import imgui.extension.implot.ImPlot;
 import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.render.Camera;
@@ -14,6 +15,7 @@ import me.restonic4.citadel.util.math.UnitConverter;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 
+@ClientSide
 public class StatisticsImGui extends ToggleableImGuiScreen {
     int graphWidth = 500;
     int graphHeight = 200;
