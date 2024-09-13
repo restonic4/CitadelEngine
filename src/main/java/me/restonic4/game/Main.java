@@ -12,7 +12,7 @@ public class Main {
         citadelSettings.setCrashMessagesAmount(7);
         citadelSettings.setWindowTitleChangeFrequency(3);
         citadelSettings.setDefaultLocale(Locales.EN_US);
-        citadelSettings.setServerSide(true);
+        //citadelSettings.setServerSide(true);
 
         CitadelLauncher citadelLauncher = CitadelLauncher.create(citadelSettings);
         citadelLauncher.launch();
