@@ -55,7 +55,7 @@ public class PersistentLogger {
     }
 
     private void archiveOldLog() {
-        if (logFile.exists()) {
+        if (logFile.exists() && !DebugManager.isDevEnvironment()) {
             String timestamp = new SimpleDateFormat(CitadelConstants.LOG_DATE_FORMAT).format(new Date(logFile.lastModified()));
             File archivedFile = new File(logFile.getParent(), "Log_" + timestamp + ".txt");
             boolean renamed = logFile.renameTo(archivedFile);
@@ -66,6 +66,10 @@ public class PersistentLogger {
     }
 
     private void clearLogFile() {
+        if (DebugManager.isDevEnvironment()) {
+            return;
+        }
+
         try {
             new FileWriter(logFile, false).close();
         } catch (IOException e) {
@@ -74,6 +78,10 @@ public class PersistentLogger {
     }
 
     private synchronized void writeLogsToFile() {
+        if (DebugManager.isDevEnvironment()) {
+            return;
+        }
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true))) {
             for (String log : logBuffer) {
                 writer.write(log);
@@ -109,6 +117,10 @@ public class PersistentLogger {
     }
 
     public void onCrash(Thread thread, Throwable throwable) {
+        if (DebugManager.isDevEnvironment()) {
+            return;
+        }
+
         if (thread != null && throwable != null) {
             logCrashInfo(thread, throwable);
             DebugManager.displayCrashDialog(throwable);

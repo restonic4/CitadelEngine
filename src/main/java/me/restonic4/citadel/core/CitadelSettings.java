@@ -5,14 +5,18 @@ import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.GradleUtil;
 
 public class CitadelSettings {
-    private IGameLogic iGameLogic;
+    private IGameLogic clientGameLogic, serverGameLogic, sharedGameLogic;
     private String appName;
+    private String[] args;
 
     private boolean isServer = GradleUtil.SERVER_BUILD;
 
-    public CitadelSettings(IGameLogic iGameLogic, String appName) {
-        this.iGameLogic = iGameLogic;
+    public CitadelSettings(IGameLogic clientGameLogic, IGameLogic serverGameLogic, IGameLogic sharedGameLogic, String appName, String[] args) {
+        this.clientGameLogic = clientGameLogic;
+        this.serverGameLogic = serverGameLogic;
+        this.sharedGameLogic = sharedGameLogic;
         this.appName = appName;
+        this.args = args;
     }
 
     // Configuration
@@ -49,12 +53,24 @@ public class CitadelSettings {
 
     // Getters
 
-    public IGameLogic getiGameLogic() {
-        return this.iGameLogic;
+    public IGameLogic getClientGameLogic() {
+        return this.clientGameLogic;
+    }
+
+    public IGameLogic getServerGameLogic() {
+        return this.serverGameLogic;
+    }
+
+    public IGameLogic getSharedGameLogic() {
+        return this.sharedGameLogic;
     }
 
     public String getAppName() {
         return this.appName;
+    }
+
+    public String[] getArgs() {
+        return this.args;
     }
 
     public boolean isServerSide() {

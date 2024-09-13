@@ -15,6 +15,8 @@ import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.util.math.RandomUtil;
 
+import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -65,14 +67,12 @@ public class CitadelLauncher {
         RegistryManager.registerBuiltInRegistrySet(new Packets());
         RegistryManager.registerBuiltIn();
 
+        this.citadelSettings.getSharedGameLogic().start();
+
         Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());
 
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-            if (nettyThread != null) {
-                Logger.log("Killing netty thread");
-                nettyThread.interrupt();
-            }
-
+            killNetworkThreads();
             Logger.getPersistentLogger().onCrash(thread, throwable);
         });
 
@@ -86,8 +86,6 @@ public class CitadelLauncher {
                 try {
                     Client client = new Client("localhost", 8080);
                     client.run();
-                } catch(InterruptedException v) {
-                    System.out.println(v);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -95,7 +93,9 @@ public class CitadelLauncher {
             nettyThread.setName("Networking client side");
             nettyThread.start();
 
-            this.citadelSettings.getiGameLogic().start();
+            this.citadelSettings.getClientGameLogic().start();
+
+            window.setCursorLocked(true);
 
             window.loop();
             window.cleanup();
@@ -108,8 +108,6 @@ public class CitadelLauncher {
                     DebugManager.setDebugMode(true);
                     Server server = new Server(8080);
                     server.run();
-                } catch(InterruptedException v) {
-                    System.out.println(v);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -117,23 +115,35 @@ public class CitadelLauncher {
             nettyThread.setName("Networking server side");
             nettyThread.start();
 
-            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-            scheduler.scheduleAtFixedRate(() -> {
-                try {
-                    Packets.TEST.setData(new String[]{
-                            String.valueOf(RandomUtil.random(-10, 10)),
-                            String.valueOf(RandomUtil.random(-10, 10)),
-                            String.valueOf(RandomUtil.random(-10, 10))
+            for (int i = 0; i < citadelSettings.getArgs().length; i++) {
+                if (Objects.equals(citadelSettings.getArgs()[i], "citadelConsole")) {
+                    Thread renderThread = new Thread(() -> {
+                        try {
+                            Window.getInstance().initGuiOnly();
+                        } catch (Exception e) {
+                            killNetworkThreads();
+                            System.exit(0);
+                            throw new RuntimeException(e);
+                        }
                     });
-                    Packets.TEST.send(PacketType.SERVER_TO_ALL_CLIENTS);
-                } catch (Exception e) {
-                    Logger.log(e.getMessage());
+                    renderThread.setName("Server console rendering");
+                    renderThread.start();
+
+                    ImGuiScreens.SERVER_CONSOLE.show();
                 }
-            }, 0, 1, TimeUnit.SECONDS);
+            }
+
+            this.citadelSettings.getServerGameLogic().start();
         }
 
         CitadelLifecycleEvents.CITADEL_STOPPED.invoker().onCitadelStopped(CitadelLauncher.getInstance());
+    }
+
+    private void killNetworkThreads() {
+        if (nettyThread != null) {
+            Logger.log("Killing netty thread");
+            nettyThread.interrupt();
+        }
     }
 
     public String getAppName() {

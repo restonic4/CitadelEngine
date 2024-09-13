@@ -16,9 +16,7 @@ public abstract class Logger {
 
         System.out.println(message);
 
-        if (!DebugManager.isDevEnvironment()) {
-            persistentLogger.log(message.toString());
-        }
+        persistentLogger.log(message.toString());
     }
 
     public static void logExtra(Object message) {

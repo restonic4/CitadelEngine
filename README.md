@@ -23,6 +23,7 @@ This engine is going to be used for my future games and projects, but if people 
 - Registry system to add content dynamically.
 - Optimization.
 - Better configuration for initializing the engine.
+- Networking.
 
 <b>Planned</b>:
 - Object culling.

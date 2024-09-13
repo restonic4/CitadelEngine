@@ -46,11 +46,6 @@ dependencies {
 
     implementation 'io.netty:netty-all:4.1.113.Final'
 
-    // Auto service
-
-    /*annotationProcessor 'com.google.auto.service:auto-service:1.0-rc7'
-    implementation 'com.google.auto.service:auto-service-annotations:1.0-rc7'*/
-
     annotationProcessor project(':processors')
     implementation project(path: ':processors')
 }

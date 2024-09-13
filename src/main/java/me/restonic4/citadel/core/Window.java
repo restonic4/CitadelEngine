@@ -169,8 +169,6 @@ public class Window {
         imGuiGlfw.init(glfwWindowAddress, true);
         imGuiGl3.init(glslVersion);
 
-        setCursorLocked(true);
-
         Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
         for (Map.Entry<AssetLocation, ImGuiScreen> entry : guis.entrySet()) {
             ImGuiScreen screen = entry.getValue();
@@ -235,7 +233,7 @@ public class Window {
         CitadelLifecycleEvents.CITADEL_STOPPING.invoker().onCitadelStopping(CitadelLauncher.getInstance(), this);
     }
 
-    private void runImGuiFrame() {
+    public void runImGuiFrame() {
         imGuiGl3.newFrame();
         imGuiGlfw.newFrame();
         ImGui.newFrame();
@@ -265,6 +263,26 @@ public class Window {
             ImGui.renderPlatformWindowsDefault();
             org.lwjgl.glfw.GLFW.glfwMakeContextCurrent(backupWindowPtr);
         }
+    }
+
+    public void initGuiOnly() {
+        init();
+
+        ImGuiIO io = ImGui.getIO();
+        io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
+
+        glfwSetWindowSize(glfwWindowAddress, 1, 1);
+        glfwHideWindow(glfwWindowAddress);
+
+        while (!glfwWindowShouldClose(glfwWindowAddress)) {
+            glfwPollEvents();
+            updateAspectRatio();
+            Window.getInstance().runImGuiFrame();
+            glfwSwapBuffers(glfwWindowAddress);
+            Time.onFrameEnded();
+        }
+
+        cleanup();
     }
 
     public void cleanup() {
