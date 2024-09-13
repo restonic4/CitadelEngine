@@ -73,13 +73,6 @@ public class Window {
         return Window.instance;
     }
 
-    public void run(IGameLogic iGameLogic) {
-        init();
-        iGameLogic.start(); // Starts your game logic
-        loop();
-        cleanup();
-    }
-
     public void init() {
         Logger.log("Creating the GLFW window");
 
@@ -274,7 +267,7 @@ public class Window {
         }
     }
 
-    private void cleanup() {
+    public void cleanup() {
         CitadelLifecycleEvents.CITADEL_CLEANING_UP.invoker().onCitadelCleaningUp(CitadelLauncher.getInstance(), this);
 
         SceneManager.unLoadCurrentScene();

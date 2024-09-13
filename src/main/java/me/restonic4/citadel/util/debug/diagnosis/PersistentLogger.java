@@ -35,14 +35,6 @@ public class PersistentLogger {
         logWriterThread.setDaemon(true); // Closes the thread when the app dies
         logWriterThread.start();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(this::onShutdown));
-
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            logCrashInfo(t, e);
-            DebugManager.displayCrashDialog(e);
-            onShutdown();
-        });
-
         writeLogsToFile();
     }
 
@@ -116,7 +108,12 @@ public class PersistentLogger {
         writeLogsToFile();
     }
 
-    private void onShutdown() {
+    public void onCrash(Thread thread, Throwable throwable) {
+        if (thread != null && throwable != null) {
+            logCrashInfo(thread, throwable);
+            DebugManager.displayCrashDialog(throwable);
+        }
+
         writeLogsToFile();
         stop();
     }

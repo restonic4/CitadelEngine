@@ -2,8 +2,11 @@ package me.restonic4.game.core.scenes;
 
 import me.restonic4.citadel.files.parsers.mesh.OBJLoader;
 import me.restonic4.citadel.input.MouseListener;
+import me.restonic4.citadel.networking.NetworkingManager;
+import me.restonic4.citadel.networking.PacketType;
 import me.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
+import me.restonic4.citadel.registries.built_in.managers.Packets;
 import me.restonic4.citadel.render.Texture;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
@@ -42,7 +45,7 @@ public class WorldScene extends Scene {
     SoundSource music;
 
     List<GameObject> moving = new ArrayList<>();
-    GameObject test2;
+    public GameObject test2;
 
     @Override
     public void init() {
@@ -145,7 +148,7 @@ public class WorldScene extends Scene {
         float radius = 75;
         float x = (float) Math.sin(Time.getRunningTime() * speed);
         float y = (float) Math.cos(Time.getRunningTime() * speed);
-        test2.transform.setPosition(x * radius, y * radius, 0);
+        //test2.transform.setPosition(x * radius, y * radius, 0);
 
         if (KeyBinds.CRASH.isPressed()) {
             Logger.log("Size: " + renderer.getByteSize());
@@ -168,7 +171,8 @@ public class WorldScene extends Scene {
         }
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_K)) {
-            music.stop();
+            Packets.DEFAULT.setData(new String[]{"a", "b", "c", String.valueOf(Time.getRunningTime())});
+            Packets.DEFAULT.send(PacketType.CLIENT_TO_SERVER);
         }
 
 

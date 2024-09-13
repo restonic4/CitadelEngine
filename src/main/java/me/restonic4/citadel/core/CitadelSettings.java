@@ -2,10 +2,13 @@ package me.restonic4.citadel.core;
 
 import me.restonic4.citadel.registries.built_in.types.Locale;
 import me.restonic4.citadel.util.CitadelConstants;
+import me.restonic4.citadel.util.GradleUtil;
 
 public class CitadelSettings {
     private IGameLogic iGameLogic;
     private String appName;
+
+    private boolean isServer = GradleUtil.SERVER_BUILD;
 
     public CitadelSettings(IGameLogic iGameLogic, String appName) {
         this.iGameLogic = iGameLogic;
@@ -39,6 +42,11 @@ public class CitadelSettings {
         return this;
     }
 
+    public CitadelSettings setServerSide(boolean value) {
+        this.isServer = value;
+        return this;
+    }
+
     // Getters
 
     public IGameLogic getiGameLogic() {
@@ -47,5 +55,9 @@ public class CitadelSettings {
 
     public String getAppName() {
         return this.appName;
+    }
+
+    public boolean isServerSide() {
+        return this.isServer;
     }
 }

@@ -42,6 +42,10 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-openal::${lwjglNatives}"
     runtimeOnly "io.github.spair:imgui-java-${imguiNatives}:${imguiJavaVersion}"
 
+    // Netty
+
+    implementation 'io.netty:netty-all:4.1.113.Final'
+
     // Auto service
 
     /*annotationProcessor 'com.google.auto.service:auto-service:1.0-rc7'
@@ -55,7 +59,7 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
-    withSourcesJar()
+    //withSourcesJar()
 }
 
 jar {
@@ -74,7 +78,7 @@ jar {
     archiveBaseName.set("CitadelEngine${project.hasProperty('serverBuild') ? '-Server' : ''}")
 }
 
-tasks.withType(JavaCompile).configureEach {
+/*tasks.withType(JavaCompile).configureEach {
     if (project.hasProperty('serverBuild')) {
         options.compilerArgs += [
                 "-processor", "me.restonic4.AnnotationsProcessor",
@@ -120,7 +124,7 @@ task modifyCompiledClasses {
     }
 }
 
-compileJava.finalizedBy(modifyCompiledClasses)
+compileJava.finalizedBy(modifyCompiledClasses)*/
 
 tasks.register('buildServerJar', Exec) {
     commandLine 'cmd', '/c', 'gradlew.bat clean build -PserverBuild'
@@ -166,6 +170,11 @@ tasks.register('packageApp', Exec) {
 tasks.register('buildAndPackage') {
     dependsOn 'buildJar'
     dependsOn 'packageApp'
+}
+
+tasks.register('buildBothJars', Exec) {
+    commandLine 'cmd', '/c', 'gradlew.bat clean build'
+    commandLine 'cmd', '/c', 'gradlew.bat build -PserverBuild'
 }
 
 // Define a map to hold configurations for each mode
@@ -243,6 +252,7 @@ task updateGradleUtil {
     def versionRegex = /public static final String VERSION = ".*";/
     def nameRegex = /public static final String APP_NAME = ".*";/
     def consoleRegex = /public static final Boolean CONSOLE_ENABLED = .*/
+    def serverBuildRegex = /public static final Boolean SERVER_BUILD = .*/
 
     doLast {
         def file = file(filePath)
@@ -250,10 +260,15 @@ task updateGradleUtil {
             throw new GradleException("File not found: $filePath")
         }
 
+        if (project.hasProperty('serverBuild')) {
+            consoleEnabled = true
+        }
+
         def content = file.text
         content = content.replaceAll(versionRegex, "public static final String VERSION = \"${project.version}\";")
         content = content.replaceAll(nameRegex, "public static final String APP_NAME = \"${appName}\";")
         content = content.replaceAll(consoleRegex, "public static final Boolean CONSOLE_ENABLED = ${consoleEnabled};")
+        content = content.replaceAll(serverBuildRegex, "public static final Boolean SERVER_BUILD = ${project.hasProperty('serverBuild')};")
 
         file.text = content
         println "Updated GradleUtil.java"

@@ -3,6 +3,8 @@ package me.restonic4.citadel.registries;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.exceptions.AssetLocationException;
 
+import java.util.Objects;
+
 //This is used to locate assets
 public class AssetLocation {
     private String namespace;
@@ -15,13 +17,13 @@ public class AssetLocation {
 
     public AssetLocation(String compressed) {
         if (!compressed.contains(":")) {
-            throw new AssetLocationException("Illegal compressed asset location. It should be like: \"namespace:path\"");
+            throw new AssetLocationException("Illegal compressed asset location. It should be like: \"namespace:path\"; But we found: " + compressed);
         }
 
         String[] parts = compressed.split(":");
 
         if (parts.length < 2) {
-            throw new AssetLocationException("Illegal compressed asset location. It is missing a part. It should be like: \"namespace:path\"");
+            throw new AssetLocationException("Illegal compressed asset location. It is missing a part. It should be like: \"namespace:path\"; But we found: " + compressed);
         }
 
         setUp(parts[0], parts[1]);
@@ -59,6 +61,19 @@ public class AssetLocation {
 
     public String toString() {
         return this.namespace + ":" + this.path;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        AssetLocation that = (AssetLocation) obj;
+        return namespace.equals(that.namespace) && path.equals(that.path);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(namespace, path); // Combine namespace and path for a unique hash
     }
 
     public String getNamespace() {

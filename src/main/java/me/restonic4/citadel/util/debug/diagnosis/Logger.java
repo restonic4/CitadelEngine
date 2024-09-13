@@ -6,6 +6,10 @@ public abstract class Logger {
     private static final PersistentLogger persistentLogger = new PersistentLogger();
 
     public static void log(Object message) {
+        if (message == null) {
+            message = "[NULL_OBJECT]";
+        }
+
         if (DebugManager.isDebugMode()) {
             message = getDebugInfo() + message;
         }

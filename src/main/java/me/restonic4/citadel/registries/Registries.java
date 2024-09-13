@@ -15,6 +15,7 @@ public class Registries {
     public static final RegistryKey<Locale> LOCALE = new RegistryKey<>("locale");
     public static final RegistryKey<KeyBind> KEY_BIND = new RegistryKey<>("key_bind");
     public static final RegistryKey<ImGuiScreen> IM_GUI_SCREEN = new RegistryKey<>("im_gui_screen");
+    public static final RegistryKey<Packet> PACKET = new RegistryKey<>("packet");
 
     // Custom key system, where you can register your own keys
 
