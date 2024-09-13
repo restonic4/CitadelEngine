@@ -16,20 +16,20 @@ This engine is going to be used for my future games and projects, but if people 
 - Profiler.
 - Event system.
 - ImGui.
+- Frustum culling.
 
 <b>Working on</b>:
 - Textures.
-- Frustum culling.
 - Registry system to add content dynamically.
 - Optimization.
 - Better configuration for initializing the engine.
+- Lighting.
 - Networking.
 
 <b>Planned</b>:
 - Object culling.
 - Config system.
 - Steamworks compatibility.
-- Lighting.
 
 ## Credits
 
