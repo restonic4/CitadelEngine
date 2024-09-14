@@ -65,6 +65,7 @@ public class CitadelLauncher {
         RegistryManager.registerBuiltInRegistrySet(new Locales());
         RegistryManager.registerBuiltInRegistrySet(new KeyBinds());
         RegistryManager.registerBuiltInRegistrySet(new ImGuiScreens());
+        RegistryManager.registerBuiltInRegistrySet(new PacketDataTypes());
         RegistryManager.registerBuiltInRegistrySet(new Packets());
         RegistryManager.registerBuiltIn();
 
