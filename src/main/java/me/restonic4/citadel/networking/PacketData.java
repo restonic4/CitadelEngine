@@ -5,6 +5,7 @@ import me.restonic4.citadel.registries.Registries;
 import me.restonic4.citadel.registries.Registry;
 import me.restonic4.citadel.registries.built_in.types.PacketDataType;
 import me.restonic4.citadel.util.StringBuilderHelper;
+import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +47,11 @@ public class PacketData {
         List<T> resultList = new ArrayList<>();
 
         for (String datum : data) {
-            String[] parts = datum.split("_", 2);
+            String[] parts = trimEnd(datum).split("_", 3);
 
             if (parts[0].equals(packetDataType.getKey())) {
                 String value = parts[1];
+                Logger.log(value);
                 T convertedValue = packetDataType.parse(value);
                 if (convertedValue != null) {
                     resultList.add(convertedValue);

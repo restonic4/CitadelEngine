@@ -173,7 +173,7 @@ public class WorldScene extends Scene {
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_K)) {
             Packets.DEFAULT.send(PacketType.CLIENT_TO_SERVER,
-                    new PacketData("a", "b", "c", Time.getRunningTime())
+                    new PacketData("a", "b", "c", Time.getRunningTime(), new Vector3f(10, 11, 12))
             );
         }
 

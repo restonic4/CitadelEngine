@@ -6,6 +6,7 @@ import me.restonic4.citadel.registries.Registries;
 import me.restonic4.citadel.registries.Registry;
 import me.restonic4.citadel.registries.built_in.types.PacketDataType;
 import me.restonic4.citadel.util.CitadelConstants;
+import org.joml.Vector3f;
 
 public class PacketDataTypes extends AbstractRegistryInitializer {
     public static PacketDataType<String> STRING;
@@ -17,6 +18,7 @@ public class PacketDataTypes extends AbstractRegistryInitializer {
     public static PacketDataType<Short> SHORT;
     public static PacketDataType<Byte> BYTE;
     public static PacketDataType<Character> CHARACTER;
+    public static PacketDataType<Vector3f> VECTOR3F;
 
     @SuppressWarnings("unchecked")
     public void register() {
@@ -80,6 +82,13 @@ public class PacketDataTypes extends AbstractRegistryInitializer {
             @Override
             public Character parse(String value) {
                 return value.charAt(0);
+            }
+        });
+
+        VECTOR3F = (PacketDataType<Vector3f>) Registry.register(Registries.PACKET_DATA_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector3f"), new PacketDataType<>(Vector3f.class, "v3f") {
+            @Override
+            public Vector3f parse(String value) {
+                return new Vector3f();
             }
         });
     }
