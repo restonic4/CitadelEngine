@@ -4,6 +4,9 @@ import imgui.ImGui;
 import me.restonic4.ClientSide;
 import imgui.extension.implot.ImPlot;
 import me.restonic4.citadel.core.Window;
+import me.restonic4.citadel.registries.AssetLocation;
+import me.restonic4.citadel.registries.Registry;
+import me.restonic4.citadel.registries.RegistryKey;
 import me.restonic4.citadel.render.Camera;
 import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.render.gui.LineGraphImGui;
@@ -14,6 +17,9 @@ import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.math.UnitConverter;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
+
+import java.util.Map;
+import java.util.Objects;
 
 @ClientSide
 public class StatisticsImGui extends ToggleableImGuiScreen {
@@ -114,6 +120,32 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
             ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
             ImGui.text(StringBuilderHelper.concatenate("Sound sources: ", soundManager.getSourcesAmount()));
+
+            ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
+        }
+
+        ImGui.spacing();
+
+        if (ImGui.collapsingHeader("Registries")) {
+            ImGui.indent(CitadelConstants.IM_GUI_INDENT);
+
+            Map<RegistryKey<?>, Map<AssetLocation, ?>> registries = Registry.getRegistries();
+            for (Map.Entry<RegistryKey<?>, Map<AssetLocation, ?>> data : registries.entrySet()) {
+                Map<AssetLocation, ?> map = data.getValue();
+
+                if (ImGui.collapsingHeader(data.getKey().getKey())) {
+                    ImGui.indent(CitadelConstants.IM_GUI_INDENT);
+
+                    for (Map.Entry<AssetLocation, ?> registryData : map.entrySet()) {
+                        AssetLocation assetLocation = registryData.getKey();
+
+                        ImGui.text(assetLocation.toString());
+                    }
+
+                    ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
+                }
+
+            }
 
             ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
         }

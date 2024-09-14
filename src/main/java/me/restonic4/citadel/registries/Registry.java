@@ -2,6 +2,7 @@ package me.restonic4.citadel.registries;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Registry {
     private static final Map<RegistryKey<?>, Map<AssetLocation, ?>> registries = new HashMap<>();
@@ -39,5 +40,25 @@ public class Registry {
     @SuppressWarnings("unchecked")
     public static <T extends RegistryObject> Map<AssetLocation, T> getRegistry(RegistryKey<T> registryKey) {
         return (Map<AssetLocation, T>) registries.get(registryKey);
+    }
+
+    public static <T extends RegistryObject> boolean isNamespaceLoaded(String id) {
+        for (Map.Entry<RegistryKey<?>, Map<AssetLocation, ?>> data : registries.entrySet()) {
+            Map<AssetLocation, ?> map = data.getValue();
+
+            for (Map.Entry<AssetLocation, ?> registryData : map.entrySet()) {
+                AssetLocation assetLocation = registryData.getKey();
+
+                if (Objects.equals(assetLocation.getNamespace(), id)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static Map<RegistryKey<?>, Map<AssetLocation, ?>> getRegistries() {
+        return registries;
     }
 }
