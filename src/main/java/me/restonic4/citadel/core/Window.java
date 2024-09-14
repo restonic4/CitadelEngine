@@ -184,10 +184,6 @@ public class Window {
 
         IGameLogic clientGameLogic = CitadelLauncher.getInstance().getSettings().getClientGameLogic();
 
-        // Cache
-
-        Scene scene;
-
         while (!glfwWindowShouldClose(glfwWindowAddress)) {
             // Listen for input events
             glfwPollEvents();
@@ -196,7 +192,7 @@ public class Window {
 
             clientGameLogic.update();
 
-            scene = SceneManager.getCurrentScene();
+            Scene scene = SceneManager.getCurrentScene();
             if (scene != null && Time.getDeltaTime() > 0) {
                 Renderer.setShader(defaultShader);
                 scene.update();

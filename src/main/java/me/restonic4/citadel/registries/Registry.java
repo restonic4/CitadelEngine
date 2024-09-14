@@ -1,5 +1,11 @@
 package me.restonic4.citadel.registries;
 
+import me.restonic4.citadel.core.CitadelLauncher;
+import me.restonic4.citadel.core.CitadelSettings;
+import me.restonic4.citadel.exceptions.RegistryObjectException;
+import me.restonic4.citadel.util.CitadelConstants;
+import me.restonic4.citadel.util.StringBuilderHelper;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -8,6 +14,28 @@ public class Registry {
     private static final Map<RegistryKey<?>, Map<AssetLocation, ?>> registries = new HashMap<>();
 
     public static <T extends RegistryObject> T register(RegistryKey<T> registryKey, AssetLocation assetLocation, T object) {
+        if (!isValidNamespace(assetLocation)) {
+            String allowedNamespacesText = "[";
+
+            String[] allowedNamespaces = CitadelLauncher.getInstance().getSettings().getAllowedNamespaces();
+            if (allowedNamespaces != null) {
+                for (int i = 0; i < allowedNamespaces.length; i++) {
+                    allowedNamespacesText = StringBuilderHelper.concatenate(allowedNamespacesText, allowedNamespaces[i]);
+
+                    if (i < allowedNamespaces.length - 1) {
+                        allowedNamespacesText = StringBuilderHelper.concatenate(allowedNamespacesText, ", ");
+                    }
+                }
+            }
+            else {
+                allowedNamespacesText = StringBuilderHelper.concatenate(allowedNamespacesText, "NONE");
+            }
+
+            allowedNamespacesText = StringBuilderHelper.concatenate(allowedNamespacesText, "]");
+
+            throw new RegistryObjectException("The developer of this game disabled the ability to register new objects. Only the following namespaces are allowed: " + allowedNamespacesText);
+        }
+
         Map<AssetLocation, T> registry = getOrCreateRegistry(registryKey);
 
         assetLocation.setRegistryKey(registryKey);
@@ -60,5 +88,30 @@ public class Registry {
 
     public static Map<RegistryKey<?>, Map<AssetLocation, ?>> getRegistries() {
         return registries;
+    }
+
+    public static boolean isValidNamespace(AssetLocation assetLocation) {
+        CitadelSettings citadelSettings = CitadelLauncher.getInstance().getSettings();
+
+        if (citadelSettings.isThirdPartyNamespaceRegistrationAllowed()) {
+            return true;
+        }
+
+        if (assetLocation.getNamespace() == CitadelConstants.REGISTRY_NAMESPACE) {
+            return true;
+        }
+
+        String[] allowedNamespaces = citadelSettings.getAllowedNamespaces();
+        if (allowedNamespaces == null) {
+            return false;
+        }
+
+        for (int i = 0; i < allowedNamespaces.length; i++) {
+            if (assetLocation.getNamespace() == allowedNamespaces[i]) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

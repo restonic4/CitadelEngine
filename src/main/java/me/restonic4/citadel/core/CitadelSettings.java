@@ -1,5 +1,6 @@
 package me.restonic4.citadel.core;
 
+import me.restonic4.NotRecommended;
 import me.restonic4.citadel.registries.built_in.types.Locale;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.GradleUtil;
@@ -9,7 +10,9 @@ public class CitadelSettings {
     private String appName;
     private String[] args;
 
-    private boolean isServer = GradleUtil.SERVER_BUILD;
+    private boolean isServer;
+    private boolean thirdPartyNamespaceRegistrationAllowed;
+    private String[] allowedNamespaces;
 
     public CitadelSettings(IGameLogic clientGameLogic, IGameLogic serverGameLogic, IGameLogic sharedGameLogic, String appName, String[] args) {
         this.clientGameLogic = clientGameLogic;
@@ -17,6 +20,9 @@ public class CitadelSettings {
         this.sharedGameLogic = sharedGameLogic;
         this.appName = appName;
         this.args = args;
+
+        isServer = GradleUtil.SERVER_BUILD;
+        thirdPartyNamespaceRegistrationAllowed = true;
     }
 
     // Configuration
@@ -51,6 +57,19 @@ public class CitadelSettings {
         return this;
     }
 
+    @NotRecommended("It is not recommended to leave this method as false, as it will make it much more difficult for your community to create and use mods in your game.")
+    public CitadelSettings setThirdPartyNamespaceRegistrationAllowed(boolean value) {
+        this.thirdPartyNamespaceRegistrationAllowed = value;
+        return this;
+    }
+
+    @NotRecommended("It is not recommended to leave this method as false, as it will make it much more difficult for your community to create and use mods in your game.")
+    public CitadelSettings setThirdPartyNamespaceRegistrationAllowed(boolean value, String[] allowedNamespaces) {
+        this.thirdPartyNamespaceRegistrationAllowed = value;
+        this.allowedNamespaces = allowedNamespaces;
+        return this;
+    }
+
     // Getters
 
     public IGameLogic getClientGameLogic() {
@@ -75,5 +94,13 @@ public class CitadelSettings {
 
     public boolean isServerSide() {
         return this.isServer;
+    }
+
+    public boolean isThirdPartyNamespaceRegistrationAllowed() {
+        return this.thirdPartyNamespaceRegistrationAllowed;
+    }
+
+    public String[] getAllowedNamespaces() {
+        return this.allowedNamespaces;
     }
 }

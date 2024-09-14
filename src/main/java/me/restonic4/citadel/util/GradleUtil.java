@@ -4,7 +4,7 @@ import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public class GradleUtil {
     // These variables are generated with a gradle task
-    public static final String VERSION = "0.5.27";
+    public static final String VERSION = "0.5.28";
     public static final String APP_NAME = "Citadel";
     public static final Boolean CONSOLE_ENABLED = false;
     public static final Boolean SERVER_BUILD = false;

@@ -1,6 +1,6 @@
 package me.restonic4.citadel.registries;
 
-import me.restonic4.citadel.exceptions.RegistryItemException;
+import me.restonic4.citadel.exceptions.RegistryObjectException;
 
 public abstract class RegistryObject {
     private AssetLocation assetLocation;
@@ -8,7 +8,7 @@ public abstract class RegistryObject {
 
     public AssetLocation getAssetLocation() {
         if (assetLocation == null) {
-            throw new RegistryItemException("This RegistryItem is not populated yet");
+            throw new RegistryObjectException("This RegistryItem is not populated yet");
         }
 
         return this.assetLocation;
