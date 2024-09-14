@@ -16,4 +16,9 @@ public class ClientGameLogic implements IGameLogic {
 
         SceneManager.loadScene(new WorldScene());
     }
+
+    @Override
+    public void update() {
+
+    }
 }

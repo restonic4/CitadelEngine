@@ -26,6 +26,7 @@ public class CitadelLauncher {
 
     private CitadelSettings citadelSettings;
     Thread nettyThread = null;
+    boolean shouldEnd = false;
 
     private CitadelLauncher(CitadelSettings citadelSettings) {
         this.citadelSettings = citadelSettings;
@@ -77,10 +78,11 @@ public class CitadelLauncher {
 
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             killNetworkThreads();
+            shouldEnd = true;
             Logger.getPersistentLogger().onCrash(thread, throwable);
         });
 
-        if (!citadelSettings.isServerSide()) {
+        if (!citadelSettings.isServerSide()) { // Client side
             Logger.log("Launching as client");
 
             Window window = Window.getInstance();
@@ -104,7 +106,7 @@ public class CitadelLauncher {
             window.loop();
             window.cleanup();
         }
-        else {
+        else { // Server side
             Logger.log("Launching as server");
 
             nettyThread = new Thread(() -> {
@@ -119,6 +121,7 @@ public class CitadelLauncher {
             nettyThread.setName("Networking server side");
             nettyThread.start();
 
+            // Java arguments
             for (int i = 0; i < citadelSettings.getArgs().length; i++) {
                 if (Objects.equals(citadelSettings.getArgs()[i], "citadelConsole")) {
                     Thread renderThread = new Thread(() -> {
@@ -138,6 +141,11 @@ public class CitadelLauncher {
             }
 
             this.citadelSettings.getServerGameLogic().start();
+        }
+
+        while (!shouldEnd) {
+            this.citadelSettings.getSharedGameLogic().update();
+            this.citadelSettings.getServerGameLogic().update();
         }
 
         CitadelLifecycleEvents.CITADEL_STOPPED.invoker().onCitadelStopped(CitadelLauncher.getInstance());

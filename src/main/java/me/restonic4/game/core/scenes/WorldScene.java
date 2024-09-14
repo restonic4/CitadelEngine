@@ -3,6 +3,7 @@ package me.restonic4.game.core.scenes;
 import me.restonic4.citadel.files.parsers.mesh.OBJLoader;
 import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.networking.NetworkingManager;
+import me.restonic4.citadel.networking.PacketData;
 import me.restonic4.citadel.networking.PacketType;
 import me.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
@@ -171,8 +172,9 @@ public class WorldScene extends Scene {
         }
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_K)) {
-            Packets.DEFAULT.setData(new String[]{"a", "b", "c", String.valueOf(Time.getRunningTime())});
-            Packets.DEFAULT.send(PacketType.CLIENT_TO_SERVER);
+            Packets.DEFAULT.send(PacketType.CLIENT_TO_SERVER,
+                    new PacketData("a", "b", "c", Time.getRunningTime())
+            );
         }
 
 

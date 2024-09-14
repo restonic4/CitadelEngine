@@ -18,7 +18,7 @@ public class PacketFactory {
         AssetLocation assetLocation = new AssetLocation(rawAssetLocation);
 
         Packet packet = Registry.getRegistryObject(Registries.PACKET, assetLocation);
-        packet.setData(packetData);
+        packet.setData(new PacketData(packetData));
         return packet;
     }
 }

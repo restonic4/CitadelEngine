@@ -12,4 +12,9 @@ public class SharedGameLogic implements IGameLogic {
         RegistryManager.registerRegistrySet(new Sounds());
         RegistryManager.registerCustom();
     }
+
+    @Override
+    public void update() {
+
+    }
 }

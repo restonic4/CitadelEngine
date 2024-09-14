@@ -182,6 +182,8 @@ public class Window {
         Shader defaultShader = new Shader("assets/shaders/default.glsl");
         defaultShader.compile();
 
+        IGameLogic clientGameLogic = CitadelLauncher.getInstance().getSettings().getClientGameLogic();
+
         // Cache
 
         Scene scene;
@@ -191,6 +193,8 @@ public class Window {
             glfwPollEvents();
 
             updateAspectRatio();
+
+            clientGameLogic.update();
 
             scene = SceneManager.getCurrentScene();
             if (scene != null && Time.getDeltaTime() > 0) {

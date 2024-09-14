@@ -16,5 +16,5 @@ public class Packets extends AbstractRegistryInitializer {
     @Override
     public void register() {
         DEFAULT = Registry.register(Registries.PACKET, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "default"), new Packet(PacketType.CLIENT_TO_SERVER));
-        TEST = (TestPacket) Registry.register(Registries.PACKET, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "test"), new TestPacket(PacketType.CLIENT_TO_SERVER));}
+        TEST = (TestPacket) Registry.register(Registries.PACKET, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "test"), new TestPacket(PacketType.SERVER_TO_CLIENT));}
 }

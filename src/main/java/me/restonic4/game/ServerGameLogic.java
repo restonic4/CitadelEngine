@@ -1,6 +1,7 @@
 package me.restonic4.game;
 
 import me.restonic4.citadel.core.IGameLogic;
+import me.restonic4.citadel.networking.PacketData;
 import me.restonic4.citadel.networking.PacketType;
 import me.restonic4.citadel.registries.RegistryManager;
 import me.restonic4.citadel.registries.built_in.managers.Packets;
@@ -24,15 +25,21 @@ public class ServerGameLogic implements IGameLogic {
 
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                Packets.TEST.setData(new String[]{
-                        String.valueOf(RandomUtil.random(-10, 10)),
-                        String.valueOf(RandomUtil.random(-10, 10)),
-                        String.valueOf(RandomUtil.random(-10, 10))
-                });
-                Packets.TEST.send(PacketType.SERVER_TO_ALL_CLIENTS);
+                Packets.TEST.send(PacketType.SERVER_TO_ALL_CLIENTS,
+                        new PacketData(
+                                RandomUtil.random(-10, 10),
+                                RandomUtil.random(-10, 10),
+                                RandomUtil.random(-10, 10)
+                        )
+                );
             } catch (Exception e) {
                 Logger.log(e.getMessage());
             }
         }, 0, 1, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void update() {
+
     }
 }
