@@ -71,6 +71,10 @@ public class CitadelLauncher {
 
         Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());
 
+        if (operatingSystem.isAppRunning("idea64.exe")) {
+            Logger.log("You coding huh?");
+        }
+
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             killNetworkThreads();
             Logger.getPersistentLogger().onCrash(thread, throwable);

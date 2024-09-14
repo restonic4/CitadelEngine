@@ -25,7 +25,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         String received = (String) msg;
         Packet packet = PacketFactory.createPacket(received);
-        packet.execute(ctx);
+        if (packet.getPacketType() == PacketType.CLIENT_TO_SERVER) {
+            packet.execute(ctx);
+        }
     }
 
     @Override

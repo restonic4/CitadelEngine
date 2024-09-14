@@ -8,7 +8,17 @@ import me.restonic4.citadel.util.StringBuilderHelper;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 public class Packet extends RegistryObject {
+    private PacketType packetType;
     private String[] data;
+
+    public Packet(PacketType packetType) {
+        if (packetType == PacketType.SERVER_TO_ALL_CLIENTS) {
+            this.packetType = PacketType.SERVER_TO_CLIENT;
+        }
+        else {
+            this.packetType = packetType;
+        }
+    }
 
     public void execute(ChannelHandlerContext ctx) {
         Logger.log(getMessage());
@@ -38,5 +48,9 @@ public class Packet extends RegistryObject {
         }
 
         return message + "\n";
+    }
+
+    public PacketType getPacketType() {
+        return this.packetType;
     }
 }

@@ -1,5 +1,6 @@
 package me.restonic4.citadel.registries.built_in.managers;
 
+import me.restonic4.citadel.networking.PacketType;
 import me.restonic4.citadel.networking.packets.TestPacket;
 import me.restonic4.citadel.registries.AbstractRegistryInitializer;
 import me.restonic4.citadel.registries.AssetLocation;
@@ -14,6 +15,6 @@ public class Packets extends AbstractRegistryInitializer {
 
     @Override
     public void register() {
-        DEFAULT = Registry.register(Registries.PACKET, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "default"), new Packet());
-        TEST = (TestPacket) Registry.register(Registries.PACKET, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "test"), new TestPacket());}
+        DEFAULT = Registry.register(Registries.PACKET, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "default"), new Packet(PacketType.CLIENT_TO_SERVER));
+        TEST = (TestPacket) Registry.register(Registries.PACKET, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "test"), new TestPacket(PacketType.CLIENT_TO_SERVER));}
 }
