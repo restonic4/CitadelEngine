@@ -2,6 +2,7 @@ package me.restonic4.citadel.networking;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import me.restonic4.citadel.exceptions.NetworkException;
 import me.restonic4.citadel.util.StringBuilderHelper;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
@@ -13,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MessageBusImpl implements MessageBus {
     private ChannelHandlerContext serverContext;
     private final Map<Integer, ChannelHandlerContext> clientContexts = new ConcurrentHashMap<>();
+    private final int maxLength = 256;
 
     @Override
     public void registerHandler(int clientId, ChannelHandlerContext ctx) {
@@ -32,6 +34,7 @@ public class MessageBusImpl implements MessageBus {
     @Override
     public void sendMessageToClient(int clientId, String message) {
         killStoppedContexts();
+        throwIfTooBig(message);
         ChannelHandlerContext ctx = clientContexts.get(clientId);
         if (ctx != null) {
             ctx.writeAndFlush(Unpooled.copiedBuffer(message.getBytes()));
@@ -41,6 +44,7 @@ public class MessageBusImpl implements MessageBus {
     @Override
     public void sendMessageToAllClients(String message) {
         killStoppedContexts();
+        throwIfTooBig(message);
         for (ChannelHandlerContext ctx : clientContexts.values()) {
             ctx.writeAndFlush(Unpooled.copiedBuffer(message.getBytes()));
         }
@@ -49,7 +53,14 @@ public class MessageBusImpl implements MessageBus {
     @Override
     public void sendMessageToServer(String message) {
         killStoppedContexts();
+        throwIfTooBig(message);
         serverContext.writeAndFlush(Unpooled.copiedBuffer(message.getBytes()));
+    }
+
+    private void throwIfTooBig(String message) {
+        if (message.length() > maxLength) {
+            throw new NetworkException("Packet too big! " + message);
+        }
     }
 
     private void killStoppedContexts() {

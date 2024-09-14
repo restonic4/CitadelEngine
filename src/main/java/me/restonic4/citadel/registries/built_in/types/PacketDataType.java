@@ -23,4 +23,8 @@ public class PacketDataType<T> extends RegistryObject {
     public T parse(String value) {
         return null;
     }
+
+    public String parseToString(Object object) {
+        return object.toString();
+    }
 }

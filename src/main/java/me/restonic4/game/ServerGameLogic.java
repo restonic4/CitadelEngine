@@ -12,6 +12,7 @@ import me.restonic4.citadel.util.math.RandomUtil;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.game.core.scenes.WorldScene;
 import me.restonic4.game.core.world.sounds.Sounds;
+import org.joml.Vector3f;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -27,9 +28,11 @@ public class ServerGameLogic implements IGameLogic {
             try {
                 Packets.TEST.send(PacketType.SERVER_TO_ALL_CLIENTS,
                         new PacketData(
-                                RandomUtil.random(-10, 10),
-                                RandomUtil.random(-10, 10),
-                                RandomUtil.random(-10, 10)
+                                new Vector3f(
+                                        RandomUtil.random(-10, 10),
+                                        RandomUtil.random(-10, 10),
+                                        RandomUtil.random(-10, 10)
+                                )
                         )
                 );
             } catch (Exception e) {

@@ -25,7 +25,7 @@ public class PacketData {
                 throw new NetworkException("Illegal data found on packet. " + tClass.toString() + " is not allowed!");
             }
 
-            data[i] = packetDataType.getKey() + "_" + object.toString();
+            data[i] = packetDataType.getKey() + "_" + packetDataType.parseToString(object);
         }
     }
 
@@ -51,7 +51,7 @@ public class PacketData {
 
             if (parts[0].equals(packetDataType.getKey())) {
                 String value = parts[1];
-                Logger.log(value);
+
                 T convertedValue = packetDataType.parse(value);
                 if (convertedValue != null) {
                     resultList.add(convertedValue);
