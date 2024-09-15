@@ -1,19 +1,32 @@
 package me.restonic4.citadel.registries.built_in.types;
 
+import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.registries.RegistryObject;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
+
+import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.ARBBindlessTexture.*;
 import static org.lwjgl.opengl.GL11.glDeleteTextures;
 import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL32.glFramebufferTexture;
 
 public class FrameBuffer extends RegistryObject {
+    private int width, height;
     private boolean generated;
     private int frameBufferId, textureId;
     private long textureHandlerId;
 
-    public FrameBuffer() {}
+    public FrameBuffer() {
+        this.width = Window.getInstance().getWidth();
+        this.height = Window.getInstance().getHeight();
+    }
+
+    public FrameBuffer(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 
     public void generate() {
         if (generated) {
@@ -28,15 +41,19 @@ public class FrameBuffer extends RegistryObject {
 
         textureId = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, (ByteBuffer) null);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureId, 0);
 
         textureHandlerId = glGetTextureHandleARB(textureId);
         glMakeTextureHandleResidentARB(textureHandlerId);
 
         Logger.log("FrameBuffer generated: " + this.getAssetLocation());
+    }
+
+    public void bind() {
+       bind(width, height);
     }
 
     public void bind(int width, int height) {
@@ -47,7 +64,6 @@ public class FrameBuffer extends RegistryObject {
         glBindTexture(GL_TEXTURE_2D, 0);//To make sure the texture isn't bound
         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
         glViewport(0, 0, width, height);
-
     }
 
     public void cleanup() {
