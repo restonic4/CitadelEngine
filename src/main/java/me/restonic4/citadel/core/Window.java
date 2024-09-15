@@ -16,6 +16,7 @@ import me.restonic4.citadel.registries.AssetLocation;
 import me.restonic4.citadel.registries.Registries;
 import me.restonic4.citadel.registries.Registry;
 import me.restonic4.citadel.registries.built_in.types.ImGuiScreen;
+import me.restonic4.citadel.render.FrameBufferManager;
 import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.render.Shader;
 import me.restonic4.citadel.sound.SoundManager;
@@ -175,6 +176,12 @@ public class Window {
             screen.start();
         }
 
+        if (!CitadelLauncher.getInstance().getSettings().isFrameBuffersPreGenerationDisabled()) {
+            FrameBufferManager.preGenerateFrameBuffers();
+        }
+
+        FrameBufferManager.unbindCurrentFrameBuffer();
+
         CitadelLifecycleEvents.CITADEL_STARTED.invoker().onCitadelStarted(CitadelLauncher.getInstance(), this);
     }
 
@@ -290,6 +297,7 @@ public class Window {
 
         SceneManager.unLoadCurrentScene();
         SoundManager.getInstance().cleanup();
+        FrameBufferManager.cleanup();
 
         // Clean ImGui
         imGuiGl3.shutdown();

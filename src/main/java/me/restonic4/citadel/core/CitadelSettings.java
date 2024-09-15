@@ -13,6 +13,7 @@ public class CitadelSettings {
     private boolean isServer;
     private boolean thirdPartyNamespaceRegistrationAllowed;
     private String[] allowedNamespaces;
+    private boolean frameBuffersPreGenerationDisabled;
 
     public CitadelSettings(IGameLogic clientGameLogic, IGameLogic serverGameLogic, IGameLogic sharedGameLogic, String appName, String[] args) {
         this.clientGameLogic = clientGameLogic;
@@ -21,8 +22,9 @@ public class CitadelSettings {
         this.appName = appName;
         this.args = args;
 
-        isServer = GradleUtil.SERVER_BUILD;
-        thirdPartyNamespaceRegistrationAllowed = true;
+        this.isServer = GradleUtil.SERVER_BUILD;
+        this.thirdPartyNamespaceRegistrationAllowed = true;
+        this.frameBuffersPreGenerationDisabled = false;
     }
 
     // Configuration
@@ -70,6 +72,11 @@ public class CitadelSettings {
         return this;
     }
 
+    public CitadelSettings disableFrameBuffersPreGeneration(boolean value) {
+        this.frameBuffersPreGenerationDisabled = value;
+        return this;
+    }
+
     // Getters
 
     public IGameLogic getClientGameLogic() {
@@ -102,5 +109,9 @@ public class CitadelSettings {
 
     public String[] getAllowedNamespaces() {
         return this.allowedNamespaces;
+    }
+
+    public boolean isFrameBuffersPreGenerationDisabled() {
+        return this.frameBuffersPreGenerationDisabled;
     }
 }

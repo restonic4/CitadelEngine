@@ -67,6 +67,7 @@ public class CitadelLauncher {
         RegistryManager.registerBuiltInRegistrySet(new ImGuiScreens());
         RegistryManager.registerBuiltInRegistrySet(new PacketDataTypes());
         RegistryManager.registerBuiltInRegistrySet(new Packets());
+        RegistryManager.registerBuiltInRegistrySet(new FrameBuffers());
         RegistryManager.registerBuiltIn();
 
         this.citadelSettings.getSharedGameLogic().start();
