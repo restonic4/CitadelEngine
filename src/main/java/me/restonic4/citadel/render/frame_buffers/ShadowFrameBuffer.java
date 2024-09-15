@@ -25,7 +25,7 @@ public class ShadowFrameBuffer extends FrameBuffer {
         setFrameBufferId(glGenFramebuffers());
         glBindFramebuffer(GL_FRAMEBUFFER, getFrameBufferId());
         glDrawBuffer(GL_NONE);
-        glReadBuffer(GL_NONE);
+        //glReadBuffer(GL_NONE);
 
         setTextureId(glGenTextures());
         glBindTexture(GL_TEXTURE_2D, getTextureId());

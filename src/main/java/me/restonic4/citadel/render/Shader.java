@@ -4,6 +4,7 @@ import me.restonic4.ClientSide;
 import me.restonic4.citadel.exceptions.RenderException;
 import me.restonic4.citadel.platform.PlatformManager;
 import me.restonic4.citadel.files.FileManager;
+import me.restonic4.citadel.registries.RegistryObject;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
@@ -18,7 +19,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
 
 @ClientSide
-public class Shader {
+public class Shader extends RegistryObject {
     private String filepath;
 
     private int shaderProgramID;
@@ -26,10 +27,17 @@ public class Shader {
     private String fragmentSource;
     private boolean isUsed = false;
 
-    public Shader(String filepath) {
-        filepath = FileManager.toResources(filepath);
+    public Shader() {}
 
-        this.filepath = filepath;
+    @Override
+    public void onPopulate() {
+        super.onPopulate();
+
+        create();
+    }
+
+    private void create() {
+        this.filepath = FileManager.toResources(getAssetPath());
 
         try {
             // Reading the shader file and splitting it into a vertex and fragment shader

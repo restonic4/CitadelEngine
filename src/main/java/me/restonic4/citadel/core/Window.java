@@ -15,6 +15,7 @@ import me.restonic4.citadel.input.MouseListener;
 import me.restonic4.citadel.registries.AssetLocation;
 import me.restonic4.citadel.registries.Registries;
 import me.restonic4.citadel.registries.Registry;
+import me.restonic4.citadel.registries.built_in.managers.Shaders;
 import me.restonic4.citadel.registries.built_in.types.ImGuiScreen;
 import me.restonic4.citadel.render.FrameBufferManager;
 import me.restonic4.citadel.render.Renderer;
@@ -186,8 +187,11 @@ public class Window {
     }
 
     public void loop() {
-        Shader defaultShader = new Shader("assets/shaders/default.glsl");
-        defaultShader.compile();
+        Map<AssetLocation, Shader> shaders = Registry.getRegistry(Registries.SHADER);
+        for (Map.Entry<AssetLocation, Shader> entry : shaders.entrySet()) {
+            Shader shader = entry.getValue();
+            shader.compile();
+        }
 
         IGameLogic clientGameLogic = CitadelLauncher.getInstance().getSettings().getClientGameLogic();
 
@@ -201,7 +205,6 @@ public class Window {
 
             Scene scene = SceneManager.getCurrentScene();
             if (scene != null && Time.getDeltaTime() > 0) {
-                Renderer.setShader(defaultShader);
                 scene.update();
             }
 

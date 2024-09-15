@@ -2,6 +2,7 @@ package me.restonic4.citadel.render;
 
 import me.restonic4.ClientSide;
 import me.restonic4.citadel.registries.built_in.managers.FrameBuffers;
+import me.restonic4.citadel.registries.built_in.managers.Shaders;
 import me.restonic4.citadel.util.ArrayHelper;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -196,8 +197,12 @@ public class RenderBatch {
 
         updateIndices();
 
+        renderShadowMap();
+
         // Use shader
-        Shader shader = Renderer.getCurrentShader();
+        Shader shader = Shaders.MAIN;
+        shader.use();
+
         shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
         shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());
         // TODO: I think this should not be updated every frame (Lights)
@@ -237,6 +242,16 @@ public class RenderBatch {
         glDisableVertexAttribArray(5);
 
         glBindVertexArray(0);
+
+        shader.detach();
+    }
+
+    private void renderShadowMap() {
+        Shader shader = Shaders.SHADOWS;
+        shader.use();
+
+        /*shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
+        shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());*/
 
         shader.detach();
     }

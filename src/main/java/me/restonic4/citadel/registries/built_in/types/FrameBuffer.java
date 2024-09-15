@@ -80,7 +80,7 @@ public class FrameBuffer extends RegistryObject {
     }
 
     public boolean isGenerated() {
-        return this.isGenerated();
+        return this.generated;
     }
 
     public void setGenerated() {

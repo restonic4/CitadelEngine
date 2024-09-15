@@ -60,6 +60,7 @@ public class CitadelLauncher {
 
         SoundManager.getInstance().init();
 
+        RegistryManager.registerBuiltInRegistrySet(new Shaders());
         RegistryManager.registerBuiltInRegistrySet(new Sounds());
         RegistryManager.registerBuiltInRegistrySet(new ProfilerStats());
         RegistryManager.registerBuiltInRegistrySet(new Locales());

@@ -18,7 +18,6 @@ import static org.lwjgl.opengl.GL11.*;
 public class Renderer {
     private List<RenderBatch> staticBatches, dynamicBatches;
 
-    private static Shader currentShader;
     private Scene scene;
 
     // This is just a stat
@@ -76,8 +75,6 @@ public class Renderer {
         dirtyModifiedTotal = 0;
         dirtySkippedTotal = 0;
 
-        currentShader.use();
-
         //Background, blue :D
         glClearColor(0.267f, 0.741f, 1, 1.0f);
         //glClearColor(0, 0, 0, 1.0f);
@@ -127,14 +124,6 @@ public class Renderer {
             dirtyModifiedTotal += batch.getDirtyModified();
             dirtySkippedTotal += batch.getDirtySkipped();
         }
-    }
-
-    public static void setShader(Shader shader) {
-        currentShader = shader;
-    }
-
-    public static Shader getCurrentShader() {
-        return currentShader;
     }
 
     public int getDrawCalls() {
