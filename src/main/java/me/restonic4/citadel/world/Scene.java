@@ -8,6 +8,7 @@ import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.world.object.components.LightComponent;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +134,16 @@ public abstract class Scene {
         }
 
         return colors;
+    }
+
+    public Vector4f[] getLightAttenuationFactors() {
+        Vector4f[] attenuationFactors = new Vector4f[getLightsAmount()];
+
+        for (int i = 0; i < attenuationFactors.length; i++) {
+            attenuationFactors[i] = this.lightComponents.get(i).getLightType().getAttenuationFactorsComplete();
+        }
+
+        return attenuationFactors;
     }
 
     public int getLightsAmount() {

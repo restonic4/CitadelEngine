@@ -38,7 +38,7 @@ public class ServerGameLogic implements IGameLogic {
             } catch (Exception e) {
                 Logger.log(e.getMessage());
             }
-        }, 0, 1, TimeUnit.SECONDS);
+        }, 0, 250, TimeUnit.MILLISECONDS);
     }
 
     @Override

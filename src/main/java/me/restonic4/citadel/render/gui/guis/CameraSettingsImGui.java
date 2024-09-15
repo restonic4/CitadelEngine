@@ -3,6 +3,10 @@ package me.restonic4.citadel.render.gui.guis;
 import imgui.ImGui;
 import me.restonic4.ClientSide;
 import me.restonic4.citadel.util.CitadelConstants;
+import me.restonic4.citadel.world.Scene;
+import me.restonic4.citadel.world.SceneManager;
+import me.restonic4.citadel.world.object.components.LightComponent;
+import org.joml.Vector3f;
 
 @ClientSide
 public class CameraSettingsImGui extends ToggleableImGuiScreen {

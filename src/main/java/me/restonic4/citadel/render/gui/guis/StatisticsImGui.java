@@ -26,7 +26,7 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
     int graphWidth = 500;
     int graphHeight = 200;
 
-    LineGraphImGui fpsGraph = new LineGraphImGui("FPS", 1000, graphWidth, graphHeight, 1000, 300);
+    LineGraphImGui fpsGraph = new LineGraphImGui("FPS", 1000, graphWidth, graphHeight, 1000, true);
     LineGraphImGui renderingGraph = new LineGraphImGui("Rendering", 1000, graphWidth, graphHeight, 1000, true);
 
     static {

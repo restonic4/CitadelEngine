@@ -14,18 +14,22 @@ uniform mat4 uProjection;
 uniform mat4 uView;
 uniform vec3 uLightPos[4]; // Max lights
 uniform vec3 uLightColors[4];
+uniform vec4 uLightAttenuationFactors[4];
 uniform int uLightAmount;
 
 out vec4 fColor;
 out vec2 fUV;
 flat out uvec2 fTextureHandle;
 out vec3 normalizedNormal;
-out vec3 toLightVector[4];
+out vec3 toLightVectorNormaliced[4];
 out vec3 toCameraVector;
+out vec3 fLightPos[4];
+out vec3 toLightVector[4];
 out vec3 reflectedLightVector[4];
 out vec2 fReflectivity;
 flat out int fLightAmount;
 flat out vec3 fLightColors[4];
+flat out vec4 fLightAttenuationFactors[4];
 
 void main()
 {
@@ -37,6 +41,8 @@ void main()
     fReflectivity = aReflectivity;
     fLightAmount = uLightAmount;
     fLightColors = uLightColors;
+    fLightAttenuationFactors = uLightAttenuationFactors;
+    fLightPos = uLightPos;
 
     // Lighting
 
@@ -45,9 +51,10 @@ void main()
     normalizedNormal = normalize(aNormal);
 
     for (int i = 0; i < uLightAmount; i++) {
-        toLightVector[i] = normalize(uLightPos[i] - aPos);
+        toLightVector[i] = uLightPos[i] - aPos;
+        toLightVectorNormaliced[i] = normalize(toLightVector[i]);
 
-        vec3 lightDirection = -toLightVector[i];
+        vec3 lightDirection = -toLightVectorNormaliced[i];
         reflectedLightVector[i] = reflect(lightDirection, normalizedNormal);
     }
 
@@ -67,12 +74,15 @@ in vec4 fColor;
 in vec2 fUV;
 flat in uvec2 fTextureHandle;
 in vec3 normalizedNormal;
+in vec3 fLightPos[4];
 in vec3 toLightVector[4];
+in vec3 toLightVectorNormaliced[4];
 in vec3 toCameraVector;
 in vec3 reflectedLightVector[4];
 in vec2 fReflectivity;
 flat in int fLightAmount;
 flat in vec3 fLightColors[4];
+flat in vec4 fLightAttenuationFactors[4]; // id, x, y, z
 
 out vec4 color;
 
@@ -93,18 +103,30 @@ void main()
 
     // Lights
 
-    float minLight = 0.1;
+    float minLight = 0.05;
+    float minAttenuationConstantFactor = 0.5;
 
     vec3 lightResult = vec3(0.0);
     vec3 lightSpecularResult = vec3(0.0);
 
     for (int i = 0; i < fLightAmount; i++) {
-        float lightBrightnessFactor = max(0, dot(normalizedNormal, toLightVector[i]));
+        float attenuationFactor = 1.0;
+        vec3 lightDir;
+
+        if (fLightAttenuationFactors[i].x == 0) { // Directional light
+            lightDir = normalize(fLightPos[i]);
+        } else if (fLightAttenuationFactors[i].x == 1) { // Point light
+            float distance = length(toLightVector[i]);
+            attenuationFactor = max(fLightAttenuationFactors[i].y, minAttenuationConstantFactor) + (fLightAttenuationFactors[i].z * distance) + (fLightAttenuationFactors[i].w * distance * distance); // Attenuation formula
+            lightDir = toLightVectorNormaliced[i];
+        }
+
+        float lightBrightnessFactor = max(0, dot(normalizedNormal, lightDir));
         float lightSpecularFactor = max(0, dot(reflectedLightVector[i], toCameraVector));
         float lightDampedFactor = pow(lightSpecularFactor, fReflectivity.y);
 
-        lightResult += lightBrightnessFactor * fLightColors[i];
-        lightSpecularResult += lightDampedFactor * fReflectivity.x * fLightColors[i];
+        lightResult += (lightBrightnessFactor * fLightColors[i]) / attenuationFactor;
+        lightSpecularResult += (lightDampedFactor * fReflectivity.x * fLightColors[i]) / attenuationFactor;
     }
 
     lightResult = max(lightResult, minLight);

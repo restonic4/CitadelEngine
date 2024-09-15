@@ -81,6 +81,8 @@ public class CitadelLauncher {
             killNetworkThreads();
             shouldEnd = true;
             Logger.getPersistentLogger().onCrash(thread, throwable);
+            throwable.printStackTrace();
+            //throw new RuntimeException(throwable.getMessage());
         });
 
         if (!citadelSettings.isServerSide()) { // Client side

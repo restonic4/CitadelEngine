@@ -128,7 +128,9 @@ public class WorldScene extends Scene {
         citadelMesh.setTexture(new Texture("assets/textures/persus.png"));
 
         GameObject test = new GameObject(false);
-        test.addComponent(new LightComponent(LightComponent.LightType.POINT));
+        LightComponent lightComponent = new LightComponent(LightComponent.LightType.POINT);
+        lightComponent.getLightType().adjustAttenuationByRange(1);
+        test.addComponent(lightComponent);
         test.addComponent(new ModelRendererComponent(citadelMesh));
         test.setName("test");
         test.transform.setPosition(0, 0, 0);
