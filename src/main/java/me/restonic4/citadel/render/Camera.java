@@ -47,6 +47,28 @@ public abstract class Camera {
         return this.projectionMatrix;
     }
 
+    public Vector3f[] extractFrustumCorners() {
+        Matrix4f invProjView = new Matrix4f();
+        getProjectionMatrix().mul(getViewMatrix(), invProjView).invert();
+
+        Vector3f[] frustumCorners = new Vector3f[8];
+        frustumCorners[0] = new Vector3f(-1, -1, -1); // Near-bottom-left
+        frustumCorners[1] = new Vector3f(1, -1, -1);  // Near-bottom-right
+        frustumCorners[2] = new Vector3f(1, 1, -1);   // Near-top-right
+        frustumCorners[3] = new Vector3f(-1, 1, -1);  // Near-top-left
+
+        frustumCorners[4] = new Vector3f(-1, -1, 1);  // Far-bottom-left
+        frustumCorners[5] = new Vector3f(1, -1, 1);   // Far-bottom-right
+        frustumCorners[6] = new Vector3f(1, 1, 1);    // Far-top-right
+        frustumCorners[7] = new Vector3f(-1, 1, 1);   // Far-top-left
+
+        for (int i = 0; i < 8; i++) {
+            frustumCorners[i].mulProject(invProjView);
+        }
+
+        return frustumCorners;
+    }
+
     public void load() {
         getViewMatrix();
         getProjectionMatrix();

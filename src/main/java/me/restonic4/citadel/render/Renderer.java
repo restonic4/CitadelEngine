@@ -97,7 +97,7 @@ public class Renderer {
             projection = camera.fakeProjectionMatrix;
             view = camera.fakeViewMatrix;
 
-            Vector3f[] vertex = FrustumRenderer.extractFrustumCorners(projection, view);
+            Vector3f[] vertex = camera.extractFrustumCorners();
             FrustumRenderer.renderFrustum(vertex);
         }
 
