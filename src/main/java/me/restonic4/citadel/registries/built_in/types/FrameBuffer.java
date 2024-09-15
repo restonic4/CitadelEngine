@@ -2,6 +2,7 @@ package me.restonic4.citadel.registries.built_in.types;
 
 import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.registries.RegistryObject;
+import me.restonic4.citadel.render.FrameBufferManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.nio.ByteBuffer;
@@ -49,6 +50,8 @@ public class FrameBuffer extends RegistryObject {
         textureHandlerId = glGetTextureHandleARB(textureId);
         glMakeTextureHandleResidentARB(textureHandlerId);
 
+        FrameBufferManager.unbindCurrentFrameBuffer();
+
         Logger.log("FrameBuffer generated: " + this.getAssetLocation());
     }
 
@@ -74,5 +77,53 @@ public class FrameBuffer extends RegistryObject {
         glDeleteFramebuffers(frameBufferId);
         glDeleteTextures(textureId);
         glMakeTextureHandleNonResidentARB(textureHandlerId);
+    }
+
+    public boolean isGenerated() {
+        return this.isGenerated();
+    }
+
+    public void setGenerated() {
+        this.generated = true;
+    }
+
+    public int getFrameBufferId() {
+        return this.frameBufferId;
+    }
+
+    public void setFrameBufferId(int id) {
+        this.frameBufferId = id;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getTextureId() {
+        return textureId;
+    }
+
+    public void setTextureId(int textureId) {
+        this.textureId = textureId;
+    }
+
+    public long getTextureHandlerId() {
+        return textureHandlerId;
+    }
+
+    public void setTextureHandlerId(long textureHandlerId) {
+        this.textureHandlerId = textureHandlerId;
     }
 }

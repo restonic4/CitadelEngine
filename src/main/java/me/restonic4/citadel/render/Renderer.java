@@ -79,8 +79,8 @@ public class Renderer {
         currentShader.use();
 
         //Background, blue :D
-        //glClearColor(0.267f, 0.741f, 1, 1.0f);
-        glClearColor(0, 0, 0, 1.0f);
+        glClearColor(0.267f, 0.741f, 1, 1.0f);
+        //glClearColor(0, 0, 0, 1.0f);
 
         // Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

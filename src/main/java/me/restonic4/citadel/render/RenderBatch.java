@@ -1,6 +1,7 @@
 package me.restonic4.citadel.render;
 
 import me.restonic4.ClientSide;
+import me.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import me.restonic4.citadel.util.ArrayHelper;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
