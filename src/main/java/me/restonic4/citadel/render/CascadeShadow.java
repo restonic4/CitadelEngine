@@ -1,6 +1,7 @@
 package me.restonic4.citadel.render;
 
 import me.restonic4.citadel.render.cameras.Camera;
+import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.world.object.components.LightComponent;
@@ -20,17 +21,13 @@ public class CascadeShadow {
         projViewMatrix = new Matrix4f();
     }
 
-    public static void updateCascadeShadows(List<CascadeShadow> cascadeShadows) {
-        Scene scene = SceneManager.getCurrentScene();
-        Camera camera = scene.getCamera();
-
-        Matrix4f viewMatrix = camera.getViewMatrix();
-        Matrix4f projMatrix = camera.getProjectionMatrix();
-
-        if (scene.getLightComponentsOfType(LightComponent.LightType.DIRECTIONAL).size() <= 0) {
-            return; // fuc
+    public static void updateCascadeShadows(List<CascadeShadow> cascadeShadows, Scene scene) {
+        if(scene.getLightComponentsOfType(LightComponent.LightType.DIRECTIONAL).isEmpty()) {
+            return;
         }
 
+        Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
+        Matrix4f projMatrix = scene.getCamera().getProjectionMatrix();
         Vector4f lightPos = new Vector4f(scene.getLightComponentsOfType(LightComponent.LightType.DIRECTIONAL).get(0).getDirection(), 0);
 
         float cascadeSplitLambda = 0.95f;
@@ -116,6 +113,9 @@ public class CascadeShadow {
             cascadeShadow.projViewMatrix = lightOrthoMatrix.mul(lightViewMatrix);
 
             lastSplitDist = cascadeSplits[i];
+
+            // Debug
+            DebugManager.setCascadeShadowFrustumVertices(frustumCorners);
         }
     }
 

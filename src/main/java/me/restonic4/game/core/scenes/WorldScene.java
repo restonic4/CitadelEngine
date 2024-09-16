@@ -11,6 +11,7 @@ import me.restonic4.citadel.render.Texture;
 import me.restonic4.citadel.render.cameras.OrthographicCamera;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
+import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
@@ -26,6 +27,7 @@ import me.restonic4.citadel.render.cameras.PerspectiveCamera;
 import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.math.RandomUtil;
 import me.restonic4.game.core.world.sounds.Sounds;
+import org.joml.Math;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -40,9 +42,10 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
 public class WorldScene extends Scene {
     SoundSource music;
 
-    List<GameObject> moving = new ArrayList<>();
+    List<GameObject> debugCascadePoints = new ArrayList<>();
     public GameObject test2;
     public OrthographicCamera shadowMapCamera;
+    public GameObject sun;
 
     @Override
     public void init() {
@@ -174,13 +177,30 @@ public class WorldScene extends Scene {
         GameObject light = new GameObject(false);
         //light.transform.setPosition(0, 100, 0);
         light.transform.setPosition(0, 1, 1);
+        light.addComponent(new ModelRendererComponent(planeMesh));
         LightComponent lightComponent1 = new LightComponent(LightComponent.LightType.DIRECTIONAL);
         //lightComponent1.getLightType().adjustAttenuationByRange(50);
         light.addComponent(lightComponent1);
         this.addGameObject(light);
 
+        sun = light;
+
         //DebugManager.setVerticesMode(true);
         //DebugManager.setWireFrameMode(true);
+
+        for (int i = 0; i < 8; i++) {
+            GameObject debugCascadePoint = new GameObject(false);
+            debugCascadePoint.setName("debugCascadePoint");
+
+            Mesh debugMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
+
+            debugCascadePoint.addComponent(new ModelRendererComponent(debugMesh));
+
+            debugCascadePoint.transform.setPosition(-100, i * 2, -100);
+
+            this.addGameObject(debugCascadePoint);
+            debugCascadePoints.add(debugCascadePoint);
+        }
 
         super.init();
     }
@@ -199,6 +219,21 @@ public class WorldScene extends Scene {
 		var q = Quaternion.FromToRotation(Vector3.forward, v);
 		return Quaternion.FromToRotation(v, dir) * q;
          */
+        float factor = (float) Time.getRunningTime();
+        sun.transform.setPosition(0, Math.cos(factor), Math.sin(factor));
+
+        Vector3f[] vertices = DebugManager.getCascadeShadowFrustumVertices();
+        if (vertices != null && vertices.length > 0) {
+            for (int i = 0; i < debugCascadePoints.size(); i++) {
+                GameObject gameObject = debugCascadePoints.get(i);
+                gameObject.transform.setPosition(vertices[i].x, vertices[i].y, vertices[i].z);
+
+                float distance = getCamera().transform.getPosition().distance(gameObject.transform.getPosition());
+                float smoothed = Math.min(Math.max(distance, 0.5f), 10);
+
+                gameObject.transform.setScale(smoothed, smoothed, smoothed);
+            }
+        }
 
         if (KeyBinds.CRASH.isPressed()) {
             Logger.log("Size: " + renderer.getByteSize());

@@ -1,6 +1,7 @@
 package me.restonic4.citadel.render;
 
 import me.restonic4.ClientSide;
+import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.exceptions.RenderException;
 import me.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import me.restonic4.citadel.render.cameras.Camera;
@@ -99,32 +100,11 @@ public class Renderer {
         FrustumCullingFilter.getInstance().updateFrustum(projection, view);
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS);
 
-        // Render batches
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        renderShadowBatches(this.staticBatches);
-        renderShadowBatches(this.dynamicBatches);
-
         glClearColor(0.267f, 0.741f, 1, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Render batches
         renderBatches(this.staticBatches);
         renderBatches(this.dynamicBatches);
-    }
-
-    private <T extends RenderBatch> void renderShadowBatches(List<T> batches) {
-        for (int i = 0; i < batches.size(); i++) {
-            RenderBatch batch = batches.get(i);
-
-            if (batch.shouldBeSkipped()) {
-                drawCallsSkipped++;
-                continue;
-            }
-
-            batch.renderShadowMap();
-
-            drawCallsConsumed++;
-        }
     }
 
     private <T extends RenderBatch> void renderBatches(List<T> batches) {
@@ -135,6 +115,13 @@ public class Renderer {
                 drawCallsSkipped++;
                 continue;
             }
+
+            batch.update();
+
+            batch.renderShadowMap();
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glViewport(0, 0, Window.getInstance().getWidth(), Window.getInstance().getHeight());
 
             batch.render();
 

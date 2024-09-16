@@ -21,13 +21,19 @@ import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
 @ClientSide
 public class Shader extends RegistryObject {
     private String filepath;
+    private String[] desiredUniforms;
 
     private int shaderProgramID, vertexID, fragmentID;
     private String vertexSource;
     private String fragmentSource;
+    private UniformsMap uniformsMap;
     private boolean isUsed = false;
 
     public Shader() {}
+
+    public Shader(String[] uniforms) {
+        this.desiredUniforms = uniforms;
+    }
 
     @Override
     public void onPopulate() {
@@ -60,6 +66,14 @@ public class Shader extends RegistryObject {
         } catch(IOException e) {
             e.printStackTrace();
             throw new RenderException("Error: Could not open file for shader: '" + filepath + "'");
+        }
+    }
+
+    public void generateUniforms() {
+        Logger.log("Generating uniforms for " + shaderProgramID);
+
+        for (int i = 0; i < desiredUniforms.length; i++) {
+            uniformsMap.createUniform(desiredUniforms[i]);
         }
     }
 
@@ -127,6 +141,10 @@ public class Shader extends RegistryObject {
 
             throw new RenderException("Error linking vertex and fragment shader");
         }
+
+        // Starting the uniform map
+        uniformsMap = new UniformsMap(shaderProgramID);
+        generateUniforms();
     }
 
     public void use() {
@@ -151,125 +169,7 @@ public class Shader extends RegistryObject {
         glDeleteShader(fragmentID);
     }
 
-    private FloatBuffer mat4Buffer = BufferUtils.createFloatBuffer(CitadelConstants.MATRIX4F_CAPACITY);
-    public void uploadMat4f(String varName, Matrix4f mat4) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        mat4Buffer.clear();
-        mat4.get(mat4Buffer);
-
-        glUniformMatrix4fv(varLocation, false, mat4Buffer);
-    }
-
-    FloatBuffer mat3Buffer = BufferUtils.createFloatBuffer(CitadelConstants.MATRIX3F_CAPACITY);
-    public void uploadMat3f(String varName, Matrix3f mat3) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        // Convert the matrix into a "simple float array"
-        mat3Buffer.clear();
-        mat3.get(mat3Buffer);
-
-        glUniformMatrix3fv(varLocation, false, mat3Buffer);
-    }
-
-    public void uploadVec4f(String varName, Vector4f vec) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        glUniform4f(varLocation, vec.x, vec.y, vec.z, vec.w);
-    }
-
-    private FloatBuffer vec4Buffer = null;
-    public void uploadVec4fArray(String varName, Vector4f[] vecArray) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        if (vec4Buffer == null || vec4Buffer.capacity() < vecArray.length * 4) {
-            vec4Buffer = BufferUtils.createFloatBuffer(vecArray.length * 4);
-        }
-
-        for (int i = 0; i < vecArray.length; i++) {
-            Vector4f vec = vecArray[i];
-            if (vec != null) {
-                vec4Buffer.put(vec.x).put(vec.y).put(vec.z).put(vec.w);
-            }
-        }
-
-        vec4Buffer.flip();
-
-        glUniform4fv(varLocation, vec4Buffer);
-    }
-
-    public void uploadVec3f(String varName, Vector3f vec) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        glUniform3f(varLocation, vec.x, vec.y, vec.z);
-    }
-
-    private FloatBuffer vec3Buffer = null;
-    public void uploadVec3fArray(String varName, Vector3f[] vecArray) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        if (vec3Buffer == null || vec3Buffer.capacity() < vecArray.length * 3) {
-            vec3Buffer = BufferUtils.createFloatBuffer(vecArray.length * 3);
-        }
-
-        for (int i = 0; i < vecArray.length; i++) {
-            Vector3f vec = vecArray[i];
-            if (vec != null) {
-                vec3Buffer.put(vec.x).put(vec.y).put(vec.z);
-            }
-        }
-
-        vec3Buffer.flip();
-
-        glUniform3fv(varLocation, vec3Buffer);
-    }
-
-
-    public void uploadVec2f(String varName, Vector2f vec) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        glUniform2f(varLocation, vec.x, vec.y);
-    }
-
-    public void uploadFloat(String varName, float value) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        glUniform1f(varLocation, value);
-    }
-
-    public void uploadInt(String varName, int value) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        glUniform1i(varLocation, value);
-    }
-
-    public void uploadTexture(String varName, int slot) {
-        uploadInt(varName, slot);
-    }
-
-    public void uploadIntArray(String varName, int[] array) {
-        int varLocation = glGetUniformLocation(shaderProgramID, varName);
-
-        use(); // Use the shader in case is not being used
-
-        glUniform1iv(varLocation, array);
+    public UniformsMap getUniformsMap() {
+        return this.uniformsMap;
     }
 }

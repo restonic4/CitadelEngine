@@ -4,7 +4,9 @@ import me.restonic4.citadel.registries.AbstractRegistryInitializer;
 import me.restonic4.citadel.registries.AssetLocation;
 import me.restonic4.citadel.registries.Registries;
 import me.restonic4.citadel.registries.Registry;
+import me.restonic4.citadel.render.CascadeShadow;
 import me.restonic4.citadel.render.Shader;
+import me.restonic4.citadel.render.UniformsMap;
 import me.restonic4.citadel.util.CitadelConstants;
 
 public class Shaders extends AbstractRegistryInitializer {
@@ -13,7 +15,23 @@ public class Shaders extends AbstractRegistryInitializer {
 
     @Override
     public void register() {
-        MAIN = Registry.register(Registries.SHADER, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "main"), new Shader());
-        SHADOWS = Registry.register(Registries.SHADER, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "shadows"), new Shader());
+        MAIN = Registry.register(Registries.SHADER, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "main"),
+                new Shader(new String[]{ "uProjection", "uView", "uLightPos", "uLightAmount", "uLightColors", "uLightAttenuationFactors" }) {
+                    @Override
+                    public void generateUniforms() {
+                        super.generateUniforms();
+
+                        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
+                            UniformsMap uniformsMap = getUniformsMap();
+                            uniformsMap.createUniform("shadowMap[" + i + "]");
+                            uniformsMap.createUniform("cascadeShadows[" + i + "]" + ".projViewMatrix");
+                            uniformsMap.createUniform("cascadeShadows[" + i + "]" + ".splitDistance");
+                        }
+                    }
+                }
+        );
+        SHADOWS = Registry.register(Registries.SHADER, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "shadows"),
+                new Shader(new String[]{ "uProjViewMatrix" })
+        );
     }
 }

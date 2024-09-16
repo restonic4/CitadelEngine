@@ -192,50 +192,46 @@ public class RenderBatch {
         }
     }
 
-    public void render() {
+    public void update() {
         dirtyModified = 0; // Stat
         dirtySkipped = 0; // Stat
-
-        Scene scene = SceneManager.getCurrentScene();
 
         updateDirtyModels();
 
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
 
-        glEnable(GL_BLEND);
-        glBlendEquation(GL_FUNC_ADD);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
         updateIndices();
+    }
 
-        // Bind the shadow textures
+    public void render() {
+        Scene scene = SceneManager.getCurrentScene();
 
-        Shader shadowShader = Shaders.SHADOWS;
-        shadowShader.use();
+        Shaders.MAIN.use();
+
+        UniformsMap mainShaderUniformMap = Shaders.MAIN.getUniformsMap();
+
+        // Shadows
 
         int start = 2;
-        List<CascadeShadow> cascadeShadows = this.cascadeShadows;
-        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
-            shadowShader.uploadInt(StringBuilderHelper.concatenate("shadowMap[", i, "]"), start + i);
-
+        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) { // TODO: Use string builder helper for the strings
+            mainShaderUniformMap.setUniform("shadowMap[" + i + "]", start + i);
             CascadeShadow cascadeShadow = cascadeShadows.get(i);
-            shadowShader.uploadMat4f(StringBuilderHelper.concatenate("cascadeshadows[", i, "]", ".projViewMatrix"), cascadeShadow.getProjViewMatrix());
-            shadowShader.uploadFloat(StringBuilderHelper.concatenate("cascadeshadows[", i, "]", ".splitDistance"), cascadeShadow.getSplitDistance());
+            mainShaderUniformMap.setUniform("cascadeShadows[" + i + "]" + ".projViewMatrix", cascadeShadow.getProjViewMatrix());
+            mainShaderUniformMap.setUniform("cascadeShadows[" + i + "]" + ".splitDistance", cascadeShadow.getSplitDistance());
         }
-        FrameBuffers.SHADOWS.bindTextures(GL_TEXTURE0);
-        shadowShader.detach();
 
-        Shader shader = Shaders.MAIN;
-        shader.use();
+        FrameBuffers.SHADOWS.bindTextures(GL_TEXTURE2);
 
-        shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
-        shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());
+        // Main
+
+        mainShaderUniformMap.setUniform("uProjection", scene.getCamera().getProjectionMatrix());
+        mainShaderUniformMap.setUniform("uView", scene.getCamera().getViewMatrix());
         // TODO: I think this should not be updated every frame (Lights)
-        shader.uploadVec3fArray("uLightPos", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightPositions(), CitadelConstants.MAX_LIGHTS));
-        shader.uploadInt("uLightAmount", scene.getLightsAmount());
-        shader.uploadVec3fArray("uLightColors", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightColors(), CitadelConstants.MAX_LIGHTS));
-        shader.uploadVec4fArray("uLightAttenuationFactors", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightAttenuationFactors(), CitadelConstants.MAX_LIGHTS));
+        mainShaderUniformMap.setUniform("uLightPos", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightPositions(), CitadelConstants.MAX_LIGHTS));
+        mainShaderUniformMap.setUniform("uLightAmount", scene.getLightsAmount());
+        mainShaderUniformMap.setUniform("uLightColors", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightColors(), CitadelConstants.MAX_LIGHTS));
+        mainShaderUniformMap.setUniform("uLightAttenuationFactors", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightAttenuationFactors(), CitadelConstants.MAX_LIGHTS));
 
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);
@@ -269,11 +265,29 @@ public class RenderBatch {
 
         glBindVertexArray(0);
 
-        shader.detach();
+        Shaders.MAIN.detach();
     }
 
     public void renderShadowMap() {
+        CascadeShadow.updateCascadeShadows(cascadeShadows, SceneManager.getCurrentScene());
 
+        FrameBuffers.SHADOWS.bind();
+        Shaders.SHADOWS.use();
+
+        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FrameBuffers.SHADOWS.getDepthMapTexture().getIds()[i], 0);
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            CascadeShadow shadowCascade = cascadeShadows.get(i);
+            Shaders.SHADOWS.getUniformsMap().setUniform("uProjViewMatrix", shadowCascade.getProjViewMatrix());
+
+            glBindVertexArray(vaoID);
+            glEnableVertexAttribArray(0);
+            glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
+        }
+
+        Shaders.SHADOWS.detach();
+        FrameBufferManager.unbindCurrentFrameBuffer();
     }
 
     // TODO: Optimize this, CPU usage and Memory

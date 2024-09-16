@@ -16,6 +16,7 @@ public class RegistryManager {
         Logger.log("Starting all the built-in registries");
 
         for (AbstractRegistryInitializer abstractRegistryInitializer : builtInRegistries) {
+            Logger.log("Starting built-in registry: " + abstractRegistryInitializer.getClass().getName());
             abstractRegistryInitializer.register();
         }
     }
@@ -24,6 +25,7 @@ public class RegistryManager {
         Logger.log("Starting all the custom registries");
 
         for (AbstractRegistryInitializer abstractRegistryInitializer : customRegistries) {
+            Logger.log("Starting custom registry: " + abstractRegistryInitializer.getClass().getName());
             abstractRegistryInitializer.register();
         }
     }

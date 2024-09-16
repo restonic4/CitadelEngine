@@ -44,6 +44,7 @@ import java.util.Map;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 
 @ClientSide
 public class Window {
@@ -161,6 +162,8 @@ public class Window {
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glEnable(GL_MULTISAMPLE);
 
         if (!GL.getCapabilities().GL_ARB_bindless_texture) {
             throw new IllegalStateException("Bindless textures not compatible with your graphics card. Tell the devs pls!");

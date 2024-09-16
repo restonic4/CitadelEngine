@@ -15,7 +15,6 @@ public class ShadowTexture {
 
     public ShadowTexture(int numTextures, int width, int height, int pixelFormat) {
         ids = new int[numTextures];
-
         glGenTextures(ids);
 
         for (int i = 0; i < numTextures; i++) {

@@ -33,6 +33,8 @@ public class DebugManager {
     private static OpenGLDebugOutput openGLDebugOutput = new OpenGLDebugOutput();
     private static boolean openGLDebugOutputStarted = false;
 
+    private static Vector3f[] cascadeShadowFrustumVertices;
+
     public static void setDebugMode(boolean value) {
         EventResult eventResult = DebugEvents.DEBUG_MODE_CHANGED.invoker().onDebugModeChanged(DEBUG_MODE, value);
         if (eventResult == EventResult.CANCELED) {
@@ -170,5 +172,13 @@ public class DebugManager {
             glDisable(GL_DEBUG_OUTPUT);
             glDisable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         }
+    }
+
+    public static Vector3f[] getCascadeShadowFrustumVertices() {
+        return cascadeShadowFrustumVertices;
+    }
+
+    public static void setCascadeShadowFrustumVertices(Vector3f[] cascadeShadowFrustumVertices) {
+        DebugManager.cascadeShadowFrustumVertices = cascadeShadowFrustumVertices;
     }
 }

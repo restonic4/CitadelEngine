@@ -40,23 +40,26 @@ public class ShadowFrameBuffer extends FrameBuffer {
         setGenerated();
 
         // FBO creation
-
         setFrameBufferId(glGenFramebuffers());
+
+        // Create the depth map textures
+        depthMap = new ShadowTexture(CascadeShadow.SHADOW_MAP_CASCADE_COUNT, getWidth(), getHeight(), GL_DEPTH_COMPONENT);
+
+        // Attach the depth map texture to the FBO
         glBindFramebuffer(GL_FRAMEBUFFER, getFrameBufferId());
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap.getIds()[0], 0);
+
+        // Set only depth
         glDrawBuffer(GL_NONE);
         glReadBuffer(GL_NONE);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            throw new RenderException("Could not create FrameBuffer");
+        }
 
         FrameBufferManager.unbindCurrentFrameBuffer();
 
         Logger.log("ShadowFrameBuffer " + getFrameBufferId() + " generated: " + this.getAssetLocation());
-
-        // Texture array
-
-        depthMap = new ShadowTexture(CascadeShadow.SHADOW_MAP_CASCADE_COUNT, getWidth(), getHeight(), GL_DEPTH_COMPONENT);
-        for (int i = 0; i < depthMap.getIds().length; i++) {
-            Logger.log(depthMap.getIds()[i]);
-        }
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap.getIds()[0], 0);
     }
 
     @Override
@@ -80,6 +83,10 @@ public class ShadowFrameBuffer extends FrameBuffer {
             glActiveTexture(start + i);
             glBindTexture(GL_TEXTURE_2D, depthMap.getIds()[i]);
         }
+    }
+
+    public int getDepthMapFBO() {
+        return getFrameBufferId();
     }
 
     public ShadowTexture getDepthMapTexture() {
