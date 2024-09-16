@@ -52,7 +52,7 @@ public class FrameBuffer extends RegistryObject {
 
         FrameBufferManager.unbindCurrentFrameBuffer();
 
-        Logger.log("FrameBuffer generated: " + this.getAssetLocation());
+        Logger.log("FrameBuffer " + frameBufferId + " generated: " + this.getAssetLocation() + " texture handler id: " + textureHandlerId);
     }
 
     public void bind() {
@@ -64,7 +64,7 @@ public class FrameBuffer extends RegistryObject {
             generate();
         }
 
-        glBindTexture(GL_TEXTURE_2D, 0);//To make sure the texture isn't bound
+        //glBindTexture(GL_TEXTURE_2D, 0);//To make sure the texture isn't bound
         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
         glViewport(0, 0, width, height);
     }

@@ -22,7 +22,7 @@ import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
 public class Shader extends RegistryObject {
     private String filepath;
 
-    private int shaderProgramID;
+    private int shaderProgramID, vertexID, fragmentID;
     private String vertexSource;
     private String fragmentSource;
     private boolean isUsed = false;
@@ -75,8 +75,6 @@ public class Shader extends RegistryObject {
     }
 
     public void compile() {
-        int vertexID, fragmentID;
-
         // First load and compile the vertex shader
         vertexID = glCreateShader(GL_VERTEX_SHADER);
 
@@ -145,6 +143,12 @@ public class Shader extends RegistryObject {
     public void detach() {
         glUseProgram(0);
         isUsed = false;
+    }
+
+    public void cleanup() {
+        glDeleteProgram(this.shaderProgramID);
+        glDeleteShader(vertexID);
+        glDeleteShader(fragmentID);
     }
 
     private FloatBuffer mat4Buffer = BufferUtils.createFloatBuffer(CitadelConstants.MATRIX4F_CAPACITY);

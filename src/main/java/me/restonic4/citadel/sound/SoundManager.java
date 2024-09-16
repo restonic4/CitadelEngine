@@ -1,6 +1,6 @@
 package me.restonic4.citadel.sound;
 
-import me.restonic4.citadel.render.Camera;
+import me.restonic4.citadel.render.cameras.Camera;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import org.joml.*;
 import org.lwjgl.openal.*;

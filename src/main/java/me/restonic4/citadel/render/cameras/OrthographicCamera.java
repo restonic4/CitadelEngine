@@ -1,4 +1,4 @@
-package me.restonic4.citadel.render;
+package me.restonic4.citadel.render.cameras;
 
 import me.restonic4.ClientSide;
 import me.restonic4.citadel.core.Window;

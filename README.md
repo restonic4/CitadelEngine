@@ -52,6 +52,8 @@ Knowledge:
 - <a href="https://www.youtube.com/watch?v=f05PwswO7qc">Youtube video by @KazeN64</a>
 - <a href="https://www.youtube.com/watch?v=1LCEiVDHJmc">Youtube video by @standupmaths</a>
 - <a href="https://www.youtube.com/watch?v=YTfdBSjitd8">Youtube video by @Aurailus</a>
+- <a href="https://ahbejarano.gitbook.io/lwjglgamedev">LWJGL book by lwjglgamedev</a>
+- <a href="https://lwjglgamedev.gitbooks.io/3d-game-development-with-lwjgl/content">Another LWJGL book by lwjglgamedev</a>
 
 For more information, check out the [docs](./resources/docs) in the `resources/docs` folder.
 

@@ -3,7 +3,7 @@ package me.restonic4.citadel.world;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.util.CitadelConstants;
 import me.restonic4.citadel.world.object.GameObject;
-import me.restonic4.citadel.render.Camera;
+import me.restonic4.citadel.render.cameras.Camera;
 import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.world.object.components.LightComponent;
@@ -114,6 +114,20 @@ public abstract class Scene {
 
     public List<LightComponent> getLightComponents() {
         return this.lightComponents;
+    }
+
+    public List<LightComponent> getLightComponentsOfType(LightComponent.LightType lightType) {
+        List<LightComponent> desiredLights = new ArrayList<>();
+
+        for (int i = 0; i < this.lightComponents.size(); i++) {
+            LightComponent lightComponent = this.lightComponents.get(i);
+
+            if (lightComponent.getLightType() == lightType) {
+                desiredLights.add(lightComponent);
+            }
+        }
+
+        return desiredLights;
     }
 
     public Vector3f[] getLightPositions() {

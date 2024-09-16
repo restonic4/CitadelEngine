@@ -7,7 +7,7 @@ import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.registries.AssetLocation;
 import me.restonic4.citadel.registries.Registry;
 import me.restonic4.citadel.registries.RegistryKey;
-import me.restonic4.citadel.render.Camera;
+import me.restonic4.citadel.render.cameras.Camera;
 import me.restonic4.citadel.render.Renderer;
 import me.restonic4.citadel.render.gui.LineGraphImGui;
 import me.restonic4.citadel.sound.SoundManager;
@@ -19,7 +19,6 @@ import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 
 import java.util.Map;
-import java.util.Objects;
 
 @ClientSide
 public class StatisticsImGui extends ToggleableImGuiScreen {

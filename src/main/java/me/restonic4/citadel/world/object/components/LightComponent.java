@@ -6,6 +6,8 @@ import me.restonic4.citadel.util.debug.diagnosis.Logger;
 import me.restonic4.citadel.world.object.Component;
 import me.restonic4.citadel.world.object.Material;
 import me.restonic4.citadel.world.object.Mesh;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -38,6 +40,20 @@ public class LightComponent extends Component {
 
     public LightType getLightType() {
         return this.lightType;
+    }
+
+    public Vector3f getDirection() {
+        if (lightType == LightType.DIRECTIONAL) {
+            return this.gameObject.transform.getPosition();
+        }
+        else {
+            Quaternionf rotation = this.gameObject.transform.getRotation();
+
+            Vector3f forward = new Vector3f(0, 0, -1);
+            Matrix4f rotationMatrix = new Matrix4f().rotate(rotation);
+
+            return rotationMatrix.transformDirection(forward);
+        }
     }
 
     public enum LightType {

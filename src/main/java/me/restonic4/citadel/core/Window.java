@@ -159,6 +159,9 @@ public class Window {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         if (!GL.getCapabilities().GL_ARB_bindless_texture) {
             throw new IllegalStateException("Bindless textures not compatible with your graphics card. Tell the devs pls!");
         }
@@ -301,6 +304,12 @@ public class Window {
         SceneManager.unLoadCurrentScene();
         SoundManager.getInstance().cleanup();
         FrameBufferManager.cleanup();
+
+        Map<AssetLocation, Shader> shaders = Registry.getRegistry(Registries.SHADER);
+        for (Map.Entry<AssetLocation, Shader> entry : shaders.entrySet()) {
+            Shader shader = entry.getValue();
+            shader.cleanup();
+        }
 
         // Clean ImGui
         imGuiGl3.shutdown();

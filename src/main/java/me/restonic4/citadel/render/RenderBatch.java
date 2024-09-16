@@ -3,15 +3,17 @@ package me.restonic4.citadel.render;
 import me.restonic4.ClientSide;
 import me.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import me.restonic4.citadel.registries.built_in.managers.Shaders;
+import me.restonic4.citadel.render.cameras.OrthographicCamera;
 import me.restonic4.citadel.util.ArrayHelper;
 import me.restonic4.citadel.util.CitadelConstants;
-import me.restonic4.citadel.util.debug.diagnosis.Logger;
+import me.restonic4.citadel.util.StringBuilderHelper;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.world.object.GameObject;
 import me.restonic4.citadel.world.object.Transform;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import me.restonic4.citadel.util.debug.DebugManager;
+import me.restonic4.game.core.scenes.WorldScene;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -22,8 +24,7 @@ import java.util.List;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
 @ClientSide
 public class RenderBatch {
@@ -49,6 +50,7 @@ public class RenderBatch {
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     private List<ModelRendererComponent> models;
+    private ArrayList<CascadeShadow> cascadeShadows;
 
     private float[] vertices;
     private int[] indices;
@@ -74,6 +76,12 @@ public class RenderBatch {
         this.areIndicesDirty = true;
 
         this.vertices = new float[maxBatchSize * VERTEX_SIZE];
+
+        this.cascadeShadows = new ArrayList<>();
+        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
+            CascadeShadow cascadeShadow = new CascadeShadow();
+            cascadeShadows.add(cascadeShadow);
+        }
     }
 
     public boolean isStatic() {
@@ -195,11 +203,29 @@ public class RenderBatch {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
 
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_FUNC_ADD);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         updateIndices();
 
-        renderShadowMap();
+        // Bind the shadow textures
 
-        // Use shader
+        Shader shadowShader = Shaders.SHADOWS;
+        shadowShader.use();
+
+        int start = 2;
+        List<CascadeShadow> cascadeShadows = this.cascadeShadows;
+        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
+            shadowShader.uploadInt(StringBuilderHelper.concatenate("shadowMap[", i, "]"), start + i);
+
+            CascadeShadow cascadeShadow = cascadeShadows.get(i);
+            shadowShader.uploadMat4f(StringBuilderHelper.concatenate("cascadeshadows[", i, "]", ".projViewMatrix"), cascadeShadow.getProjViewMatrix());
+            shadowShader.uploadFloat(StringBuilderHelper.concatenate("cascadeshadows[", i, "]", ".splitDistance"), cascadeShadow.getSplitDistance());
+        }
+        FrameBuffers.SHADOWS.bindTextures(GL_TEXTURE0);
+        shadowShader.detach();
+
         Shader shader = Shaders.MAIN;
         shader.use();
 
@@ -246,14 +272,69 @@ public class RenderBatch {
         shader.detach();
     }
 
-    private void renderShadowMap() {
+    public void renderShadowMap() {
+        CascadeShadow.updateCascadeShadows(cascadeShadows);
+
+        FrameBuffers.SHADOWS.bind();
+
         Shader shader = Shaders.SHADOWS;
         shader.use();
 
-        /*shader.uploadMat4f("uProjection", scene.getCamera().getProjectionMatrix());
-        shader.uploadMat4f("uView", scene.getCamera().getViewMatrix());*/
+        updateDirtyModels();
+
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+
+        updateIndices();
+
+        glBindVertexArray(vaoID);
+        glEnableVertexAttribArray(0);
+
+        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FrameBuffers.SHADOWS.getDepthMapTexture().getIds()[i], 0);
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            CascadeShadow shadowCascade = cascadeShadows.get(i);
+            shader.uploadMat4f("uProjViewMatrix", shadowCascade.getProjViewMatrix());
+
+            glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
+        }
+
+        glDisableVertexAttribArray(0);
+        glBindVertexArray(0);
 
         shader.detach();
+        FrameBufferManager.unbindCurrentFrameBuffer();
+
+        /*CascadeShadow.updateCascadeShadows(cascadeShadows);
+
+        Shader shader = Shaders.SHADOWS;
+        shader.use();
+
+        updateDirtyModels();
+
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+
+        updateIndices();
+
+        glBindVertexArray(vaoID);
+        glEnableVertexAttribArray(0);
+
+        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FrameBuffers.SHADOWS.getDepthMapTexture().getIds()[i], 0);
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            CascadeShadow shadowCascade = cascadeShadows.get(i);
+            shader.uploadMat4f("uProjViewMatrix", shadowCascade.getProjViewMatrix());
+
+            glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
+        }
+
+        glDisableVertexAttribArray(0);
+        glBindVertexArray(0);
+
+        shader.detach();*/
     }
 
     // TODO: Optimize this, CPU usage and Memory

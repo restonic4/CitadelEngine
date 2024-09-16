@@ -1,33 +1,28 @@
 package me.restonic4.game.core.scenes;
 
-import me.restonic4.citadel.files.parsers.mesh.OBJLoader;
 import me.restonic4.citadel.input.MouseListener;
-import me.restonic4.citadel.networking.NetworkingManager;
 import me.restonic4.citadel.networking.PacketData;
 import me.restonic4.citadel.networking.PacketType;
+import me.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import me.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import me.restonic4.citadel.registries.built_in.managers.Packets;
 import me.restonic4.citadel.render.Texture;
+import me.restonic4.citadel.render.cameras.OrthographicCamera;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
-import me.restonic4.citadel.util.CitadelConstants;
-import me.restonic4.citadel.util.debug.DebugManager;
 import me.restonic4.citadel.util.debug.diagnosis.Logger;
-import me.restonic4.citadel.util.debug.diagnosis.ProfilerManager;
-import me.restonic4.citadel.util.math.PerlinNoise;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.SceneManager;
 import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.input.KeyListener;
 import me.restonic4.citadel.world.object.GameObject;
-import me.restonic4.citadel.world.object.Material;
 import me.restonic4.citadel.world.object.Mesh;
 import me.restonic4.citadel.world.object.Transform;
 import me.restonic4.citadel.world.object.components.LightComponent;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
 import me.restonic4.citadel.files.parsers.mesh.MeshLoader;
-import me.restonic4.citadel.render.PerspectiveCamera;
+import me.restonic4.citadel.render.cameras.PerspectiveCamera;
 import me.restonic4.citadel.util.Time;
 import me.restonic4.citadel.util.math.RandomUtil;
 import me.restonic4.game.core.world.sounds.Sounds;
@@ -47,6 +42,7 @@ public class WorldScene extends Scene {
 
     List<GameObject> moving = new ArrayList<>();
     public GameObject test2;
+    public OrthographicCamera shadowMapCamera;
 
     @Override
     public void init() {
@@ -55,6 +51,13 @@ public class WorldScene extends Scene {
         camTransform.setScale(1, 1, 1);
         camera = new PerspectiveCamera(camTransform);
         camera.load();
+
+        Transform shadowMapCameraTransform = new Transform();
+        shadowMapCameraTransform.setPosition(0, 0, 0);
+        //Quaternionf quaternion = new Quaternionf().rotateX((float) Math.PI);
+        Quaternionf quaternionf = new Quaternionf().lookAlong(new Vector3f(0, -1, 0), new Vector3f(1, 0, 0));
+        shadowMapCameraTransform.setRotation(quaternionf);
+        shadowMapCamera = new OrthographicCamera(shadowMapCameraTransform);
 
         // Music
         music = Sounds.TEMPLATE.createSource(true, true);
@@ -96,7 +99,7 @@ public class WorldScene extends Scene {
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        int amount = 20;
+        /*int amount = 20;
 
         for (int i = -(amount / 2); i < amount / 2; i++) {
             for (int j = -(amount / 2); j < amount / 2; j++) {
@@ -122,22 +125,59 @@ public class WorldScene extends Scene {
                     this.addGameObject(test);
                 }
             }
-        }
+        }*/
 
         Mesh citadelMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
         citadelMesh.setTexture(new Texture("assets/textures/persus.png"));
 
         GameObject test = new GameObject(false);
         LightComponent lightComponent = new LightComponent(LightComponent.LightType.POINT);
-        lightComponent.getLightType().adjustAttenuationByRange(1);
+        lightComponent.getLightType().adjustAttenuationByRange(10);
         test.addComponent(lightComponent);
         test.addComponent(new ModelRendererComponent(citadelMesh));
         test.setName("test");
-        test.transform.setPosition(0, 0, 0);
-        test.transform.setScale(1.2f,1.2f,1.2f);
+        test.transform.setPosition(0, -100, 10);
+        test.transform.setScale(0.1f,0.1f,0.1f);
         this.addGameObject(test);
 
         test2 = test;
+
+        GameObject fboView = new GameObject(false);
+        fboView.transform.setPosition(0, -100, 0);
+        fboView.transform.setScale(10, 10, 1);
+        Mesh fboMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
+        //fboMesh.setTexture(new Texture(FrameBuffers.SHADOWS.getTextureHandlerId())); // error
+        //fboMesh.setTexture(new Texture(teest.getBindlessHandle()));
+        fboView.addComponent(new ModelRendererComponent(fboMesh));
+        this.addGameObject(fboView);
+
+        int planeSize = 50;
+
+        GameObject plane = new GameObject(false);
+        plane.transform.setPosition(0, 0, 0);
+        plane.transform.setScale(planeSize, 1, planeSize);
+        Mesh planeMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
+        planeMesh.setTint(new Vector4f(0, 1, 0, 1));
+        plane.addComponent(new ModelRendererComponent(planeMesh));
+        this.addGameObject(plane);
+
+        for (int i = 0; i < planeSize * 2; i++) {
+            GameObject cube = new GameObject(false);
+            cube.transform.setPosition(RandomUtil.random(-planeSize, planeSize), 1, RandomUtil.random(-planeSize, planeSize));
+            cube.transform.setScale(1, 2, 1);
+            Mesh cubeMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
+            cubeMesh.setTint(new Vector4f(0, 1, 1, 1));
+            cube.addComponent(new ModelRendererComponent(cubeMesh));
+            this.addGameObject(cube);
+        }
+
+        GameObject light = new GameObject(false);
+        //light.transform.setPosition(0, 100, 0);
+        light.transform.setPosition(0, 1, 1);
+        LightComponent lightComponent1 = new LightComponent(LightComponent.LightType.DIRECTIONAL);
+        //lightComponent1.getLightType().adjustAttenuationByRange(50);
+        light.addComponent(lightComponent1);
+        this.addGameObject(light);
 
         //DebugManager.setVerticesMode(true);
         //DebugManager.setWireFrameMode(true);
@@ -152,6 +192,13 @@ public class WorldScene extends Scene {
         float x = (float) Math.sin(Time.getRunningTime() * speed);
         float y = (float) Math.cos(Time.getRunningTime() * speed);
         //test2.transform.setPosition(x * radius, y * radius, 0);
+
+        /*
+        up.Normalize();
+		var v =  dir + up * -Vector3.Dot(up, dir);
+		var q = Quaternion.FromToRotation(Vector3.forward, v);
+		return Quaternion.FromToRotation(v, dir) * q;
+         */
 
         if (KeyBinds.CRASH.isPressed()) {
             Logger.log("Size: " + renderer.getByteSize());
@@ -258,7 +305,7 @@ public class WorldScene extends Scene {
             camera.transform.addRotationQuaternion(pitchRotation);
         }
 
-        float mult = 0.2F;
+        /*float mult = 0.2F;
         for (int i = 0; i < this.getDynamicGameObjects().size(); i++) {
             if (this.getDynamicGameObjects().get(i) == test2) {
                 continue;
@@ -271,7 +318,7 @@ public class WorldScene extends Scene {
 
             GameObject gameObject = this.getDynamicGameObjects().get(i);
             gameObject.transform.setPosition(multR * offset, multR + offset, multR * offset2);
-        }
+        }*/
 
         //camera.transform.addLocalRotationEuler(xMouseDelta, yMouseDelta, 0);
 

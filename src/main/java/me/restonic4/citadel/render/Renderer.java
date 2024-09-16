@@ -2,6 +2,8 @@ package me.restonic4.citadel.render;
 
 import me.restonic4.ClientSide;
 import me.restonic4.citadel.exceptions.RenderException;
+import me.restonic4.citadel.registries.built_in.managers.FrameBuffers;
+import me.restonic4.citadel.render.cameras.Camera;
 import me.restonic4.citadel.world.Scene;
 import me.restonic4.citadel.world.object.GameObject;
 import me.restonic4.citadel.world.object.components.ModelRendererComponent;
@@ -75,13 +77,6 @@ public class Renderer {
         dirtyModifiedTotal = 0;
         dirtySkippedTotal = 0;
 
-        //Background, blue :D
-        glClearColor(0.267f, 0.741f, 1, 1.0f);
-        //glClearColor(0, 0, 0, 1.0f);
-
-        // Clear the color and depth buffers
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         if (scene == null) {
             return;
         }
@@ -90,14 +85,14 @@ public class Renderer {
 
         // Updating the frustum culling
 
-        Matrix4f projection = camera.projectionMatrix;
-        Matrix4f view = camera.viewMatrix;
+        Matrix4f projection = camera.getProjectionMatrix();
+        Matrix4f view = camera.getViewMatrix();
 
         if (camera.isSimulated()) {
-            projection = camera.fakeProjectionMatrix;
-            view = camera.fakeViewMatrix;
+            projection = camera.getFakeProjectionMatrix();
+            view = camera.getFakeViewMatrix();
 
-            Vector3f[] vertex = camera.extractFrustumCorners();
+            Vector3f[] vertex = camera.getFrustumCorners();
             FrustumRenderer.renderFrustum(vertex);
         }
 
@@ -105,8 +100,31 @@ public class Renderer {
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS);
 
         // Render batches
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        renderShadowBatches(this.staticBatches);
+        renderShadowBatches(this.dynamicBatches);
+
+        glClearColor(0.267f, 0.741f, 1, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         renderBatches(this.staticBatches);
         renderBatches(this.dynamicBatches);
+    }
+
+    private <T extends RenderBatch> void renderShadowBatches(List<T> batches) {
+        for (int i = 0; i < batches.size(); i++) {
+            RenderBatch batch = batches.get(i);
+
+            if (batch.shouldBeSkipped()) {
+                drawCallsSkipped++;
+                continue;
+            }
+
+            batch.renderShadowMap();
+
+            drawCallsConsumed++;
+        }
     }
 
     private <T extends RenderBatch> void renderBatches(List<T> batches) {

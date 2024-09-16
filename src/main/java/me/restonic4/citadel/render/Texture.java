@@ -100,6 +100,10 @@ public class Texture {
         this.isRaw = true;
     }
 
+    public Texture(long textureHandlerId) {
+        this.texHandleID = textureHandlerId;
+    }
+
     public void generate() {
         // Generate texture on GPU
         texID = glGenTextures();

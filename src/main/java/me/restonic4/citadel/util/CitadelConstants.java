@@ -35,6 +35,7 @@ public class CitadelConstants {
     public static final int HEX_COLOR_RED = 0xff64ad;
 
     public static final int MAX_LIGHTS = 4;
+    public static final int SHADOW_RESOLUTION = 2048;
 
     // Can be modified
 

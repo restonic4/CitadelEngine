@@ -1,4 +1,4 @@
-package me.restonic4.citadel.render;
+package me.restonic4.citadel.render.cameras;
 
 import me.restonic4.ClientSide;
 import me.restonic4.citadel.world.object.Transform;
@@ -11,7 +11,7 @@ public abstract class Camera {
     public Transform transform;
 
     private boolean isSimulated;
-    protected Matrix4f fakeProjectionMatrix, fakeViewMatrix;
+    private Matrix4f fakeProjectionMatrix, fakeViewMatrix;
 
     // Cache
 
@@ -47,7 +47,16 @@ public abstract class Camera {
         return this.projectionMatrix;
     }
 
-    public Vector3f[] extractFrustumCorners() {
+    public Matrix4f getFakeProjectionMatrix() {
+        return fakeProjectionMatrix;
+    }
+
+    public Matrix4f getFakeViewMatrix() {
+        return fakeViewMatrix;
+    }
+
+    // TODO: Optimize this, this will probably create memory leaks
+    public Vector3f[] getFrustumCorners() {
         Matrix4f invProjView = new Matrix4f();
         getProjectionMatrix().mul(getViewMatrix(), invProjView).invert();
 
