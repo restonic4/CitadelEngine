@@ -273,68 +273,7 @@ public class RenderBatch {
     }
 
     public void renderShadowMap() {
-        CascadeShadow.updateCascadeShadows(cascadeShadows);
 
-        FrameBuffers.SHADOWS.bind();
-
-        Shader shader = Shaders.SHADOWS;
-        shader.use();
-
-        updateDirtyModels();
-
-        glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
-
-        updateIndices();
-
-        glBindVertexArray(vaoID);
-        glEnableVertexAttribArray(0);
-
-        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FrameBuffers.SHADOWS.getDepthMapTexture().getIds()[i], 0);
-            glClear(GL_DEPTH_BUFFER_BIT);
-
-            CascadeShadow shadowCascade = cascadeShadows.get(i);
-            shader.uploadMat4f("uProjViewMatrix", shadowCascade.getProjViewMatrix());
-
-            glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
-        }
-
-        glDisableVertexAttribArray(0);
-        glBindVertexArray(0);
-
-        shader.detach();
-        FrameBufferManager.unbindCurrentFrameBuffer();
-
-        /*CascadeShadow.updateCascadeShadows(cascadeShadows);
-
-        Shader shader = Shaders.SHADOWS;
-        shader.use();
-
-        updateDirtyModels();
-
-        glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
-
-        updateIndices();
-
-        glBindVertexArray(vaoID);
-        glEnableVertexAttribArray(0);
-
-        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FrameBuffers.SHADOWS.getDepthMapTexture().getIds()[i], 0);
-            glClear(GL_DEPTH_BUFFER_BIT);
-
-            CascadeShadow shadowCascade = cascadeShadows.get(i);
-            shader.uploadMat4f("uProjViewMatrix", shadowCascade.getProjViewMatrix());
-
-            glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
-        }
-
-        glDisableVertexAttribArray(0);
-        glBindVertexArray(0);
-
-        shader.detach();*/
     }
 
     // TODO: Optimize this, CPU usage and Memory
