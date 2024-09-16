@@ -51,6 +51,16 @@ public class Mesh {
         this.normals = new Vector3f[vertices.length];
     }
 
+    public Mesh(Mesh mesh) {
+        this.vertices = mesh.vertices;
+        this.indices = mesh.indices;
+        this.verticesColors = mesh.verticesColors;
+        this.tint = mesh.tint;
+        this.texture = mesh.texture;
+        this.uvs = mesh.uvs;
+        this.normals = mesh.normals;
+    }
+
     public Vector3f[] getVertices() {
         return this.vertices;
     }
@@ -97,12 +107,5 @@ public class Mesh {
 
     public void setNormals(Vector3f[] normals) {
         this.normals = normals;
-    }
-
-    public Mesh copy() {
-        Mesh mesh = new Mesh(this.vertices, this.indices, this.verticesColors);
-        mesh.setTint(mesh.getTint());
-
-        return mesh;
     }
 }

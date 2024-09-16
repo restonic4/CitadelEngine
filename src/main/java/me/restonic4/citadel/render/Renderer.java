@@ -94,13 +94,13 @@ public class Renderer {
             view = camera.getFakeViewMatrix();
 
             Vector3f[] vertex = camera.getFrustumCorners();
-            FrustumRenderer.renderFrustum(vertex);
+            //FrustumRenderer.renderFrustum(vertex);
         }
 
         FrustumCullingFilter.getInstance().updateFrustum(projection, view);
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS);
 
-        glClearColor(0.267f, 0.741f, 1, 1.0f);
+        //glClearColor(0.267f, 0.741f, 1, 1.0f);
 
         // Render batches
         renderBatches(this.staticBatches);
@@ -113,7 +113,8 @@ public class Renderer {
 
             if (batch.shouldBeSkipped()) {
                 drawCallsSkipped++;
-                continue;
+                //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                //continue;
             }
 
             batch.update();

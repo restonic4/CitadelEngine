@@ -43,6 +43,7 @@ public class WorldScene extends Scene {
     SoundSource music;
 
     List<GameObject> debugCascadePoints = new ArrayList<>();
+    List<GameObject> tornado = new ArrayList<>();
     public GameObject test2;
     public OrthographicCamera shadowMapCamera;
     public GameObject sun;
@@ -102,7 +103,7 @@ public class WorldScene extends Scene {
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        /*int amount = 20;
+        int amount = 20;
 
         for (int i = -(amount / 2); i < amount / 2; i++) {
             for (int j = -(amount / 2); j < amount / 2; j++) {
@@ -123,12 +124,12 @@ public class WorldScene extends Scene {
                     test.transform.setPosition(i*5, j*5, w*5);
                     test.transform.setScale(1,1,1);
 
-                    moving.add(test);
+                    tornado.add(test);
 
                     this.addGameObject(test);
                 }
             }
-        }*/
+        }
 
         Mesh citadelMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
         citadelMesh.setTexture(new Texture("assets/textures/persus.png"));
@@ -340,9 +341,9 @@ public class WorldScene extends Scene {
             camera.transform.addRotationQuaternion(pitchRotation);
         }
 
-        /*float mult = 0.2F;
-        for (int i = 0; i < this.getDynamicGameObjects().size(); i++) {
-            if (this.getDynamicGameObjects().get(i) == test2) {
+        float mult = 0.2F;
+        for (int i = 0; i < tornado.size(); i++) {
+            if (tornado.get(i) == test2) {
                 continue;
             }
 
@@ -351,9 +352,9 @@ public class WorldScene extends Scene {
             float offset = (float) Math.sin(Time.getRunningTime() + multR);
             float offset2 = (float) Math.cos(Time.getRunningTime() + multR);
 
-            GameObject gameObject = this.getDynamicGameObjects().get(i);
+            GameObject gameObject = tornado.get(i);
             gameObject.transform.setPosition(multR * offset, multR + offset, multR * offset2);
-        }*/
+        }
 
         //camera.transform.addLocalRotationEuler(xMouseDelta, yMouseDelta, 0);
 
