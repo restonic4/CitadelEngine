@@ -100,7 +100,8 @@ public class Renderer {
         FrustumCullingFilter.getInstance().updateFrustum(projection, view);
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS);
 
-        //glClearColor(0.267f, 0.741f, 1, 1.0f);
+        glClearColor(0.267f, 0.741f, 1, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Render batches
         renderBatches(this.staticBatches);
@@ -114,15 +115,15 @@ public class Renderer {
             if (batch.shouldBeSkipped()) {
                 drawCallsSkipped++;
                 //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                //continue;
+                continue;
             }
 
             batch.update();
 
             batch.renderShadowMap();
 
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glViewport(0, 0, Window.getInstance().getWidth(), Window.getInstance().getHeight());
+            //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            //glViewport(0, 0, Window.getInstance().getWidth(), Window.getInstance().getHeight());
 
             batch.render();
 

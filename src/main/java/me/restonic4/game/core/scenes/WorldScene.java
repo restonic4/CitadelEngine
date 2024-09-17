@@ -103,7 +103,7 @@ public class WorldScene extends Scene {
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        int amount = 20;
+        int amount = 2;//20
 
         for (int i = -(amount / 2); i < amount / 2; i++) {
             for (int j = -(amount / 2); j < amount / 2; j++) {
@@ -190,7 +190,7 @@ public class WorldScene extends Scene {
         //DebugManager.setWireFrameMode(true);
 
         for (int i = 0; i < 8; i++) {
-            GameObject debugCascadePoint = new GameObject(false);
+            /*GameObject debugCascadePoint = new GameObject(false);
             debugCascadePoint.setName("debugCascadePoint");
 
             Mesh debugMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
@@ -200,7 +200,7 @@ public class WorldScene extends Scene {
             debugCascadePoint.transform.setPosition(-100, i * 2, -100);
 
             this.addGameObject(debugCascadePoint);
-            debugCascadePoints.add(debugCascadePoint);
+            debugCascadePoints.add(debugCascadePoint);*/
         }
 
         super.init();
