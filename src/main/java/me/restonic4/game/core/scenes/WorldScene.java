@@ -8,6 +8,7 @@ import me.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import me.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import me.restonic4.citadel.registries.built_in.managers.Packets;
 import me.restonic4.citadel.render.Texture;
+import me.restonic4.citadel.render.cameras.Camera;
 import me.restonic4.citadel.render.cameras.OrthographicCamera;
 import me.restonic4.citadel.sound.SoundManager;
 import me.restonic4.citadel.sound.SoundSource;
@@ -47,6 +48,7 @@ public class WorldScene extends Scene {
     public GameObject test2;
     public OrthographicCamera shadowMapCamera;
     public GameObject sun;
+    public GameObject thingy;
 
     @Override
     public void init() {
@@ -155,7 +157,7 @@ public class WorldScene extends Scene {
         fboView.addComponent(new ModelRendererComponent(fboMesh));
         this.addGameObject(fboView);
 
-        int planeSize = 50;
+        int planeSize = 5000;
 
         GameObject plane = new GameObject(false);
         plane.transform.setPosition(0, 0, 0);
@@ -190,7 +192,7 @@ public class WorldScene extends Scene {
         //DebugManager.setWireFrameMode(true);
 
         for (int i = 0; i < 8; i++) {
-            /*GameObject debugCascadePoint = new GameObject(false);
+            GameObject debugCascadePoint = new GameObject(false);
             debugCascadePoint.setName("debugCascadePoint");
 
             Mesh debugMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
@@ -200,8 +202,20 @@ public class WorldScene extends Scene {
             debugCascadePoint.transform.setPosition(-100, i * 2, -100);
 
             this.addGameObject(debugCascadePoint);
-            debugCascadePoints.add(debugCascadePoint);*/
+            debugCascadePoints.add(debugCascadePoint);
         }
+
+        GameObject debugCascadePoint = new GameObject(false);
+        debugCascadePoint.setName("debugCascadePoint");
+
+        Mesh debugMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
+
+        debugCascadePoint.addComponent(new ModelRendererComponent(debugMesh));
+
+        debugCascadePoint.transform.setPosition(-100, 0, -100);
+
+        this.addGameObject(debugCascadePoint);
+        thingy = debugCascadePoint;
 
         super.init();
     }
@@ -221,7 +235,7 @@ public class WorldScene extends Scene {
 		return Quaternion.FromToRotation(v, dir) * q;
          */
         float factor = (float) Time.getRunningTime();
-        sun.transform.setPosition(0, Math.cos(factor), Math.sin(factor));
+        //sun.transform.setPosition(0, Math.cos(factor), Math.sin(factor));
 
         Vector3f[] vertices = DebugManager.getCascadeShadowFrustumVertices();
         if (vertices != null && vertices.length > 0) {
@@ -340,6 +354,19 @@ public class WorldScene extends Scene {
             camera.transform.addRotationQuaternion(yawRotation);
             camera.transform.addRotationQuaternion(pitchRotation);
         }
+
+        Camera camera1 = getCamera();
+        Vector3f cameraPosition = new Vector3f(camera1.transform.getPosition());
+        Quaternionf cameraRotation = new Quaternionf(camera1.transform.getRotation());
+        Vector3f forward = new Vector3f(0, 0, -1);
+        cameraRotation.transform(forward);
+        float distanceInFront = 5.0f;
+        Vector3f newPosition = new Vector3f(
+                cameraPosition.x + forward.x * distanceInFront,
+                cameraPosition.y + forward.y * distanceInFront,
+                cameraPosition.z + forward.z * distanceInFront
+        );
+        thingy.transform.setPosition(newPosition);
 
         float mult = 0.2F;
         for (int i = 0; i < tornado.size(); i++) {

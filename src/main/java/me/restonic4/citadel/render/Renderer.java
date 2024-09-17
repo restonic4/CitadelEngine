@@ -104,11 +104,52 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Render batches
-        renderBatches(this.staticBatches);
-        renderBatches(this.dynamicBatches);
+        renderShadowBatches(this.staticBatches);
+        renderShadowBatches(this.dynamicBatches);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        renderMainBatches(this.staticBatches);
+        renderMainBatches(this.dynamicBatches);
     }
 
-    private <T extends RenderBatch> void renderBatches(List<T> batches) {
+    private <T extends RenderBatch> void renderShadowBatches(List<T> batches) {
+        for (int i = 0; i < batches.size(); i++) {
+            RenderBatch batch = batches.get(i);
+
+            if (batch.shouldBeSkipped()) {
+                drawCallsSkipped++;
+                continue;
+            }
+
+            batch.update();
+
+            batch.renderShadowMap();
+
+            drawCallsConsumed++;
+            dirtyModifiedTotal += batch.getDirtyModified();
+            dirtySkippedTotal += batch.getDirtySkipped();
+        }
+    }
+
+    private <T extends RenderBatch> void renderMainBatches(List<T> batches) {
+        for (int i = 0; i < batches.size(); i++) {
+            RenderBatch batch = batches.get(i);
+
+            if (batch.shouldBeSkipped()) {
+                drawCallsSkipped++;
+                continue;
+            }
+
+            batch.render();
+
+            drawCallsConsumed++;
+            dirtyModifiedTotal += batch.getDirtyModified();
+            dirtySkippedTotal += batch.getDirtySkipped();
+        }
+    }
+
+    /*private <T extends RenderBatch> void renderBatches(List<T> batches) {
         for (int i = 0; i < batches.size(); i++) {
             RenderBatch batch = batches.get(i);
 
@@ -122,16 +163,13 @@ public class Renderer {
 
             batch.renderShadowMap();
 
-            //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            //glViewport(0, 0, Window.getInstance().getWidth(), Window.getInstance().getHeight());
-
             batch.render();
 
             drawCallsConsumed++;
             dirtyModifiedTotal += batch.getDirtyModified();
             dirtySkippedTotal += batch.getDirtySkipped();
         }
-    }
+    }*/
 
     public int getDrawCalls() {
         return this.drawCallsConsumed;

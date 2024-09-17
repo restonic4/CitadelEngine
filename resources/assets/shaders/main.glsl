@@ -1,5 +1,5 @@
 #type vertex
-#version 330 core
+#version 430 core
 #extension GL_NV_gpu_shader5 : enable
 #extension GL_ARB_bindless_texture : require
 
@@ -31,7 +31,8 @@ out vec2 fReflectivity;
 flat out int fLightAmount;
 flat out vec3 fLightColors[4];
 flat out vec4 fLightAttenuationFactors[4];
-out vec4 vFragPos;
+out vec3 vFragPosView;
+out vec4 vFragPosWorld;
 
 void main()
 {
@@ -64,12 +65,13 @@ void main()
 
     // Positioning
 
-    vFragPos = vec4(aPos, 1);
-    gl_Position = uProjection * uView * vFragPos;
+    vFragPosWorld = vec4(aPos, 1);
+    vFragPosView = (uView * vFragPosWorld).xyz;
+    gl_Position = uProjection * uView * vFragPosWorld;
 }
 
 #type fragment
-#version 330 core
+#version 430 core
 #extension GL_NV_gpu_shader5 : enable
 #extension GL_ARB_bindless_texture : require
 
@@ -99,7 +101,8 @@ in vec2 fReflectivity;
 flat in int fLightAmount;
 flat in vec3 fLightColors[4];
 flat in vec4 fLightAttenuationFactors[4]; // id, x, y, z
-in vec4 vFragPos;
+in vec3 vFragPosView;
+in vec4 vFragPosWorld;
 
 out vec4 color;
 
@@ -172,12 +175,12 @@ void main()
 
     int cascadeIndex = 0;
     for (int i = 0; i < NUM_CASCADES - 1; i++) {
-        if (vFragPos.z < cascadeShadows[i].splitDistance) {
+        if (vFragPosView.z < cascadeShadows[i].splitDistance) {
             cascadeIndex = i + 1;
         }
     }
 
-    float shadowFactor = calcShadow(vFragPos, cascadeIndex);
+    float shadowFactor = calcShadow(vFragPosWorld, cascadeIndex);
 
     // Result
 
@@ -187,16 +190,16 @@ void main()
     if (DEBUG_SHADOWS == 1) {
         switch (cascadeIndex) {
             case 0:
-            color.rgb *= vec3(1.0f, 0.25f, 0.25f);
+            color.rgb *= vec3(1, 0, 0);
             break;
             case 1:
-            color.rgb *= vec3(0.25f, 1.0f, 0.25f);
+            color.rgb *= vec3(0, 1, 0);
             break;
             case 2:
-            color.rgb *= vec3(0.25f, 0.25f, 1.0f);
+            color.rgb *= vec3(0, 0, 1);
             break;
             default :
-            color.rgb *= vec3(1.0f, 1.0f, 0.25f);
+            color.rgb *= vec3(1, 1, 0); // yellow
             break;
         }
     }
