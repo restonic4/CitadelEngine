@@ -3,6 +3,7 @@ import java.text.SimpleDateFormat
 plugins {
     id 'java'
     id 'application'
+    id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
@@ -71,6 +72,14 @@ jar {
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveBaseName.set("CitadelEngine${project.hasProperty('serverBuild') ? '-Server' : ''}")
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
 
 /*tasks.withType(JavaCompile).configureEach {

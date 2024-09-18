@@ -24,6 +24,8 @@ public class ModLoader {
     }
 
     public void loadMods() {
+        Logger.log("Loading mods");
+
         CitadelSettings citadelSettings = CitadelLauncher.getInstance().getSettings();
 
         if (!citadelSettings.isThirdPartyNamespaceRegistrationAllowed()) {

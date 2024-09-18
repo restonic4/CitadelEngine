@@ -22,6 +22,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+// TODO: This class is a chaos
 public class CitadelLauncher {
     private static CitadelLauncher instance;
 
@@ -109,6 +110,7 @@ public class CitadelLauncher {
             nettyThread.start();
 
             this.citadelSettings.getClientGameLogic().start();
+            this.modLoader.loadMods();
 
             window.setCursorLocked(true);
 
@@ -150,9 +152,8 @@ public class CitadelLauncher {
             }
 
             this.citadelSettings.getServerGameLogic().start();
+            this.modLoader.loadMods();
         }
-
-        this.modLoader.loadMods();
 
         while (!shouldEnd) {
             this.modLoader.update();

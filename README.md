@@ -1,40 +1,70 @@
+<div style="text-align:center;"><img style="height: 200px" src="resources/assets/textures/icons/icon.png"></div>
+
+<div style="text-align:center;">
+    <a href="https://patreon.com/restonic4"><img src="https://img.shields.io/badge/Patreon-restonic4-orange?logo=patreon&style=for-the-badge"></a>
+    <a href="https://github.com/restonic4"><img src="https://img.shields.io/badge/GitHub-restonic4-black?logo=github&style=for-the-badge"></a>
+    <a href="https://discord.gg/9ZUpW6TDrb"><img src="https://img.shields.io/discord/735889440743882834?label=Discord&logo=discord&style=for-the-badge"></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache-blue?style=for-the-badge
+"></a>
+</div>
+
+---
+
 ## Welcome
 
 This is my first time programming a game engine. I am doing this because I don't quite like other engines. Don't get me wrong, those engines are really cool, but I prefer something else, something that I can 100% understand and modify without blowing my mind.
 
 I never thought I would be able to do something like this, but here I am, creating a 3D game engine in java, that's crazy.
 
+---
+
 ## Citadel engine
 
 This engine is going to be used for my future games and projects, but if people really like it, I could add support for using it outside my own projects.
 
-<b>Features</b>:
-- 3D rendering.
-- Batching.
-- Sound, OGG files.
-- Log system that saves the log-buffer into a log file and prevents crashes without a "crash-log file".
-- Profiler.
-- Event system.
-- ImGui.
-- Frustum culling.
-- Mod injection system.
+---
 
-<b>Working on</b>:
-- Textures.
-- Registry system to add content dynamically.
-- Optimization.
-- Better configuration for initializing the engine.
-- Lighting.
-- Shadows.
-- Networking.
+## Development Status
 
-<b>Planned</b>:
-- Object culling.
-- Config system.
-- Steamworks compatibility.
-- GUI.
-- Particles.
-- Documentation about the engine/code.
+### Always In Development (⌛)
+| Feature       | Status   |
+|---------------|----------|
+| 3D Rendering  | ⌛        |
+| Optimization  | ⌛        |
+| Modding API   | ⌛        |
+| Documentation | ⌛        |
+
+### Currently In Progress (🔄)
+| Feature         | Status |
+|-----------------|--------|
+| Lighting        | 🔄     |
+| Shadows         | 🔄     |
+| Log System      | 🔄     |
+| Profiler        | 🔄     |
+| Frustum Culling | 🔄     |
+| Textures        | 🔄     |
+| Networking      | 🔄     |
+
+### Planned Features (🗓️)
+| Feature                  | Status |
+|--------------------------|--------|
+| Object Culling           | 🗓️    |
+| Save System              | 🗓️    |
+| Steamworks Compatibility | 🗓️    |
+| GUI System               | 🗓️    |
+| Particles                | 🗓️    |
+
+### Completed Features (✅)
+| Feature               | Status   |
+|-----------------------|----------|
+| Batching              | ✅        |
+| Sound                 | ✅        |
+| Registry System       | ✅        |
+| Engine Configuration  | ✅        |
+| ImGui                 | ✅        |
+| Event System          | ✅        |
+
+---
 
 ## Credits
 
@@ -65,9 +95,13 @@ Knowledge:
 
 For more information, check out the [docs](./resources/docs) in the `resources/docs` folder.
 
+---
+
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+---
 
 ## Gource
 
