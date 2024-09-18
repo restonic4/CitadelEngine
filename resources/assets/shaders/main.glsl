@@ -76,7 +76,7 @@ void main()
 const int NUM_CASCADES = 3;
 const float BIAS = 0.0005;
 const float SHADOW_FACTOR = 0.25;
-const int DEBUG_SHADOWS = 1;
+const int DEBUG_SHADOWS = 0;
 
 struct CascadeShadow {
     mat4 projViewMatrix;
