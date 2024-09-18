@@ -31,7 +31,6 @@ out vec2 fReflectivity;
 flat out int fLightAmount;
 flat out vec3 fLightColors[4];
 flat out vec4 fLightAttenuationFactors[4];
-out vec3 vFragPosView;
 out vec4 vFragPosWorld;
 
 void main()
@@ -66,7 +65,6 @@ void main()
     // Positioning
 
     vFragPosWorld = vec4(aPos, 1);
-    vFragPosView = (uView * vFragPosWorld).xyz;
     gl_Position = uProjection * uView * vFragPosWorld;
 }
 
@@ -87,6 +85,7 @@ struct CascadeShadow {
 
 uniform sampler2D shadowMap[NUM_CASCADES];
 uniform CascadeShadow cascadeShadows[NUM_CASCADES];
+uniform mat4 uView;
 
 in vec4 fColor;
 in vec2 fUV;
@@ -101,7 +100,6 @@ in vec2 fReflectivity;
 flat in int fLightAmount;
 flat in vec3 fLightColors[4];
 flat in vec4 fLightAttenuationFactors[4]; // id, x, y, z
-in vec3 vFragPosView;
 in vec4 vFragPosWorld;
 
 out vec4 color;
@@ -173,9 +171,11 @@ void main()
 
     // Shadows
 
+    vec3 fragPosView = (uView * vFragPosWorld).xyz;
+
     int cascadeIndex = 0;
     for (int i = 0; i < NUM_CASCADES - 1; i++) {
-        if (vFragPosView.z < cascadeShadows[i].splitDistance) {
+        if (fragPosView.z < cascadeShadows[i].splitDistance) {
             cascadeIndex = i + 1;
         }
     }

@@ -105,7 +105,7 @@ public class WorldScene extends Scene {
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        int amount = 2;//20
+        int amount = 5;//20
 
         for (int i = -(amount / 2); i < amount / 2; i++) {
             for (int j = -(amount / 2); j < amount / 2; j++) {
@@ -157,7 +157,7 @@ public class WorldScene extends Scene {
         fboView.addComponent(new ModelRendererComponent(fboMesh));
         this.addGameObject(fboView);
 
-        int planeSize = 5000;
+        int planeSize = 500;
 
         GameObject plane = new GameObject(false);
         plane.transform.setPosition(0, 0, 0);
@@ -167,7 +167,7 @@ public class WorldScene extends Scene {
         plane.addComponent(new ModelRendererComponent(planeMesh));
         this.addGameObject(plane);
 
-        for (int i = 0; i < planeSize * 2; i++) {
+        for (int i = 0; i < planeSize; i++) {
             GameObject cube = new GameObject(false);
             cube.transform.setPosition(RandomUtil.random(-planeSize, planeSize), 1, RandomUtil.random(-planeSize, planeSize));
             cube.transform.setScale(1, 2, 1);
