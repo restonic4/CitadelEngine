@@ -24,27 +24,34 @@ This engine is going to be used for my future games and projects, but if people 
 - Optimization.
 - Better configuration for initializing the engine.
 - Lighting.
+- Shadows.
 - Networking.
 
 <b>Planned</b>:
 - Object culling.
 - Config system.
 - Steamworks compatibility.
+- GUI.
+- Particles.
+- Documentation about the engine/code.
 
 ## Credits
 
 Coded with ❤🧡💛💚💙💙💜🤎🖤🤍 by <a href="https://github.com/restonic4">restonic4</a>.
 
+📚 = Library.
+🔮 = App / Tool.
+
 Libraries and tools used:
-- <a href="https://www.lwjgl.org">LWJGL 3</a>
-- <a href="https://www.glfw.org">GLFW</a>
-- <a href="https://www.khronos.org/about/">OpenGL</a>
-- <a href="https://www.openal.org">OpenAL</a>
-- <a href="https://github.com/nothings/stb">STB</a>
-- <a href="https://github.com/ocornut/imgui">Original ImGui</a>, <a href="https://github.com/SpaiR/imgui-java">Java ImGui</a>
-- <a href="https://github.com/netty/netty/">Netty</a>
-- <a href="https://gource.io">Gource</a>
-- <a href="https://visualvm.github.io">VisualVM</a>
+- <a href="https://www.lwjgl.org">📚 LWJGL 3</a>
+- <a href="https://www.glfw.org">📚 GLFW</a>
+- <a href="https://www.khronos.org/about/">📚 OpenGL</a>
+- <a href="https://www.openal.org">📚 OpenAL</a>
+- <a href="https://github.com/nothings/stb">📚 STB</a>
+- <a href="https://github.com/ocornut/imgui">📚 Original ImGui</a> ---> <a href="https://github.com/SpaiR/imgui-java">📚 Java ImGui</a>
+- <a href="https://github.com/netty/netty/">📚 Netty</a>
+- <a href="https://gource.io">🔮 Gource</a>
+- <a href="https://visualvm.github.io">🔮 VisualVM</a>
 
 Knowledge:
 - <a href="https://www.youtube.com/@GamesWithGabe">Youtube: @GamesWithGabe</a>
