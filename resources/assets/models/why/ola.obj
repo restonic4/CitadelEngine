@@ -1,6 +1,6 @@
 # Blender 3.1.0
 # www.blender.org
-mtllib me gusta el chocolate.mtl
+mtllib com gusta el chocolate.mtl
 o Cube
 v -1.000000 -1.000000 1.000000
 v -1.000000 1.000000 1.000000

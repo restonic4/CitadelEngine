@@ -1,0 +1,18 @@
+package com.restonic4.citadel.registries.built_in.types;
+
+import imgui.ImGui;
+import com.restonic4.citadel.registries.RegistryObject;
+
+public class ImGuiScreen extends RegistryObject {
+    public void start() {
+
+    }
+
+    public void render() {
+        ImGui.begin(this.getAssetLocation().toString());
+        ImGui.text("This is empty...");
+        ImGui.end();
+    };
+
+
+}

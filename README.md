@@ -11,7 +11,7 @@
 
 ## Welcome
 
-This is my first time programming a game engine. I am doing this because I don't quite like other engines. Don't get me wrong, those engines are really cool, but I prefer something else, something that I can 100% understand and modify without blowing my mind.
+This is my first time programming a game engine. I am doing this because I don't quite like other engines. Don't get com wrong, those engines are really cool, but I prefer something else, something that I can 100% understand and modify without blowing my mind.
 
 I never thought I would be able to do something like this, but here I am, creating a 3D game engine in java, that's crazy.
 
