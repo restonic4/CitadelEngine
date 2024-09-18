@@ -105,7 +105,7 @@ public class WorldScene extends Scene {
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        int amount = 5;//20
+        /*int amount = 5;//20
 
         for (int i = -(amount / 2); i < amount / 2; i++) {
             for (int j = -(amount / 2); j < amount / 2; j++) {
@@ -131,7 +131,7 @@ public class WorldScene extends Scene {
                     this.addGameObject(test);
                 }
             }
-        }
+        }*/
 
         Mesh citadelMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
         citadelMesh.setTexture(new Texture("assets/textures/persus.png"));

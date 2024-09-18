@@ -15,6 +15,7 @@ public class Shaders extends AbstractRegistryInitializer {
 
     @Override
     public void register() {
+        // TODO: Optimize this shader, it's using a ton of memory or something like, i cant pass new variables.
         MAIN = Registry.register(Registries.SHADER, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "main"),
                 new Shader(new String[]{ "uProjection", "uView", "uLightPos", "uLightAmount", "uLightColors", "uLightAttenuationFactors" }) {
                     @Override

@@ -149,28 +149,6 @@ public class Renderer {
         }
     }
 
-    /*private <T extends RenderBatch> void renderBatches(List<T> batches) {
-        for (int i = 0; i < batches.size(); i++) {
-            RenderBatch batch = batches.get(i);
-
-            if (batch.shouldBeSkipped()) {
-                drawCallsSkipped++;
-                //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                continue;
-            }
-
-            batch.update();
-
-            batch.renderShadowMap();
-
-            batch.render();
-
-            drawCallsConsumed++;
-            dirtyModifiedTotal += batch.getDirtyModified();
-            dirtySkippedTotal += batch.getDirtySkipped();
-        }
-    }*/
-
     public int getDrawCalls() {
         return this.drawCallsConsumed;
     }
