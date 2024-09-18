@@ -3,7 +3,6 @@ import java.text.SimpleDateFormat
 plugins {
     id 'java'
     id 'application'
-    id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
@@ -56,6 +55,7 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
     //withSourcesJar()
+    //withJavadocJar()
 }
 
 jar {
@@ -74,13 +74,13 @@ jar {
     archiveBaseName.set("CitadelEngine${project.hasProperty('serverBuild') ? '-Server' : ''}")
 }
 
-publishing {
+/*publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
         }
     }
-}
+}*/
 
 /*tasks.withType(JavaCompile).configureEach {
     if (project.hasProperty('serverBuild')) {
@@ -252,7 +252,7 @@ tasks.register('gource', Exec) {
 
 // Auto update common constants between gradle and java
 task updateGradleUtil {
-    def filePath = "src/main/java/me/restonic4/citadel/util/GradleUtil.java"
+    def filePath = "src/main/java/com/restonic4/citadel/util/GradleUtil.java"
     def versionRegex = /public static final String VERSION = ".*";/
     def nameRegex = /public static final String APP_NAME = ".*";/
     def consoleRegex = /public static final Boolean CONSOLE_ENABLED = .*/
