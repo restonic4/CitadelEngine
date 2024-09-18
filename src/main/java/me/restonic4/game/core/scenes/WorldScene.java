@@ -49,6 +49,7 @@ public class WorldScene extends Scene {
     public OrthographicCamera shadowMapCamera;
     public GameObject sun;
     public GameObject thingy;
+    public List<GameObject> yes = new ArrayList<>();
 
     @Override
     public void init() {
@@ -105,7 +106,7 @@ public class WorldScene extends Scene {
 
         Mesh[] list = new Mesh[]{testMesh, testMesh2};
 
-        /*int amount = 5;//20
+        /*int amount = 2;//20
 
         for (int i = -(amount / 2); i < amount / 2; i++) {
             for (int j = -(amount / 2); j < amount / 2; j++) {
@@ -174,6 +175,7 @@ public class WorldScene extends Scene {
             Mesh cubeMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
             cubeMesh.setTint(new Vector4f(0, 1, 1, 1));
             cube.addComponent(new ModelRendererComponent(cubeMesh));
+            yes.add(cube);
             this.addGameObject(cube);
         }
 
@@ -310,6 +312,17 @@ public class WorldScene extends Scene {
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_E)) {
             camera.transform.addLocalPositionY((float) (velocity * Time.getDeltaTime()));
+        }
+
+        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {
+            for (GameObject gameObject : yes) {
+                gameObject.transform.addLocalPositionY((float) (Time.getDeltaTime() * 5));
+            }
+        }
+        if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
+            for (GameObject gameObject : yes) {
+                gameObject.transform.addLocalPositionY((float) (Time.getDeltaTime() * -5));
+            }
         }
 
         /*if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_UP)) {

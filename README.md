@@ -17,6 +17,7 @@ This engine is going to be used for my future games and projects, but if people 
 - Event system.
 - ImGui.
 - Frustum culling.
+- Mod injection system.
 
 <b>Working on</b>:
 - Textures.

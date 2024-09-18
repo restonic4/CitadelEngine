@@ -1,5 +1,6 @@
 package me.restonic4.citadel.events.types;
 
+import me.restonic4.citadel.api.Mod;
 import me.restonic4.citadel.core.CitadelLauncher;
 import me.restonic4.citadel.core.Window;
 import me.restonic4.citadel.events.Event;
@@ -91,5 +92,33 @@ public class CitadelLifecycleEvents {
     @FunctionalInterface
     public interface CitadelCleanedUp {
         void onCitadelCleanedUp(CitadelLauncher citadelLauncher, Window window);
+    }
+
+    /**
+     * Gets triggered when the engine loads a mod.
+     */
+    public static final Event<ModLoaded> MOD_LOADED = EventFactory.createArray(ModLoaded.class, callbacks -> (mod) -> {
+        for (ModLoaded callback : callbacks) {
+            callback.onModLoaded(mod);
+        }
+    });
+
+    @FunctionalInterface
+    public interface ModLoaded {
+        void onModLoaded(Mod mod);
+    }
+
+    /**
+     * Gets triggered when the engine unloads a mod.
+     */
+    public static final Event<ModUnloaded> MOD_UNLOADED = EventFactory.createArray(ModUnloaded.class, callbacks -> (mod) -> {
+        for (ModUnloaded callback : callbacks) {
+            callback.onModUnloaded(mod);
+        }
+    });
+
+    @FunctionalInterface
+    public interface ModUnloaded {
+        void onModUnloaded(Mod mod);
     }
 }

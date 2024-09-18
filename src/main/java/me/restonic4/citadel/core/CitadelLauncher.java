@@ -1,5 +1,6 @@
 package me.restonic4.citadel.core;
 
+import me.restonic4.citadel.api.ModLoader;
 import me.restonic4.citadel.events.types.CitadelLifecycleEvents;
 import me.restonic4.citadel.localization.Localizer;
 import me.restonic4.citadel.networking.Client;
@@ -24,12 +25,15 @@ import java.util.concurrent.TimeUnit;
 public class CitadelLauncher {
     private static CitadelLauncher instance;
 
-    private CitadelSettings citadelSettings;
+    private final CitadelSettings citadelSettings;
+    private final ModLoader modLoader;
+
     Thread nettyThread = null;
     boolean shouldEnd = false;
 
     private CitadelLauncher(CitadelSettings citadelSettings) {
         this.citadelSettings = citadelSettings;
+        this.modLoader = new ModLoader();
     }
 
     public static CitadelLauncher create(CitadelSettings citadelSettings) {
@@ -148,7 +152,10 @@ public class CitadelLauncher {
             this.citadelSettings.getServerGameLogic().start();
         }
 
+        this.modLoader.loadMods();
+
         while (!shouldEnd) {
+            this.modLoader.update();
             this.citadelSettings.getSharedGameLogic().update();
             this.citadelSettings.getServerGameLogic().update();
         }

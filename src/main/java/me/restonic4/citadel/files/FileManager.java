@@ -165,6 +165,10 @@ public class FileManager {
         return appDataDir;
     }
 
+    public static String getOrCreateDirectory(String directory) {
+        return createDirectory(directory);
+    }
+
     public static String createDirectory(String directory) {
         File appDir = new File(getMainDirectory());
 

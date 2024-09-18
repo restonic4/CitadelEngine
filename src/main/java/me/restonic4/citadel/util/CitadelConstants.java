@@ -37,6 +37,9 @@ public class CitadelConstants {
     public static final int MAX_LIGHTS = 4;
     public static final int SHADOW_RESOLUTION = 4096;
 
+    public static final String MOD_PROPERTIES_FILE_NAME = "mod.properties.json";
+    public static final String MOD_PROPERTIES_MAIN_CLASS = "main_class";
+
     // Can be modified
 
     public static float CAMERA_NEAR_PLANE = 0.1f;
@@ -51,4 +54,6 @@ public class CitadelConstants {
     public static int WINDOW_TITLE_CHANGE_FREQUENCY = 3;
 
     public static Locale DEFAULT_LOCALE = Locales.EN_US;
+
+    public static String MODS_DIRECTORY = "mods";
 }
