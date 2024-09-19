@@ -57,8 +57,10 @@ public class CitadelLauncher {
 
         GradleUtil.logInfo();
 
-        // TODO: This should be avoided on the server side, the server doesn't need to play sounds. getInstance initializes the sound engine.
-        SoundManager.getInstance().init();
+        // Only init the sound engine on the client
+        if (!citadelSettings.isServerSide()) {
+            SoundManager.getInstance().init();
+        }
 
         RegistryManager.registerBuiltInRegistrySet(new Shaders());
         RegistryManager.registerBuiltInRegistrySet(new Sounds());

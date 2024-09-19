@@ -28,6 +28,17 @@ public class SoundManager {
     public SoundManager() {
         soundBufferList = new ArrayList<>();
         soundSourceMap = new HashMap<>();
+    }
+
+    public static SoundManager getInstance() {
+        if (SoundManager.instance == null) {
+            SoundManager.instance = new SoundManager();
+        }
+        return SoundManager.instance;
+    }
+
+    public void init() {
+        Logger.log("Starting the audio engine");
 
         device = alcOpenDevice((ByteBuffer) null);
         if (device == NULL) {
@@ -43,17 +54,6 @@ public class SoundManager {
 
         setAttenuationModel(AL11.AL_EXPONENT_DISTANCE);
         setListener(new SoundListener(new Vector3f(0, 0, 0)));
-    }
-
-    public static SoundManager getInstance() {
-        if (SoundManager.instance == null) {
-            SoundManager.instance = new SoundManager();
-        }
-        return SoundManager.instance;
-    }
-
-    public void init() {
-        Logger.log("Starting the audio engine");
     }
 
     public void addSoundBuffer(SoundBuffer soundBuffer) {
