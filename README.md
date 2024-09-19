@@ -41,8 +41,7 @@ This engine is going to be used for my future games and projects, but if people 
 |-----------------|--------|
 | Lighting        | ✅      |
 | Shadows         | ✅      |
-| Log System      | ✅      |
-| Profiler        | ✅      |
+| Profiler        | ❔      |
 | Frustum Culling | ✅      |
 | Textures        | ✅      |
 | Networking      | ✅      |
@@ -60,14 +59,15 @@ This engine is going to be used for my future games and projects, but if people 
 | Physics                                        | ❔      |
 
 ### Completed Features (✅)
-| Feature                  | Status   |
-|--------------------------|----------|
-| Batching                 | ✅        |
-| Sound                    | ✅        |
-| Registry System          | ✅        |
-| Engine Configuration     | ✅        |
-| ImGui                    | ✅        |
-| Event System             | ✅        |
+| Feature              | Status |
+|----------------------|--------|
+| Batching             | ✅      |
+| Sound                | ✅      |
+| Registry System      | ✅      |
+| Engine Configuration | ✅      |
+| ImGui                | ✅      |
+| Event System         | ✅      |
+| Log System           | ✅      |
 
 ## Credits
 
