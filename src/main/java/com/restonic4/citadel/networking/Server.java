@@ -19,7 +19,7 @@ public class Server {
         this.port = port;
     }
 
-    public void run() throws Exception {
+    public void run() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(); // Accept connections
         EventLoopGroup workerGroup = new NioEventLoopGroup(); // Handle connections
         ByteBuf delimiter = Unpooled.copiedBuffer("\n".getBytes());
@@ -44,6 +44,11 @@ public class Server {
             Logger.log("Server started, listening on " + port);
 
             f.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            Logger.logError(e);
+        } catch (Exception e) {
+            Logger.logError(e);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

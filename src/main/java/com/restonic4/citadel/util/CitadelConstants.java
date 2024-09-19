@@ -39,6 +39,10 @@ public class CitadelConstants {
     public static final String MOD_PROPERTIES_FILE_NAME = "mod.properties.json";
     public static final String MOD_PROPERTIES_MAIN_CLASS = "main_class";
 
+    public static final String CLIENT_SIDE_THREAD_NAME = "Networking client side";
+    public static final String CLIENT_SIDE_RENDER_THREAD_NAME = "Render client side";
+    public static final String SERVER_SIDE_THREAD_NAME = "Networking server side";
+
     // Can be modified
 
     public static float CAMERA_NEAR_PLANE = 0.1f;

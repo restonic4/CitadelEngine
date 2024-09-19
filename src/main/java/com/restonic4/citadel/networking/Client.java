@@ -1,5 +1,6 @@
 package com.restonic4.citadel.networking;
 
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -20,7 +21,7 @@ public class Client {
         this.port = port;
     }
 
-    public void run() throws Exception {
+    public void run() {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -39,6 +40,11 @@ public class Client {
             ChannelFuture f = b.connect(host, port).sync();
 
             f.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            Logger.logError(e);
+        } catch (Exception e) {
+            Logger.logError(e);
         } finally {
             group.shutdownGracefully();
         }

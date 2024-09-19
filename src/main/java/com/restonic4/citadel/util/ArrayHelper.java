@@ -1,6 +1,7 @@
 package com.restonic4.citadel.util;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +33,13 @@ public class ArrayHelper {
         System.arraycopy(array, 0, newArray, 0, Math.min(array.length, size));
 
         return (T[]) newArray;
+    }
+
+    public static <T> void runIfFound(T[] array, T elementToFind, Runnable runnable) {
+        boolean found = Arrays.asList(array).contains(elementToFind);
+        if (found) {
+            runnable.run();
+        }
     }
 
     private static class ArrayKey {

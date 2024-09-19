@@ -1,14 +1,13 @@
 package com.restonic4.citadel.util.debug.diagnosis;
 
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.DebugManager;
 
 public abstract class Logger {
     private static final PersistentLogger persistentLogger = new PersistentLogger();
 
     public static void log(Object message) {
-        if (message == null) {
-            message = "[NULL_OBJECT]";
-        }
+        message = convertMessage(message);
 
         if (DebugManager.isDebugMode()) {
             message = getDebugInfo() + message;
@@ -23,6 +22,25 @@ public abstract class Logger {
         if (DebugManager.isDebugMode()) {
             log(message);
         }
+    }
+
+    public static void logError(Object message) {
+        message = convertMessage(message);
+
+        log(StringBuilderHelper.concatenate("[ERROR]: ", message));
+    }
+
+    public static void logError(Exception exception) {
+        log(StringBuilderHelper.concatenate("[ERROR]: ", exception));
+        exception.printStackTrace();
+    }
+
+    public static String convertMessage(Object message) {
+        if (message == null) {
+           return "[NULL_OBJECT]";
+        }
+
+        return message.toString();
     }
 
     private static String getDebugInfo() {

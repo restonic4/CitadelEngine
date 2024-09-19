@@ -10,6 +10,8 @@ import com.restonic4.citadel.platform.operating_systems.OperatingSystem;
 import com.restonic4.citadel.registries.RegistryManager;
 import com.restonic4.citadel.registries.built_in.managers.*;
 import com.restonic4.citadel.sound.SoundManager;
+import com.restonic4.citadel.util.ArrayHelper;
+import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.GradleUtil;
 import com.restonic4.citadel.util.debug.DebugManager;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -23,7 +25,6 @@ public class CitadelLauncher {
     private final CitadelSettings citadelSettings;
     private final ModLoader modLoader;
 
-    Thread nettyThread = null;
     boolean shouldEnd = false;
 
     private CitadelLauncher(CitadelSettings citadelSettings) {
@@ -49,19 +50,109 @@ public class CitadelLauncher {
     public void launch() {
         CitadelLifecycleEvents.CITADEL_STARTING.invoker().onCitadelStarting(this);
 
+        logUsefulData();
+        handleCrashes();
+        startRegistries();
+
+        startDesiredEnvironment();
+
+        while (!shouldEnd) {
+            this.modLoader.update();
+            this.citadelSettings.getSharedGameLogic().update();
+
+            if (citadelSettings.isServerSide()) {
+                this.citadelSettings.getServerGameLogic().update();
+            }
+            else {
+                this.citadelSettings.getClientGameLogic().update();
+            }
+        }
+
+        CitadelLifecycleEvents.CITADEL_STOPPED.invoker().onCitadelStopped(CitadelLauncher.getInstance());
+    }
+
+    private void startDesiredEnvironment() {
+        this.citadelSettings.getSharedGameLogic().start();
+
+        if (!citadelSettings.isServerSide()) {
+            Logger.log("Launching as client");
+            startClient();
+        }
+        else {
+            Logger.log("Launching as server");
+            startServer();
+        }
+
+        this.modLoader.loadMods();
+    }
+
+    private void startClient() {
+        ThreadManager.startThread(CitadelConstants.CLIENT_SIDE_THREAD_NAME, () -> {
+            Client client = new Client("localhost", 8080);
+            client.run();
+        });
+
+        this.citadelSettings.getClientGameLogic().start();
+
+        ThreadManager.startThread(CitadelConstants.CLIENT_SIDE_RENDER_THREAD_NAME, () -> {
+            Window window = Window.getInstance();
+            window.init();
+
+            window.setCursorLocked(true);
+
+            window.loop();
+            window.cleanup();
+        });
+    }
+
+    private void startServer() {
+        ThreadManager.startThread(CitadelConstants.SERVER_SIDE_THREAD_NAME, () -> {
+            DebugManager.setDebugMode(true);
+            Server server = new Server(8080);
+            server.run();
+        });
+
+        // Java arguments
+        ArrayHelper.runIfFound(citadelSettings.getArgs(), "citadelConsole", () -> {
+            ThreadManager.startThread("Server console rendering", () -> {
+                try {
+                    Window.getInstance().initGuiOnly();
+                } catch (Exception e) {
+                    killNetworkThreads();
+                    System.exit(0);
+                    throw new RuntimeException(e);
+                }
+            });
+
+            ImGuiScreens.SERVER_CONSOLE.show();
+        });
+
+        this.citadelSettings.getServerGameLogic().start();
+    }
+
+    private void logUsefulData() {
         OperatingSystem operatingSystem = PlatformManager.getOperatingSystem().get();
 
         Logger.log("Starting Citadel engine");
         Logger.log("Platform: " + operatingSystem);
         Logger.log("Java locale: " + operatingSystem.getSystemLocale());
+        Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());
 
         GradleUtil.logInfo();
 
+        if (operatingSystem.isAppRunning("idea64.exe")) {
+            Logger.log("You coding huh?");
+        }
+    }
+
+    private void startRegistries() {
         // Only init the sound engine on the client
+        // Required before registries
         if (!citadelSettings.isServerSide()) {
             SoundManager.getInstance().init();
         }
 
+        // Loading the registry sets
         RegistryManager.registerBuiltInRegistrySet(new Shaders());
         RegistryManager.registerBuiltInRegistrySet(new Sounds());
         RegistryManager.registerBuiltInRegistrySet(new ProfilerStats());
@@ -71,16 +162,12 @@ public class CitadelLauncher {
         RegistryManager.registerBuiltInRegistrySet(new PacketDataTypes());
         RegistryManager.registerBuiltInRegistrySet(new Packets());
         RegistryManager.registerBuiltInRegistrySet(new FrameBuffers());
+
+        // Register all
         RegistryManager.registerBuiltIn();
+    }
 
-        this.citadelSettings.getSharedGameLogic().start();
-
-        Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());
-
-        if (operatingSystem.isAppRunning("idea64.exe")) {
-            Logger.log("You coding huh?");
-        }
-
+    private void handleCrashes() {
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             killNetworkThreads();
             shouldEnd = true;
@@ -88,83 +175,17 @@ public class CitadelLauncher {
             throwable.printStackTrace();
             //throw new RuntimeException(throwable.getMessage());
         });
-
-        if (!citadelSettings.isServerSide()) { // Client side
-            Logger.log("Launching as client");
-
-            Window window = Window.getInstance();
-            window.init();
-
-            nettyThread = new Thread(() -> {
-                try {
-                    Client client = new Client("localhost", 8080);
-                    client.run();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            nettyThread.setName("Networking client side");
-            nettyThread.start();
-
-            this.citadelSettings.getClientGameLogic().start();
-            this.modLoader.loadMods();
-
-            window.setCursorLocked(true);
-
-            window.loop();
-            window.cleanup();
-        }
-        else { // Server side
-            Logger.log("Launching as server");
-
-            nettyThread = new Thread(() -> {
-                try {
-                    DebugManager.setDebugMode(true);
-                    Server server = new Server(8080);
-                    server.run();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            nettyThread.setName("Networking server side");
-            nettyThread.start();
-
-            // Java arguments
-            for (int i = 0; i < citadelSettings.getArgs().length; i++) {
-                if (Objects.equals(citadelSettings.getArgs()[i], "citadelConsole")) {
-                    Thread renderThread = new Thread(() -> {
-                        try {
-                            Window.getInstance().initGuiOnly();
-                        } catch (Exception e) {
-                            killNetworkThreads();
-                            System.exit(0);
-                            throw new RuntimeException(e);
-                        }
-                    });
-                    renderThread.setName("Server console rendering");
-                    renderThread.start();
-
-                    ImGuiScreens.SERVER_CONSOLE.show();
-                }
-            }
-
-            this.citadelSettings.getServerGameLogic().start();
-            this.modLoader.loadMods();
-        }
-
-        while (!shouldEnd) {
-            this.modLoader.update();
-            this.citadelSettings.getSharedGameLogic().update();
-            this.citadelSettings.getServerGameLogic().update();
-        }
-
-        CitadelLifecycleEvents.CITADEL_STOPPED.invoker().onCitadelStopped(CitadelLauncher.getInstance());
     }
 
     private void killNetworkThreads() {
-        if (nettyThread != null) {
-            Logger.log("Killing netty thread");
-            nettyThread.interrupt();
+        Thread clientThread = ThreadManager.findThreadByName(CitadelConstants.CLIENT_SIDE_THREAD_NAME);
+        if (clientThread != null) {
+            ThreadManager.stopThread(clientThread);
+        }
+
+        Thread serverThread = ThreadManager.findThreadByName(CitadelConstants.SERVER_SIDE_THREAD_NAME);
+        if (serverThread != null) {
+            ThreadManager.stopThread(serverThread);
         }
     }
 
