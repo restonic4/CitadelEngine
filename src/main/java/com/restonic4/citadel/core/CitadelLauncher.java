@@ -50,9 +50,9 @@ public class CitadelLauncher {
     public void launch() {
         CitadelLifecycleEvents.CITADEL_STARTING.invoker().onCitadelStarting(this);
 
-        logUsefulData();
         handleCrashes();
         startRegistries();
+        logUsefulData();
 
         startDesiredEnvironment();
 
