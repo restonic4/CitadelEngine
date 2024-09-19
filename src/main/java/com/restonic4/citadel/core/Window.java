@@ -1,5 +1,6 @@
 package com.restonic4.citadel.core;
 
+import com.restonic4.citadel.exceptions.RenderException;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.flag.ImGuiConfigFlags;
@@ -163,8 +164,9 @@ public class Window {
 
         glEnable(GL_MULTISAMPLE);
 
+        // TODO: Old graphics cards support, if possible
         if (!GL.getCapabilities().GL_ARB_bindless_texture) {
-            throw new IllegalStateException("Bindless textures not compatible with your graphics card. Tell the devs pls!");
+            throw new RenderException("Bindless textures not compatible with your graphics card. Tell the devs pls!");
         }
 
         ImGui.createContext();
