@@ -44,7 +44,7 @@ public class Client {
             Thread.currentThread().interrupt();
             Logger.logError(e);
         } catch (Exception e) {
-            Logger.logError(e);
+            Logger.throwError(e);
         } finally {
             group.shutdownGracefully();
         }

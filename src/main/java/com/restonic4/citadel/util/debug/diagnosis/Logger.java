@@ -35,6 +35,14 @@ public abstract class Logger {
         exception.printStackTrace();
     }
 
+    public static void throwError(Exception exception) {
+        if (!DebugManager.isDevEnvironment()) {
+            logError(exception);
+        }
+
+        throw new RuntimeException(exception);
+    }
+
     public static String convertMessage(Object message) {
         if (message == null) {
            return "[NULL_OBJECT]";

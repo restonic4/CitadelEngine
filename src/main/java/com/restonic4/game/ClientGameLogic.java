@@ -14,6 +14,8 @@ public class ClientGameLogic implements IGameLogic {
         DebugManager.setDebugMode(true);
         ProfilerManager.setEnabled(false);
 
+        Logger.log("ola1");
+
         SceneManager.loadScene(new WorldScene());
     }
 

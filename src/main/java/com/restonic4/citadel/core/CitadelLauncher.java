@@ -63,9 +63,6 @@ public class CitadelLauncher {
             if (citadelSettings.isServerSide()) {
                 this.citadelSettings.getServerGameLogic().update();
             }
-            else {
-                this.citadelSettings.getClientGameLogic().update();
-            }
         }
 
         CitadelLifecycleEvents.CITADEL_STOPPED.invoker().onCitadelStopped(CitadelLauncher.getInstance());
@@ -87,18 +84,18 @@ public class CitadelLauncher {
     }
 
     private void startClient() {
-        ThreadManager.startThread(CitadelConstants.CLIENT_SIDE_THREAD_NAME, () -> {
+        ThreadManager.startThread(CitadelConstants.CLIENT_SIDE_THREAD_NAME, false, () -> {
             Client client = new Client("localhost", 8080);
             client.run();
         });
 
-        this.citadelSettings.getClientGameLogic().start();
-
-        ThreadManager.startThread(CitadelConstants.CLIENT_SIDE_RENDER_THREAD_NAME, () -> {
+        ThreadManager.startThread(CitadelConstants.CLIENT_SIDE_RENDER_THREAD_NAME, true, () -> {
             Window window = Window.getInstance();
             window.init();
 
             window.setCursorLocked(true);
+
+            this.citadelSettings.getClientGameLogic().start();
 
             window.loop();
             window.cleanup();
@@ -106,7 +103,7 @@ public class CitadelLauncher {
     }
 
     private void startServer() {
-        ThreadManager.startThread(CitadelConstants.SERVER_SIDE_THREAD_NAME, () -> {
+        ThreadManager.startThread(CitadelConstants.SERVER_SIDE_THREAD_NAME, false, () -> {
             DebugManager.setDebugMode(true);
             Server server = new Server(8080);
             server.run();
@@ -114,7 +111,7 @@ public class CitadelLauncher {
 
         // Java arguments
         ArrayHelper.runIfFound(citadelSettings.getArgs(), "citadelConsole", () -> {
-            ThreadManager.startThread("Server console rendering", () -> {
+            ThreadManager.startThread("Server console rendering", true, () -> {
                 try {
                     Window.getInstance().initGuiOnly();
                 } catch (Exception e) {
@@ -171,6 +168,8 @@ public class CitadelLauncher {
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             killNetworkThreads();
             shouldEnd = true;
+            ThreadManager.stopAllThreads();
+            ThreadManager.shutdownExecutor();
             Logger.getPersistentLogger().onCrash(thread, throwable);
             throwable.printStackTrace();
             //throw new RuntimeException(throwable.getMessage());

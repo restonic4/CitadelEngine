@@ -199,11 +199,15 @@ public class Window {
             shader.compile();
         }
 
+        IGameLogic clientGameLogic = CitadelLauncher.getInstance().getSettings().getClientGameLogic();
+
         while (!glfwWindowShouldClose(glfwWindowAddress)) {
             // Listen for input events
             glfwPollEvents();
 
             updateAspectRatio();
+
+            clientGameLogic.update();
 
             Scene scene = SceneManager.getCurrentScene();
             if (scene != null && Time.getDeltaTime() > 0) {
