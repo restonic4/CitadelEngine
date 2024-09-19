@@ -164,7 +164,7 @@ public class Window {
 
         glEnable(GL_MULTISAMPLE);
 
-        // TODO: Old graphics cards support, if possible
+        // TODO: Old graphics cards support, if possible. Issue #2
         if (!GL.getCapabilities().GL_ARB_bindless_texture) {
             throw new RenderException("Bindless textures not compatible with your graphics card. Tell the devs pls!");
         }
