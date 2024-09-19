@@ -268,8 +268,8 @@ public class RenderBatch {
     public void renderShadowMap() {
         CascadeShadow.updateCascadeShadows(cascadeShadows, SceneManager.getCurrentScene());
 
-        FrameBuffers.SHADOWS.bind();
-        Shaders.SHADOWS.use();
+        /*FrameBuffers.SHADOWS.bind();
+        Shaders.SHADOWS.use();*/
 
         for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FrameBuffers.SHADOWS.getDepthMapTexture().getIds()[i], 0);
@@ -283,8 +283,8 @@ public class RenderBatch {
             glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
         }
 
-        Shaders.SHADOWS.detach();
-        FrameBufferManager.unbindCurrentFrameBuffer();
+        /*Shaders.SHADOWS.detach();
+        FrameBufferManager.unbindCurrentFrameBuffer();*/
     }
 
     // TODO: Optimize this, CPU usage and Memory
@@ -412,6 +412,10 @@ public class RenderBatch {
 
     public int getVerticesAmount() {
         return this.vertices.length;
+    }
+
+    public List<CascadeShadow> getCascadeShadows() {
+        return cascadeShadows;
     }
 
     public boolean isOutsideFrustum() {

@@ -2,8 +2,11 @@ package com.restonic4.citadel.render;
 
 import com.restonic4.ClientSide;
 import com.restonic4.citadel.exceptions.RenderException;
+import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
+import com.restonic4.citadel.registries.built_in.managers.Shaders;
 import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.world.Scene;
+import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.GameObject;
 import com.restonic4.citadel.world.object.components.ModelRendererComponent;
 import com.restonic4.citadel.util.CitadelConstants;
@@ -102,8 +105,23 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Render batches
+        /*List<CascadeShadow> temp = new ArrayList<>();
+        for (RenderBatch renderBatch : staticBatches) {
+            temp.addAll(renderBatch.getCascadeShadows());
+        }
+        for (RenderBatch renderBatch : dynamicBatches) {
+            temp.addAll(renderBatch.getCascadeShadows());
+        }
+        CascadeShadow.updateCascadeShadows(temp, SceneManager.getCurrentScene());*/
+
+        FrameBuffers.SHADOWS.bind();
+        Shaders.SHADOWS.use();
+
         renderShadowBatches(this.staticBatches);
         renderShadowBatches(this.dynamicBatches);
+
+        Shaders.SHADOWS.detach();
+        FrameBufferManager.unbindCurrentFrameBuffer();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -142,8 +160,6 @@ public class Renderer {
             batch.render();
 
             drawCallsConsumed++;
-            dirtyModifiedTotal += batch.getDirtyModified();
-            dirtySkippedTotal += batch.getDirtySkipped();
         }
     }
 

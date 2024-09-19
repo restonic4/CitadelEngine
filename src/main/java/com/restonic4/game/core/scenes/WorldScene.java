@@ -45,7 +45,6 @@ public class WorldScene extends Scene {
     List<GameObject> debugCascadePoints = new ArrayList<>();
     List<GameObject> tornado = new ArrayList<>();
     public GameObject test2;
-    public OrthographicCamera shadowMapCamera;
     public GameObject sun;
     public GameObject thingy;
     public List<GameObject> yes = new ArrayList<>();
@@ -57,13 +56,6 @@ public class WorldScene extends Scene {
         camTransform.setScale(1, 1, 1);
         camera = new PerspectiveCamera(camTransform);
         camera.load();
-
-        Transform shadowMapCameraTransform = new Transform();
-        shadowMapCameraTransform.setPosition(0, 0, 0);
-        //Quaternionf quaternion = new Quaternionf().rotateX((float) Math.PI);
-        Quaternionf quaternionf = new Quaternionf().lookAlong(new Vector3f(0, -1, 0), new Vector3f(1, 0, 0));
-        shadowMapCameraTransform.setRotation(quaternionf);
-        shadowMapCamera = new OrthographicCamera(shadowMapCameraTransform);
 
         // Music
         music = Sounds.TEMPLATE.createSource(true, true);
@@ -142,14 +134,14 @@ public class WorldScene extends Scene {
         test.addComponent(lightComponent);
         test.addComponent(new ModelRendererComponent(citadelMesh));
         test.setName("test");
-        test.transform.setPosition(0, -100, 10);
+        test.transform.setPosition(0, 50, 10);
         test.transform.setScale(0.1f,0.1f,0.1f);
         this.addGameObject(test);
 
         test2 = test;
 
         GameObject fboView = new GameObject(false);
-        fboView.transform.setPosition(0, -100, 0);
+        fboView.transform.setPosition(0, 50, -10);
         fboView.transform.setScale(10, 10, 1);
         Mesh fboMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
         //fboMesh.setTexture(new Texture(FrameBuffers.SHADOWS.getTextureHandlerId())); // error
@@ -169,11 +161,16 @@ public class WorldScene extends Scene {
 
         for (int i = 0; i < planeSize; i++) {
             GameObject cube = new GameObject(false);
-            cube.transform.setPosition(RandomUtil.random(-planeSize, planeSize), 1, RandomUtil.random(-planeSize, planeSize));
-            cube.transform.setScale(1, 2, 1);
+            cube.setName("debugCascadePoint");
+
             Mesh cubeMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
-            cubeMesh.setTint(new Vector4f(0, 1, 1, 1));
+            //cubeMesh.setTint(new Vector4f(0, 1, 1, 1));
+
             cube.addComponent(new ModelRendererComponent(cubeMesh));
+
+            //cube.transform.setPosition(RandomUtil.random(-planeSize, planeSize), 1, RandomUtil.random(-planeSize, planeSize));
+            //cube.transform.setScale(1, 2, 1);
+
             yes.add(cube);
             this.addGameObject(cube);
         }
@@ -213,10 +210,23 @@ public class WorldScene extends Scene {
 
         debugCascadePoint.addComponent(new ModelRendererComponent(debugMesh));
 
-        debugCascadePoint.transform.setPosition(-100, 0, -100);
+        debugCascadePoint.transform.setPosition(-100, 10, -100);
 
         this.addGameObject(debugCascadePoint);
         thingy = debugCascadePoint;
+
+        for (int i = 0; i < 160; i++) {
+            GameObject a = new GameObject(false);
+            a.setName("debugCascadePoint");
+
+            Mesh b = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
+
+            a.addComponent(new ModelRendererComponent(b));
+
+            a.transform.setPosition(-100 + i * 10, 10, -100);
+
+            this.addGameObject(a);
+        }
 
         super.init();
     }
@@ -227,6 +237,11 @@ public class WorldScene extends Scene {
         float radius = 75;
         float x = (float) Math.sin(Time.getRunningTime() * speed);
         float y = (float) Math.cos(Time.getRunningTime() * speed);
+        float offsetYippie = 3;
+        for (int i = 0; i < yes.size(); i++) {
+            yes.get(i).transform.setPosition(x * i * offsetYippie, y * i * offsetYippie, 0);
+        }
+
         //test2.transform.setPosition(x * radius, y * radius, 0);
 
         /*
@@ -378,7 +393,7 @@ public class WorldScene extends Scene {
                 cameraPosition.y + forward.y * distanceInFront,
                 cameraPosition.z + forward.z * distanceInFront
         );
-        thingy.transform.setPosition(newPosition);
+        //thingy.transform.setPosition(newPosition);
 
         float mult = 0.2F;
         for (int i = 0; i < tornado.size(); i++) {
