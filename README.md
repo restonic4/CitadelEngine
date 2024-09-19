@@ -21,43 +21,50 @@ This engine is going to be used for my future games and projects, but if people 
 
 ## Development Status
 
-### Always In Development (⌛)
+<ul>
+    <li>✅ = Confirmed</li>
+    <li>❌ = Rejected / Canceled</li>
+    <li>❔ = Unknown / We don't know</li>
+</ul>
+
+### Always In Development (🔄)
 | Feature       | Status   |
 |---------------|----------|
-| 3D Rendering  | ⌛        |
-| Optimization  | ⌛        |
-| Modding API   | ⌛        |
-| Documentation | ⌛        |
+| 3D Rendering  | ✅        |
+| Optimization  | ✅        |
+| Modding API   | ✅        |
+| Documentation | ✅        |
 
-### Currently In Progress (🔄)
+### Currently In Progress (⌛)
 | Feature         | Status |
 |-----------------|--------|
-| Lighting        | 🔄     |
-| Shadows         | 🔄     |
-| Log System      | 🔄     |
-| Profiler        | 🔄     |
-| Frustum Culling | 🔄     |
-| Textures        | 🔄     |
-| Networking      | 🔄     |
+| Lighting        | ✅      |
+| Shadows         | ✅      |
+| Log System      | ✅      |
+| Profiler        | ✅      |
+| Frustum Culling | ✅      |
+| Textures        | ✅      |
+| Networking      | ✅      |
 
 ### Planned Features (🗓️)
 | Feature                  | Status |
 |--------------------------|--------|
-| Object Culling           | 🗓️    |
-| Save System              | 🗓️    |
-| Steamworks Compatibility | 🗓️    |
-| GUI System               | 🗓️    |
-| Particles                | 🗓️    |
+| Object Culling           | ✅      |
+| Save System              | ❔      |
+| Steamworks Compatibility | ❔      |
+| GUI System               | ❔      |
+| Particles                | ✅      |
+| Switchable render system | ❔      |
 
 ### Completed Features (✅)
-| Feature               | Status   |
-|-----------------------|----------|
-| Batching              | ✅        |
-| Sound                 | ✅        |
-| Registry System       | ✅        |
-| Engine Configuration  | ✅        |
-| ImGui                 | ✅        |
-| Event System          | ✅        |
+| Feature                  | Status   |
+|--------------------------|----------|
+| Batching                 | ✅        |
+| Sound                    | ✅        |
+| Registry System          | ✅        |
+| Engine Configuration     | ✅        |
+| ImGui                    | ✅        |
+| Event System             | ✅        |
 
 ## Credits
 
