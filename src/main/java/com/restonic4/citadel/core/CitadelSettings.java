@@ -11,6 +11,8 @@ public class CitadelSettings {
     private String[] args;
 
     private boolean isServer;
+    private int serverPort;
+
     private boolean thirdPartyNamespaceRegistrationAllowed;
     private String[] allowedNamespaces;
     private boolean frameBuffersPreGenerationDisabled;
@@ -23,6 +25,8 @@ public class CitadelSettings {
         this.args = args;
 
         this.isServer = GradleUtil.SERVER_BUILD;
+        this.serverPort = 8080;
+
         this.thirdPartyNamespaceRegistrationAllowed = true;
         this.frameBuffersPreGenerationDisabled = false;
     }
@@ -105,6 +109,14 @@ public class CitadelSettings {
         return this;
     }
 
+    /**
+     * Sets the server port.
+     */
+    public CitadelSettings setServerPort(int port) {
+        this.serverPort = port;
+        return this;
+    }
+
     // Getters
 
     public IGameLogic getClientGameLogic() {
@@ -129,6 +141,10 @@ public class CitadelSettings {
 
     public boolean isServerSide() {
         return this.isServer;
+    }
+
+    public int getServerPort() {
+        return this.serverPort;
     }
 
     public boolean isThirdPartyNamespaceRegistrationAllowed() {

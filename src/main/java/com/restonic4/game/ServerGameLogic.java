@@ -18,7 +18,7 @@ public class ServerGameLogic implements IGameLogic {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        scheduler.scheduleAtFixedRate(() -> {
+        /*scheduler.scheduleAtFixedRate(() -> {
             try {
                 Packets.TEST.send(PacketType.SERVER_TO_ALL_CLIENTS,
                         new PacketData(
@@ -32,7 +32,7 @@ public class ServerGameLogic implements IGameLogic {
             } catch (Exception e) {
                 Logger.log(e.getMessage());
             }
-        }, 0, 250, TimeUnit.MILLISECONDS);
+        }, 0, 250, TimeUnit.MILLISECONDS);*/
     }
 
     @Override

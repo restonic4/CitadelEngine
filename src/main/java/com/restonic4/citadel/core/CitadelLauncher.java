@@ -84,11 +84,6 @@ public class CitadelLauncher {
     }
 
     private void startClient() {
-        ThreadManager.startThread(CitadelConstants.CLIENT_SIDE_THREAD_NAME, false, () -> {
-            Client client = new Client("localhost", 8080);
-            client.run();
-        });
-
         ThreadManager.startThread(CitadelConstants.CLIENT_SIDE_RENDER_THREAD_NAME, true, () -> {
             Window window = Window.getInstance();
             window.init();
@@ -102,10 +97,17 @@ public class CitadelLauncher {
         });
     }
 
+    public void connectClientToServer(String ip, int port) {
+        ThreadManager.startThread(CitadelConstants.CLIENT_SIDE_THREAD_NAME, false, () -> {
+            Client client = new Client(ip, port);
+            client.run();
+        });
+    }
+
     private void startServer() {
         ThreadManager.startThread(CitadelConstants.SERVER_SIDE_THREAD_NAME, false, () -> {
             DebugManager.setDebugMode(true);
-            Server server = new Server(8080);
+            Server server = new Server(citadelSettings.getServerPort());
             server.run();
         });
 

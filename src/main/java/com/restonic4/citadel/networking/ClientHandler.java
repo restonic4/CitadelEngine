@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import com.restonic4.citadel.exceptions.NetworkException;
 import com.restonic4.citadel.registries.built_in.types.Packet;
+import org.jetbrains.annotations.NotNull;
 
 public class ClientHandler extends ChannelInboundHandlerAdapter {
     public MessageBus messageBus;
@@ -13,12 +14,12 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
+    public void channelActive(@NotNull ChannelHandlerContext ctx) {
         messageBus.registerServerHandler(ctx);
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object msg) {
         String received = (String) msg;
         Packet packet = PacketFactory.createPacket(received);
         if (packet.getPacketType() == PacketType.SERVER_TO_CLIENT) {
