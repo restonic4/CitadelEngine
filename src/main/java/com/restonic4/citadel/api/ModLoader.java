@@ -22,6 +22,9 @@ public class ModLoader {
         this.mods = new ArrayList<>();
     }
 
+    /**
+     * Injects all the mods into the engine.
+     */
     public void loadMods() {
         Logger.log("Loading mods");
 
@@ -86,6 +89,9 @@ public class ModLoader {
         });
     }
 
+    /**
+     * Calls the onUpdate() of every mod.
+     */
     public void update() {
         for (int i = 0; i < mods.size(); i++) {
             mods.get(i).onUpdate();
