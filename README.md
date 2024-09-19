@@ -25,6 +25,7 @@ This engine is going to be used for my future games and projects, but if people 
     <li>✅ = Confirmed</li>
     <li>❌ = Rejected / Canceled</li>
     <li>❔ = Unknown / We don't know</li>
+    <li>❓ = We could accept help from the community/contributors, but we won't so it without help</li>
 </ul>
 
 ### Always In Development (🔄)
@@ -47,14 +48,16 @@ This engine is going to be used for my future games and projects, but if people 
 | Networking      | ✅      |
 
 ### Planned Features (🗓️)
-| Feature                  | Status |
-|--------------------------|--------|
-| Object Culling           | ✅      |
-| Save System              | ❔      |
-| Steamworks Compatibility | ❔      |
-| GUI System               | ❔      |
-| Particles                | ✅      |
-| Switchable render system | ❔      |
+| Feature                                        | Status |
+|------------------------------------------------|--------|
+| Object Culling                                 | ✅      |
+| Save System                                    | ❔      |
+| Steamworks Compatibility                       | ❔      |
+| GUI System                                     | ❔      |
+| Particles                                      | ✅      |
+| Switchable render system (For older computers) | ❔      |
+| Vulkan support                                 | ❓      |
+| Physics                                        | ❔      |
 
 ### Completed Features (✅)
 | Feature                  | Status   |
