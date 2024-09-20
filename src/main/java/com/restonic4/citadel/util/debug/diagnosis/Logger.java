@@ -3,6 +3,7 @@ package com.restonic4.citadel.util.debug.diagnosis;
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.DebugManager;
 
+// TODO: Some methods display wrong stacktrace info
 public abstract class Logger {
     private static final PersistentLogger persistentLogger = new PersistentLogger();
 

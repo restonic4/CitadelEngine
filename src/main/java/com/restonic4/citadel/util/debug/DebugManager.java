@@ -35,6 +35,10 @@ public class DebugManager {
 
     private static Vector3f[] cascadeShadowFrustumVertices;
 
+    /**
+     * Enables/Disables the debug mode. This mode will log extra messages and also display where the log came from, such as the class package and line of code.
+     * @param value true/false
+     */
     public static void setDebugMode(boolean value) {
         EventResult eventResult = DebugEvents.DEBUG_MODE_CHANGED.invoker().onDebugModeChanged(DEBUG_MODE, value);
         if (eventResult == EventResult.CANCELED) {
@@ -65,6 +69,10 @@ public class DebugManager {
         return FileManager.isFileInSystem("build.gradle");
     }
 
+    /**
+     * Displays a crash dialog.
+     * @param e The error.
+     */
     public static void displayCrashDialog(Throwable e) {
         String messageKey = "citadel:system.message.crash." + RandomUtil.random(1, CitadelConstants.CRASH_MESSAGES_AMOUNT);
         String message = Localizer.localizeKey(messageKey);
@@ -126,10 +134,16 @@ public class DebugManager {
         return WIREFRAME_MODE;
     }
 
+    /**
+     * Enables/Disables wireframe mode.
+     */
     public static void setWireFrameMode(boolean value) {
         WIREFRAME_MODE = value;
     }
 
+    /**
+     * Enables/Disables wireframe mode.
+     */
     public static void toggleWireFrameMode() {
         setWireFrameMode(!WIREFRAME_MODE);
     }
@@ -138,10 +152,16 @@ public class DebugManager {
         return VERTICES_MODE;
     }
 
+    /**
+     * Enables/Disables visible vertices points.
+     */
     public static void setVerticesMode(boolean value) {
         VERTICES_MODE = value;
     }
 
+    /**
+     * Enables/Disables visible vertices points.
+     */
     public static void toggleVerticesMode() {
         setVerticesMode(!VERTICES_MODE);
     }
@@ -150,14 +170,23 @@ public class DebugManager {
         return STOP_BATCH_RENDER;
     }
 
+    /**
+     * Enables/Disables model rendering.
+     */
     public static void setBatchRenderingDisabled(boolean value) {
         STOP_BATCH_RENDER = value;
     }
 
+    /**
+     * Enables/Disables model rendering.
+     */
     public static void toggleBatchRenderingDisabled() {
         setVerticesMode(!STOP_BATCH_RENDER);
     }
 
+    /**
+     * Enables/Disables advanced OpenGL output/debug info.
+     */
     public static void enableOpenGLAdvancedLogOutput(boolean value) {
         if (value) {
             glEnable(GL_DEBUG_OUTPUT);
