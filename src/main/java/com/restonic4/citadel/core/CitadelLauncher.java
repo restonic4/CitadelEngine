@@ -18,7 +18,6 @@ import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.util.Objects;
 
-// TODO: This class is a chaos
 public class CitadelLauncher {
     private static CitadelLauncher instance;
 
