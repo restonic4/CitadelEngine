@@ -1,4 +1,4 @@
-package com.restonic4.citadel.render;
+package com.restonic4.citadel.render.shadows;
 
 import com.restonic4.citadel.util.debug.DebugManager;
 import com.restonic4.citadel.world.Scene;

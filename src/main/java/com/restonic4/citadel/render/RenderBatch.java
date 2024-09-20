@@ -3,6 +3,7 @@ package com.restonic4.citadel.render;
 import com.restonic4.ClientSide;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.managers.Shaders;
+import com.restonic4.citadel.render.shadows.CascadeShadow;
 import com.restonic4.citadel.util.ArrayHelper;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.world.Scene;
@@ -265,26 +266,15 @@ public class RenderBatch {
         Shaders.MAIN.detach();
     }
 
-    public void renderShadowMap() {
+    public void renderShadowMap(int cascadeIndex) {
         CascadeShadow.updateCascadeShadows(cascadeShadows, SceneManager.getCurrentScene());
 
-        /*FrameBuffers.SHADOWS.bind();
-        Shaders.SHADOWS.use();*/
+        CascadeShadow shadowCascade = cascadeShadows.get(cascadeIndex);
+        Shaders.SHADOWS.getUniformsMap().setUniform("uProjViewMatrix", shadowCascade.getProjViewMatrix());
 
-        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FrameBuffers.SHADOWS.getDepthMapTexture().getIds()[i], 0);
-            glClear(GL_DEPTH_BUFFER_BIT);
-
-            CascadeShadow shadowCascade = cascadeShadows.get(i);
-            Shaders.SHADOWS.getUniformsMap().setUniform("uProjViewMatrix", shadowCascade.getProjViewMatrix());
-
-            glBindVertexArray(vaoID);
-            glEnableVertexAttribArray(0);
-            glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
-        }
-
-        /*Shaders.SHADOWS.detach();
-        FrameBufferManager.unbindCurrentFrameBuffer();*/
+        glBindVertexArray(vaoID);
+        glEnableVertexAttribArray(0);
+        glDrawElements(GL_TRIANGLES, this.indices.length, GL_UNSIGNED_INT, 0);
     }
 
     // TODO: Optimize this, CPU usage and Memory

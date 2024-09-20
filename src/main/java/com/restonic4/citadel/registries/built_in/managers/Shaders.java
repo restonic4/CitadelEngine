@@ -4,7 +4,7 @@ import com.restonic4.citadel.registries.AbstractRegistryInitializer;
 import com.restonic4.citadel.registries.AssetLocation;
 import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
-import com.restonic4.citadel.render.CascadeShadow;
+import com.restonic4.citadel.render.shadows.CascadeShadow;
 import com.restonic4.citadel.render.Shader;
 import com.restonic4.citadel.render.UniformsMap;
 import com.restonic4.citadel.util.CitadelConstants;

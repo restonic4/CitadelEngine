@@ -2,9 +2,9 @@ package com.restonic4.citadel.render.frame_buffers;
 
 import com.restonic4.citadel.exceptions.RenderException;
 import com.restonic4.citadel.registries.built_in.types.FrameBuffer;
-import com.restonic4.citadel.render.CascadeShadow;
+import com.restonic4.citadel.render.shadows.CascadeShadow;
 import com.restonic4.citadel.render.FrameBufferManager;
-import com.restonic4.citadel.render.ShadowTexture;
+import com.restonic4.citadel.render.shadows.ShadowTexture;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -77,10 +77,6 @@ public class ShadowFrameBuffer extends FrameBuffer {
             glActiveTexture(start + i);
             glBindTexture(GL_TEXTURE_2D, depthMap.getIds()[i]);
         }
-    }
-
-    public int getDepthMapFBO() {
-        return getFrameBufferId();
     }
 
     public ShadowTexture getDepthMapTexture() {

@@ -5,6 +5,7 @@ import com.restonic4.citadel.exceptions.RenderException;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.managers.Shaders;
 import com.restonic4.citadel.render.cameras.Camera;
+import com.restonic4.citadel.render.shadows.CascadeShadow;
 import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.GameObject;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.*;
 
 @ClientSide
 public class Renderer {
@@ -105,23 +107,8 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Render batches
-        /*List<CascadeShadow> temp = new ArrayList<>();
-        for (RenderBatch renderBatch : staticBatches) {
-            temp.addAll(renderBatch.getCascadeShadows());
-        }
-        for (RenderBatch renderBatch : dynamicBatches) {
-            temp.addAll(renderBatch.getCascadeShadows());
-        }
-        CascadeShadow.updateCascadeShadows(temp, SceneManager.getCurrentScene());*/
 
-        FrameBuffers.SHADOWS.bind();
-        Shaders.SHADOWS.use();
-
-        renderShadowBatches(this.staticBatches);
-        renderShadowBatches(this.dynamicBatches);
-
-        Shaders.SHADOWS.detach();
-        FrameBufferManager.unbindCurrentFrameBuffer();
+        renderShadowsCascades();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -129,7 +116,23 @@ public class Renderer {
         renderMainBatches(this.dynamicBatches);
     }
 
-    private <T extends RenderBatch> void renderShadowBatches(List<T> batches) {
+    private void renderShadowsCascades() {
+        FrameBuffers.SHADOWS.bind();
+        Shaders.SHADOWS.use();
+
+        for (int i = 0; i < CascadeShadow.SHADOW_MAP_CASCADE_COUNT; i++) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FrameBuffers.SHADOWS.getDepthMapTexture().getIds()[i], 0);
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            renderShadowBatches(this.staticBatches, i);
+            renderShadowBatches(this.dynamicBatches, i);
+        }
+
+        Shaders.SHADOWS.detach();
+        FrameBufferManager.unbindCurrentFrameBuffer();
+    }
+
+    private <T extends RenderBatch> void renderShadowBatches(List<T> batches, int cascadeIndex) {
         for (int i = 0; i < batches.size(); i++) {
             RenderBatch batch = batches.get(i);
 
@@ -140,7 +143,7 @@ public class Renderer {
 
             batch.update();
 
-            batch.renderShadowMap();
+            batch.renderShadowMap(cascadeIndex);
 
             drawCallsConsumed++;
             dirtyModifiedTotal += batch.getDirtyModified();
