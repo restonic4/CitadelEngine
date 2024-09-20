@@ -48,6 +48,9 @@ public abstract class Logger {
         if (message == null) {
            return "[NULL_OBJECT]";
         }
+        else if (message instanceof String string && (string.isBlank() || string.isEmpty())) {
+            return "[EMPTY_STRING]";
+        }
 
         return message.toString();
     }
