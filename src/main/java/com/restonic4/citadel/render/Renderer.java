@@ -26,7 +26,7 @@ public class Renderer {
 
     private Scene scene;
 
-    // This is just a stat
+    // This is just stats
     private int drawCallsConsumed = 0;
     private int drawCallsSkipped = 0;
     private int dirtyModifiedTotal = 0;
