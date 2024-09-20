@@ -362,6 +362,7 @@ public class RenderBatch {
         tempCacheVec.add(transform.getPosition());
     }
 
+    List<Integer> cacheIndicesList = new ArrayList<>();
     private int[] updateIndices() {
         if (!this.areIndicesDirty) {
             return this.indices;
@@ -369,7 +370,8 @@ public class RenderBatch {
 
         this.areIndicesDirty = false;
 
-        List<Integer> indicesList = new ArrayList<>();
+        cacheIndicesList.clear();
+
         int vertexOffset = 0;
 
         // Traditional for-loop, because GC explodes so badly lol
@@ -379,17 +381,17 @@ public class RenderBatch {
             int[] modelIndices = model.getMesh().getIndices();
 
             for (int index : modelIndices) {
-                indicesList.add(index + vertexOffset);
+                cacheIndicesList.add(index + vertexOffset);
             }
 
             vertexOffset += model.getMesh().getVertices().length;
         }
 
-        this.indices = indicesList.stream().mapToInt(Integer::intValue).toArray();
+        // TODO: toArray() could be improved and used another method instead on instantiating a new array.
+        this.indices = cacheIndicesList.stream().mapToInt(Integer::intValue).toArray();
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices, GL_DYNAMIC_DRAW);
-        //glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this.indices);
 
         return this.indices;
     }

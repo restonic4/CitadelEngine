@@ -36,5 +36,7 @@ public class FrameBufferManager {
         for (FrameBuffer frameBuffer : frameBufferMap.values()) {
             frameBuffer.generate();
         }
+
+        FrameBufferManager.unbindCurrentFrameBuffer();
     }
 }

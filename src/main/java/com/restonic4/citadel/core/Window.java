@@ -187,8 +187,6 @@ public class Window {
             FrameBufferManager.preGenerateFrameBuffers();
         }
 
-        FrameBufferManager.unbindCurrentFrameBuffer();
-
         CitadelLifecycleEvents.CITADEL_STARTED.invoker().onCitadelStarted(CitadelLauncher.getInstance(), this);
     }
 
