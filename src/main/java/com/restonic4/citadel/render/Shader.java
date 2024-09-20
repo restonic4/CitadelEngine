@@ -51,6 +51,9 @@ public class Shader extends RegistryObject {
             // Find the first pattern after #type 'pattern'
             int index = source.indexOf("#type") + 6;
             int endOfTheLine = source.indexOf(PlatformManager.getEndOfLine(), index);
+            if (endOfTheLine == -1) {
+                endOfTheLine = source.length();
+            }
             Logger.log(index);
             Logger.log(endOfTheLine);
             Logger.log(PlatformManager.getEndOfLine());
