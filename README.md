@@ -28,6 +28,9 @@ This engine is going to be used for my future games and projects, but if people 
     <li>❓ = We could accept help from the community/contributors, but we won't so it without help</li>
 </ul>
 
+<table style="border-collapse: collapse; border: none;">
+<td style="border: none;">
+
 ### Always In Development (🔄)
 | Feature       | Status   |
 |---------------|----------|
@@ -35,6 +38,8 @@ This engine is going to be used for my future games and projects, but if people 
 | Optimization  | ✅        |
 | Modding API   | ✅        |
 | Documentation | ✅        |
+
+</td><td style="border: none;">
 
 ### Currently In Progress (⌛)
 | Feature         | Status |
@@ -45,6 +50,11 @@ This engine is going to be used for my future games and projects, but if people 
 | Frustum Culling | ✅      |
 | Textures        | ✅      |
 | Networking      | ✅      |
+
+</td></table>
+
+<table style="border-collapse: collapse; border: none;">
+<td style="border: none;">
 
 ### Planned Features (🗓️)
 | Feature                                        | Status |
@@ -58,7 +68,9 @@ This engine is going to be used for my future games and projects, but if people 
 | Vulkan support                                 | ❓      |
 | Physics                                        | ❔      |
 
-### Completed Features (✅)
+</td><td style="border: none;">
+
+### Recently Completed (✅)
 | Feature              | Status |
 |----------------------|--------|
 | Batching             | ✅      |
@@ -68,6 +80,8 @@ This engine is going to be used for my future games and projects, but if people 
 | ImGui                | ✅      |
 | Event System         | ✅      |
 | Log System           | ✅      |
+
+</td></table>
 
 ## Credits
 
@@ -97,6 +111,11 @@ Knowledge:
 - <a href="https://lwjglgamedev.gitbooks.io/3d-game-development-with-lwjgl/content">Another LWJGL book by lwjglgamedev</a>
 
 For more information, check out the [docs](./resources/docs) in the `resources/docs` folder.
+
+## Projects using Citadel
+<ul>
+    <li>Private Nasa project; To be revealed soon.</li>
+</ul>
 
 ## License
 
