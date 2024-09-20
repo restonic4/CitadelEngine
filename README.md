@@ -138,6 +138,8 @@ dependencies {
 }
 ```
 
+If your IDE can't find the commit/version it could be that jitpack does not have it jet compiled, you can go to https://jitpack.io/#restonic4/CitadelEngine and check if that commit is available, if not, you can ask jitpack to build it.
+
 ## Projects using Citadel
 <ul>
     <li>Private Nasa project; To be revealed soon.</li>

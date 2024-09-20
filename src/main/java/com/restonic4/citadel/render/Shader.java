@@ -45,6 +45,9 @@ public class Shader extends RegistryObject {
             String source = FileManager.readFile(filepath);
             String[] splitString = source.split("(#type)( )+([a-zA-Z]+)");
 
+            Logger.log(filepath);
+            Logger.log(source);
+
             // Find the first pattern after #type 'pattern'
             int index = source.indexOf("#type") + 6;
             int endOfTheLine = source.indexOf(PlatformManager.getEndOfLine(), index);
