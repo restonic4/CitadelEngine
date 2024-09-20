@@ -171,14 +171,14 @@ public class RenderBatch {
             ModelRendererComponent modelRendererComponent = models.get(i);
             GameObject gameObject = modelRendererComponent.gameObject;
 
-            Vector3f cleanPos = gameObject.transform.getCleanPosition();
+            /*Vector3f cleanPos = gameObject.transform.getCleanPosition();
             if (!gameObject.isInsideFrustum() && !FrustumCullingFilter.getInstance().insideFrustum(cleanPos.x, cleanPos.y, cleanPos.z, CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS)) {
                 if (gameObject.transform.isDirty()) {
                     dirtySkipped++;
                 }
 
                 continue;
-            }
+            }*/
 
             if (gameObject.transform.isDirty()) {
                 loadVertexProperties(modelRendererComponent);
