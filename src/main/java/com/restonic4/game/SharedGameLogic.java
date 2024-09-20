@@ -1,11 +1,11 @@
 package com.restonic4.game;
 
-import com.restonic4.citadel.core.IGameLogic;
+import com.restonic4.citadel.core.GameLogic;
 import com.restonic4.citadel.registries.RegistryManager;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.game.core.world.sounds.Sounds;
 
-public class SharedGameLogic implements IGameLogic {
+public class SharedGameLogic implements GameLogic {
     public void start() {
         Logger.log("Starting the game shared logic");
 

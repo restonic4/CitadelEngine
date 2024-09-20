@@ -197,7 +197,7 @@ public class Window {
             shader.compile();
         }
 
-        IGameLogic clientGameLogic = CitadelLauncher.getInstance().getSettings().getClientGameLogic();
+        GameLogic clientGameLogic = CitadelLauncher.getInstance().getSettings().getClientGameLogic();
 
         while (!glfwWindowShouldClose(glfwWindowAddress)) {
             // Listen for input events

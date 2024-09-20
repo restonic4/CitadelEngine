@@ -6,7 +6,7 @@ import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.GradleUtil;
 
 public class CitadelSettings {
-    private IGameLogic clientGameLogic, serverGameLogic, sharedGameLogic;
+    private GameLogic clientGameLogic, serverGameLogic, sharedGameLogic;
     private String appName;
     private String[] args;
 
@@ -17,7 +17,7 @@ public class CitadelSettings {
     private String[] allowedNamespaces;
     private boolean frameBuffersPreGenerationDisabled;
 
-    public CitadelSettings(IGameLogic clientGameLogic, IGameLogic serverGameLogic, IGameLogic sharedGameLogic, String appName, String[] args) {
+    public CitadelSettings(GameLogic clientGameLogic, GameLogic serverGameLogic, GameLogic sharedGameLogic, String appName, String[] args) {
         this.clientGameLogic = clientGameLogic;
         this.serverGameLogic = serverGameLogic;
         this.sharedGameLogic = sharedGameLogic;
@@ -119,15 +119,15 @@ public class CitadelSettings {
 
     // Getters
 
-    public IGameLogic getClientGameLogic() {
+    public GameLogic getClientGameLogic() {
         return this.clientGameLogic;
     }
 
-    public IGameLogic getServerGameLogic() {
+    public GameLogic getServerGameLogic() {
         return this.serverGameLogic;
     }
 
-    public IGameLogic getSharedGameLogic() {
+    public GameLogic getSharedGameLogic() {
         return this.sharedGameLogic;
     }
 

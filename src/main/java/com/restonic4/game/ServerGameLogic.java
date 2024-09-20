@@ -1,18 +1,12 @@
 package com.restonic4.game;
 
-import com.restonic4.citadel.core.IGameLogic;
-import com.restonic4.citadel.networking.PacketData;
-import com.restonic4.citadel.networking.PacketType;
-import com.restonic4.citadel.registries.built_in.managers.Packets;
+import com.restonic4.citadel.core.GameLogic;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
-import com.restonic4.citadel.util.math.RandomUtil;
-import org.joml.Vector3f;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-public class ServerGameLogic implements IGameLogic {
+public class ServerGameLogic implements GameLogic {
     public void start() {
         Logger.log("Starting the game server logic");
 
