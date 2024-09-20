@@ -1,5 +1,6 @@
 package com.restonic4.citadel.registries.built_in.types;
 
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.sound.SoundBuffer;
 import com.restonic4.citadel.registries.RegistryObject;
 import com.restonic4.citadel.sound.SoundManager;
@@ -36,6 +37,10 @@ public class Sound extends RegistryObject {
     }
 
     private SoundBuffer createBuffer() {
+        if (CitadelLauncher.getInstance().getSettings().isServerSide()) {
+            return null;
+        }
+
         SoundBuffer soundBuffer = new SoundBuffer(this.getAssetPath());
 
         SoundManager soundManager =  SoundManager.getInstance();

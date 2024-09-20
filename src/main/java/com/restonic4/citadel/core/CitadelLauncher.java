@@ -50,6 +50,8 @@ public class CitadelLauncher {
     public void launch() {
         logConsoleBranding();
 
+        applyArguments(citadelSettings.getArgs());
+
         CitadelLifecycleEvents.CITADEL_STARTING.invoker().onCitadelStarting(this);
 
         handleCrashes();
@@ -68,6 +70,12 @@ public class CitadelLauncher {
         }
 
         CitadelLifecycleEvents.CITADEL_STOPPED.invoker().onCitadelStopped(CitadelLauncher.getInstance());
+    }
+
+    private void applyArguments(String[] args) {
+        ArrayHelper.runIfFound(citadelSettings.getArgs(), "server", () -> {
+            citadelSettings.setServerSide(true);
+        });
     }
 
     private void startDesiredEnvironment() {
@@ -146,6 +154,8 @@ public class CitadelLauncher {
                 "                                                                              Y8b d88P                       ", PlatformManager.getEndOfLine(),
                 "                                                                               \"Y88P\"                        "
         ));
+
+        GradleUtil.logInfo();
     }
 
     private void logUsefulData() {
@@ -155,8 +165,6 @@ public class CitadelLauncher {
         Logger.log("Platform: " + operatingSystem);
         Logger.log("Java locale: " + operatingSystem.getSystemLocale());
         Logger.log("Locale: " + Localizer.fromJavaLocale(operatingSystem.getSystemLocale()).getAssetLocation().getPath());
-
-        GradleUtil.logInfo();
 
         if (operatingSystem.isAppRunning("idea64.exe")) {
             Logger.log("You coding huh?");

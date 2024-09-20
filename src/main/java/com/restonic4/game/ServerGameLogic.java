@@ -10,7 +10,7 @@ public class ServerGameLogic implements GameLogic {
     public void start() {
         Logger.log("Starting the game server logic");
 
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        //ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         /*scheduler.scheduleAtFixedRate(() -> {
             try {
