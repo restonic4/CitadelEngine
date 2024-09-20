@@ -13,6 +13,7 @@ import com.restonic4.citadel.sound.SoundManager;
 import com.restonic4.citadel.util.ArrayHelper;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.GradleUtil;
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.DebugManager;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
@@ -131,9 +132,20 @@ public class CitadelLauncher {
     }
 
     private void logConsoleBranding() {
-        Logger.log(
-                ""
-        );
+        Logger.log(StringBuilderHelper.concatenate(
+                "//----------------------------------------------------------------------------------------------------------------\\\\", PlatformManager.getEndOfLine(),
+                "||   .d8888b.  d8b 888                  888          888      8888888888                   d8b                    ||", PlatformManager.getEndOfLine(),
+                "||  d88P  Y88b Y8P 888                  888          888      888                          Y8P                    ||", PlatformManager.getEndOfLine(),
+                "||  888    888     888                  888          888      888                                                 ||", PlatformManager.getEndOfLine(),
+                "||  888        888 888888  8888b.   .d88888  .d88b.  888      8888888    88888b.   .d88b.  888 88888b.   .d88b.   ||", PlatformManager.getEndOfLine(),
+                "||  888        888 888        \"88b d88\" 888 d8P  Y8b 888      888        888 \"88b d88P\"88b 888 888 \"88b d8P  Y8b  ||", PlatformManager.getEndOfLine(),
+                "||  888    888 888 888    .d888888 888  888 88888888 888      888        888  888 888  888 888 888  888 88888888  ||", PlatformManager.getEndOfLine(),
+                "||  Y88b  d88P 888 Y88b.  888  888 Y88b 888 Y8b.     888      888        888  888 Y88b 888 888 888  888 Y8b.      ||", PlatformManager.getEndOfLine(),
+                "||   \"Y8888P\"  888  \"Y888 \"Y888888  \"Y88888  \"Y8888  888      8888888888 888  888  \"Y88888 888 888  888  \"Y8888   ||", PlatformManager.getEndOfLine(),
+                "\\\\------------------------------------------------------------------------------------888-------------------------//", PlatformManager.getEndOfLine(),
+                "                                                                              Y8b d88P                       ", PlatformManager.getEndOfLine(),
+                "                                                                               \"Y88P\"                        "
+        ));
     }
 
     private void logUsefulData() {
