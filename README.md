@@ -134,7 +134,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.restonic4:CitadelEngine:3e42808ed9' // 3e42808ed9 is an example, choose the one you need.
+    implementation 'com.restonic4:CitadelEngine:98c27d066b' // 98c27d066b is an example, choose the one you need.
 }
 ```
 

@@ -8,6 +8,8 @@ import com.restonic4.citadel.registries.RegistryObject;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
@@ -43,30 +45,11 @@ public class Shader extends RegistryObject {
         try {
             // Reading the shader file and splitting it into a vertex and fragment shader
             String source = FileManager.readFile(filepath);
+
             String[] splitString = source.split("(#type)( )+([a-zA-Z]+)");
 
-            Logger.log(filepath);
-            Logger.log(source);
-
-            // Find the first pattern after #type 'pattern'
-            int index = source.indexOf("#type") + 6;
-            int endOfTheLine = source.indexOf(PlatformManager.getEndOfLine(), index);
-            if (endOfTheLine == -1) {
-                endOfTheLine = source.length();
-            }
-            Logger.log(index);
-            Logger.log(endOfTheLine);
-            Logger.log(PlatformManager.getEndOfLine());
-            String firstPattern = source.substring(index, endOfTheLine).trim();
-
-            // Find the second pattern after #type 'pattern'
-            index = source.indexOf("#type", endOfTheLine) + 6;
-            endOfTheLine = source.indexOf(PlatformManager.getEndOfLine(), index);
-            String secondPattern = source.substring(index, endOfTheLine).trim();
-
-            // Sets the shaders into the correct variables
-            setShaderInPattern(firstPattern, splitString[1]);
-            setShaderInPattern(secondPattern, splitString[2]);
+            setShaderInPattern("vertex", splitString[1]);
+            setShaderInPattern("fragment", splitString[2]);
         } catch(IOException e) {
             e.printStackTrace();
             throw new RenderException("Error: Could not open file for shader: '" + filepath + "'");
