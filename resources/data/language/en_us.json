@@ -1,0 +1,23 @@
+{
+
+
+  "SYSTEM": "System translations, such as error messages or window dialogs",
+
+
+  "citadel:system.message.crash": "CRASHED",
+  "citadel:system.message.crash.title": "Game Crash",
+  "citadel:system.message.crash.details": "A detailed log has been saved to the logs folder.",
+
+  "citadel:system.message.crash.1": "The game crashed.",
+  "citadel:system.message.crash.2": "RIP.",
+  "citadel:system.message.crash.3": "This game is so broken...",
+  "citadel:system.message.crash.4": "Crashed... cool i guess?",
+  "citadel:system.message.crash.5": "Pls, don't kill the devs...",
+  "citadel:system.message.crash.6": "This crash message is random.",
+  "citadel:system.message.crash.7": "This crash message is random. And you probably do not care at all.",
+
+  "citadel:system.ui.crash.button.1": "View Log",
+  "citadel:system.ui.crash.button.2": "Open Log Folder",
+  "citadel:system.ui.crash.button.3": "Report the issue",
+  "citadel:system.ui.crash.button.4": "Close"
+}

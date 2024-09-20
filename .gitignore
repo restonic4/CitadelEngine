@@ -12,6 +12,8 @@ build/
 *.iws
 *.iml
 *.ipr
+.idea/uiDesigner.xml
+.idea/discord.xml
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/

@@ -1,6 +1,9 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = "${group}"
@@ -13,37 +16,46 @@ repositories {
 }
 
 dependencies {
-    //LWJGL
+    // LWJGL
     implementation platform("org.lwjgl:lwjgl-bom:${lwjglVersion}")
 
-    //JOML - 3D math
+    // JOML - 3D math
     implementation "org.joml:joml:${jomlVersion}"
 
-    //LWJGL
+    // org.json  https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20240303'
+
+    // LWJGL
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-glfw"      // Windows management
     implementation "org.lwjgl:lwjgl-opengl"    // OpenGL 3D
     implementation "org.lwjgl:lwjgl-stb"       // Images/assets loader
     implementation "org.lwjgl:lwjgl-openal"    // OpenAL for audio
-    //implementation "org.lwjgl:lwjgl-imgui"     // ImGui for GUI
-    implementation "io.github.spair:imgui-java-binding:${imguiJavaVersion}"
-    implementation "org.lwjgl:lwjgl-assimp" // Assimp for complex models
+    implementation "io.github.spair:imgui-java-binding:${imguiJavaVersion}" // ImGui for GUI
+    implementation "io.github.spair:imgui-java-lwjgl3:${imguiJavaVersion}"// ImGui for GUI
 
-
-    //Windows
+    // LWJGL Windows
     runtimeOnly "org.lwjgl:lwjgl::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-glfw::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-opengl::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-stb::${lwjglNatives}"
     runtimeOnly "org.lwjgl:lwjgl-openal::${lwjglNatives}"
     runtimeOnly "io.github.spair:imgui-java-${imguiNatives}:${imguiJavaVersion}"
-    runtimeOnly "org.lwjgl:lwjgl-assimp::${lwjglNatives}"
+
+    // Netty
+
+    implementation 'io.netty:netty-all:4.1.113.Final'
+
+    annotationProcessor project(':processors')
+    implementation project(path: ':processors')
 }
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+    //withSourcesJar()
+    //withJavadocJar()
 }
 
 jar {
@@ -59,11 +71,71 @@ jar {
         into 'resources'
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveBaseName.set("EpicGameiGues")
+    archiveBaseName.set("CitadelEngine${project.hasProperty('serverBuild') ? '-Server' : ''}")
+}
+
+/*publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}*/
+
+/*tasks.withType(JavaCompile).configureEach {
+    if (project.hasProperty('serverBuild')) {
+        options.compilerArgs += [
+                "-processor", "me.restonic4.AnnotationsProcessor",
+                "-AisServerBuild=true"
+        ]
+    }
+
+    println "Is server build = ${project.hasProperty('serverBuild')}"
+}
+
+task modifyCompiledClasses {
+    doLast {
+        if (!project.hasProperty('serverBuild')) {
+            return
+        }
+
+        def sourceDir = file('src/main/java')
+        def buildOutputDir = file("${buildDir}/classes/java/main") // Directorio de compilación
+
+        if (!buildOutputDir.exists()) {
+            println "El directorio de clases compiladas no existe: " + buildOutputDir
+            return
+        }
+
+        sourceDir.eachFileRecurse { file ->
+            if (file.isFile() && file.name.endsWith('.java')) {
+                def lines = file.readLines()
+                def isClientSideClass = lines.any { it.contains('@ClientSide') }
+
+                if (isClientSideClass) {
+                    def relativePath = sourceDir.toURI().relativize(file.toURI()).getPath()
+
+                    def compiledClassFile = new File(buildOutputDir, relativePath.replace('.java', '.class'))
+
+                    println "Modifying ${compiledClassFile.absolutePath}: ${compiledClassFile.exists()}"
+
+                    if (compiledClassFile.exists()) {
+                        compiledClassFile.delete()
+                    }
+                }
+            }
+        }
+    }
+}
+
+compileJava.finalizedBy(modifyCompiledClasses)*/
+
+tasks.register('buildServerJar', Exec) {
+    commandLine 'cmd', '/c', 'gradlew.bat clean build -PserverBuild'
 }
 
 tasks.register('buildJar', Exec) {
-    commandLine 'cmd', '/c', 'gradlew.bat', 'clean', 'build'
+    commandLine 'cmd', '/c', 'gradlew.bat clean build'
 }
 
 tasks.register('packageApp', Exec) {
@@ -71,12 +143,14 @@ tasks.register('packageApp', Exec) {
     def appVersion = project.version
 
     def outputDir = "$buildDir/app"
+    def iconPath = "$projectDir/resources/assets/textures/icons/icon.ico"
 
     doFirst {
         file(outputDir).mkdirs()
     }
 
-    commandLine 'jpackage',
+    def args = [
+            'jpackage',
             '--input', 'build/libs/',
             '--main-jar', jarName,
             '--main-class', "${mainClass}",
@@ -86,10 +160,123 @@ tasks.register('packageApp', Exec) {
             '--win-shortcut',
             '--win-menu',
             '--app-version', appVersion,
+            '--icon', iconPath,
             '--dest', outputDir
+    ]
+
+    if (consoleEnabled == "true") {
+        args += ['--win-console']
+    }
+
+    commandLine 'cmd', '/c', args.join(' ')
 }
 
 tasks.register('buildAndPackage') {
     dependsOn 'buildJar'
     dependsOn 'packageApp'
 }
+
+tasks.register('buildBothJars', Exec) {
+    commandLine 'cmd', '/c', 'gradlew.bat clean build'
+    commandLine 'cmd', '/c', 'gradlew.bat build -PserverBuild'
+}
+
+// Define a map to hold configurations for each mode
+def modeConfig = [
+        'last24Hours': [dateShift: [Calendar.DATE, -1], secondsPerDay: 20],
+        'lastWeek': [dateShift: [Calendar.WEEK_OF_YEAR, -1], secondsPerDay: 8],
+        'lastMonth': [dateShift: [Calendar.MONTH, -1], secondsPerDay: 4],
+        'lastYear': [dateShift: [Calendar.YEAR, -1], secondsPerDay: 1],
+        'all': [dateShift: null, secondsPerDay: 1],
+        'allSlow': [dateShift: null, secondsPerDay: 4]
+]
+
+// Utility function to get formatted date string
+static def getFormattedDateString(Date date) {
+    def dateFormat = new SimpleDateFormat("\"yyyy-MM-dd HH:mm:ss Z\"")
+    dateFormat.setTimeZone(TimeZone.getDefault())
+    return dateFormat.format(date)
+}
+
+// Function to get date based on mode
+static def getStartDate(mode, modeConfig) {
+    def config = modeConfig[mode]
+    if (config == null) {
+        throw new GradleException("Invalid time mode: $mode")
+    }
+    if (config.dateShift == null) {
+        return null
+    }
+    Calendar calendar = Calendar.getInstance()
+    calendar.add(config.dateShift[0], config.dateShift[1])
+    return getFormattedDateString(calendar.getTime())
+}
+
+// Function to get seconds per day based on mode
+static def getSecondsPerDay(mode, modeConfig) {
+    def config = modeConfig[mode]
+    if (config == null) {
+        throw new GradleException("Invalid time mode: $mode")
+    }
+    return config.secondsPerDay
+}
+
+tasks.register('gource', Exec) {
+    // Set the desired mode
+    def mode = "${gourceMode}"
+    def startDate = getStartDate(mode, modeConfig)
+    def secondsPerDay = getSecondsPerDay(mode, modeConfig)
+
+    // Build the list of arguments
+    def args = [
+            'gource',
+            '-f', '-1920x1080',
+            '--seconds-per-day', "${secondsPerDay}",
+            '--title', "${appName}",
+            '--hide', 'mouse,progress',
+            '--highlight-colour', 'FFD700',
+            '--highlight-user', 'restonic4',
+            '--highlight-user', 'Dinax',
+            '--caption-file', 'gource/captions.txt',
+            '--font-scale', '2'
+    ]
+
+    // Add the start date argument if it's not null
+    if (startDate != null) {
+        args += ['--start-date', startDate]
+    }
+
+    // Configure the command line
+    commandLine 'cmd', '/c', args.join(' ')
+}
+
+// Auto update common constants between gradle and java
+task updateGradleUtil {
+    def filePath = "src/main/java/com/restonic4/citadel/util/GradleUtil.java"
+    def versionRegex = /public static final String VERSION = ".*";/
+    def nameRegex = /public static final String APP_NAME = ".*";/
+    def consoleRegex = /public static final Boolean CONSOLE_ENABLED = .*/
+    def serverBuildRegex = /public static final Boolean SERVER_BUILD = .*/
+
+    doLast {
+        def file = file(filePath)
+        if (!file.exists()) {
+            throw new GradleException("File not found: $filePath")
+        }
+
+        if (project.hasProperty('serverBuild')) {
+            consoleEnabled = true
+        }
+
+        def content = file.text
+        content = content.replaceAll(versionRegex, "public static final String VERSION = \"${project.version}\";")
+        content = content.replaceAll(nameRegex, "public static final String APP_NAME = \"${appName}\";")
+        content = content.replaceAll(consoleRegex, "public static final Boolean CONSOLE_ENABLED = ${consoleEnabled};")
+        content = content.replaceAll(serverBuildRegex, "public static final Boolean SERVER_BUILD = ${project.hasProperty('serverBuild')};")
+
+        file.text = content
+        println "Updated GradleUtil.java"
+    }
+}
+
+compileJava.dependsOn(updateGradleUtil)
