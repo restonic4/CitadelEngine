@@ -56,6 +56,16 @@ public abstract class Logger {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         StackTraceElement caller = stackTrace[3];
 
+        // TODO: Check this to fix the stacktrace
+        for (int i = 0; i < stackTrace.length; i++) {
+            System.out.printf(
+                    String.format("[DEBUG] %s.%s() [Line %d]: ",
+                            caller.getClassName(),
+                            caller.getMethodName(),
+                            caller.getLineNumber())
+            );
+        }
+
         return String.format("[DEBUG] %s.%s() [Line %d]: ",
                 caller.getClassName(),
                 caller.getMethodName(),
