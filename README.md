@@ -123,6 +123,21 @@ Coded with ❤🧡💛💚💙💙💜🤎🖤🤍 by <a href="https://github.co
 
 For more information, check out the [docs](./resources/docs) in the `resources/docs` folder.
 
+## How to install / use the engine
+
+I will provide a better guide on the future, as well as documentation. But for now you can go to jitpack and implement as a gradle dependency the commit you desire.
+
+### Using gradle groovy
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.restonic4:CitadelEngine:3e42808ed9' // 3e42808ed9 is an example, choose the one you need.
+}
+```
+
 ## Projects using Citadel
 <ul>
     <li>Private Nasa project; To be revealed soon.</li>
