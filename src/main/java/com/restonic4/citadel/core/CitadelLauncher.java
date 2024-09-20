@@ -47,6 +47,8 @@ public class CitadelLauncher {
     }
 
     public void launch() {
+        logConsoleBranding();
+
         CitadelLifecycleEvents.CITADEL_STARTING.invoker().onCitadelStarting(this);
 
         handleCrashes();
@@ -126,6 +128,12 @@ public class CitadelLauncher {
         });
 
         this.citadelSettings.getServerGameLogic().start();
+    }
+
+    private void logConsoleBranding() {
+        Logger.log(
+                ""
+        );
     }
 
     private void logUsefulData() {
