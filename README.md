@@ -28,8 +28,8 @@ This engine is going to be used for my future games and projects, but if people 
     <li>❓ = We could accept help from the community/contributors, but we won't so it without help</li>
 </ul>
 
-<table style="border-collapse: collapse; border: none;">
-<td style="border: none;">
+<table style="border-collapse: collapse !important; border: none !important;">
+<td style="border: none !important;">
 
 ### Always In Development (🔄)
 | Feature       | Status   |
@@ -39,7 +39,7 @@ This engine is going to be used for my future games and projects, but if people 
 | Modding API   | ✅        |
 | Documentation | ✅        |
 
-</td><td style="border: none;">
+</td><td style="border: none !important;">
 
 ### Currently In Progress (⌛)
 | Feature         | Status |
@@ -53,8 +53,8 @@ This engine is going to be used for my future games and projects, but if people 
 
 </td></table>
 
-<table style="border-collapse: collapse; border: none;">
-<td style="border: none;">
+<table style="border-collapse: collapse !important; border: none !important;">
+<td style="border: none !important;">
 
 ### Planned Features (🗓️)
 | Feature                                        | Status |
@@ -68,7 +68,7 @@ This engine is going to be used for my future games and projects, but if people 
 | Vulkan support                                 | ❓      |
 | Physics                                        | ❔      |
 
-</td><td style="border: none;">
+</td><td style="border: none !important;">
 
 ### Recently Completed (✅)
 | Feature              | Status |
