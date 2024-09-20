@@ -90,25 +90,36 @@ Coded with ❤🧡💛💚💙💙💜🤎🖤🤍 by <a href="https://github.co
 📚 = Library.
 🔮 = App / Tool.
 
-Libraries and tools used:
-- <a href="https://www.lwjgl.org">📚 LWJGL 3</a>
-- <a href="https://www.glfw.org">📚 GLFW</a>
-- <a href="https://www.khronos.org/about/">📚 OpenGL</a>
-- <a href="https://www.openal.org">📚 OpenAL</a>
-- <a href="https://github.com/nothings/stb">📚 STB</a>
-- <a href="https://github.com/ocornut/imgui">📚 Original ImGui</a> ---> <a href="https://github.com/SpaiR/imgui-java">📚 Java ImGui</a>
-- <a href="https://github.com/netty/netty/">📚 Netty</a>
-- <a href="https://gource.io">🔮 Gource</a>
-- <a href="https://visualvm.github.io">🔮 VisualVM</a>
-
-Knowledge:
-- <a href="https://www.youtube.com/@GamesWithGabe">Youtube: @GamesWithGabe</a>
-- <a href="https://www.youtube.com/@ThinMatrix">Youtube: @ThinMatrix</a>
-- <a href="https://www.youtube.com/watch?v=f05PwswO7qc">Youtube video by @KazeN64</a>
-- <a href="https://www.youtube.com/watch?v=1LCEiVDHJmc">Youtube video by @standupmaths</a>
-- <a href="https://www.youtube.com/watch?v=YTfdBSjitd8">Youtube video by @Aurailus</a>
-- <a href="https://ahbejarano.gitbook.io/lwjglgamedev">LWJGL book by lwjglgamedev</a>
-- <a href="https://lwjglgamedev.gitbooks.io/3d-game-development-with-lwjgl/content">Another LWJGL book by lwjglgamedev</a>
+<table style="border: none; width: 100%;">
+  <tr>
+    <td style="vertical-align: top; border: none;">
+      <h3>Libraries and tools used:</h3>
+      <ul>
+        <li><a href="https://www.lwjgl.org">📚 LWJGL 3</a></li>
+        <li><a href="https://www.glfw.org">📚 GLFW</a></li>
+        <li><a href="https://www.khronos.org/about/">📚 OpenGL</a></li>
+        <li><a href="https://www.openal.org">📚 OpenAL</a></li>
+        <li><a href="https://github.com/nothings/stb">📚 STB</a></li>
+        <li><a href="https://github.com/ocornut/imgui">📚 Original ImGui</a> ---> <a href="https://github.com/SpaiR/imgui-java">📚 Java ImGui</a></li>
+        <li><a href="https://github.com/netty/netty/">📚 Netty</a></li>
+        <li><a href="https://gource.io">🔮 Gource</a></li>
+        <li><a href="https://visualvm.github.io">🔮 VisualVM</a></li>
+      </ul>
+    </td>
+    <td style="vertical-align: top; border: none;">
+      <h3>Knowledge:</h3>
+      <ul>
+        <li><a href="https://www.youtube.com/@GamesWithGabe">Youtube: @GamesWithGabe</a></li>
+        <li><a href="https://www.youtube.com/@ThinMatrix">Youtube: @ThinMatrix</a></li>
+        <li><a href="https://www.youtube.com/watch?v=f05PwswO7qc">Youtube video by @KazeN64</a></li>
+        <li><a href="https://www.youtube.com/watch?v=1LCEiVDHJmc">Youtube video by @standupmaths</a></li>
+        <li><a href="https://www.youtube.com/watch?v=YTfdBSjitd8">Youtube video by @Aurailus</a></li>
+        <li><a href="https://ahbejarano.gitbook.io/lwjglgamedev">LWJGL book by lwjglgamedev</a></li>
+        <li><a href="https://lwjglgamedev.gitbooks.io/3d-game-development-with-lwjgl/content">Another LWJGL book by lwjglgamedev</a></li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 For more information, check out the [docs](./resources/docs) in the `resources/docs` folder.
 
