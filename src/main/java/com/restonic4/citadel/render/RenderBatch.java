@@ -356,7 +356,7 @@ public class RenderBatch {
         tempCacheVec.mul(transform.getScale());
 
         // Apply rotation
-        tempCacheVec.rotate(transform.getRotation()); // TODO: Optimize, CPU
+        tempCacheVec.rotate(transform.getRotation()); // TODO: Optimize, CPU (rotate)
 
         // Apply position
         tempCacheVec.add(transform.getPosition());
@@ -374,7 +374,6 @@ public class RenderBatch {
 
         int vertexOffset = 0;
 
-        // Traditional for-loop, because GC explodes so badly lol
         for (int i = 0; i < models.size(); i++) {
             ModelRendererComponent model = models.get(i);
 
@@ -421,7 +420,6 @@ public class RenderBatch {
     }
 
     public boolean isOutsideFrustum() {
-        // Traditional for-loop, because GC explodes so badly lol
         for (int i = 0; i < this.models.size(); i++) {
             if (this.models.get(i).gameObject.isInsideFrustum()) {
                 return false;
