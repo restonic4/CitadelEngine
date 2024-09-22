@@ -50,6 +50,7 @@ This engine is going to be used for my future games and projects, but if people 
 | Frustum Culling | ✅      |
 | Textures        | ✅      |
 | Networking      | ✅      |
+| Physics         | ✅      |
 
 </td></table>
 
@@ -66,7 +67,6 @@ This engine is going to be used for my future games and projects, but if people 
 | Particles                                      | ✅      |
 | Switchable render system (For older computers) | ❔      |
 | Vulkan support                                 | ❓      |
-| Physics                                        | ❔      |
 
 </td><td style="border: none;">
 

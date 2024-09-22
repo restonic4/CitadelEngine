@@ -17,10 +17,6 @@ public class ModelRendererComponent extends Component {
     }
 
     @Override
-    public void start() {
-    }
-
-    @Override
     public void update() {
 
     }

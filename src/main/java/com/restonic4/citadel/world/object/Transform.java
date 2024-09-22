@@ -81,6 +81,14 @@ public class Transform {
         setDirty();
     }
 
+    public void addPosition(Vector3f vector3f) {
+        this.position.x += vector3f.x;
+        this.position.y += vector3f.y;
+        this.position.z += vector3f.z;
+
+        setDirty();
+    }
+
     public void addPosition(float x, float y, float z) {
         this.position.x += x;
         this.position.y += y;

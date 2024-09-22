@@ -1,6 +1,8 @@
 package com.restonic4.citadel.core;
 
 import com.restonic4.citadel.exceptions.RenderException;
+import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
+import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.flag.ImGuiConfigFlags;
@@ -206,6 +208,10 @@ public class Window {
             updateAspectRatio();
 
             clientGameLogic.update();
+
+            if (KeyBinds.TOGGLE_STATISTICS_GUI.isPressedOnce()) {
+                ImGuiScreens.RENDER_STATISTICS.toggle();
+            }
 
             Scene scene = SceneManager.getCurrentScene();
             if (scene != null && Time.getDeltaTime() > 0) {

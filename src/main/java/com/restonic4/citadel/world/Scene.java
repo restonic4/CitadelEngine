@@ -1,12 +1,15 @@
 package com.restonic4.citadel.world;
 
+import com.restonic4.citadel.physics.PhysicsManager;
 import com.restonic4.citadel.sound.SoundManager;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.world.object.GameObject;
 import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.render.Renderer;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import com.restonic4.citadel.world.object.components.ColliderComponent;
 import com.restonic4.citadel.world.object.components.LightComponent;
+import com.restonic4.citadel.world.object.components.RigidBodyComponent;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -20,6 +23,8 @@ public abstract class Scene {
     private List<GameObject> staticGameObjects = new ArrayList<>();
     private List<GameObject> dynamicGameObjects = new ArrayList<>();
     private List<LightComponent> lightComponents = new ArrayList<>();
+    private List<ColliderComponent> colliderComponents = new ArrayList<>();
+    private List<RigidBodyComponent> rigidBodyComponents = new ArrayList<>();
 
     private boolean isActivated = false;
 
@@ -53,6 +58,8 @@ public abstract class Scene {
     }
 
     public void update() {
+        PhysicsManager.update();
+
         for (int i = 0; i < this.staticGameObjects.size(); i++) {
             this.staticGameObjects.get(i).update();
         }
@@ -79,6 +86,16 @@ public abstract class Scene {
         LightComponent lightComponent = gameObject.getComponent(LightComponent.class);
         if (lightComponent != null) {
             lightComponents.add(lightComponent);
+        }
+
+        ColliderComponent colliderComponent = gameObject.getComponent(ColliderComponent.class);
+        if (colliderComponent != null) {
+            colliderComponents.add(colliderComponent);
+        }
+
+        RigidBodyComponent rigidBodyComponent = gameObject.getComponent(RigidBodyComponent.class);
+        if (rigidBodyComponent != null) {
+            rigidBodyComponents.add(rigidBodyComponent);
         }
 
         if (isActivated) {
@@ -114,6 +131,14 @@ public abstract class Scene {
 
     public List<LightComponent> getLightComponents() {
         return this.lightComponents;
+    }
+
+    public List<ColliderComponent> getColliderComponents() {
+        return colliderComponents;
+    }
+
+    public List<RigidBodyComponent> getRigidBodyComponents() {
+        return rigidBodyComponents;
     }
 
     public List<LightComponent> getLightComponentsOfType(LightComponent.LightType lightType) {
