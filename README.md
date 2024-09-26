@@ -3,7 +3,7 @@
 <div align="center" style="text-align:center;">
     <a href="https://patreon.com/restonic4"><img src="https://img.shields.io/badge/Patreon-restonic4-orange?logo=patreon&style=for-the-badge"></a>
     <a href="https://github.com/restonic4"><img src="https://img.shields.io/badge/GitHub-restonic4-black?logo=github&style=for-the-badge"></a>
-    <a href="https://discord.gg/9ZUpW6TDrb"><img src="https://img.shields.io/discord/735889440743882834?label=Discord&logo=discord&style=for-the-badge"></a>
+    <a href="https://discord.gg/GkAwCVhemV"><img src="https://img.shields.io/discord/1287697784572743790?label=Discord&logo=discord&style=for-the-badge"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache-blue?style=for-the-badge"></a>
 </div>
 
