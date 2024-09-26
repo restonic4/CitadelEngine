@@ -1,4 +1,4 @@
-<div align="center" style="text-align:center;"><img style="height: 200px" src="branding/assets/logo/PNG/citadelPNG1.png"></div>
+<div align="center" style="text-align:center;"><img style="width: 100%" src="branding/assets/logo/PNG/citadelPNG1.png"></div>
 
 <div align="center" style="text-align:center;">
     <a href="https://patreon.com/restonic4"><img src="https://img.shields.io/badge/Patreon-restonic4-orange?logo=patreon&style=for-the-badge"></a>
