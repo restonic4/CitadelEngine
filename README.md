@@ -50,7 +50,8 @@ This engine is going to be used for my future games and projects, but if people 
 | Frustum Culling | ✅      |
 | Textures        | ✅      |
 | Networking      | ✅      |
-| Physics         | ✅      |
+| Physics         | ❔      |
+| Level editor    | ✅      |
 
 </td></table>
 

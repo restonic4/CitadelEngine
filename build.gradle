@@ -48,10 +48,6 @@ dependencies {
 
     annotationProcessor project(':processors')
     implementation project(path: ':processors')
-
-    // Physics
-
-    implementation("com.github.stephengold:Libbulletjme:21.2.1")
 }
 
 java {

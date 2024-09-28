@@ -4,6 +4,7 @@ import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.registries.AssetLocation;
 import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
+import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.types.FrameBuffer;
 
 import java.util.Map;

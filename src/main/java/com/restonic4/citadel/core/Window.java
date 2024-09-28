@@ -1,11 +1,16 @@
 package com.restonic4.citadel.core;
 
 import com.restonic4.citadel.exceptions.RenderException;
+import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
+import com.restonic4.citadel.render.frame_buffers.GameViewportFrameBuffer;
 import imgui.ImGui;
 import imgui.ImGuiIO;
+import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiConfigFlags;
+import imgui.flag.ImGuiStyleVar;
+import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import com.restonic4.ClientSide;
@@ -29,6 +34,7 @@ import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.Time;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import imgui.type.ImBoolean;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -46,6 +52,7 @@ import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
+import static imgui.flag.ImGuiWindowFlags.*;
 
 @ClientSide
 public class Window {
@@ -174,7 +181,8 @@ public class Window {
         ImGui.createContext();
 
         ImGuiIO io = ImGui.getIO();
-        io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
+        //io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
+        io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
 
         imGuiGlfw.init(glfwWindowAddress, true);
         imGuiGl3.init(glslVersion);
@@ -258,22 +266,16 @@ public class Window {
         imGuiGlfw.newFrame();
         ImGui.newFrame();
 
+        runImGuiDockspace();
+
         // TODO: Optimize this for GC
-        /*
-        Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
-        Iterator<Map.Entry<AssetLocation, ImGuiScreen>> iterator = guis.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<AssetLocation, ImGuiScreen> entry = iterator.next();
-            ImGuiScreen screen = entry.getValue();
-            screen.render();
-        }
-         */
         Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
         for (Map.Entry<AssetLocation, ImGuiScreen> entry : guis.entrySet()) {
             ImGuiScreen screen = entry.getValue();
             screen.render();
         }
 
+        ImGui.end(); // Docking
         ImGui.render();
         imGuiGl3.renderDrawData(ImGui.getDrawData());
 
@@ -283,6 +285,22 @@ public class Window {
             ImGui.renderPlatformWindowsDefault();
             org.lwjgl.glfw.GLFW.glfwMakeContextCurrent(backupWindowPtr);
         }
+    }
+
+    private void runImGuiDockspace() {
+        int windowFlags = MenuBar | NoDocking | NoTitleBar | NoCollapse | NoResize | NoMove | NoBringToFrontOnFocus | NoNavFocus;
+
+        ImGui.setNextWindowPos(0.0f, 0.0f, ImGuiCond.Always);
+        ImGui.setNextWindowSize(getWidth(), getHeight());
+
+        ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
+        ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+
+        ImGui.begin("Dockspace Demo", new ImBoolean(true), windowFlags);
+        ImGui.popStyleVar(2);
+
+        // Dockspace
+        ImGui.dockSpace(ImGui.getID("Dockspace"));
     }
 
     public void initGuiOnly() {
@@ -416,6 +434,10 @@ public class Window {
     public float getAspectRatio() {
         updateAspectRatio();
         return this.aspectRatio;
+    }
+
+    public static float getEditorAspectRatio() {
+        return 16.0f / 9.0f;
     }
 
     public int getWidth() {

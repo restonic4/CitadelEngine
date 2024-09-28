@@ -103,12 +103,16 @@ public class Renderer {
         FrustumCullingFilter.getInstance().updateFrustum(projection, view);
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS);
 
+        //FrameBuffers.GAME_VIEWPORT.bind();
+
         glClearColor(0.267f, 0.741f, 1, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Render batches
 
         renderShadowsCascades();
+
+        FrameBuffers.GAME_VIEWPORT.bind();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
