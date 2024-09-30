@@ -70,6 +70,8 @@ public class SoundManager {
     }
 
     public void cleanup() {
+        Logger.log("Cleaning sound manager");
+
         reset();
 
         soundBufferList.forEach(SoundBuffer::cleanup);

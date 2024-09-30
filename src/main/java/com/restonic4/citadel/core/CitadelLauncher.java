@@ -25,7 +25,7 @@ public class CitadelLauncher {
     private final CitadelSettings citadelSettings;
     private final ModLoader modLoader;
 
-    boolean shouldEnd = false;
+    private static volatile boolean shouldEnd = false;
 
     private CitadelLauncher(CitadelSettings citadelSettings) {
         this.citadelSettings = citadelSettings;
@@ -60,12 +60,6 @@ public class CitadelLauncher {
 
         startDesiredEnvironment();
 
-        if (citadelSettings.isEditorMode()) {
-            ImGuiScreens.GAME_VIEWPORT.show();
-            ImGuiScreens.RENDER_STATISTICS.show();
-            ImGuiScreens.CAMERA_SETTINGS.show();
-        }
-
         while (!shouldEnd) {
             this.modLoader.update();
             this.citadelSettings.getSharedGameLogic().update();
@@ -74,6 +68,8 @@ public class CitadelLauncher {
                 this.citadelSettings.getServerGameLogic().update();
             }
         }
+
+        killNetworkThreads();
 
         CitadelLifecycleEvents.CITADEL_STOPPED.invoker().onCitadelStopped(CitadelLauncher.getInstance());
     }
@@ -104,12 +100,12 @@ public class CitadelLauncher {
             Window window = Window.getInstance();
             window.init();
 
-            window.setCursorLocked(true);
-
             this.citadelSettings.getClientGameLogic().start();
 
             window.loop();
             window.cleanup();
+
+            finishApp();
         });
     }
 
@@ -202,7 +198,7 @@ public class CitadelLauncher {
     private void handleCrashes() {
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             killNetworkThreads();
-            shouldEnd = true;
+            finishApp();
             ThreadManager.stopAllThreads();
             ThreadManager.shutdownExecutor();
             Logger.getPersistentLogger().onCrash(thread, throwable);
@@ -212,6 +208,8 @@ public class CitadelLauncher {
     }
 
     private void killNetworkThreads() {
+        Logger.log("Killing networking threads");
+
         Thread clientThread = ThreadManager.findThreadByName(CitadelConstants.CLIENT_SIDE_THREAD_NAME);
         if (clientThread != null) {
             ThreadManager.stopThread(clientThread);
@@ -229,5 +227,10 @@ public class CitadelLauncher {
 
     public CitadelSettings getSettings() {
         return this.citadelSettings;
+    }
+
+    public static synchronized void finishApp() {
+        Logger.log("Finishing engine");
+        shouldEnd = true;
     }
 }

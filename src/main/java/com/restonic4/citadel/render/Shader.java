@@ -5,6 +5,7 @@ import com.restonic4.citadel.exceptions.RenderException;
 import com.restonic4.citadel.platform.PlatformManager;
 import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.registries.RegistryObject;
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.io.IOException;
@@ -151,6 +152,8 @@ public class Shader extends RegistryObject {
     }
 
     public void cleanup() {
+        Logger.log(StringBuilderHelper.concatenate("Cleaning shader: ", this.shaderProgramID));
+
         glDeleteProgram(this.shaderProgramID);
         glDeleteShader(vertexID);
         glDeleteShader(fragmentID);

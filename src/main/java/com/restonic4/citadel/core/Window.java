@@ -197,6 +197,14 @@ public class Window {
             FrameBufferManager.preGenerateFrameBuffers();
         }
 
+        if (CitadelLauncher.getInstance().getSettings().isEditorMode()) {
+            ImGuiScreens.GAME_VIEWPORT.show();
+            ImGuiScreens.RENDER_STATISTICS.show();
+            ImGuiScreens.CAMERA_SETTINGS.show();
+
+            setCursorLocked(false);
+        }
+
         CitadelLifecycleEvents.CITADEL_STARTED.invoker().onCitadelStarted(CitadelLauncher.getInstance(), this);
     }
 
@@ -342,6 +350,8 @@ public class Window {
         }
 
         // Clean ImGui
+        Logger.log("Cleaning imgui");
+
         imGuiGl3.shutdown();
         imGuiGlfw.shutdown();
         ImGui.destroyContext();

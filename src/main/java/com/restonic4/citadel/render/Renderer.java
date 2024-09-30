@@ -141,6 +141,8 @@ public class Renderer {
                 continue;
             }
 
+            FrameBuffers.GAME_VIEWPORT.bind();
+
             batch.update();
 
             batch.renderShadowMap(cascadeIndex);

@@ -6,6 +6,7 @@ import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.types.FrameBuffer;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.util.Map;
 
@@ -26,6 +27,8 @@ public class FrameBufferManager {
     }
 
     public static void cleanup() {
+        Logger.log("Cleaning frame buffers");
+
         Map<AssetLocation, FrameBuffer> frameBufferMap = Registry.getRegistry(Registries.FRAME_BUFFER);
         for (FrameBuffer frameBuffer : frameBufferMap.values()) {
             frameBuffer.cleanup();
