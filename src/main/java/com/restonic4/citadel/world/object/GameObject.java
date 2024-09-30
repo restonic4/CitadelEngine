@@ -1,10 +1,14 @@
 package com.restonic4.citadel.world.object;
 
+import com.restonic4.citadel.util.UniqueIdentifierManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameObject {
     public Transform transform;
+
+    private int id;
 
     private String name;
     private List<Component> components;
@@ -14,6 +18,7 @@ public class GameObject {
     private Transform startingTransform;
 
     public GameObject(boolean isStatic) {
+        this.id = UniqueIdentifierManager.generateUniqueID();
         this.name = "GameObject";
         this.transform = new Transform();
         this.components = new ArrayList<>();
@@ -21,6 +26,7 @@ public class GameObject {
     }
 
     public GameObject(String name, boolean isStatic) {
+        this.id = UniqueIdentifierManager.generateUniqueID();
         this.name = name;
         this.transform = new Transform();
         this.components = new ArrayList<>();
@@ -28,6 +34,7 @@ public class GameObject {
     }
 
     public GameObject(String name, boolean isStatic, Transform transform) {
+        this.id = UniqueIdentifierManager.generateUniqueID();
         this.name = name;
         this.transform = transform;
         this.components = new ArrayList<>();
@@ -35,6 +42,7 @@ public class GameObject {
     }
 
     public GameObject(String name, boolean isStatic, Transform transform, List<Component> components) {
+        this.id = UniqueIdentifierManager.generateUniqueID();
         this.name = name;
         this.transform = transform;
         this.components = components;
@@ -107,11 +115,24 @@ public class GameObject {
         return this.name;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
     public void setInsideFrustum(boolean value) {
         this.isInsideFrustum = value;
     }
 
     public boolean isInsideFrustum() {
         return this.isInsideFrustum;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        return obj instanceof GameObject gameObject && gameObject.getId() == this.id;
     }
 }

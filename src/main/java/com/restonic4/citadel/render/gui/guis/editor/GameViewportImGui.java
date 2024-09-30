@@ -1,4 +1,4 @@
-package com.restonic4.citadel.render.gui.guis;
+package com.restonic4.citadel.render.gui.guis.editor;
 
 import com.restonic4.ClientSide;
 import com.restonic4.citadel.core.Window;
@@ -9,6 +9,7 @@ import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.render.Renderer;
 import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.render.gui.LineGraphImGui;
+import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.sound.SoundManager;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
@@ -19,7 +20,9 @@ import com.restonic4.citadel.world.SceneManager;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.extension.implot.ImPlot;
+import imgui.flag.ImGuiBackendFlags;
 import imgui.flag.ImGuiWindowFlags;
+import imgui.internal.flag.ImGuiDockNodeFlags;
 
 import java.util.Map;
 

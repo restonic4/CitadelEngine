@@ -34,6 +34,7 @@ import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.Time;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import imgui.internal.flag.ImGuiDockNodeFlags;
 import imgui.type.ImBoolean;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -202,11 +203,7 @@ public class Window {
         }
 
         if (citadelSettings.isEditorMode()) {
-            ImGuiScreens.GAME_VIEWPORT.show();
-            ImGuiScreens.RENDER_STATISTICS.show();
-            ImGuiScreens.CAMERA_SETTINGS.show();
-
-            setCursorLocked(false);
+            LevelEditor.init();
         }
 
         CitadelLifecycleEvents.CITADEL_STARTED.invoker().onCitadelStarted(CitadelLauncher.getInstance(), this);
@@ -310,19 +307,18 @@ public class Window {
     }
 
     private void runImGuiDockspace() {
-        int windowFlags = MenuBar | NoDocking | NoTitleBar | NoCollapse | NoResize | NoMove | NoBringToFrontOnFocus | NoNavFocus;
-
+        // No borders and titles
         ImGui.setNextWindowPos(0.0f, 0.0f, ImGuiCond.Always);
         ImGui.setNextWindowSize(getWidth(), getHeight());
 
         ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
         ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
 
-        ImGui.begin("Dockspace Demo", new ImBoolean(true), windowFlags);
-        ImGui.popStyleVar(2);
+        // Main window
+        LevelEditor.render();
 
         // Dockspace
-        ImGui.dockSpace(ImGui.getID("Dockspace"));
+        ImGui.dockSpace(ImGui.getID("Dockspace"), 0, 0, ImGuiDockNodeFlags.NoCloseButton | ImGuiDockNodeFlags.NoWindowMenuButton);
     }
 
     public void initGuiOnly() {

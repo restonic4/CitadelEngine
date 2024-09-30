@@ -20,6 +20,7 @@ public abstract class Scene {
     protected Renderer renderer = new Renderer(this);
     protected Camera camera;
 
+    List<GameObject> allGameObjects = new ArrayList<>();
     private List<GameObject> staticGameObjects = new ArrayList<>();
     private List<GameObject> dynamicGameObjects = new ArrayList<>();
     private List<LightComponent> lightComponents = new ArrayList<>();
@@ -82,6 +83,7 @@ public abstract class Scene {
     public void addGameObject(GameObject gameObject) {
         List<GameObject> targetList = gameObject.isStatic() ? staticGameObjects : dynamicGameObjects;
         targetList.add(gameObject);
+        allGameObjects.add(gameObject);
 
         LightComponent lightComponent = gameObject.getComponent(LightComponent.class);
         if (lightComponent != null) {
@@ -113,11 +115,6 @@ public abstract class Scene {
     }
 
     public List<GameObject> getGameObjects() {
-        List<GameObject> allGameObjects = new ArrayList<>();
-
-        allGameObjects.addAll(staticGameObjects);
-        allGameObjects.addAll(dynamicGameObjects);
-
         return allGameObjects;
     }
 
