@@ -1,7 +1,9 @@
 package com.restonic4.citadel.world.object.components;
 
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.world.object.Component;
+import imgui.ImGui;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -28,6 +30,12 @@ public class LightComponent extends Component {
     @Override
     public void update() {
 
+    }
+
+    @Override
+    public void renderEditorUI() {
+        ImGui.text(StringBuilderHelper.concatenate("ID: ", this.getId()));
+        ImGui.text(StringBuilderHelper.concatenate("LightType: ", this.lightType));
     }
 
     public Vector3f getColor() {

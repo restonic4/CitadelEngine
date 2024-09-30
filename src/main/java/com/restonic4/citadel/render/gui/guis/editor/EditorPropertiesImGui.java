@@ -89,7 +89,7 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
                 if (ImGui.collapsingHeader(StringBuilderHelper.concatenate(component.getClass().getSimpleName(), "##", component.getId()))) {
                     ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
-                    ImGui.text(StringBuilderHelper.concatenate("ID: ", component.getId()));
+                    component.renderEditorUI();
 
                     ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
                 }

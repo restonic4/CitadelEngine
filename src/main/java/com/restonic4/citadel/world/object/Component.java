@@ -1,6 +1,8 @@
 package com.restonic4.citadel.world.object;
 
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.UniqueIdentifierManager;
+import imgui.ImGui;
 
 public abstract class Component {
     private final int id;
@@ -15,6 +17,10 @@ public abstract class Component {
     }
 
     public abstract void update();
+
+    public void renderEditorUI() {
+        ImGui.text(StringBuilderHelper.concatenate("ID: ", this.getId()));
+    }
 
     public int getId() {
         return this.id;
