@@ -1,3 +1,4 @@
-rootProject.name = 'EpicAmazingCoolGameTestIGues'
+rootProject.name = 'Citadel'
 include 'processors'
+include 'TestGame'
 

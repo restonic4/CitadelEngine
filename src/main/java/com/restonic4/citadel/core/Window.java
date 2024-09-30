@@ -269,9 +269,14 @@ public class Window {
         runImGuiDockspace();
 
         // TODO: Optimize this for GC
-        Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
+        /*Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
         for (Map.Entry<AssetLocation, ImGuiScreen> entry : guis.entrySet()) {
             ImGuiScreen screen = entry.getValue();
+            screen.render();
+        }*/
+
+        final Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
+        for (ImGuiScreen screen : guis.values()) {
             screen.render();
         }
 
