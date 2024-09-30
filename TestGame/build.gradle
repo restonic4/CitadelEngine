@@ -24,6 +24,10 @@ java {
     }
 }
 
-tasks.register('runLocal', Exec) {
-    commandLine 'cmd.exe', '/c', 'java', '-cp', "${projectDir}/TestGame/build/libs/*;${projectDir}/TestGame/build/classes/java/main", 'com.restonic4.test.Main'
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.restonic4.test.Main'
+        )
+    }
 }
