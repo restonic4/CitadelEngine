@@ -205,8 +205,6 @@ public class RenderBatch {
     public void render() {
         Scene scene = SceneManager.getCurrentScene();
 
-        Shaders.MAIN.use();
-
         UniformsMap mainShaderUniformMap = Shaders.MAIN.getUniformsMap();
 
         // Shadows
@@ -262,8 +260,6 @@ public class RenderBatch {
         glDisableVertexAttribArray(5);
 
         glBindVertexArray(0);
-
-        Shaders.MAIN.detach();
     }
 
     public void renderShadowMap(int cascadeIndex) {

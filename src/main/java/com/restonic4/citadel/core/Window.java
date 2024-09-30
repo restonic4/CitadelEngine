@@ -64,6 +64,8 @@ public class Window {
     private float aspectRatio;
     private boolean isCursorLocked;
 
+    private CitadelSettings citadelSettings;
+
     private double lastTimeTitleChange = Time.getRunningTime();
 
     protected ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
@@ -86,6 +88,8 @@ public class Window {
 
     public void init() {
         Logger.log("Creating the GLFW window");
+
+        citadelSettings = CitadelLauncher.getInstance().getSettings();
 
         // This redirects errors to sout.err
         GLFWErrorCallback.createPrint(System.err).set();
@@ -193,11 +197,11 @@ public class Window {
             screen.start();
         }
 
-        if (!CitadelLauncher.getInstance().getSettings().isFrameBuffersPreGenerationDisabled()) {
+        if (!citadelSettings.isFrameBuffersPreGenerationDisabled()) {
             FrameBufferManager.preGenerateFrameBuffers();
         }
 
-        if (CitadelLauncher.getInstance().getSettings().isEditorMode()) {
+        if (citadelSettings.isEditorMode()) {
             ImGuiScreens.GAME_VIEWPORT.show();
             ImGuiScreens.RENDER_STATISTICS.show();
             ImGuiScreens.CAMERA_SETTINGS.show();
@@ -274,7 +278,9 @@ public class Window {
         imGuiGlfw.newFrame();
         ImGui.newFrame();
 
-        runImGuiDockspace();
+        if (citadelSettings.isEditorMode()) {
+            runImGuiDockspace();
+        }
 
         // TODO: Optimize this for GC
         /*Map<AssetLocation, ImGuiScreen> guis = Registry.getRegistry(Registries.IM_GUI_SCREEN);
@@ -288,7 +294,10 @@ public class Window {
             screen.render();
         }
 
-        ImGui.end(); // Docking
+        if (citadelSettings.isEditorMode()) {
+            ImGui.end(); // Docking
+        }
+
         ImGui.render();
         imGuiGl3.renderDrawData(ImGui.getDrawData());
 

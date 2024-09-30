@@ -1,6 +1,8 @@
 package com.restonic4.citadel.render;
 
 import com.restonic4.ClientSide;
+import com.restonic4.citadel.core.CitadelLauncher;
+import com.restonic4.citadel.core.CitadelSettings;
 import com.restonic4.citadel.exceptions.RenderException;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.managers.Shaders;
@@ -25,6 +27,7 @@ public class Renderer {
     private List<RenderBatch> staticBatches, dynamicBatches;
 
     private Scene scene;
+    private CitadelSettings citadelSettings;
 
     // This is just stats
     private int drawCallsConsumed = 0;
@@ -36,6 +39,7 @@ public class Renderer {
         this.scene = scene;
         this.staticBatches = new ArrayList<>();
         this.dynamicBatches = new ArrayList<>();
+        this.citadelSettings = CitadelLauncher.getInstance().getSettings();
     }
 
     public void add(GameObject gameObject) {
@@ -109,11 +113,7 @@ public class Renderer {
         // Render batches
 
         renderShadowsCascades();
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        renderMainBatches(this.staticBatches);
-        renderMainBatches(this.dynamicBatches);
+        renderGeometry();
     }
 
     private void renderShadowsCascades() {
@@ -132,6 +132,22 @@ public class Renderer {
         FrameBufferManager.unbindCurrentFrameBuffer();
     }
 
+    private void renderGeometry() {
+        if (citadelSettings.isEditorMode()) {
+            FrameBuffers.GAME_VIEWPORT.bind();
+        }
+
+        Shaders.MAIN.use();
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        renderMainBatches(this.staticBatches);
+        renderMainBatches(this.dynamicBatches);
+
+        Shaders.MAIN.detach();
+        FrameBufferManager.unbindCurrentFrameBuffer();
+    }
+
     private <T extends RenderBatch> void renderShadowBatches(List<T> batches, int cascadeIndex) {
         for (int i = 0; i < batches.size(); i++) {
             RenderBatch batch = batches.get(i);
@@ -140,8 +156,6 @@ public class Renderer {
                 drawCallsSkipped++;
                 continue;
             }
-
-            FrameBuffers.GAME_VIEWPORT.bind();
 
             batch.update();
 
