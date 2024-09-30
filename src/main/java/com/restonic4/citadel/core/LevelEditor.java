@@ -13,7 +13,7 @@ public abstract class LevelEditor {
 
     private static GameObject selectedObject;
 
-    private static boolean isSceneViewVisible, isStatisticsVisible, isInspectorVisible;
+    private static boolean isSceneViewVisible, isStatisticsVisible, isInspectorVisible, isPropertiesVisible;
 
     public static void init() {
         window = Window.getInstance();
@@ -23,10 +23,12 @@ public abstract class LevelEditor {
         isSceneViewVisible = true;
         isStatisticsVisible = true;
         isInspectorVisible = true;
+        isPropertiesVisible = true;
 
         ImGuiScreens.GAME_VIEWPORT.show();
         ImGuiScreens.RENDER_STATISTICS.show();
         ImGuiScreens.EDITOR_INSPECTOR.show();
+        ImGuiScreens.EDITOR_PROPERTIES.show();
     }
 
     public static void render() {
@@ -67,6 +69,17 @@ public abstract class LevelEditor {
                     }
                     else {
                         ImGuiScreens.EDITOR_INSPECTOR.hide();
+                    }
+                }
+
+                if (ImGui.menuItem("Properties", isPropertiesVisible)) {
+                    isPropertiesVisible = !isPropertiesVisible;
+
+                    if (isPropertiesVisible) {
+                        ImGuiScreens.EDITOR_PROPERTIES.show();
+                    }
+                    else {
+                        ImGuiScreens.EDITOR_PROPERTIES.hide();
                     }
                 }
 
