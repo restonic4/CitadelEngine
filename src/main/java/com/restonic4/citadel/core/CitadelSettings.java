@@ -16,6 +16,7 @@ public class CitadelSettings {
     private boolean thirdPartyNamespaceRegistrationAllowed;
     private String[] allowedNamespaces;
     private boolean frameBuffersPreGenerationDisabled;
+    private boolean isEditorMode;
 
     public CitadelSettings(GameLogic clientGameLogic, GameLogic serverGameLogic, GameLogic sharedGameLogic, String appName, String[] args) {
         this.clientGameLogic = clientGameLogic;
@@ -117,6 +118,14 @@ public class CitadelSettings {
         return this;
     }
 
+    /**
+     * Sets the server port.
+     */
+    public CitadelSettings setEditorMode(boolean value) {
+        this.isEditorMode = value;
+        return this;
+    }
+
     // Getters
 
     public GameLogic getClientGameLogic() {
@@ -157,5 +166,9 @@ public class CitadelSettings {
 
     public boolean isFrameBuffersPreGenerationDisabled() {
         return this.frameBuffersPreGenerationDisabled;
+    }
+
+    public boolean isEditorMode() {
+        return this.isEditorMode;
     }
 }

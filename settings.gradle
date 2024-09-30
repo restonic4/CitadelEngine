@@ -1,4 +1,3 @@
 rootProject.name = 'Citadel'
 include 'processors'
-include 'TestGame'
 

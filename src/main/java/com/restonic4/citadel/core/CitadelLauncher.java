@@ -60,6 +60,12 @@ public class CitadelLauncher {
 
         startDesiredEnvironment();
 
+        if (citadelSettings.isEditorMode()) {
+            ImGuiScreens.GAME_VIEWPORT.show();
+            ImGuiScreens.RENDER_STATISTICS.show();
+            ImGuiScreens.CAMERA_SETTINGS.show();
+        }
+
         while (!shouldEnd) {
             this.modLoader.update();
             this.citadelSettings.getSharedGameLogic().update();
