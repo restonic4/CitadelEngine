@@ -88,6 +88,7 @@ public class Window {
         return Window.instance;
     }
 
+    @SuppressWarnings("resource")
     public void init() {
         Logger.log("Creating the GLFW window");
 
