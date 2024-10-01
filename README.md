@@ -143,7 +143,7 @@ If your IDE can't find the commit/version it could be that jitpack does not have
 
 ## Projects using Citadel
 <ul>
-    <li>Private Nasa project; To be revealed soon.</li>
+    <li>...</li>
 </ul>
 
 ## License
