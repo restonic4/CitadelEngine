@@ -4,6 +4,7 @@ import com.restonic4.NotRecommended;
 import com.restonic4.citadel.registries.built_in.types.Locale;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.GradleUtil;
+import org.lwjgl.opengl.GLCapabilities;
 
 public class CitadelSettings {
     private GameLogic clientGameLogic, serverGameLogic, sharedGameLogic;
@@ -17,6 +18,8 @@ public class CitadelSettings {
     private String[] allowedNamespaces;
     private boolean frameBuffersPreGenerationDisabled;
     private boolean isEditorMode;
+
+    private GLCapabilities glCapabilities;
 
     public CitadelSettings(GameLogic clientGameLogic, GameLogic serverGameLogic, GameLogic sharedGameLogic, String appName, String[] args) {
         this.clientGameLogic = clientGameLogic;
@@ -126,6 +129,11 @@ public class CitadelSettings {
         return this;
     }
 
+    public CitadelSettings setGLCapabilities(GLCapabilities glCapabilities) {
+        this.glCapabilities = glCapabilities;
+        return this;
+    }
+
     // Getters
 
     public GameLogic getClientGameLogic() {
@@ -170,5 +178,19 @@ public class CitadelSettings {
 
     public boolean isEditorMode() {
         return this.isEditorMode;
+    }
+
+    public boolean shouldGenerateBindlessTextures() {
+        if (glCapabilities.GL_ARB_bindless_texture) {
+            return true;
+        }
+
+        // If we are launching the game as normal, we need bindless textures to render the scene.
+        // In the level editor we can display an error on the game viewport.
+        if (!isEditorMode) {
+            return true;
+        }
+
+        return false;
     }
 }

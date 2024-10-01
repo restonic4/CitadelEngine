@@ -79,6 +79,10 @@ public class Renderer {
     }
 
     public void render() {
+        if (!citadelSettings.shouldGenerateBindlessTextures()) {
+            return;
+        }
+
         // Stats
         drawCallsConsumed = 0;
         drawCallsSkipped = 0;

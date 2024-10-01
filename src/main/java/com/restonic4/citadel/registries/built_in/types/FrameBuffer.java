@@ -1,9 +1,12 @@
 package com.restonic4.citadel.registries.built_in.types;
 
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.registries.RegistryObject;
 import com.restonic4.citadel.render.FrameBufferManager;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLCapabilities;
 
 import java.nio.ByteBuffer;
 
@@ -51,6 +54,11 @@ public class FrameBuffer extends RegistryObject {
 
         generated = true;
 
+        GLCapabilities glCapabilities = GL.getCapabilities();
+
+        Logger.log("OpenGL32: " + glCapabilities.OpenGL32);
+        Logger.log("FrameBuffer objects: " + glCapabilities.GL_ARB_framebuffer_object);
+
         frameBufferId = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
         glDrawBuffer(GL_COLOR_ATTACHMENT0);
@@ -60,7 +68,14 @@ public class FrameBuffer extends RegistryObject {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, (ByteBuffer) null);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureId, 0);
+
+
+        // glFramebufferTexture works on NVIDIA RTX 2060 but breaks in Intel(R) HD Graphics 520
+        // It might be fixed by using a glFramebufferTexture2D instead.
+        // TODO: This should be properly tested.
+
+        //glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureId, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0);
 
         if (useDepthBuffer) {
             depthBufferId = glGenRenderbuffers();
@@ -69,8 +84,10 @@ public class FrameBuffer extends RegistryObject {
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBufferId);
         }
 
-        textureHandlerId = glGetTextureHandleARB(textureId);
-        glMakeTextureHandleResidentARB(textureHandlerId);
+        if (CitadelLauncher.getInstance().getSettings().shouldGenerateBindlessTextures()) {
+            textureHandlerId = glGetTextureHandleARB(textureId);
+            glMakeTextureHandleResidentARB(textureHandlerId);
+        }
 
         FrameBufferManager.unbindCurrentFrameBuffer();
 

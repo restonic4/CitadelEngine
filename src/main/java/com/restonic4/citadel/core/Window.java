@@ -41,6 +41,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
@@ -165,7 +166,8 @@ public class Window {
         glfwShowWindow(glfwWindowAddress);
 
         // OpenGL initialization
-        GL.createCapabilities();
+        GLCapabilities glCapabilities = GL.createCapabilities();
+        citadelSettings.setGLCapabilities(glCapabilities);
 
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
@@ -179,9 +181,15 @@ public class Window {
         glEnable(GL_MULTISAMPLE);
 
         // TODO: Old graphics cards support, if possible. Issue #2
-        if (!GL.getCapabilities().GL_ARB_bindless_texture) {
+        // TODO: Handle this better.
+        if (!glCapabilities.GL_ARB_bindless_texture && !citadelSettings.isEditorMode()) {
             throw new RenderException("Bindless textures not compatible with your graphics card. Tell the devs pls!");
         }
+
+        /*
+        Logger.log("OpenGL32: " + glCapabilities.OpenGL32);
+        Logger.log("FrameBuffer objects: " + glCapabilities.GL_ARB_framebuffer_object);
+         */
 
         ImGui.createContext();
 
