@@ -186,10 +186,10 @@ public class Window {
             throw new RenderException("Bindless textures not compatible with your graphics card. Tell the devs pls!");
         }
 
-
         Logger.log("OpenGL32: " + glCapabilities.OpenGL32);
         Logger.log("FrameBuffer objects: " + glCapabilities.GL_ARB_framebuffer_object);
         Logger.log("Bindless textures: " + glCapabilities.GL_ARB_bindless_texture);
+        Logger.log("GL_NV_gpu_shader5: " + glCapabilities.GL_NV_gpu_shader5);
         Logger.log("Should use force bindless textures: " + citadelSettings.shouldGenerateBindlessTextures());
 
         ImGui.createContext();
