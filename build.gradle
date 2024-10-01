@@ -74,7 +74,7 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     // Excluding the test game
-    exclude 'com/restonic4/test/**'
+    //exclude 'com/restonic4/test/**'
 
     archiveBaseName.set("CitadelEngine${project.hasProperty('serverBuild') ? '-Server' : ''}")
 }
