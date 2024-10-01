@@ -4,6 +4,10 @@ import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.world.object.Component;
 import imgui.ImGui;
+import imgui.flag.ImGuiColorEditFlags;
+import imgui.type.ImFloat;
+import imgui.type.ImInt;
+import imgui.type.ImString;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -12,6 +16,12 @@ import org.joml.Vector4f;
 public class LightComponent extends Component {
     private LightType lightType;
     private Vector3f color;
+
+    LightType[] lightTypes = LightType.values();
+    String[] comboOptions = new String[lightTypes.length];
+
+    private float[] colorValues = new float[4];
+    private ImInt currentOption = new ImInt(0);
 
     public LightComponent(LightType lightType, Vector3f color) {
         this.lightType = lightType;
@@ -23,8 +33,20 @@ public class LightComponent extends Component {
         this.color = new Vector3f(1, 1, 1);
     }
 
+    private void initColorValues() {
+        colorValues[0] = color.x;
+        colorValues[1] = color.y;
+        colorValues[2] = color.z;
+        colorValues[3] = 1.0f;
+    }
+
     @Override
     public void start() {
+        for (int i = 0; i < lightTypes.length; i++) {
+            comboOptions[i] = lightTypes[i].name();
+        }
+
+        initColorValues();
     }
 
     @Override
@@ -34,8 +56,36 @@ public class LightComponent extends Component {
 
     @Override
     public void renderEditorUI() {
-        ImGui.text(StringBuilderHelper.concatenate("ID: ", this.getId()));
-        ImGui.text(StringBuilderHelper.concatenate("LightType: ", this.lightType));
+        syncLightType();
+        syncColor();
+
+        ImGui.text("LightType:");
+        ImGui.sameLine();
+        if (ImGui.combo(StringBuilderHelper.concatenate("##lightType", this.getId()), currentOption, comboOptions)) {
+            //lightType = lightTypes[currentOption.get()];
+        }
+
+        ImGui.text("Color:");
+        ImGui.sameLine();
+        if (ImGui.colorEdit4(StringBuilderHelper.concatenate("##colorPicker", this.getId()), colorValues, ImGuiColorEditFlags.AlphaPreviewHalf)) {
+            //color.set(colorValues[0], colorValues[1], colorValues[2]);
+        }
+    }
+
+    public void syncLightType() {
+        for (int i = 0; i < lightTypes.length; i++) {
+            if (lightTypes[i] == lightType) {
+                currentOption.set(i);
+                break;
+            }
+        }
+    }
+
+    public void syncColor() {
+        colorValues[0] = color.x;
+        colorValues[1] = color.y;
+        colorValues[2] = color.z;
+        colorValues[3] = 1;
     }
 
     public Vector3f getColor() {
