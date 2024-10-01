@@ -1,7 +1,9 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
 import com.restonic4.ClientSide;
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.Window;
+import com.restonic4.citadel.platform.PlatformManager;
 import com.restonic4.citadel.registries.AssetLocation;
 import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.RegistryKey;
@@ -21,6 +23,7 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.extension.implot.ImPlot;
 import imgui.flag.ImGuiBackendFlags;
+import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.internal.flag.ImGuiDockNodeFlags;
 
@@ -48,7 +51,24 @@ public class GameViewportImGui extends ToggleableImGuiScreen {
         int textureId = FrameBuffers.GAME_VIEWPORT.getTextureId();
         ImGui.image(textureId, windowSize.x, windowSize.y, 0, 1, 1, 0);
 
+        if (!CitadelLauncher.getInstance().getSettings().shouldGenerateBindlessTextures()) {
+            renderErrorMessage(StringBuilderHelper.concatenate("Could not render due to an incompatibility", PlatformManager.getEndOfLine(), "with your graphics card."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+        }
+
         ImGui.end();
+    }
+
+    private void renderErrorMessage(String message, float x, float y, float width, float height) {
+        ImVec2 textSize = ImGui.calcTextSize(message);
+
+        float textPosX = x + (width - textSize.x) / 2;
+        float textPosY = y + (height - textSize.y) / 2;
+
+        ImGui.setCursorPos(textPosX, textPosY);
+
+        ImGui.pushStyleColor(ImGuiCol.Text, 1.0f, 0.5f, 0.0f, 1.0f);
+        ImGui.text(message);
+        ImGui.popStyleColor();
     }
 
     private static ImVec2 getLargestSizeForViewport() {
