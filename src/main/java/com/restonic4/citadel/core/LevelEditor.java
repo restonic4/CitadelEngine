@@ -22,13 +22,12 @@ public abstract class LevelEditor {
         window.setCursorLocked(false);
 
         isSceneViewVisible = true;
-        isStatisticsVisible = true;
+        isStatisticsVisible = false;
         isInspectorVisible = true;
         isPropertiesVisible = true;
         isAssetsVisible = true;
 
         ImGuiScreens.GAME_VIEWPORT.show();
-        ImGuiScreens.RENDER_STATISTICS.show();
         ImGuiScreens.EDITOR_INSPECTOR.show();
         ImGuiScreens.EDITOR_PROPERTIES.show();
         ImGuiScreens.EDITOR_ASSETS.show();

@@ -1,6 +1,7 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
 import com.restonic4.citadel.core.LevelEditor;
+import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
@@ -39,7 +40,7 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
                     isSelected = LevelEditor.getSelectedObject().equals(gameObject);
                 }
 
-                if (ImGui.selectable(StringBuilderHelper.concatenate(gameObject.getName(), "##", gameObject.getId()), isSelected)) {
+                if (ImGuiHelper.selectableTruncated(StringBuilderHelper.concatenate(gameObject.getName(), "##", gameObject.getId()), isSelected)) {
                     LevelEditor.setSelectedObject(gameObject);
                 }
             }
