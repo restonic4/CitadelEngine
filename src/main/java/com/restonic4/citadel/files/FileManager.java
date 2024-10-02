@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileManager {
     public static final String RESOURCES_PATH = "resources/";
@@ -190,5 +192,14 @@ public class FileManager {
         }
 
         return directoryFile.getAbsolutePath();
+    }
+
+    public static List<Path> getFilesInDirectory(String directory) {
+        try (var stream = Files.list(Paths.get(directory))) {
+            return stream.collect(Collectors.toList());
+        }
+        catch (IOException exception) {
+            throw new FileException(exception.getMessage());
+        }
     }
 }

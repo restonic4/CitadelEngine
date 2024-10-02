@@ -8,12 +8,13 @@ import imgui.type.ImBoolean;
 import static imgui.flag.ImGuiWindowFlags.*;
 import static imgui.flag.ImGuiWindowFlags.NoNavFocus;
 
+// TODO: Make the UIs responsive
 public abstract class LevelEditor {
     private static Window window;
 
     private static GameObject selectedObject;
 
-    private static boolean isSceneViewVisible, isStatisticsVisible, isInspectorVisible, isPropertiesVisible;
+    private static boolean isSceneViewVisible, isStatisticsVisible, isInspectorVisible, isPropertiesVisible, isAssetsVisible;
 
     public static void init() {
         window = Window.getInstance();
@@ -24,11 +25,13 @@ public abstract class LevelEditor {
         isStatisticsVisible = true;
         isInspectorVisible = true;
         isPropertiesVisible = true;
+        isAssetsVisible = true;
 
         ImGuiScreens.GAME_VIEWPORT.show();
         ImGuiScreens.RENDER_STATISTICS.show();
         ImGuiScreens.EDITOR_INSPECTOR.show();
         ImGuiScreens.EDITOR_PROPERTIES.show();
+        ImGuiScreens.EDITOR_ASSETS.show();
     }
 
     public static void render() {
@@ -80,6 +83,17 @@ public abstract class LevelEditor {
                     }
                     else {
                         ImGuiScreens.EDITOR_PROPERTIES.hide();
+                    }
+                }
+
+                if (ImGui.menuItem("Assets", isAssetsVisible)) {
+                    isAssetsVisible = !isAssetsVisible;
+
+                    if (isAssetsVisible) {
+                        ImGuiScreens.EDITOR_ASSETS.show();
+                    }
+                    else {
+                        ImGuiScreens.EDITOR_ASSETS.hide();
                     }
                 }
 
