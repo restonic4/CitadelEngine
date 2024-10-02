@@ -181,7 +181,7 @@ public class CitadelSettings {
     }
 
     public boolean shouldGenerateBindlessTextures() {
-        if (glCapabilities.GL_ARB_bindless_texture /*&& glCapabilities.GL_NV_gpu_shader5*/) {
+        if (glCapabilities.GL_ARB_bindless_texture) {
             return true;
         }
 

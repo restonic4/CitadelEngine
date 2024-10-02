@@ -1,8 +1,5 @@
-// AVOID USING GPU_SHADER_5
-
 #type vertex
 #version 430 core
-//#extension GL_NV_gpu_shader5 : enable
 #extension GL_ARB_bindless_texture : require
 
 layout (location=0) in vec3 aPos;
@@ -72,7 +69,6 @@ void main()
 
 #type fragment
 #version 430 core
-//#extension GL_NV_gpu_shader5 : enable
 #extension GL_ARB_bindless_texture : require
 
 const int NUM_CASCADES = 3;
@@ -130,23 +126,12 @@ void main()
 {
     // Texture
 
-    //uint64_t handle = (uint64_t(fTextureHandle.y) << 32) | uint64_t(fTextureHandle.x);
-    float handleTexLow = fTextureHandle.x;
-    float handleTexHigh = fTextureHandle.y;
-
-    uint handleLow = uint(handleTexLow);
-    uint handleHigh = uint(handleTexHigh);
-
-    //float handleA = handleHigh * 4294967296.0 + handleLow;
-
-    uvec2 handle = fTextureHandle;
-
     vec4 baseColor;
 
-    if (handle.x == 0 && handle.y == 0) {
+    if (fTextureHandle.x == 0 && fTextureHandle.y == 0) {
         baseColor = fColor;
     } else {
-        sampler2D tex = sampler2D(handle);
+        sampler2D tex = sampler2D(fTextureHandle);
         baseColor = fColor * texture(tex, fUV);
     }
 

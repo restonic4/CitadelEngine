@@ -113,10 +113,6 @@ public class Window {
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        //Logger.log("GL_VERSION: " + glGetString(GL_VERSION));
-        //Logger.log("GLFW_VERSION_MAJOR: " + glGetInteger(GLFW_VERSION_MAJOR));
-        //Logger.log("GLFW_VERSION_MINOR: " + glGetInteger(GLFW_VERSION_MINOR));
-
         GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         this.width = vidMode.width();
         this.height = vidMode.height();

@@ -124,7 +124,6 @@ public class Texture {
 
     public void generateBindlessHandler() {
         texHandleID = glGetTextureHandleARB(texID);
-        //glGetTextureHandleNV()
 
         Logger.logExtra("Texture: " + texID + "; " + "Handle: " + texHandleID);
 
