@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL14.GL_TEXTURE_LOD_BIAS;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
+import static org.lwjgl.opengl.NVBindlessTexture.glGetTextureHandleNV;
 import static org.lwjgl.stb.STBImage.*;
 
 @ClientSide
@@ -123,6 +124,7 @@ public class Texture {
 
     public void generateBindlessHandler() {
         texHandleID = glGetTextureHandleARB(texID);
+        //glGetTextureHandleNV()
 
         Logger.logExtra("Texture: " + texID + "; " + "Handle: " + texHandleID);
 
