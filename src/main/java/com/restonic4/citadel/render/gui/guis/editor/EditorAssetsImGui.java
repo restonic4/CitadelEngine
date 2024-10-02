@@ -37,49 +37,77 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
         ImGui.begin("Assets");
 
+        refreshPathsIfNeeded();
+
+        if (!isRootDirectory()) {
+            if (isBackNavigationSelected()) {
+                navigateToParentDirectory();
+            }
+        }
+
+        renderDirectoryContent();
+
+        ImGui.end();
+    }
+
+    private void refreshPathsIfNeeded() {
         if (paths == null || needsToRefresh) {
             needsToRefresh = false;
             paths = FileManager.getFilesInDirectory(currentDir);
         }
+    }
 
-        if (!Objects.equals(currentDir, "resources")) {
-            if (ImGui.selectable("..", false, ImGuiSelectableFlags.AllowDoubleClick)) {
-                if (ImGui.isItemHovered()) {
-                    if (ImGui.isMouseDoubleClicked(0)) {
-                        currentDir = Paths.get(currentDir).getParent().toString();
-                        needsToRefresh = true;
-                    }
-                }
+    private boolean isRootDirectory() {
+        return Objects.equals(currentDir, "resources");
+    }
+
+    private boolean isBackNavigationSelected() {
+        return ImGui.selectable("..", false, ImGuiSelectableFlags.AllowDoubleClick) &&
+                ImGui.isItemHovered() &&
+                ImGui.isMouseDoubleClicked(0);
+    }
+
+    private void navigateToParentDirectory() {
+        currentDir = Paths.get(currentDir).getParent().toString();
+        needsToRefresh = true;
+    }
+
+    private void renderDirectoryContent() {
+        for (Path path : paths) {
+            if (isPathSelected(path)) {
+                handlePathSelection(path);
             }
         }
+    }
 
-        for (int i = 0; i < paths.size(); i++) {
-            Path path = paths.get(i);
-            if (ImGui.selectable(path.getFileName().toString(), false, ImGuiSelectableFlags.AllowDoubleClick)) {
-                if (ImGui.isItemHovered()) {
-                    if (ImGui.isMouseDoubleClicked(0)) {
-                        if (Files.isRegularFile(path)) {
-                            if (Desktop.isDesktopSupported()) {
-                                try {
-                                    Desktop.getDesktop().open(path.toFile());
-                                }
-                                catch (IOException exception) {
-                                    throw new FileException(exception.getMessage());
-                                }
-                            }
-                            else {
-                                Logger.log("Java desktop is not supported here");
-                            }
-                        }
-                        else {
-                            currentDir = currentDir + "/" + path.getFileName().toString();
-                            needsToRefresh = true;
-                        }
-                    }
-                }
-            }
+    private boolean isPathSelected(Path path) {
+        return ImGui.selectable(path.getFileName().toString(), false, ImGuiSelectableFlags.AllowDoubleClick) &&
+                ImGui.isItemHovered() &&
+                ImGui.isMouseDoubleClicked(0);
+    }
+
+    private void handlePathSelection(Path path) {
+        if (Files.isRegularFile(path)) {
+            openFile(path);
+        } else {
+            navigateToDirectory(path);
         }
+    }
 
-        ImGui.end();
+    private void openFile(Path path) {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().open(path.toFile());
+            } catch (IOException exception) {
+                throw new FileException(exception.getMessage());
+            }
+        } else {
+            Logger.log("Java desktop is not supported here");
+        }
+    }
+
+    private void navigateToDirectory(Path path) {
+        currentDir = currentDir + "/" + path.getFileName().toString();
+        needsToRefresh = true;
     }
 }
