@@ -22,10 +22,10 @@ This engine is going to be used for my future games and projects, but if people 
 ## Development Status
 
 <ul>
-    <li>✅ = Confirmed</li>
-    <li>❌ = Rejected / Canceled</li>
-    <li>❔ = Unknown / We don't know</li>
-    <li>❓ = We could accept help from the community/contributors, but we won't so it without help</li>
+    <li>✅ = Confirmed.</li>
+    <li>❌ = Rejected / Canceled.</li>
+    <li>❔ = Unknown / We don't know.</li>
+    <li>❓ = We could accept help from the community/contributors, but we won't do it without help.</li>
 </ul>
 
 <table align="center" style="border-collapse: collapse; border: none;">
