@@ -35,4 +35,8 @@ public class StringBuilderHelper {
 
         return sb.toString();
     }
+
+    public static StringBuilder getBuilder() {
+        return sb;
+    }
 }
