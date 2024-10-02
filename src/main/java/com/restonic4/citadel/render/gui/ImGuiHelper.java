@@ -23,19 +23,21 @@ public class ImGuiHelper {
 
         ImVec2 ellipsisSize = ImGui.calcTextSize(ellipsis);
 
-        StringBuilderHelper.getBuilder().setLength(0);
+        StringBuilder builder = StringBuilderHelper.getBuilder();
+        builder.setLength(0);
+
+        ImVec2 textSize = new ImVec2();
 
         for (int i = 0; i < text.length(); i++) {
-            String nextText = StringBuilderHelper.getBuilder().toString() + text.charAt(i);
+            builder.append(text.charAt(i));
 
-            ImVec2 nextTextSize = ImGui.calcTextSize(nextText);
+            ImGui.calcTextSize(textSize, builder.toString());
 
-            if (nextTextSize.x + ellipsisSize.x > availableWidth) {
-                return StringBuilderHelper.getBuilder().append(ellipsis).toString();
+            if (textSize.x + ellipsisSize.x > availableWidth) {
+                return builder.append(ellipsis).toString();
             }
-
-            StringBuilderHelper.getBuilder().append(text.charAt(i));
         }
+
 
         return text;
     }
