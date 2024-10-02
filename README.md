@@ -51,7 +51,7 @@ This engine is going to be used for my future games and projects, but if people 
 | Textures        | ✅      |
 | Networking      | ✅      |
 | Physics         | ❔      |
-| Level editor    | ✅      |
+| Scene editor    | ✅      |
 
 </td></table>
 
@@ -61,7 +61,7 @@ This engine is going to be used for my future games and projects, but if people 
 ### Planned Features (🗓️)
 | Feature                                        | Status |
 |------------------------------------------------|--------|
-| Object Culling                                 | ✅      |
+| Object Culling / Occlusion culling             | ✅      |
 | Save System                                    | ❔      |
 | Steamworks Compatibility                       | ❔      |
 | GUI System                                     | ❔      |
