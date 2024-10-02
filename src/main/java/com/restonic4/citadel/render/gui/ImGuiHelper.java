@@ -38,8 +38,6 @@ public class ImGuiHelper {
             }
         }
 
-
         return text;
     }
-
 }
