@@ -28,8 +28,8 @@ public class CitadelConstants {
     public static final float FRUSTUM_BOUNDING_SPHERE_RADIUS = 2;
 
     public static final int IM_GUI_INDENT = 20;
-    public static final float IM_GUI_INFO_COLUMN_WIDTH = 100;
-    public static final float IM_GUI_INFO_COLUMN_PADDING = 10;
+    public static final float IM_GUI_INFO_COLUMN_WIDTH = 75;
+    public static final float IM_GUI_INFO_COLUMN_PADDING = 5;
 
     public static final int HEX_COLOR_BLUE = 0x7290fc;
     public static final int HEX_COLOR_GREEN = 0x91e562;

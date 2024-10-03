@@ -60,7 +60,7 @@ public class LightComponent extends Component {
         syncLightType();
         syncColor();
 
-        ImGuiHelper.renderPropertyRow("LightType", () -> {
+        ImGuiHelper.renderPropertyRow("Type", () -> {
             if (ImGui.combo(StringBuilderHelper.concatenate("##lightType", this.getId()), currentOption, comboOptions)) {
                 //lightType = lightTypes[currentOption.get()];
             }

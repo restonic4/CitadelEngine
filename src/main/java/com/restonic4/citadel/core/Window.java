@@ -200,6 +200,7 @@ public class Window {
         ImGuiIO io = ImGui.getIO();
         //io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
         io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
+        io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
 
         imGuiGlfw.init(glfwWindowAddress, true);
         imGuiGl3.init(glslVersion);

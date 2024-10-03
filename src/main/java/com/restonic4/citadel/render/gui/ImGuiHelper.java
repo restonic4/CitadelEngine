@@ -6,6 +6,18 @@ import imgui.ImGui;
 import imgui.ImVec2;
 
 public class ImGuiHelper {
+    public static void textTruncated(String fullText) {
+        float availableWidth = ImGui.getContentRegionAvail().x;
+        ImVec2 textSize = ImGui.calcTextSize(fullText);
+
+        String displayText = fullText;
+        if (textSize.x > availableWidth) {
+            displayText = truncateText(fullText, availableWidth);
+        }
+
+        ImGui.text(displayText);
+    }
+
     public static boolean selectableTruncated(String fullText, boolean isSelected) {
         float availableWidth = ImGui.getContentRegionAvail().x;
 

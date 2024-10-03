@@ -29,7 +29,7 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
         GameObject selectedGameobject = LevelEditor.getSelectedObject();
 
         if (selectedGameobject == null) {
-            ImGui.text("Select a GameObject to modify it's properties!");
+            ImGuiHelper.textTruncated("Select a GameObject to modify it's properties!");
             ImGui.end();
             return;
         }
