@@ -1,5 +1,6 @@
 package com.restonic4.citadel.world.object.components;
 
+import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.world.object.Component;
@@ -59,17 +60,17 @@ public class LightComponent extends Component {
         syncLightType();
         syncColor();
 
-        ImGui.text("LightType:");
-        ImGui.sameLine();
-        if (ImGui.combo(StringBuilderHelper.concatenate("##lightType", this.getId()), currentOption, comboOptions)) {
-            //lightType = lightTypes[currentOption.get()];
-        }
+        ImGuiHelper.renderPropertyRow("LightType", () -> {
+            if (ImGui.combo(StringBuilderHelper.concatenate("##lightType", this.getId()), currentOption, comboOptions)) {
+                //lightType = lightTypes[currentOption.get()];
+            }
+        });
 
-        ImGui.text("Color:");
-        ImGui.sameLine();
-        if (ImGui.colorEdit4(StringBuilderHelper.concatenate("##colorPicker", this.getId()), colorValues, ImGuiColorEditFlags.AlphaPreviewHalf)) {
-            //color.set(colorValues[0], colorValues[1], colorValues[2]);
-        }
+        ImGuiHelper.renderPropertyRow("Color", () -> {
+            if (ImGui.colorEdit4(StringBuilderHelper.concatenate("##colorPicker", this.getId()), colorValues, ImGuiColorEditFlags.AlphaPreviewHalf)) {
+                //color.set(colorValues[0], colorValues[1], colorValues[2]);
+            }
+        });
     }
 
     public void syncLightType() {

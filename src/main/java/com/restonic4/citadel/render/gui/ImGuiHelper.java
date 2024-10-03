@@ -1,5 +1,6 @@
 package com.restonic4.citadel.render.gui;
 
+import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
 import imgui.ImGui;
 import imgui.ImVec2;
@@ -39,5 +40,20 @@ public class ImGuiHelper {
         }
 
         return text;
+    }
+
+    public static void renderPropertyRow(String label, Runnable controlRenderer) {
+        float textWidth = ImGui.calcTextSize(label).x + CitadelConstants.IM_GUI_INFO_COLUMN_PADDING;
+
+        ImGui.columns(2, null, false);
+        ImGui.setColumnWidth(0, Math.max(textWidth, CitadelConstants.IM_GUI_INFO_COLUMN_WIDTH)); // Ajuste dinámico para la columna del texto
+
+        ImGui.text(label);
+        ImGui.nextColumn();
+
+        ImGui.setNextItemWidth(-1);
+        controlRenderer.run();
+
+        ImGui.columns(1);
     }
 }

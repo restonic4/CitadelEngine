@@ -1,6 +1,7 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
 import com.restonic4.citadel.core.LevelEditor;
+import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
@@ -57,23 +58,30 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
         if (ImGui.collapsingHeader("Transform", ImGuiTreeNodeFlags.DefaultOpen)) {
             ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
-            float[] posArray = { selectedGameobject.transform.getPosition().x, selectedGameobject.transform.getPosition().y, selectedGameobject.transform.getPosition().z };
-            ImGui.text("Position");
-            ImGui.sameLine();
-            ImGui.dragFloat3("##PositionDrag", posArray, 0.1f, -1000.0f, 1000.0f, "%.3f");
+            ImGuiHelper.renderPropertyRow("Position", () -> {
+                float[] posArray = {
+                        selectedGameobject.transform.getPosition().x,
+                        selectedGameobject.transform.getPosition().y,
+                        selectedGameobject.transform.getPosition().z
+                };
+                ImGui.dragFloat3("##PositionDrag", posArray, 0.1f, -1000.0f, 1000.0f, "%.3f");
+            });
 
-            Vector3f euler = new Vector3f();
-            selectedGameobject.transform.getRotation().getEulerAnglesXYZ(euler);
+            ImGuiHelper.renderPropertyRow("Rotation", () -> {
+                Vector3f euler = new Vector3f();
+                selectedGameobject.transform.getRotation().getEulerAnglesXYZ(euler);
+                float[] rotArray = { euler.x, euler.y, euler.z };
+                ImGui.dragFloat3("##RotationDrag", rotArray, 0.1f, -1000.0f, 1000.0f, "%.3f");
+            });
 
-            float[] rotArray = { euler.x, euler.y, euler.z };
-            ImGui.text("Rotation");
-            ImGui.sameLine();
-            ImGui.dragFloat3("##RotationDrag", rotArray, 0.1f, -1000.0f, 1000.0f, "%.3f");
-
-            float[] scaleArray = { selectedGameobject.transform.getScale().x, selectedGameobject.transform.getScale().y, selectedGameobject.transform.getScale().z };
-            ImGui.text("Scale");
-            ImGui.sameLine();
-            ImGui.dragFloat3("##ScaleDrag", scaleArray, 0.1f, -1000.0f, 1000.0f, "%.3f");
+            ImGuiHelper.renderPropertyRow("Scale", () -> {
+                float[] scaleArray = {
+                        selectedGameobject.transform.getScale().x,
+                        selectedGameobject.transform.getScale().y,
+                        selectedGameobject.transform.getScale().z
+                };
+                ImGui.dragFloat3("##ScaleDrag", scaleArray, 0.1f, -1000.0f, 1000.0f, "%.3f");
+            });
 
             ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
         }
