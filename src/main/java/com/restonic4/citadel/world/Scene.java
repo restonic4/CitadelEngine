@@ -1,5 +1,7 @@
 package com.restonic4.citadel.world;
 
+import com.restonic4.citadel.events.EventResult;
+import com.restonic4.citadel.events.types.SceneEvents;
 import com.restonic4.citadel.physics.PhysicsManager;
 import com.restonic4.citadel.sound.SoundManager;
 import com.restonic4.citadel.util.CitadelConstants;
@@ -81,6 +83,11 @@ public abstract class Scene {
     }
 
     public void addGameObject(GameObject gameObject) {
+        EventResult eventResult = SceneEvents.ADDING_OBJECT.invoker().onSceneAddingObject(this, gameObject);
+        if (eventResult == EventResult.CANCELED) {
+            return;
+        }
+
         List<GameObject> targetList = gameObject.isStatic() ? staticGameObjects : dynamicGameObjects;
         targetList.add(gameObject);
         allGameObjects.add(gameObject);

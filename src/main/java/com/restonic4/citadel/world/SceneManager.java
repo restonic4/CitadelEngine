@@ -1,5 +1,6 @@
 package com.restonic4.citadel.world;
 
+import com.restonic4.citadel.events.types.SceneEvents;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import static org.lwjgl.opengl.GL11.glFinish;
@@ -31,6 +32,8 @@ public abstract class SceneManager {
 
         scene.init();
         scene.activate();
+
+        SceneEvents.LOADED.invoker().onSceneLoaded(scene);
     }
 
     public static void unLoadScene(Scene scene) {
@@ -39,6 +42,8 @@ public abstract class SceneManager {
         if (currentScene == scene) {
             currentScene = null;
         }
+
+        SceneEvents.UNLOADED.invoker().onSceneUnLoaded(scene);
     }
 
     public static void unLoadCurrentScene() {
