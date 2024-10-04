@@ -3,6 +3,7 @@ package com.restonic4.citadel.core;
 import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
 import imgui.type.ImBoolean;
@@ -145,7 +146,21 @@ public abstract class LevelEditor {
         }
 
         if (isRenamingEnabled) {
-            ImGuiHelper.drawCenteredWindow("Epic amazing text");
+            ImGuiHelper.renameBox(getSelectedObject().getName());
+
+            if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ESCAPE)) {
+                isRenamingEnabled = false;
+                ImGuiHelper.resetRenameBox();
+            }
+            else if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ENTER)) {
+                String newName = ImGuiHelper.getRenameBoxResult();
+
+                isRenamingEnabled = false;
+                ImGuiHelper.resetRenameBox();
+
+                //TODO: Use the new name
+                Logger.log("New name: " + newName);
+            }
         }
     }
 

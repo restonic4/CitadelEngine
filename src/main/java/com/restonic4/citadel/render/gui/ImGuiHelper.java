@@ -80,7 +80,7 @@ public class ImGuiHelper {
     private static final float padding = 10.0f;
     private static final ImString inputBuffer = new ImString(128);
 
-    public static void drawCenteredWindow(String defaultText) {
+    public static void renameBox(String defaultText) {
         ImGuiIO io = ImGui.getIO();
         float screenWidth = io.getDisplaySizeX();
         float screenHeight = io.getDisplaySizeY();
@@ -112,5 +112,13 @@ public class ImGuiHelper {
         ImGui.popItemWidth();
 
         ImGui.end();
+    }
+
+    public static String getRenameBoxResult() {
+        return inputBuffer.get();
+    }
+
+    public static void resetRenameBox() {
+        inputBuffer.clear();
     }
 }
