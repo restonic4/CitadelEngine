@@ -9,6 +9,7 @@ import imgui.ImVec2;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiKey;
+import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
 
 public class ImGuiHelper {
@@ -76,7 +77,6 @@ public class ImGuiHelper {
     }
 
     private static final int windowWidth = 300;
-    private static final int windowHeight = 100;
     private static final float padding = 10.0f;
     private static final ImString inputBuffer = new ImString(128);
 
@@ -85,28 +85,30 @@ public class ImGuiHelper {
         float screenWidth = io.getDisplaySizeX();
         float screenHeight = io.getDisplaySizeY();
 
+        float titleBarHeight = ImGui.getFontSize() + ImGui.getStyle().getFramePadding().y * 2.0f;
+
+        float inputHeight = ImGui.getTextLineHeightWithSpacing();
+        float windowHeight = titleBarHeight + inputHeight + 2 * padding;
+
         float windowPosX = (screenWidth - windowWidth) / 2.0f;
         float windowPosY = (screenHeight - windowHeight) / 2.0f;
 
         ImGui.setNextWindowPos(windowPosX, windowPosY, ImGuiCond.Always);
         ImGui.setNextWindowSize(windowWidth, windowHeight);
 
-        ImGui.begin("Renaming");
-
-        float inputWidth = windowWidth - 2 * padding;
-        float inputHeight = (ImGui.getTextLineHeight() + padding) * 2;
-
-        float inputPosX = padding;
-        float inputPosY = (windowHeight - inputHeight) / 2.0f;
-
-        ImGui.setCursorPos(inputPosX, inputPosY);
+        ImGui.begin("Renaming", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse);
+        ImGui.setWindowFocus();
 
         if (inputBuffer.isEmpty()) {
             inputBuffer.set(defaultText);
+            ImGui.setKeyboardFocusHere();
         }
 
+        ImGui.setCursorPos(padding, padding + titleBarHeight);
+
+        float inputWidth = windowWidth - 2 * padding;
         ImGui.pushItemWidth(inputWidth);
-        ImGui.inputText("##input", inputBuffer, ImGuiInputTextFlags.AutoSelectAll);
+        ImGui.inputText("##Input", inputBuffer, ImGuiInputTextFlags.None);
         ImGui.popItemWidth();
 
         ImGui.end();
