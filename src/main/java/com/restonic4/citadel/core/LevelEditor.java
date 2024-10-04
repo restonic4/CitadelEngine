@@ -1,9 +1,13 @@
 package com.restonic4.citadel.core;
 
+import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
+import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
 import imgui.type.ImBoolean;
+import imgui.type.ImString;
+import org.lwjgl.glfw.GLFW;
 
 import static imgui.flag.ImGuiWindowFlags.*;
 import static imgui.flag.ImGuiWindowFlags.NoNavFocus;
@@ -15,6 +19,7 @@ public abstract class LevelEditor {
     private static GameObject selectedObject;
 
     private static boolean isSceneViewVisible, isStatisticsVisible, isInspectorVisible, isPropertiesVisible, isAssetsVisible;
+    private static boolean isRenamingEnabled = false;
 
     public static void init() {
         window = Window.getInstance();
@@ -129,6 +134,18 @@ public abstract class LevelEditor {
             }
 
             ImGui.endMainMenuBar();
+        }
+
+        handleRenaming();
+    }
+
+    private static void handleRenaming() {
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_F2) && selectedObject != null) {
+            isRenamingEnabled = true;
+        }
+
+        if (isRenamingEnabled) {
+            ImGuiHelper.drawCenteredWindow("Epic amazing text");
         }
     }
 
