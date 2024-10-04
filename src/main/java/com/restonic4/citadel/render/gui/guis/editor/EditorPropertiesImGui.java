@@ -46,9 +46,13 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
         if (ImGui.collapsingHeader("General", ImGuiTreeNodeFlags.DefaultOpen)) {
             ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
+            ImString nameBuffer = new ImString(selectedGameobject.getName(), 256);
+
             ImGui.text("Name:");
             ImGui.sameLine();
-            ImGui.inputText("##name", new ImString(selectedGameobject.getName()), 256);
+            if (ImGui.inputText("##name", nameBuffer, ImGuiInputTextFlags.EnterReturnsTrue)) {
+                selectedGameobject.setName(nameBuffer.get());
+            }
 
             ImGui.checkbox("Static", selectedGameobject.isStatic());
 

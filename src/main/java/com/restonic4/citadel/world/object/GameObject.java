@@ -112,7 +112,9 @@ public class GameObject {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (!name.isBlank() && !name.isEmpty()) {
+            this.name = name;
+        }
     }
 
     public String getName() {

@@ -106,10 +106,10 @@ public abstract class LevelEditor {
 
                 if (ImGui.beginMenu("Overlay")) {
                     if (ImGui.menuItem("Show Grid")) {
-                        // Acción para "Show Grid"
+                        //TODO: Rendering system
                     }
                     if (ImGui.menuItem("Show Axis")) {
-                        // Acción para "Show Axis"
+                        //TODO: Rendering system
                     }
                     ImGui.endMenu();
                 }
@@ -120,15 +120,15 @@ public abstract class LevelEditor {
             // Menú "Help"
             if (ImGui.beginMenu("Help")) {
                 if (ImGui.menuItem("About")) {
-
+                    //TODO: UI
                 }
 
                 if (ImGui.menuItem("Documentation")) {
-
+                    //TODO: UI
                 }
 
                 if (ImGui.menuItem("Version")) {
-
+                    //TODO: UI
                 }
 
                 ImGui.endMenu();
@@ -158,8 +158,7 @@ public abstract class LevelEditor {
                 isRenamingEnabled = false;
                 ImGuiHelper.resetRenameBox();
 
-                //TODO: Use the new name
-                Logger.log("New name: " + newName);
+                getSelectedObject().setName(newName);
             }
         }
     }
