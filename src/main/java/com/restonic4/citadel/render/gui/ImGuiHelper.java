@@ -94,7 +94,7 @@ public class ImGuiHelper {
         ImGui.begin("Renaming");
 
         float inputWidth = windowWidth - 2 * padding;
-        float inputHeight = ImGui.getTextLineHeight() + padding * 2;
+        float inputHeight = (ImGui.getTextLineHeight() + padding) * 2;
 
         float inputPosX = padding;
         float inputPosY = (windowHeight - inputHeight) / 2.0f;
