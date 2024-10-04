@@ -39,6 +39,7 @@ public abstract class LevelEditor {
         ImGuiScreens.EDITOR_ASSETS.show();
     }
 
+    // TODO: Weird behaviours in some screens, it should ignore the navbar height
     public static void render() {
         int windowFlags = MenuBar | NoDocking | NoTitleBar | NoCollapse | NoResize | NoMove | NoBringToFrontOnFocus | NoNavFocus;
 
