@@ -160,3 +160,7 @@ Next gources:
 - 500 commits.
 - 1k commits.
 - 1 year of development.
+
+## Stats
+
+![Alt](https://repobeats.axiom.co/api/embed/d25d2b27e779d0f83b2dd83417d267881d2e99bc.svg "Repobeats analytics image")
