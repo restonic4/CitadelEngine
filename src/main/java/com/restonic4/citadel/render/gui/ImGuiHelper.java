@@ -85,36 +85,30 @@ public class ImGuiHelper {
         float screenWidth = io.getDisplaySizeX();
         float screenHeight = io.getDisplaySizeY();
 
-        // Calcular la posición de la ventana centrada
         float windowPosX = (screenWidth - windowWidth) / 2.0f;
         float windowPosY = (screenHeight - windowHeight) / 2.0f;
 
         ImGui.setNextWindowPos(windowPosX, windowPosY, ImGuiCond.Always);
         ImGui.setNextWindowSize(windowWidth, windowHeight);
 
-        // Iniciar la ventana ImGui
         ImGui.begin("Renaming");
 
-        // Calcular el tamaño del campo de texto teniendo en cuenta el padding
         float inputWidth = windowWidth - 2 * padding;
-        float inputHeight = ImGui.getTextLineHeight() + padding * 2;  // Ajustar a la altura del texto con padding
+        float inputHeight = ImGui.getTextLineHeight() + padding * 2;
 
-        // Calcular la posición para centrar verticalmente el campo de texto
-        float inputPosX = padding;  // Ya está considerado en setCursorPos
-        float inputPosY = (windowHeight - inputHeight) / 2.0f;  // Centrar en altura
+        float inputPosX = padding;
+        float inputPosY = (windowHeight - inputHeight) / 2.0f;
 
-        ImGui.setCursorPos(inputPosX, inputPosY);  // Colocar el cursor en la posición calculada
+        ImGui.setCursorPos(inputPosX, inputPosY);
 
-        // Si el buffer está vacío, usar el texto por defecto
         if (inputBuffer.isEmpty()) {
             inputBuffer.set(defaultText);
         }
 
-        // Ajustar el ancho del campo de texto y dibujarlo
         ImGui.pushItemWidth(inputWidth);
         ImGui.inputText("##input", inputBuffer, ImGuiInputTextFlags.AutoSelectAll);
         ImGui.popItemWidth();
 
-        ImGui.end();  // Terminar la ventana ImGui
+        ImGui.end();
     }
 }
