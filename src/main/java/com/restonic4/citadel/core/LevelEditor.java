@@ -20,20 +20,12 @@ public abstract class LevelEditor {
     private static Window window;
 
     private static GameObject selectedObject;
-
-    private static boolean isSceneViewVisible, isStatisticsVisible, isInspectorVisible, isPropertiesVisible, isAssetsVisible;
     private static boolean isRenamingEnabled = false;
 
     public static void init() {
         window = Window.getInstance();
 
         window.setCursorLocked(false);
-
-        isSceneViewVisible = true;
-        isStatisticsVisible = false;
-        isInspectorVisible = true;
-        isPropertiesVisible = true;
-        isAssetsVisible = true;
 
         ImGuiScreens.GAME_VIEWPORT.show();
         ImGuiScreens.EDITOR_INSPECTOR.show();
@@ -50,10 +42,10 @@ public abstract class LevelEditor {
 
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("View")) {
-                if (ImGui.menuItem("Scene view", isSceneViewVisible)) {
-                    isSceneViewVisible = !isSceneViewVisible;
+                if (ImGui.menuItem("Scene view", ImGuiScreens.GAME_VIEWPORT.isVisible())) {
+                    ImGuiScreens.GAME_VIEWPORT.toggle();
 
-                    if (isSceneViewVisible) {
+                    if (ImGuiScreens.GAME_VIEWPORT.isVisible()) {
                         ImGuiScreens.GAME_VIEWPORT.show();
                     }
                     else {
@@ -61,10 +53,10 @@ public abstract class LevelEditor {
                     }
                 }
 
-                if (ImGui.menuItem("Statistics", isStatisticsVisible)) {
-                    isStatisticsVisible = !isStatisticsVisible;
+                if (ImGui.menuItem("Statistics", ImGuiScreens.RENDER_STATISTICS.isVisible())) {
+                    ImGuiScreens.RENDER_STATISTICS.toggle();
 
-                    if (isStatisticsVisible) {
+                    if (ImGuiScreens.RENDER_STATISTICS.isVisible()) {
                         ImGuiScreens.RENDER_STATISTICS.show();
                     }
                     else {
@@ -72,10 +64,10 @@ public abstract class LevelEditor {
                     }
                 }
 
-                if (ImGui.menuItem("Inspector", isInspectorVisible)) {
-                    isInspectorVisible = !isInspectorVisible;
+                if (ImGui.menuItem("Inspector", ImGuiScreens.EDITOR_INSPECTOR.isVisible())) {
+                    ImGuiScreens.EDITOR_INSPECTOR.toggle();
 
-                    if (isInspectorVisible) {
+                    if (ImGuiScreens.EDITOR_INSPECTOR.isVisible()) {
                         ImGuiScreens.EDITOR_INSPECTOR.show();
                     }
                     else {
@@ -83,10 +75,10 @@ public abstract class LevelEditor {
                     }
                 }
 
-                if (ImGui.menuItem("Properties", isPropertiesVisible)) {
-                    isPropertiesVisible = !isPropertiesVisible;
+                if (ImGui.menuItem("Properties", ImGuiScreens.EDITOR_PROPERTIES.isVisible())) {
+                    ImGuiScreens.EDITOR_PROPERTIES.toggle();
 
-                    if (isPropertiesVisible) {
+                    if (ImGuiScreens.EDITOR_PROPERTIES.isVisible()) {
                         ImGuiScreens.EDITOR_PROPERTIES.show();
                     }
                     else {
@@ -94,10 +86,10 @@ public abstract class LevelEditor {
                     }
                 }
 
-                if (ImGui.menuItem("Assets", isAssetsVisible)) {
-                    isAssetsVisible = !isAssetsVisible;
+                if (ImGui.menuItem("Assets", ImGuiScreens.EDITOR_ASSETS.isVisible())) {
+                    ImGuiScreens.EDITOR_ASSETS.toggle();
 
-                    if (isAssetsVisible) {
+                    if (ImGuiScreens.EDITOR_ASSETS.isVisible()) {
                         ImGuiScreens.EDITOR_ASSETS.show();
                     }
                     else {
