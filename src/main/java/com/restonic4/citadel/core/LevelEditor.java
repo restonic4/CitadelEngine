@@ -14,6 +14,8 @@ import static imgui.flag.ImGuiWindowFlags.*;
 import static imgui.flag.ImGuiWindowFlags.NoNavFocus;
 
 // TODO: Make the UIs responsive
+// TODO: Make an options/preferences window
+// TODO: Make a keybindings UI to configure the keybindings such as F2, ESC and ENTER
 public abstract class LevelEditor {
     private static Window window;
 
