@@ -1,18 +1,19 @@
 package com.restonic4.citadel.render.gui;
 
+import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.ImVec2;
-import imgui.flag.ImGuiCond;
-import imgui.flag.ImGuiInputTextFlags;
-import imgui.flag.ImGuiKey;
-import imgui.flag.ImGuiWindowFlags;
+import imgui.flag.*;
 import imgui.type.ImString;
+import org.joml.Vector4f;
 
 public class ImGuiHelper {
+    private static final Vector4f toolTipColor = new Vector4f(0.5f, 0.5f, 0.5f, 1);
+
     public static void textTruncated(String fullText) {
         float availableWidth = ImGui.getContentRegionAvail().x;
         ImVec2 textSize = ImGui.calcTextSize(fullText);
@@ -138,5 +139,15 @@ public class ImGuiHelper {
         if (cursorPosX > 0) {
             ImGui.setCursorPosX(cursorPosX);
         }
+    }
+
+    public static void coloredText(String text, Vector4f color) {
+        ImGui.pushStyleColor(ImGuiCol.Text, color.x, color.y, color.z, color.w);
+        ImGui.text(text);
+        ImGui.popStyleColor();
+    }
+
+    public static Vector4f getTooltipColor() {
+        return toolTipColor;
     }
 }

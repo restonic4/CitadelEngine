@@ -9,6 +9,7 @@ import com.restonic4.citadel.util.history.HistoryCommandManager;
 import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
 import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
+import imgui.flag.ImGuiCol;
 import imgui.type.ImBoolean;
 import imgui.type.ImString;
 import org.lwjgl.glfw.GLFW;
@@ -46,6 +47,52 @@ public abstract class LevelEditor {
         ImGui.popStyleVar(2);
 
         if (ImGui.beginMainMenuBar()) {
+            if (ImGui.beginMenu("Edit")) {
+                if (ImGui.menuItem("Undo")) {
+                   historyCommandManager.undo();
+                }
+                ImGui.sameLine();
+                ImGui.text("↩");
+                ImGui.sameLine();
+                ImGuiHelper.coloredText(KeyBinds.UNDO.getKeyString(), ImGuiHelper.getTooltipColor());
+
+                if (ImGui.menuItem("Redo")) {
+                    historyCommandManager.redo();
+                }
+                ImGui.sameLine();
+                ImGui.text("↪");
+                ImGui.sameLine();
+                ImGuiHelper.coloredText(KeyBinds.REDO.getKeyString(), ImGuiHelper.getTooltipColor());
+
+                ImGui.separator();
+
+                if (ImGui.menuItem("Copy")) {
+
+                }
+                ImGui.sameLine();
+                ImGuiHelper.coloredText(KeyBinds.COPY.getKeyString(), ImGuiHelper.getTooltipColor());
+
+                if (ImGui.menuItem("Paste")) {
+
+                }
+                ImGui.sameLine();
+                ImGuiHelper.coloredText(KeyBinds.PASTE.getKeyString(), ImGuiHelper.getTooltipColor());
+
+                if (ImGui.menuItem("Duplicate")) {
+
+                }
+                ImGui.sameLine();
+                ImGuiHelper.coloredText(KeyBinds.DUPLICATE.getKeyString(), ImGuiHelper.getTooltipColor());
+
+                if (ImGui.menuItem("Delete")) {
+
+                }
+                ImGui.sameLine();
+                ImGuiHelper.coloredText(KeyBinds.DELETE.getKeyString(), ImGuiHelper.getTooltipColor());
+
+                ImGui.endMenu();
+            }
+
             if (ImGui.beginMenu("View")) {
                 if (ImGui.menuItem("Scene view", ImGuiScreens.GAME_VIEWPORT.isVisible())) {
                     ImGuiScreens.GAME_VIEWPORT.toggle();
