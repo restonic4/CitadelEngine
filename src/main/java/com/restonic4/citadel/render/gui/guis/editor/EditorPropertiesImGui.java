@@ -5,6 +5,7 @@ import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
 import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.Component;
@@ -51,7 +52,7 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
             ImGui.text("Name:");
             ImGui.sameLine();
             if (ImGui.inputText("##name", nameBuffer, ImGuiInputTextFlags.EnterReturnsTrue)) {
-                selectedGameobject.setName(nameBuffer.get());
+                LevelEditor.getHistoryCommandManager().executeCommand(new RenameGameObjectHistoryCommand(selectedGameobject, nameBuffer.get()));
             }
 
             ImGui.checkbox("Static", selectedGameobject.isStatic());

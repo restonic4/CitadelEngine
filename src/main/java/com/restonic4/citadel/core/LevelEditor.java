@@ -2,8 +2,11 @@ package com.restonic4.citadel.core;
 
 import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
+import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import com.restonic4.citadel.util.history.HistoryCommandManager;
+import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
 import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
 import imgui.type.ImBoolean;
@@ -18,14 +21,16 @@ import static imgui.flag.ImGuiWindowFlags.NoNavFocus;
 // TODO: Make a keybindings UI to configure the keybindings such as F2, ESC and ENTER
 public abstract class LevelEditor {
     private static Window window;
+    private static HistoryCommandManager historyCommandManager;
 
     private static GameObject selectedObject;
     private static boolean isRenamingEnabled = false;
 
     public static void init() {
         window = Window.getInstance();
-
         window.setCursorLocked(false);
+
+        historyCommandManager = new HistoryCommandManager();
 
         ImGuiScreens.GAME_VIEWPORT.show();
         ImGuiScreens.EDITOR_INSPECTOR.show();
@@ -122,10 +127,6 @@ public abstract class LevelEditor {
                     //TODO: UI
                 }
 
-                if (ImGui.menuItem("Version")) {
-                    //TODO: UI
-                }
-
                 ImGui.endMenu();
             }
 
@@ -133,6 +134,18 @@ public abstract class LevelEditor {
         }
 
         handleRenaming();
+
+        handleHistory();
+    }
+
+    private static void handleHistory() {
+        if (KeyBinds.UNDO.isPressedOnce()) {
+            historyCommandManager.undo();
+        } else if (KeyBinds.REDO.isPressedOnce()) {
+            historyCommandManager.redo();
+        } else if (KeyBinds.REDO_ALT.isPressedOnce()) {
+            historyCommandManager.redo();
+        }
     }
 
     private static void handleRenaming() {
@@ -153,7 +166,7 @@ public abstract class LevelEditor {
                 isRenamingEnabled = false;
                 ImGuiHelper.resetRenameBox();
 
-                getSelectedObject().setName(newName);
+                historyCommandManager.executeCommand(new RenameGameObjectHistoryCommand(getSelectedObject(), newName));
             }
         }
     }
@@ -164,5 +177,9 @@ public abstract class LevelEditor {
 
     public static void setSelectedObject(GameObject gameObject) {
         selectedObject = gameObject;
+    }
+
+    public static HistoryCommandManager getHistoryCommandManager() {
+        return historyCommandManager;
     }
 }
