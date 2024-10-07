@@ -1,6 +1,7 @@
 package com.restonic4.citadel.render;
 
 import com.restonic4.ClientSide;
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.exceptions.FileException;
 import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -123,6 +124,10 @@ public class Texture {
     }
 
     public void generateBindlessHandler() {
+        if (!CitadelLauncher.getInstance().getSettings().shouldGenerateBindlessTextures()) {
+            return;
+        }
+
         texHandleID = glGetTextureHandleARB(texID);
 
         Logger.logExtra("Texture: " + texID + "; " + "Handle: " + texHandleID);
@@ -153,5 +158,13 @@ public class Texture {
 
     public boolean isRaw() {
         return this.isRaw;
+    }
+
+    public int getTextureID() {
+        return texID;
+    }
+
+    public long getTextureHandleID() {
+        return texHandleID;
     }
 }

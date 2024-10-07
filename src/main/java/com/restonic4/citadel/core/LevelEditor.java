@@ -115,7 +115,7 @@ public abstract class LevelEditor {
             // Menú "Help"
             if (ImGui.beginMenu("Help")) {
                 if (ImGui.menuItem("About")) {
-                    //TODO: UI
+                    ImGuiScreens.EDITOR_ABOUT.show();
                 }
 
                 if (ImGui.menuItem("Documentation")) {

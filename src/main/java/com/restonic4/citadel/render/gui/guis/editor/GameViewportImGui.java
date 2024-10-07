@@ -8,6 +8,7 @@ import com.restonic4.citadel.registries.AssetLocation;
 import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.RegistryKey;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
+import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.render.Renderer;
 import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.render.gui.LineGraphImGui;
@@ -42,7 +43,19 @@ public class GameViewportImGui extends ToggleableImGuiScreen {
             return;
         }
 
-        ImGui.begin("Game Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
+        ImGui.begin("Game Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.MenuBar);
+
+        if (ImGui.beginMenuBar()) {
+            if (ImGui.beginMenu("Test")) {
+                if (ImGui.menuItem("Test2", ImGuiScreens.GAME_VIEWPORT.isVisible())) {
+
+                }
+
+                ImGui.endMenu();
+            }
+
+            ImGui.endMenuBar();
+        }
 
         ImVec2 windowSize = getLargestSizeForViewport();
         ImVec2 windowPos = getCenteredPositionForViewport(windowSize);

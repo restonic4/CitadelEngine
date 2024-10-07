@@ -121,4 +121,22 @@ public class ImGuiHelper {
     public static void resetRenameBox() {
         inputBuffer.clear();
     }
+
+    public static void setCentered(float elementWidth) {
+        float windowWidth = ImGui.getWindowSizeX();
+        float cursorPosX = (windowWidth - elementWidth) / 2.0f;
+
+        if (cursorPosX > 0) {
+            ImGui.setCursorPosX(cursorPosX);
+        }
+    }
+
+    public static void setCenteredText(String text) {
+        float windowWidth = ImGui.getWindowSizeX();
+        float cursorPosX = (windowWidth - ImGui.calcTextSize(text).x) / 2.0f;
+
+        if (cursorPosX > 0) {
+            ImGui.setCursorPosX(cursorPosX);
+        }
+    }
 }
