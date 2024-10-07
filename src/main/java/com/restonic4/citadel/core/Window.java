@@ -7,10 +7,7 @@ import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import com.restonic4.citadel.render.frame_buffers.GameViewportFrameBuffer;
 import imgui.ImGui;
 import imgui.ImGuiIO;
-import imgui.flag.ImGuiCond;
-import imgui.flag.ImGuiConfigFlags;
-import imgui.flag.ImGuiStyleVar;
-import imgui.flag.ImGuiWindowFlags;
+import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import com.restonic4.ClientSide;
@@ -237,7 +234,9 @@ public class Window {
 
             updateAspectRatio();
 
-            clientGameLogic.update();
+            if (!citadelSettings.isEditorMode() || (LevelEditor.isIsPlaying() && !LevelEditor.isIsPaused())) {
+                clientGameLogic.update();
+            }
 
             if (KeyBinds.TOGGLE_STATISTICS_GUI.isPressedOnce()) {
                 ImGuiScreens.RENDER_STATISTICS.toggle();
@@ -245,7 +244,12 @@ public class Window {
 
             Scene scene = SceneManager.getCurrentScene();
             if (scene != null && Time.getDeltaTime() > 0) {
-                scene.update();
+                if (!citadelSettings.isEditorMode() || (LevelEditor.isIsPlaying() && !LevelEditor.isIsPaused())) {
+                    scene.update();
+                }
+                else {
+                    scene.getRenderer().render();
+                }
             }
 
             runImGuiFrame();
@@ -326,6 +330,7 @@ public class Window {
 
         ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
         ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+        ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 0.0f, 0.0f);
 
         // Main window
         LevelEditor.render();

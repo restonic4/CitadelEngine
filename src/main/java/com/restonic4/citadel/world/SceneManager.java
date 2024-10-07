@@ -52,4 +52,14 @@ public abstract class SceneManager {
             unLoadScene(currentScene);
         }
     }
+
+    public static void reloadScene() {
+        Class<? extends Scene> sceneClass = currentScene.getClass();
+
+        try {
+            loadScene(sceneClass.getDeclaredConstructor().newInstance());
+        } catch (Exception e) {
+            Logger.logError(e);
+        }
+    }
 }

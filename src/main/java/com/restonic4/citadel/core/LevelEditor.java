@@ -3,13 +3,19 @@ package com.restonic4.citadel.core;
 import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
+import com.restonic4.citadel.render.Texture;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.history.HistoryCommandManager;
 import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
+import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
+import imgui.ImVec2;
+import imgui.ImVec4;
 import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiStyleVar;
 import imgui.type.ImBoolean;
 import imgui.type.ImString;
 import org.lwjgl.glfw.GLFW;
@@ -26,6 +32,10 @@ public abstract class LevelEditor {
 
     private static GameObject selectedObject;
     private static boolean isRenamingEnabled = false;
+    private static boolean isPlaying = false;
+    private static boolean isPaused = false;
+
+    static int playButtonTextureId, stopButtonTextureId, pauseButtonTextureId;
 
     public static void init() {
         window = Window.getInstance();
@@ -37,14 +47,26 @@ public abstract class LevelEditor {
         ImGuiScreens.EDITOR_INSPECTOR.show();
         ImGuiScreens.EDITOR_PROPERTIES.show();
         ImGuiScreens.EDITOR_ASSETS.show();
+
+        playButtonTextureId = new Texture("assets/textures/icons/play/56.png").getTextureID();
+        stopButtonTextureId = new Texture("assets/textures/icons/stop/56.png").getTextureID();
+        pauseButtonTextureId = new Texture("assets/textures/icons/pause/56.png").getTextureID();
     }
 
     // TODO: Weird behaviours in some screens, it should ignore the navbar height
     public static void render() {
         int windowFlags = MenuBar | NoDocking | NoTitleBar | NoCollapse | NoResize | NoMove | NoBringToFrontOnFocus | NoNavFocus;
 
+        float menuBarHeight = ImGui.getFrameHeight();
+        float menuBarSize = (menuBarHeight / 2) + ImGui.getStyle().getFramePadding().y;
+
+        ImGui.setNextWindowPos(0.0f, menuBarHeight, ImGuiCond.Always);
+        ImGui.setNextWindowSize(window.getWidth(), window.getHeight() - menuBarHeight);
+
         ImGui.begin("Dockspace Demo", new ImBoolean(true), windowFlags);
-        ImGui.popStyleVar(2);
+        ImGui.popStyleVar(3);
+
+        ImGui.pushStyleVar(ImGuiStyleVar.FramePadding, menuBarSize, menuBarSize);
 
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("Edit")) {
@@ -164,7 +186,6 @@ public abstract class LevelEditor {
                 ImGui.endMenu();
             }
 
-            // Menú "Help"
             if (ImGui.beginMenu("Help")) {
                 if (ImGui.menuItem("About")) {
                     ImGuiScreens.EDITOR_ABOUT.show();
@@ -177,8 +198,48 @@ public abstract class LevelEditor {
                 ImGui.endMenu();
             }
 
+            ImGui.beginGroup();
+
+            ImVec2 buttonSize = new ImVec2(16, 16);
+
+            float availableWidth = ImGui.getContentRegionAvail().x;
+            ImGui.setCursorPosX((availableWidth - buttonSize.x) / 2);
+
+            if (!isIsPlaying()) {
+                ImGui.pushStyleColor(ImGuiCol.Button, new ImVec4(0, 0, 0, 0));
+                if (ImGui.imageButton(playButtonTextureId, buttonSize.x, buttonSize.y)) {
+                    SceneManager.reloadScene();
+                    setIsPlaying(true);
+                    setIsPaused(false);
+                }
+                ImGui.popStyleColor();
+            } else {
+                ImGui.pushStyleColor(ImGuiCol.Button, new ImVec4(0, 0, 0, 0));
+                if (ImGui.imageButton(stopButtonTextureId, buttonSize.x, buttonSize.y)) {
+                    setIsPlaying(false);
+                    SceneManager.reloadScene();
+                }
+                ImGui.popStyleColor();
+
+                if (isIsPaused()) {
+                    ImGui.pushStyleColor(ImGuiCol.Button, new ImVec4(0.5f, 0.5f, 0.5f, 1));
+                } else {
+                    ImGui.pushStyleColor(ImGuiCol.Button, new ImVec4(0, 0, 0, 0));
+                }
+
+                if (ImGui.imageButton(pauseButtonTextureId, buttonSize.x, buttonSize.y)) {
+                    setIsPaused(!isIsPaused());
+                }
+
+                ImGui.popStyleColor();
+            }
+
+            ImGui.endGroup();
+
             ImGui.endMainMenuBar();
         }
+
+        ImGui.popStyleVar();
 
         handleRenaming();
 
@@ -186,6 +247,10 @@ public abstract class LevelEditor {
     }
 
     private static void handleHistory() {
+        if (isIsPlaying()) {
+            return;
+        }
+
         if (KeyBinds.UNDO.isPressedOnce()) {
             historyCommandManager.undo();
         } else if (KeyBinds.REDO.isPressedOnce()) {
@@ -228,5 +293,21 @@ public abstract class LevelEditor {
 
     public static HistoryCommandManager getHistoryCommandManager() {
         return historyCommandManager;
+    }
+
+    public static boolean isIsPlaying() {
+        return isPlaying;
+    }
+
+    public static void setIsPlaying(boolean isPlaying) {
+        LevelEditor.isPlaying = isPlaying;
+    }
+
+    public static boolean isIsPaused() {
+        return isPaused;
+    }
+
+    public static void setIsPaused(boolean isPaused) {
+        LevelEditor.isPaused = isPaused;
     }
 }
