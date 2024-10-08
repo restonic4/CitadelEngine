@@ -171,6 +171,7 @@ public class GameObject extends Serializable {
     public Object deserialize(String data) {
         String[] splits = data.split("!");
 
+
         setName(splits[0]);
         isStatic = Objects.equals(splits[1], "t");
         transform = (Transform) new Transform().deserialize(splits[2]);
