@@ -334,7 +334,7 @@ public class Transform extends Serializable {
                 "_",
                 scale.x, ",", scale.y, ",", scale.z,
                 "_",
-                rotation.x, rotation.y, rotation.z, rotation.w
+                rotation.x, ",",  rotation.y, ",",  rotation.z, ",",  rotation.w
         );
     }
 

@@ -24,6 +24,8 @@ public class LightComponent extends Component {
     private float[] colorValues = new float[4];
     private ImInt currentOption = new ImInt(0);
 
+    public LightComponent() {}
+
     public LightComponent(LightType lightType, Vector3f color) {
         this.lightType = lightType;
         this.color = color;
@@ -178,6 +180,18 @@ public class LightComponent extends Component {
 
     @Override
     public String serialize() {
-        return StringBuilderHelper.concatenate("l,", lightType, ",", color.x, "-", color.y, "-", color.z);
+        return StringBuilderHelper.concatenate("l%", lightType, ",", color.x, "-", color.y, "-", color.z);
+    }
+
+    @Override
+    public Object deserialize(String data) {
+        String[] splits = data.split(",");
+
+        String[] color = splits[1].split("-");
+
+        this.lightType = LightType.valueOf(splits[0]);
+        this.color = new Vector3f(Float.parseFloat(color[0]), Float.parseFloat(color[1]), Float.parseFloat(color[2]));
+
+        return this;
     }
 }

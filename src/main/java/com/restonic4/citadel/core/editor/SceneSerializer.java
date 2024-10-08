@@ -6,6 +6,7 @@ import com.restonic4.test.TestScene;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
@@ -22,6 +23,14 @@ public class SceneSerializer {
     }
 
     public Scene loadScene(String filePath) {
-        return new TestScene();
+        Path path = Paths.get(filePath);
+        try {
+            String content = Files.readString(path);
+            return (Scene) new Scene().deserialize(content);
+        } catch (IOException e) {
+            Logger.logError(e);
+        }
+
+        return null;
     }
 }

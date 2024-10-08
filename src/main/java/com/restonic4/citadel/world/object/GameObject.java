@@ -2,6 +2,8 @@ package com.restonic4.citadel.world.object;
 
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.UniqueIdentifierManager;
+import com.restonic4.citadel.world.object.components.LightComponent;
+import com.restonic4.citadel.world.object.components.ModelRendererComponent;
 import org.joml.Vector3f;
 
 import java.io.Serial;
@@ -171,7 +173,6 @@ public class GameObject extends Serializable {
     public Object deserialize(String data) {
         String[] splits = data.split("!");
 
-
         setName(splits[0]);
         isStatic = Objects.equals(splits[1], "t");
         transform = (Transform) new Transform().deserialize(splits[2]);
@@ -179,7 +180,19 @@ public class GameObject extends Serializable {
         String[] components = splits[3].split("_");
 
         for (int i = 0; i < components.length; i++) {
+            String[] cSplits = components[i].split("%");
 
+            String componentPrefix = cSplits[0];
+
+            Component newComponent = switch (componentPrefix) {
+                case "mr" -> (Component) new ModelRendererComponent().deserialize(cSplits[1]);
+                case "l" -> (Component) new LightComponent().deserialize(cSplits[1]);
+                default -> null;
+            };
+
+            if (newComponent != null) {
+                this.addComponent(newComponent);
+            }
         }
 
         return this;

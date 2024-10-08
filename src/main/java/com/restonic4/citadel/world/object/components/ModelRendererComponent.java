@@ -9,6 +9,8 @@ public class ModelRendererComponent extends Component {
     private Mesh mesh;
     private Material material;
 
+    public ModelRendererComponent() {}
+
     public ModelRendererComponent(Mesh mesh) {
         this.mesh = mesh;
         this.material = new Material();
@@ -34,6 +36,11 @@ public class ModelRendererComponent extends Component {
 
     @Override
     public String serialize() {
-        return StringBuilderHelper.concatenate("mr,", getId());
+        return StringBuilderHelper.concatenate("mr%", getId());
+    }
+
+    @Override
+    public Object deserialize(String data) {
+        return this;
     }
 }

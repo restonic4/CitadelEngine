@@ -24,7 +24,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Scene extends Serializable {
+public class Scene extends Serializable {
     protected Renderer renderer = new Renderer(this);
     protected Camera camera;
 
