@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -137,7 +138,7 @@ public class FileManager {
             myWriter.write(data);
             myWriter.close();
         } catch (IOException e) {
-            throw new FileException("Failed to export file to " + name, e);
+            throw new FileException("Failed to export file to " + name);
         }
 
         return file.getAbsolutePath();
@@ -199,7 +200,56 @@ public class FileManager {
             return stream.collect(Collectors.toList());
         }
         catch (IOException exception) {
-            throw new FileException(exception.getMessage());
+            Logger.logError("Failed reading files in " + directory + ": " + exception.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public static void createFileInDirectory(String directory, String fileName) throws IOException {
+        File file = new File(directory, fileName);
+
+        if (file.exists()) {
+            throw new IOException("File already exists: " + file.getAbsolutePath());
+        }
+
+        boolean isFileCreated = file.createNewFile();
+        if (!isFileCreated) {
+            throw new IOException("Failed to create file: " + file.getAbsolutePath());
+        }
+    }
+
+    public static void createFolderInDirectory(String directory, String folderName) throws IOException {
+        File folder = new File(directory, folderName);
+
+        if (folder.exists()) {
+            throw new IOException("Folder already exists: " + folder.getAbsolutePath());
+        }
+
+        boolean isFolderCreated = folder.mkdirs();
+        if (!isFolderCreated) {
+            throw new IOException("Failed to create folder: " + folder.getAbsolutePath());
+        }
+    }
+
+    public static void deleteFileOrFolder(String path) {
+        File fileOrFolder = new File(path);
+
+        if (!fileOrFolder.exists()) {
+            throw new FileException("File or folder does not exist: " + fileOrFolder.getAbsolutePath());
+        }
+
+        if (fileOrFolder.isDirectory()) {
+            File[] files = fileOrFolder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteFileOrFolder(file.getAbsolutePath());
+                }
+            }
+        }
+
+        boolean isDeleted = fileOrFolder.delete();
+        if (!isDeleted) {
+            throw new FileException("Failed to delete file or folder: " + fileOrFolder.getAbsolutePath());
         }
     }
 }

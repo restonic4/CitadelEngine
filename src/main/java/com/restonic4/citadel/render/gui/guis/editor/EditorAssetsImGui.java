@@ -1,11 +1,20 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
+import com.restonic4.citadel.core.CitadelLauncher;
+import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.exceptions.FileException;
 import com.restonic4.citadel.files.FileManager;
+import com.restonic4.citadel.input.KeyListener;
+import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import com.restonic4.citadel.util.history.commands.CreateFileHistoryCommand;
+import com.restonic4.citadel.util.history.commands.DeleteFileHistoryCommand;
+import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
 import imgui.ImGui;
+import imgui.flag.ImGuiMouseButton;
 import imgui.flag.ImGuiSelectableFlags;
+import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
 import java.io.IOException;
@@ -19,6 +28,10 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private List<Path> paths;
     private String currentDir = "resources";
     private boolean needsToRefresh;
+
+    private boolean isCreating = false;
+    private boolean isFile = false;
+    private Path rightClickedPath = null;
 
     @Override
     public void render() {
@@ -36,9 +49,59 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
             }
         }
 
+        if (ImGui.isWindowHovered() && ImGui.isMouseClicked(ImGuiMouseButton.Right)) {
+            rightClickedPath = null;
+            ImGui.openPopup("RightClickMenu");
+        }
+
         renderDirectoryContent();
 
+        if (ImGui.beginPopup("RightClickMenu")) {
+            if (rightClickedPath == null) {
+                if (ImGui.menuItem("New Folder")) {
+                    isCreating = true;
+                    isFile = false;
+                }
+                if (ImGui.menuItem("New File")) {
+                    isCreating = true;
+                    isFile = true;
+                }
+            } else {
+                if (ImGui.menuItem("Rename")) {
+                    ImGuiHelper.renameBox(rightClickedPath.getFileName().toString());
+                }
+                if (ImGui.menuItem("Delete")) {
+                    LevelEditor.getHistoryCommandManager().executeCommand(new DeleteFileHistoryCommand(rightClickedPath.toString()));
+                }
+            }
+            ImGui.endPopup();
+        }
+
+        handleCreateAction();
+
         ImGui.end();
+    }
+
+    private void handleCreateAction() {
+        if (isCreating) {
+            if (isFile) {
+                ImGuiHelper.renameBox("New file.txt");
+            } else {
+                ImGuiHelper.renameBox("New directory");
+            }
+
+            if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ESCAPE)) {
+                isCreating = false;
+                ImGuiHelper.resetRenameBox();
+            } else if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ENTER)) {
+                String name = ImGuiHelper.getRenameBoxResult();
+
+                LevelEditor.getHistoryCommandManager().executeCommand(new CreateFileHistoryCommand(currentDir, name, isFile));
+
+                isCreating = false;
+                ImGuiHelper.resetRenameBox();
+            }
+        }
     }
 
     private void refreshPathsIfNeeded() {
@@ -65,16 +128,24 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
     private void renderDirectoryContent() {
         for (Path path : paths) {
-            if (isPathSelected(path)) {
+            boolean[] pathActions = getPathActions(path);
+
+            if (pathActions[0]) {
                 handlePathSelection(path);
+            }
+            else if (pathActions[1]) {
+                rightClickedPath = path;
             }
         }
     }
 
-    private boolean isPathSelected(Path path) {
-        return ImGui.selectable(path.getFileName().toString(), false, ImGuiSelectableFlags.AllowDoubleClick) &&
-                ImGui.isItemHovered() &&
-                ImGui.isMouseDoubleClicked(0);
+    private boolean[] getPathActions(Path path) {
+        boolean clicked = ImGui.selectable(path.getFileName().toString(), false, ImGuiSelectableFlags.AllowDoubleClick);
+
+        return new boolean[] {
+                (clicked && ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)), // Double clicked
+                (ImGui.isItemHovered() && ImGui.isMouseClicked(ImGuiMouseButton.Right)) // Right clicked
+        };
     }
 
     private void handlePathSelection(Path path) {
@@ -100,5 +171,9 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private void navigateToDirectory(Path path) {
         currentDir = currentDir + "/" + path.getFileName().toString();
         needsToRefresh = true;
+    }
+
+    public void reload() {
+        this.needsToRefresh = true;
     }
 }

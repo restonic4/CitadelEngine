@@ -11,15 +11,6 @@ public class TestClient implements GameLogic {
     @Override
     public void start() {
         SceneManager.loadScene(new TestScene());
-        try {
-            SceneSerializer sceneSerializer = new SceneSerializer();
-            sceneSerializer.saveScene(SceneManager.getCurrentScene(), "sceneTest");
-
-            Scene scene = sceneSerializer.loadScene("sceneTest");
-        }
-        catch (Exception exception) {
-            Logger.logError(exception);
-        }
     }
 
     @Override

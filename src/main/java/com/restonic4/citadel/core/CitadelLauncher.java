@@ -10,12 +10,14 @@ import com.restonic4.citadel.platform.operating_systems.OperatingSystem;
 import com.restonic4.citadel.registries.RegistryManager;
 import com.restonic4.citadel.registries.built_in.managers.*;
 import com.restonic4.citadel.sound.SoundManager;
+import com.restonic4.citadel.sound.SoundSource;
 import com.restonic4.citadel.util.ArrayHelper;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.GradleUtil;
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.DebugManager;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import org.joml.Vector3f;
 
 import java.util.Objects;
 
@@ -232,5 +234,18 @@ public class CitadelLauncher {
     public static synchronized void finishApp() {
         Logger.log("Finishing engine");
         shouldEnd = true;
+    }
+
+    public void handleError(String message) {
+        Logger.logError(message);
+
+        if (citadelSettings.isEditorMode()) {
+            SoundSource soundSource = Sounds.CRASH.createSource(false, false);
+            soundSource.setPosition(new Vector3f(0, 0, 0));
+            soundSource.play();
+        }
+        else {
+            throw new RuntimeException("Critical error");
+        }
     }
 }

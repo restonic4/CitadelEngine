@@ -1,5 +1,6 @@
 package com.restonic4.citadel.world;
 
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.events.types.SceneEvents;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
@@ -54,6 +55,11 @@ public abstract class SceneManager {
     }
 
     public static void reloadScene() {
+        if (currentScene == null) {
+            CitadelLauncher.getInstance().handleError("Scene needed!");
+            return;
+        }
+
         Class<? extends Scene> sceneClass = currentScene.getClass();
 
         try {
