@@ -1,9 +1,12 @@
 package com.restonic4.citadel.world.object;
 
+import com.restonic4.citadel.util.StringBuilderHelper;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-public class Transform {
+import java.io.Serial;
+
+public class Transform extends Serializable {
     private Vector3f position;
     private Vector3f scale;
     private Quaternionf rotation;
@@ -322,5 +325,16 @@ public class Transform {
         else {
             return false;
         }
+    }
+
+    @Override
+    public String serialize() {
+        return StringBuilderHelper.concatenate(
+                position.x, ",", position.y, ",", position.z,
+                "_",
+                scale.x, ",", scale.y, ",", scale.z,
+                "_",
+                rotation.x, rotation.y, rotation.z, rotation.w
+        );
     }
 }

@@ -176,4 +176,8 @@ public class LightComponent extends Component {
         }
     }
 
+    @Override
+    public String serialize() {
+        return StringBuilderHelper.concatenate("l,", lightType, ",", color.x, "-", color.y, "-", color.z);
+    }
 }

@@ -1,11 +1,11 @@
-package com.restonic4.citadel.core;
+package com.restonic4.citadel.core.editor;
 
+import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import com.restonic4.citadel.render.Texture;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
-import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.history.HistoryCommandManager;
 import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
 import com.restonic4.citadel.world.SceneManager;
@@ -17,7 +17,6 @@ import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiStyleVar;
 import imgui.type.ImBoolean;
-import imgui.type.ImString;
 import org.lwjgl.glfw.GLFW;
 
 import static imgui.flag.ImGuiWindowFlags.*;
@@ -301,6 +300,7 @@ public abstract class LevelEditor {
 
     public static void setIsPlaying(boolean isPlaying) {
         LevelEditor.isPlaying = isPlaying;
+        setSelectedObject(null);
     }
 
     public static boolean isIsPaused() {

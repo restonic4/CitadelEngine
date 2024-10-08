@@ -4,12 +4,14 @@ import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.UniqueIdentifierManager;
 import imgui.ImGui;
 
-public abstract class Component {
+import java.io.Serial;
+
+public abstract class Component extends Serializable {
     private final int id;
     public GameObject gameObject = null;
 
     public Component() {
-        this.id = UniqueIdentifierManager.generateUniqueID();
+        this.id = UniqueIdentifierManager.generateUID();
     }
 
     public void start() {

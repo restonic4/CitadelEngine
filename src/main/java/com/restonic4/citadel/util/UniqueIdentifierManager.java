@@ -1,14 +1,14 @@
 package com.restonic4.citadel.util;
 
 public class UniqueIdentifierManager {
-    private static int lastKnownID = 0;
+    private static int lastKnownUID = 0;
 
-    public static int generateUniqueID() {
-        lastKnownID++;
-        return lastKnownID;
+    public static int generateUID() {
+        lastKnownUID++;
+        return lastKnownUID;
     }
 
-    public static int predictNextID() {
-        return lastKnownID + 1;
+    public static int predictNextUID() {
+        return lastKnownUID + 1;
     }
 }

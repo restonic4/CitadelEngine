@@ -5,6 +5,9 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 public class Mesh {
     private Vector3f[] vertices;
     private int[] indices;

@@ -31,4 +31,9 @@ public class ModelRendererComponent extends Component {
     public Material getMaterial() {
         return material;
     }
+
+    @Override
+    public String serialize() {
+        return StringBuilderHelper.concatenate("mr,", getId());
+    }
 }

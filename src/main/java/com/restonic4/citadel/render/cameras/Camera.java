@@ -5,13 +5,19 @@ import com.restonic4.citadel.world.object.Transform;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @ClientSide
-public abstract class Camera {
-    protected Matrix4f projectionMatrix, viewMatrix;
+public abstract class Camera implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    protected transient Matrix4f projectionMatrix, viewMatrix;
     public Transform transform;
 
-    private boolean isSimulated;
-    private Matrix4f fakeProjectionMatrix, fakeViewMatrix;
+    private transient boolean isSimulated;
+    private transient Matrix4f fakeProjectionMatrix, fakeViewMatrix;
 
     // Cache
 

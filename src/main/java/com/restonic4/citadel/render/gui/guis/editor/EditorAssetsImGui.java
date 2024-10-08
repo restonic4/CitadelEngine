@@ -1,20 +1,11 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
-import com.restonic4.citadel.core.LevelEditor;
 import com.restonic4.citadel.exceptions.FileException;
 import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
-import com.restonic4.citadel.util.CitadelConstants;
-import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
-import com.restonic4.citadel.world.object.Component;
-import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
-import imgui.flag.ImGuiButtonFlags;
 import imgui.flag.ImGuiSelectableFlags;
-import imgui.flag.ImGuiTreeNodeFlags;
-import imgui.type.ImString;
-import org.joml.Vector3f;
 
 import java.awt.*;
 import java.io.IOException;

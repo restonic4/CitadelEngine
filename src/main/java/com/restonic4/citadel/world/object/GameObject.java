@@ -1,11 +1,14 @@
 package com.restonic4.citadel.world.object;
 
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.UniqueIdentifierManager;
+import org.joml.Vector3f;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameObject {
+public class GameObject extends Serializable {
     public Transform transform;
 
     private int id;
@@ -18,7 +21,7 @@ public class GameObject {
     private Transform startingTransform;
 
     public GameObject(boolean isStatic) {
-        this.id = UniqueIdentifierManager.generateUniqueID();
+        this.id = UniqueIdentifierManager.generateUID();
         this.name = "GameObject";
         this.transform = new Transform();
         this.components = new ArrayList<>();
@@ -26,7 +29,7 @@ public class GameObject {
     }
 
     public GameObject(String name, boolean isStatic) {
-        this.id = UniqueIdentifierManager.generateUniqueID();
+        this.id = UniqueIdentifierManager.generateUID();
         this.name = name;
         this.transform = new Transform();
         this.components = new ArrayList<>();
@@ -34,7 +37,7 @@ public class GameObject {
     }
 
     public GameObject(String name, boolean isStatic, Transform transform) {
-        this.id = UniqueIdentifierManager.generateUniqueID();
+        this.id = UniqueIdentifierManager.generateUID();
         this.name = name;
         this.transform = transform;
         this.components = new ArrayList<>();
@@ -42,7 +45,7 @@ public class GameObject {
     }
 
     public GameObject(String name, boolean isStatic, Transform transform, List<Component> components) {
-        this.id = UniqueIdentifierManager.generateUniqueID();
+        this.id = UniqueIdentifierManager.generateUID();
         this.name = name;
         this.transform = transform;
         this.components = components;
@@ -140,5 +143,20 @@ public class GameObject {
         }
 
         return obj instanceof GameObject gameObject && gameObject.getId() == this.id;
+    }
+
+    @Override
+    public String serialize() {
+        String data = StringBuilderHelper.concatenate(name, "!", isStatic, "!", transform.serialize(), "!");
+
+        for (int i = 0; i < components.size(); i++) {
+            data = StringBuilderHelper.concatenate(data, components.get(i).serialize());
+
+            if (i < components.size() - 1) {
+                data = StringBuilderHelper.concatenate(data, "_");
+            }
+        }
+
+        return data;
     }
 }

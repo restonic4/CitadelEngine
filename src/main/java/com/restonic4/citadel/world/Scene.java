@@ -8,20 +8,23 @@ import com.restonic4.citadel.events.types.SceneEvents;
 import com.restonic4.citadel.physics.PhysicsManager;
 import com.restonic4.citadel.sound.SoundManager;
 import com.restonic4.citadel.util.CitadelConstants;
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.world.object.GameObject;
 import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.render.Renderer;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import com.restonic4.citadel.world.object.Serializable;
 import com.restonic4.citadel.world.object.components.ColliderComponent;
 import com.restonic4.citadel.world.object.components.LightComponent;
 import com.restonic4.citadel.world.object.components.RigidBodyComponent;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Scene {
+public abstract class Scene extends Serializable {
     protected Renderer renderer = new Renderer(this);
     protected Camera camera;
 
@@ -203,5 +206,20 @@ public abstract class Scene {
 
     public void cleanup() {
         this.renderer.cleanup();
+    }
+
+    @Override
+    public String serialize() {
+        String data = "";
+
+        for (int i = 0; i < allGameObjects.size(); i++) {
+            data = StringBuilderHelper.concatenate(data, allGameObjects.get(i).serialize());
+
+            if (i < allGameObjects.size() - 1) {
+                data = StringBuilderHelper.concatenate(data, "&");
+            }
+        }
+
+        return data;
     }
 }

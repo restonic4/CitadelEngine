@@ -1,10 +1,9 @@
 package com.restonic4.citadel.core;
 
+import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.exceptions.RenderException;
-import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
-import com.restonic4.citadel.render.frame_buffers.GameViewportFrameBuffer;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.flag.*;
@@ -32,7 +31,6 @@ import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.Time;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import imgui.internal.flag.ImGuiDockNodeFlags;
-import imgui.type.ImBoolean;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -51,7 +49,6 @@ import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
-import static imgui.flag.ImGuiWindowFlags.*;
 
 @ClientSide
 public class Window {
