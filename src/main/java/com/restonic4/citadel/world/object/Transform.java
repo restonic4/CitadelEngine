@@ -337,4 +337,19 @@ public class Transform extends Serializable {
                 rotation.x, rotation.y, rotation.z, rotation.w
         );
     }
+
+    @Override
+    public Object deserialize(String data) {
+        String[] splits = data.split("_");
+
+        String[] position = splits[0].split(",");
+        String[] scale = splits[1].split(",");
+        String[] rotation = splits[2].split(",");
+
+        this.position = new Vector3f(Float.parseFloat(position[0]), Float.parseFloat(position[1]), Float.parseFloat(position[2]));
+        this.scale = new Vector3f(Float.parseFloat(scale[0]), Float.parseFloat(scale[1]), Float.parseFloat(scale[2]));
+        this.rotation = new Quaternionf(Float.parseFloat(rotation[0]), Float.parseFloat(rotation[1]), Float.parseFloat(rotation[2]), Float.parseFloat(rotation[3]));
+
+        return this;
+    }
 }

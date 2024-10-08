@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GameObject extends Serializable {
     public Transform transform;
@@ -19,6 +20,12 @@ public class GameObject extends Serializable {
     private boolean isInsideFrustum;
 
     private Transform startingTransform;
+
+    public GameObject() {
+        this.id = UniqueIdentifierManager.generateUID();
+        this.transform = new Transform();
+        this.components = new ArrayList<>();
+    }
 
     public GameObject(boolean isStatic) {
         this.id = UniqueIdentifierManager.generateUID();
@@ -158,5 +165,22 @@ public class GameObject extends Serializable {
         }
 
         return data;
+    }
+
+    @Override
+    public Object deserialize(String data) {
+        String[] splits = data.split("!");
+
+        setName(splits[0]);
+        isStatic = Objects.equals(splits[1], "t");
+        transform = (Transform) new Transform().deserialize(splits[2]);
+
+        String[] components = splits[3].split("_");
+
+        for (int i = 0; i < components.length; i++) {
+
+        }
+
+        return this;
     }
 }

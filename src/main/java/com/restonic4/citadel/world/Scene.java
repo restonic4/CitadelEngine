@@ -222,4 +222,17 @@ public abstract class Scene extends Serializable {
 
         return data;
     }
+
+    @Override
+    public Object deserialize(String data) {
+        String[] gameObjects = data.split("&");
+
+        for (int i = 0; i < gameObjects.length; i++) {
+            GameObject newGameObject = new GameObject();
+            newGameObject.deserialize(gameObjects[i]);
+            this.addGameObject(newGameObject);
+        }
+
+        return this;
+    }
 }
