@@ -24,8 +24,4 @@ public class SceneSerializer {
     public Scene loadScene(String filePath) {
         return new TestScene();
     }
-
-    public String compress(String data) {
-        return data;
-    }
 }

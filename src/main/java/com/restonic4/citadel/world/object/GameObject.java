@@ -147,7 +147,7 @@ public class GameObject extends Serializable {
 
     @Override
     public String serialize() {
-        String data = StringBuilderHelper.concatenate(name, "!", isStatic, "!", transform.serialize(), "!");
+        String data = StringBuilderHelper.concatenate(name, "!", isStatic ? "t" : "f", "!", transform.serialize(), "!");
 
         for (int i = 0; i < components.size(); i++) {
             data = StringBuilderHelper.concatenate(data, components.get(i).serialize());
