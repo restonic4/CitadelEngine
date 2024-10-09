@@ -34,7 +34,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean isFile = false;
     private Path rightClickedPath = null;
 
-    int folderIconID, genericFileIconID, imageFileIconID, objectFileIconID, jsonFileIconID, textFileIconID;
+    int folderIconID, genericFileIconID, imageFileIconID, objectFileIconID, jsonFileIconID, textFileIconID, audioFileIconID, shaderFileIconID;
 
     @Override
     public void start() {
@@ -44,6 +44,8 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
         objectFileIconID = new Texture(true, "assets/textures/icons/files/object/56.png").getTextureID();
         jsonFileIconID = new Texture(true, "assets/textures/icons/files/json/56.png").getTextureID();
         textFileIconID = new Texture(true, "assets/textures/icons/files/text/56.png").getTextureID();
+        audioFileIconID = new Texture(true, "assets/textures/icons/files/audio/56.png").getTextureID();
+        shaderFileIconID = new Texture(true, "assets/textures/icons/files/shader/56.png").getTextureID();
     }
 
     @Override
@@ -206,20 +208,15 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
         String fileExtension = getFileExtension(fileName);
 
-        switch (fileExtension) {
-            case "png":
-            case "ico":
-                return imageFileIconID;
-            case "obj":
-                return objectFileIconID;
-            case "json":
-                return jsonFileIconID;
-            case "txt":
-            case "md":
-                return textFileIconID;
-            default:
-                return genericFileIconID;
-        }
+        return switch (fileExtension) {
+            case "png", "ico" -> imageFileIconID;
+            case "obj" -> objectFileIconID;
+            case "json" -> jsonFileIconID;
+            case "txt", "md" -> textFileIconID;
+            case "ogg" -> audioFileIconID;
+            case "glsl" -> shaderFileIconID;
+            default -> genericFileIconID;
+        };
     }
 
     private String getFileExtension(String fileName) {
