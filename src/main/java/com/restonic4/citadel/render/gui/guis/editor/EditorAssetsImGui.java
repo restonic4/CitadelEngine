@@ -11,6 +11,7 @@ import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.history.commands.CreateFileHistoryCommand;
 import com.restonic4.citadel.util.history.commands.DeleteFileHistoryCommand;
+import com.restonic4.citadel.util.history.commands.RenameFileHistoryCommand;
 import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
 import imgui.ImGui;
 import imgui.flag.ImGuiMouseButton;
@@ -31,6 +32,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean needsToRefresh;
 
     private boolean isCreating = false;
+    private boolean isRenaming = false;
     private boolean isFile = false;
     private Path rightClickedPath = null;
 
@@ -83,8 +85,8 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
                 }
             } else {
                 if (ImGui.menuItem("Rename")) {
-                    // TODO: Handle renaming file/folder
-                    ImGuiHelper.renameBox(rightClickedPath.getFileName().toString());
+                    isRenaming = true;
+                    isFile = !Files.isDirectory(rightClickedPath);
                 }
                 if (ImGui.menuItem("Delete")) {
                     LevelEditor.getHistoryCommandManager().executeCommand(new DeleteFileHistoryCommand(rightClickedPath.toString()));
@@ -94,6 +96,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
         }
 
         handleCreateAction();
+        handleRenaming();
 
         ImGui.end();
     }
@@ -116,6 +119,27 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
                 isCreating = false;
                 ImGuiHelper.resetRenameBox();
+            }
+        }
+    }
+
+    private void handleRenaming() {
+        if (isRenaming) {
+            ImGuiHelper.renameBox(rightClickedPath.getFileName().toString());
+
+            if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ESCAPE)) {
+                isRenaming = false;
+                ImGuiHelper.resetRenameBox();
+            }
+            else if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ENTER)) {
+                String newName = ImGuiHelper.getRenameBoxResult();
+
+                isRenaming = false;
+                ImGuiHelper.resetRenameBox();
+
+                LevelEditor.getHistoryCommandManager().executeCommand(new RenameFileHistoryCommand(rightClickedPath, newName));
+
+                reload();
             }
         }
     }
@@ -210,7 +234,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
         return switch (fileExtension) {
             case "png", "ico" -> imageFileIconID;
-            case "obj" -> objectFileIconID;
+            case "obj", "fbx" -> objectFileIconID;
             case "json" -> jsonFileIconID;
             case "txt", "md" -> textFileIconID;
             case "ogg" -> audioFileIconID;
