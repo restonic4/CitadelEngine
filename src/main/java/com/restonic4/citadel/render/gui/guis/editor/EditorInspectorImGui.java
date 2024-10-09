@@ -26,6 +26,8 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
 
         ImGui.begin("Inspector");
 
+        ImGui.showDemoWindow();
+
         if (scene == null) {
             ImGui.text("The scene could not be loaded!");
             ImGui.end();
