@@ -21,7 +21,7 @@ public class EditorAboutImGui extends ToggleableImGuiScreen {
 
     @Override
     public void start() {
-        iconId = new Texture("assets/textures/icons/icon.png").getTextureID();
+        iconId = new Texture(true, "assets/textures/icons/icon.png").getTextureID();
 
         try {
             latestVersion = GitHubHelper.getLatestRelease("restonic4", "CitadelEngine");

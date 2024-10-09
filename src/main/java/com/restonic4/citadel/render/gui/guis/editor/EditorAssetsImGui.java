@@ -5,6 +5,7 @@ import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.exceptions.FileException;
 import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.input.KeyListener;
+import com.restonic4.citadel.render.Texture;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
@@ -32,6 +33,14 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean isCreating = false;
     private boolean isFile = false;
     private Path rightClickedPath = null;
+
+    int folderIconID, genericFileIconID;
+
+    @Override
+    public void start() {
+        folderIconID = new Texture(true, "assets/textures/icons/folder/56.png").getTextureID();
+        genericFileIconID = new Texture(true, "assets/textures/icons/files/generic/56.png").getTextureID();
+    }
 
     @Override
     public void render() {
@@ -140,6 +149,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     }
 
     private boolean[] getPathActions(Path path) {
+        drawDesiredIcon(path);
         boolean clicked = ImGui.selectable(path.getFileName().toString(), false, ImGuiSelectableFlags.AllowDoubleClick);
 
         return new boolean[] {
@@ -171,6 +181,16 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private void navigateToDirectory(Path path) {
         currentDir = currentDir + "/" + path.getFileName().toString();
         needsToRefresh = true;
+    }
+
+    private void drawDesiredIcon(Path path) {
+        if (Files.isDirectory(path)) {
+            ImGui.image(folderIconID, 16, 16);
+            ImGui.sameLine();
+        } else {
+            ImGui.image(genericFileIconID, 16, 16);
+            ImGui.sameLine();
+        }
     }
 
     public void reload() {

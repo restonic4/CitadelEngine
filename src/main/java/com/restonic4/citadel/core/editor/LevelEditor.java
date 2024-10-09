@@ -47,9 +47,9 @@ public abstract class LevelEditor {
         ImGuiScreens.EDITOR_PROPERTIES.show();
         ImGuiScreens.EDITOR_ASSETS.show();
 
-        playButtonTextureId = new Texture("assets/textures/icons/play/56.png").getTextureID();
-        stopButtonTextureId = new Texture("assets/textures/icons/stop/56.png").getTextureID();
-        pauseButtonTextureId = new Texture("assets/textures/icons/pause/56.png").getTextureID();
+        playButtonTextureId = new Texture(true, "assets/textures/icons/play/56.png").getTextureID();
+        stopButtonTextureId = new Texture(true, "assets/textures/icons/stop/56.png").getTextureID();
+        pauseButtonTextureId = new Texture(true, "assets/textures/icons/pause/56.png").getTextureID();
     }
 
     // TODO: Weird behaviours in some screens, it should ignore the navbar height

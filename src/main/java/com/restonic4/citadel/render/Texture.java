@@ -27,6 +27,48 @@ public class Texture {
     private int width, height;
     private boolean isRaw;
 
+    public Texture(boolean isIcon, String filepath) {
+        this.filepath = FileManager.getOrExtractFile(
+                FileManager.toResources(filepath)
+        );
+
+        this.generate();
+
+        IntBuffer width = BufferUtils.createIntBuffer(1);
+        IntBuffer height = BufferUtils.createIntBuffer(1);
+        IntBuffer channels = BufferUtils.createIntBuffer(1);
+
+        ByteBuffer image = stbi_load(this.filepath, width, height, channels, 0);
+
+        if (image != null) {
+            if (channels.get(0) == 3) {
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0),
+                        0, GL_RGB, GL_UNSIGNED_BYTE, image);
+            } else if (channels.get(0) == 4) {
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0),
+                        0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+            } else {
+                throw new FileException("Unknown number of channels '" + channels.get(0) + "'");
+            }
+        } else {
+            throw new FileException("Could not load image '" + this.filepath + "'");
+        }
+
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0); // -0.3f
+
+        generateBindlessHandler();
+
+        // Free the memory, we don't want a memory leak, don't we?
+        stbi_image_free(image);
+
+        this.imageBufferData = image;
+        this.width = width.get(0);
+        this.height = height.get(0);
+        this.isRaw = false;
+    }
+
     public Texture(String filepath) {
         this.filepath = FileManager.getOrExtractFile(
                 FileManager.toResources(filepath)
