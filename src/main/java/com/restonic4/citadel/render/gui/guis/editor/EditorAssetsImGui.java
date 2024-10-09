@@ -36,11 +36,13 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean isFile = false;
     private Path rightClickedPath = null;
 
-    int folderIconID, genericFileIconID, imageFileIconID, objectFileIconID, jsonFileIconID, textFileIconID, audioFileIconID, shaderFileIconID;
+    int folderIconID, reservedFolderIconID, genericFileIconID, imageFileIconID, objectFileIconID, jsonFileIconID, textFileIconID, audioFileIconID, shaderFileIconID;
 
     @Override
     public void start() {
-        folderIconID = new Texture(true, "assets/textures/icons/folder/56.png").getTextureID();
+        folderIconID = new Texture(true, "assets/textures/icons/files/folder/56.png").getTextureID();
+        reservedFolderIconID = new Texture(true, "assets/textures/icons/files/reserved_folder/512.png").getTextureID();
+
         genericFileIconID = new Texture(true, "assets/textures/icons/files/generic/56.png").getTextureID();
         imageFileIconID = new Texture(true, "assets/textures/icons/files/image/56.png").getTextureID();
         objectFileIconID = new Texture(true, "assets/textures/icons/files/object/56.png").getTextureID();
@@ -216,12 +218,27 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
     private void drawDesiredIcon(Path path) {
         if (Files.isDirectory(path)) {
-            ImGui.image(folderIconID, 16, 16);
+            ImGui.image(getIconForFolder(path), 16, 16);
         } else {
             ImGui.image(getIconForFile(path), 16, 16);
         }
 
         ImGui.sameLine();
+    }
+
+    private boolean isReservedFolder(Path path) {
+        String normalizedPath = path.toString().replace("\\", "/");
+
+        return normalizedPath.startsWith("resources") &&
+                (normalizedPath.equals("resources") ||
+                        normalizedPath.startsWith("resources/assets") ||
+                        normalizedPath.startsWith("resources/data") ||
+                        normalizedPath.startsWith("resources/docs")
+                );
+    }
+
+    private int getIconForFolder(Path path) {
+        return (isReservedFolder(path)) ? reservedFolderIconID : folderIconID;
     }
 
     private int getIconForFile(Path path) {
