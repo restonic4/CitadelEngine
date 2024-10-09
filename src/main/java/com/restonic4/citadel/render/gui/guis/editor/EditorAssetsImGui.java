@@ -36,12 +36,13 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean isFile = false;
     private Path rightClickedPath = null;
 
-    int folderIconID, reservedFolderIconID, genericFileIconID, imageFileIconID, objectFileIconID, jsonFileIconID, textFileIconID, audioFileIconID, shaderFileIconID;
+    int folderIconID, reservedFolderIconID, genericFileIconID, imageFileIconID, objectFileIconID, jsonFileIconID,
+            textFileIconID, audioFileIconID, shaderFileIconID, sceneFileIconID;
 
     @Override
     public void start() {
         folderIconID = new Texture(true, "assets/textures/icons/files/folder/56.png").getTextureID();
-        reservedFolderIconID = new Texture(true, "assets/textures/icons/files/reserved_folder/512.png").getTextureID();
+        reservedFolderIconID = new Texture(true, "assets/textures/icons/files/reserved_folder/56.png").getTextureID();
 
         genericFileIconID = new Texture(true, "assets/textures/icons/files/generic/56.png").getTextureID();
         imageFileIconID = new Texture(true, "assets/textures/icons/files/image/56.png").getTextureID();
@@ -50,6 +51,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
         textFileIconID = new Texture(true, "assets/textures/icons/files/text/56.png").getTextureID();
         audioFileIconID = new Texture(true, "assets/textures/icons/files/audio/56.png").getTextureID();
         shaderFileIconID = new Texture(true, "assets/textures/icons/files/shader/56.png").getTextureID();
+        sceneFileIconID = new Texture(true, "assets/textures/icons/files/scene/56.png").getTextureID();
     }
 
     @Override
@@ -256,6 +258,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
             case "txt", "md" -> textFileIconID;
             case "ogg" -> audioFileIconID;
             case "glsl" -> shaderFileIconID;
+            case "citScene" -> sceneFileIconID;
             default -> genericFileIconID;
         };
     }

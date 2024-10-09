@@ -13,10 +13,11 @@ import imgui.ImGui;
 import imgui.flag.ImGuiTreeNodeFlags;
 
 public class EditorInspectorImGui extends ToggleableImGuiScreen {
-    int objectIconID;
+    int sceneIconID, objectIconID;
 
     @Override
     public void start() {
+        sceneIconID = new Texture(true, "assets/textures/icons/files/scene/56.png").getTextureID();
         objectIconID = new Texture(true, "assets/textures/icons/game_object/56.png").getTextureID();
     }
 
