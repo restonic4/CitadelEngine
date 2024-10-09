@@ -77,6 +77,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
                 }
             } else {
                 if (ImGui.menuItem("Rename")) {
+                    // TODO: Handle renaming file/folder
                     ImGuiHelper.renameBox(rightClickedPath.getFileName().toString());
                 }
                 if (ImGui.menuItem("Delete")) {
