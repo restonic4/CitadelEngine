@@ -34,12 +34,13 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean isFile = false;
     private Path rightClickedPath = null;
 
-    int folderIconID, genericFileIconID;
+    int folderIconID, genericFileIconID, imageFileIconID;
 
     @Override
     public void start() {
         folderIconID = new Texture(true, "assets/textures/icons/folder/56.png").getTextureID();
         genericFileIconID = new Texture(true, "assets/textures/icons/files/generic/56.png").getTextureID();
+        imageFileIconID = new Texture(true, "assets/textures/icons/files/image/56.png").getTextureID();
     }
 
     @Override
@@ -189,8 +190,25 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
             ImGui.image(folderIconID, 16, 16);
             ImGui.sameLine();
         } else {
-            ImGui.image(genericFileIconID, 16, 16);
-            ImGui.sameLine();
+            if (!path.getFileName().toString().contains(".")) {
+                ImGui.image(genericFileIconID, 16, 16);
+                ImGui.sameLine();
+                return;
+            }
+
+            String[] parts =  path.getFileName().toString().split("\\.");
+            String fileExtension = parts[parts.length - 1];
+
+            if (Objects.equals(fileExtension, "png")) {
+                ImGui.image(imageFileIconID, 16, 16);
+                ImGui.sameLine();
+            } else if (Objects.equals(fileExtension, "ico")) {
+                ImGui.image(imageFileIconID, 16, 16);
+                ImGui.sameLine();
+            } else {
+                ImGui.image(genericFileIconID, 16, 16);
+                ImGui.sameLine();
+            }
         }
     }
 
