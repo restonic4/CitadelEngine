@@ -34,13 +34,16 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean isFile = false;
     private Path rightClickedPath = null;
 
-    int folderIconID, genericFileIconID, imageFileIconID;
+    int folderIconID, genericFileIconID, imageFileIconID, objectFileIconID, jsonFileIconID, textFileIconID;
 
     @Override
     public void start() {
         folderIconID = new Texture(true, "assets/textures/icons/folder/56.png").getTextureID();
         genericFileIconID = new Texture(true, "assets/textures/icons/files/generic/56.png").getTextureID();
         imageFileIconID = new Texture(true, "assets/textures/icons/files/image/56.png").getTextureID();
+        objectFileIconID = new Texture(true, "assets/textures/icons/files/object/56.png").getTextureID();
+        jsonFileIconID = new Texture(true, "assets/textures/icons/files/json/56.png").getTextureID();
+        textFileIconID = new Texture(true, "assets/textures/icons/files/text/56.png").getTextureID();
     }
 
     @Override
@@ -188,28 +191,40 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private void drawDesiredIcon(Path path) {
         if (Files.isDirectory(path)) {
             ImGui.image(folderIconID, 16, 16);
-            ImGui.sameLine();
         } else {
-            if (!path.getFileName().toString().contains(".")) {
-                ImGui.image(genericFileIconID, 16, 16);
-                ImGui.sameLine();
-                return;
-            }
-
-            String[] parts =  path.getFileName().toString().split("\\.");
-            String fileExtension = parts[parts.length - 1];
-
-            if (Objects.equals(fileExtension, "png")) {
-                ImGui.image(imageFileIconID, 16, 16);
-                ImGui.sameLine();
-            } else if (Objects.equals(fileExtension, "ico")) {
-                ImGui.image(imageFileIconID, 16, 16);
-                ImGui.sameLine();
-            } else {
-                ImGui.image(genericFileIconID, 16, 16);
-                ImGui.sameLine();
-            }
+            ImGui.image(getIconForFile(path), 16, 16);
         }
+
+        ImGui.sameLine();
+    }
+
+    private int getIconForFile(Path path) {
+        String fileName = path.getFileName().toString();
+        if (!fileName.contains(".")) {
+            return genericFileIconID;
+        }
+
+        String fileExtension = getFileExtension(fileName);
+
+        switch (fileExtension) {
+            case "png":
+            case "ico":
+                return imageFileIconID;
+            case "obj":
+                return objectFileIconID;
+            case "json":
+                return jsonFileIconID;
+            case "txt":
+            case "md":
+                return textFileIconID;
+            default:
+                return genericFileIconID;
+        }
+    }
+
+    private String getFileExtension(String fileName) {
+        String[] parts = fileName.split("\\.");
+        return parts[parts.length - 1];
     }
 
     public void reload() {
