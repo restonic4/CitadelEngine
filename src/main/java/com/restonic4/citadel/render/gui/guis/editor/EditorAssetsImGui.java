@@ -5,6 +5,9 @@ import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.exceptions.FileException;
 import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.input.KeyListener;
+import com.restonic4.citadel.registries.built_in.managers.Icons;
+import com.restonic4.citadel.registries.built_in.types.Icon;
+import com.restonic4.citadel.registries.built_in.types.subtypes.IconSize;
 import com.restonic4.citadel.render.Texture;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
@@ -35,24 +38,6 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean isRenaming = false;
     private boolean isFile = false;
     private Path rightClickedPath = null;
-
-    int folderIconID, reservedFolderIconID, genericFileIconID, imageFileIconID, objectFileIconID, jsonFileIconID,
-            textFileIconID, audioFileIconID, shaderFileIconID, sceneFileIconID;
-
-    @Override
-    public void start() {
-        folderIconID = new Texture(true, "assets/textures/icons/files/folder/56.png").getTextureID();
-        reservedFolderIconID = new Texture(true, "assets/textures/icons/files/reserved_folder/56.png").getTextureID();
-
-        genericFileIconID = new Texture(true, "assets/textures/icons/files/generic/56.png").getTextureID();
-        imageFileIconID = new Texture(true, "assets/textures/icons/files/image/56.png").getTextureID();
-        objectFileIconID = new Texture(true, "assets/textures/icons/files/object/56.png").getTextureID();
-        jsonFileIconID = new Texture(true, "assets/textures/icons/files/json/56.png").getTextureID();
-        textFileIconID = new Texture(true, "assets/textures/icons/files/text/56.png").getTextureID();
-        audioFileIconID = new Texture(true, "assets/textures/icons/files/audio/56.png").getTextureID();
-        shaderFileIconID = new Texture(true, "assets/textures/icons/files/shader/56.png").getTextureID();
-        sceneFileIconID = new Texture(true, "assets/textures/icons/files/scene/56.png").getTextureID();
-    }
 
     @Override
     public void render() {
@@ -220,9 +205,9 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
     private void drawDesiredIcon(Path path) {
         if (Files.isDirectory(path)) {
-            ImGui.image(getIconForFolder(path), 16, 16);
+            ImGui.image(getIconForFolder(path, IconSize.SIZE_56.getFlag()), 16, 16);
         } else {
-            ImGui.image(getIconForFile(path), 16, 16);
+            ImGui.image(getIconForFile(path, IconSize.SIZE_56.getFlag()), 16, 16);
         }
 
         ImGui.sameLine();
@@ -239,27 +224,27 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
                 );
     }
 
-    private int getIconForFolder(Path path) {
-        return (isReservedFolder(path)) ? reservedFolderIconID : folderIconID;
+    private int getIconForFolder(Path path, int sizeFlag) {
+        return (isReservedFolder(path)) ? Icons.RESERVED_FOLDER.getTextureID(sizeFlag) : Icons.FOLDER.getTextureID(sizeFlag);
     }
 
-    private int getIconForFile(Path path) {
+    private int getIconForFile(Path path, int sizeFlag) {
         String fileName = path.getFileName().toString();
         if (!fileName.contains(".")) {
-            return genericFileIconID;
+            return Icons.GENERIC_FILE.getTextureID(sizeFlag);
         }
 
         String fileExtension = getFileExtension(fileName);
 
         return switch (fileExtension) {
-            case "png", "ico" -> imageFileIconID;
-            case "obj", "fbx" -> objectFileIconID;
-            case "json" -> jsonFileIconID;
-            case "txt", "md" -> textFileIconID;
-            case "ogg" -> audioFileIconID;
-            case "glsl" -> shaderFileIconID;
-            case "citScene" -> sceneFileIconID;
-            default -> genericFileIconID;
+            case "png", "ico" -> Icons.IMAGE_FILE.getTextureID(sizeFlag);
+            case "obj", "fbx" -> Icons.OBJECT_FILE.getTextureID(sizeFlag);
+            case "json" -> Icons.JSON_FILE.getTextureID(sizeFlag);
+            case "txt", "md" -> Icons.TEXT_FILE.getTextureID(sizeFlag);
+            case "ogg" -> Icons.AUDIO_FILE.getTextureID(sizeFlag);
+            case "glsl" -> Icons.SHADER_FILE.getTextureID(sizeFlag);
+            case "citScene" -> Icons.SCENE_FILE.getTextureID(sizeFlag);
+            default -> Icons.GENERIC_FILE.getTextureID(sizeFlag);
         };
     }
 

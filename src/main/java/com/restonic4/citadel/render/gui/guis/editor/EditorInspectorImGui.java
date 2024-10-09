@@ -1,6 +1,9 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
 import com.restonic4.citadel.core.editor.LevelEditor;
+import com.restonic4.citadel.registries.built_in.managers.Icons;
+import com.restonic4.citadel.registries.built_in.types.Icon;
+import com.restonic4.citadel.registries.built_in.types.subtypes.IconSize;
 import com.restonic4.citadel.render.Texture;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
@@ -13,14 +16,6 @@ import imgui.ImGui;
 import imgui.flag.ImGuiTreeNodeFlags;
 
 public class EditorInspectorImGui extends ToggleableImGuiScreen {
-    int sceneIconID, objectIconID;
-
-    @Override
-    public void start() {
-        sceneIconID = new Texture(true, "assets/textures/icons/files/scene/56.png").getTextureID();
-        objectIconID = new Texture(true, "assets/textures/icons/game_object/56.png").getTextureID();
-    }
-
     @Override
     public void render() {
         if (!isVisible()) {
@@ -48,7 +43,7 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
                     isSelected = LevelEditor.getSelectedObject().equals(gameObject);
                 }
 
-                ImGui.image(objectIconID, 16, 16);
+                Icons.GAME_OBJECT.renderImGui(IconSize.SIZE_16);
                 ImGui.sameLine();
 
                 if (ImGuiHelper.selectableTruncated(StringBuilderHelper.concatenate(gameObject.getName(), "##", gameObject.getId()), isSelected)) {

@@ -1,6 +1,9 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
 import com.restonic4.ClientSide;
+import com.restonic4.citadel.registries.built_in.managers.Icons;
+import com.restonic4.citadel.registries.built_in.types.Icon;
+import com.restonic4.citadel.registries.built_in.types.subtypes.IconSize;
 import com.restonic4.citadel.render.Texture;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
@@ -13,7 +16,6 @@ import imgui.flag.ImGuiWindowFlags;
 
 @ClientSide
 public class EditorAboutImGui extends ToggleableImGuiScreen {
-    int iconId;
     int imageSize = 75;
     String latestVersion;
 
@@ -21,8 +23,6 @@ public class EditorAboutImGui extends ToggleableImGuiScreen {
 
     @Override
     public void start() {
-        iconId = new Texture(true, "assets/textures/icons/icon.png").getTextureID();
-
         try {
             latestVersion = GitHubHelper.getLatestRelease("restonic4", "CitadelEngine");
         } catch (Exception e) {
@@ -42,7 +42,7 @@ public class EditorAboutImGui extends ToggleableImGuiScreen {
         ImGui.newLine();
 
         ImGuiHelper.setCentered(imageSize);
-        ImGui.image(iconId, imageSize, imageSize);
+        Icons.ICON.renderImGui(IconSize.SIZE_100);
 
         ImGui.setWindowFontScale(1.5f);
         ImGuiHelper.setCenteredText(title);

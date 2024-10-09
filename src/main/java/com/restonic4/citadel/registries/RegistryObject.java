@@ -8,7 +8,7 @@ public abstract class RegistryObject {
 
     public AssetLocation getAssetLocation() {
         if (assetLocation == null) {
-            throw new RegistryObjectException("This RegistryItem is not populated yet");
+            throw new RegistryObjectException("This RegistryObject is not populated yet");
         }
 
         return this.assetLocation;

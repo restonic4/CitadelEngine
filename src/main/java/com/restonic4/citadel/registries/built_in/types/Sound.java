@@ -43,7 +43,7 @@ public class Sound extends RegistryObject {
 
         SoundBuffer soundBuffer = new SoundBuffer(this.getAssetPath());
 
-        SoundManager soundManager =  SoundManager.getInstance();
+        SoundManager soundManager = SoundManager.getInstance();
         soundManager.addSoundBuffer(soundBuffer);
 
         return soundBuffer;

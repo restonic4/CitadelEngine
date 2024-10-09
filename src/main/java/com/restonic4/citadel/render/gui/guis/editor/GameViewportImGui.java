@@ -34,11 +34,6 @@ import java.util.Map;
 @ClientSide
 public class GameViewportImGui extends ToggleableImGuiScreen {
     @Override
-    public void start() {
-
-    }
-
-    @Override
     public void render() {
         if (!isVisible()) {
             return;
