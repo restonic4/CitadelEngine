@@ -1,12 +1,20 @@
 package com.restonic4.citadel.world.object;
 
 import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.UniqueIdentifierManager;
+import com.restonic4.citadel.world.Scene;
+import com.restonic4.citadel.world.SceneManager;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Transform extends Serializable {
+    private int id;
+    private Transform parent;
+
     private Vector3f position;
     private Vector3f scale;
     private Quaternionf rotation;
@@ -267,7 +275,45 @@ public class Transform extends Serializable {
         return this.cleanRotation;
     }
 
+    public Transform getParent() {
+        return this.parent;
+    }
+
+    public void setParent(Transform parent) {
+        Scene scene = SceneManager.getCurrentScene();
+        if (scene != null) {
+            if (this.parent == scene.getTransform() && parent != scene.getTransform()) {
+                scene.removeRootTransform(this);
+            }
+            else if (this.parent != scene.getTransform() &&  parent == scene.getTransform()) {
+                scene.addRootTransform(this);
+            }
+        }
+
+        this.parent = parent;
+    }
+
+    public List<GameObject> getChildren() {
+        Scene scene = SceneManager.getCurrentScene();
+        if (scene != null) {
+            return scene.getTransformChildren(this);
+        }
+
+        return new ArrayList<>();
+    }
+
+    public boolean hasChildren() {
+        Scene scene = SceneManager.getCurrentScene();
+        if (scene != null) {
+            return scene.hasTransformChildren(this);
+        }
+
+        return false;
+    }
+
     public void create(Vector3f position, Vector3f scale) {
+        this.id = UniqueIdentifierManager.generateUID();
+
         this.position = position;
         this.scale = scale;
         this.rotation = new Quaternionf();
@@ -320,9 +366,20 @@ public class Transform extends Serializable {
         }
 
         if (obj instanceof Transform transform) {
-            return transform.position.equals(this.position) && transform.scale.equals(this.scale) && transform.rotation.equals(this.rotation);
+            return transform.id == this.id;
+        } else {
+            return false;
         }
-        else {
+    }
+
+    public boolean equalsComponents(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj instanceof Transform transform) {
+            return transform.position.equals(this.position) && transform.scale.equals(this.scale) && transform.rotation.equals(this.rotation);
+        } else {
             return false;
         }
     }

@@ -14,6 +14,7 @@ import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.render.Renderer;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.world.object.Serializable;
+import com.restonic4.citadel.world.object.Transform;
 import com.restonic4.citadel.world.object.components.ColliderComponent;
 import com.restonic4.citadel.world.object.components.LightComponent;
 import com.restonic4.citadel.world.object.components.RigidBodyComponent;
@@ -22,15 +23,21 @@ import org.joml.Vector4f;
 
 import java.io.Serial;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Scene extends Serializable {
     protected Renderer renderer = new Renderer(this);
     protected Camera camera;
+    protected Transform transform = new Transform();
 
-    List<GameObject> allGameObjects = new ArrayList<>();
+    private List<GameObject> allGameObjects = new ArrayList<>();
     private List<GameObject> staticGameObjects = new ArrayList<>();
     private List<GameObject> dynamicGameObjects = new ArrayList<>();
+    private List<GameObject> rootGameObjects = new ArrayList<>();
+
+    private HashMap<Transform, GameObject> transformToGameObjectMap = new HashMap<>();
+
     private List<LightComponent> lightComponents = new ArrayList<>();
     private List<ColliderComponent> colliderComponents = new ArrayList<>();
     private List<RigidBodyComponent> rigidBodyComponents = new ArrayList<>();
@@ -113,10 +120,62 @@ public class Scene extends Serializable {
             rigidBodyComponents.add(rigidBodyComponent);
         }
 
+        if (gameObject.transform.getParent() == null) {
+            gameObject.transform.setParent(transform);
+        }
+
+        if (gameObject.transform.getParent() == transform) {
+            rootGameObjects.add(gameObject);
+        }
+
+        transformToGameObjectMap.put(gameObject.transform, gameObject);
+
         if (isActivated) {
             gameObject.start();
             renderer.add(gameObject);
         }
+    }
+
+    public void addRootTransform(Transform transform) {
+        GameObject gameObject = transformToGameObjectMap.get(transform);
+
+        if (gameObject != null && !rootGameObjects.contains(gameObject)) {
+            rootGameObjects.add(gameObject);
+        }
+    }
+
+    public void removeRootTransform(Transform transform) {
+        GameObject gameObject = transformToGameObjectMap.get(transform);
+
+        if (gameObject != null && rootGameObjects.contains(gameObject)) {
+            rootGameObjects.remove(gameObject);
+        }
+    }
+
+    public List<GameObject> getTransformChildren(Transform transform) {
+        List<GameObject> children = new ArrayList<>();
+
+        for (int i = 0; i < allGameObjects.size(); i++) {
+            Transform foundTransform = allGameObjects.get(i).transform;
+
+            if (foundTransform.getParent() == transform) {
+                children.add(allGameObjects.get(i));
+            }
+        }
+
+        return children;
+    }
+
+    public boolean hasTransformChildren(Transform transform) {
+        for (int i = 0; i < allGameObjects.size(); i++) {
+            Transform foundTransform = allGameObjects.get(i).transform;
+
+            if (foundTransform.getParent() == transform) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Camera getCamera() {
@@ -129,6 +188,10 @@ public class Scene extends Serializable {
 
     public List<GameObject> getGameObjects() {
         return allGameObjects;
+    }
+
+    public List<GameObject> getRootGameObjects() {
+        return this.rootGameObjects;
     }
 
     public List<GameObject> getStaticGameObjects() {
@@ -202,6 +265,10 @@ public class Scene extends Serializable {
 
     public int getGameObjectsAmount() {
         return this.staticGameObjects.size() + this.dynamicGameObjects.size();
+    }
+
+    public Transform getTransform() {
+        return this.transform;
     }
 
     public void cleanup() {

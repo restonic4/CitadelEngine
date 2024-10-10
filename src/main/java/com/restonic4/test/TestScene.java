@@ -49,7 +49,7 @@ public class TestScene extends Scene {
 
         int planeSize = 50;
 
-        GameObject plane = new GameObject(false);
+        GameObject plane = new GameObject("Base plate", false);
         plane.transform.setPosition(0, 0, 0);
         plane.transform.setScale(planeSize, 1, planeSize);
         Mesh planeMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
@@ -60,6 +60,7 @@ public class TestScene extends Scene {
         for (int i = 0; i < planeSize; i++) {
             GameObject cube = new GameObject(false);
             cube.setName("debugCascadePoint");
+            cube.transform.setParent(plane.transform);
 
             Mesh cubeMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
             //cubeMesh.setTint(new Vector4f(0, 1, 1, 1));
@@ -73,9 +74,13 @@ public class TestScene extends Scene {
             this.addGameObject(cube);
         }
 
+        Transform last = getTransform();
         for (int i = 0; i < planeSize; i++) {
             GameObject cube = new GameObject(false);
             cube.setName("rot");
+            cube.transform.setParent(last);
+
+            last = cube.transform;
 
             Mesh cubeMesh = MeshLoader.loadMesh("assets/models/persus_cubo.obj");
             //cubeMesh.setTint(new Vector4f(0, 1, 1, 1));
