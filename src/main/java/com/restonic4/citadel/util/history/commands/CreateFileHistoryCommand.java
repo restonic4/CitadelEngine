@@ -31,7 +31,7 @@ public class CreateFileHistoryCommand implements HistoryCommand {
                 FileManager.createFolderInDirectory(currentDir, name);
             }
 
-            ((EditorAssetsImGui) ImGuiScreens.EDITOR_ASSETS).reload();
+            ImGuiScreens.EDITOR_ASSETS.reload();
         }
         catch (IOException e) {
             CitadelLauncher.getInstance().handleError(e.getMessage());
@@ -41,6 +41,6 @@ public class CreateFileHistoryCommand implements HistoryCommand {
     @Override
     public void undo() {
         FileManager.deleteFileOrFolder(currentDir + "/" + name);
-        ((EditorAssetsImGui) ImGuiScreens.EDITOR_ASSETS).reload();
+       ImGuiScreens.EDITOR_ASSETS.reload();
     }
 }

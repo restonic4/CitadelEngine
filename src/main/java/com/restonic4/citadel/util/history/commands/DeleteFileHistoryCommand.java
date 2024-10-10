@@ -60,7 +60,7 @@ public class DeleteFileHistoryCommand implements HistoryCommand {
     @Override
     public void execute() {
         FileManager.deleteFileOrFolder(filePath);
-        ((EditorAssetsImGui) ImGuiScreens.EDITOR_ASSETS).reload();
+        ImGuiScreens.EDITOR_ASSETS.reload();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DeleteFileHistoryCommand implements HistoryCommand {
             Logger.logError(e);
         }
 
-        ((EditorAssetsImGui) ImGuiScreens.EDITOR_ASSETS).reload();
+        ImGuiScreens.EDITOR_ASSETS.reload();
     }
 
     private void restoreDirectory(Path parentPath, DirectoryData dirData) {

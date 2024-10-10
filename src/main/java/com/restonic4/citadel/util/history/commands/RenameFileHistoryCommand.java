@@ -33,7 +33,7 @@ public class RenameFileHistoryCommand implements HistoryCommand {
             Logger.logError(e);
         }
 
-        ((EditorAssetsImGui) ImGuiScreens.EDITOR_ASSETS).reload();
+        ImGuiScreens.EDITOR_ASSETS.reload();
     }
 
     @Override
@@ -47,6 +47,6 @@ public class RenameFileHistoryCommand implements HistoryCommand {
             Logger.logError(e);
         }
 
-        ((EditorAssetsImGui) ImGuiScreens.EDITOR_ASSETS).reload();
+        ImGuiScreens.EDITOR_ASSETS.reload();
     }
 }
