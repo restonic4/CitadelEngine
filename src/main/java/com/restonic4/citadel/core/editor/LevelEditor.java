@@ -1,5 +1,6 @@
 package com.restonic4.citadel.core.editor;
 
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
@@ -93,19 +94,19 @@ public abstract class LevelEditor {
                 ImGuiHelper.coloredText(KeyBinds.RENAME.getKeyString(), ImGuiHelper.getTooltipColor());
 
                 if (ImGui.menuItem("Copy")) {
-
+                    CitadelLauncher.getInstance().handleError("This method is not available!");
                 }
                 ImGui.sameLine();
                 ImGuiHelper.coloredText(KeyBinds.COPY.getKeyString(), ImGuiHelper.getTooltipColor());
 
                 if (ImGui.menuItem("Paste")) {
-
+                    CitadelLauncher.getInstance().handleError("This method is not available!");
                 }
                 ImGui.sameLine();
                 ImGuiHelper.coloredText(KeyBinds.PASTE.getKeyString(), ImGuiHelper.getTooltipColor());
 
                 if (ImGui.menuItem("Duplicate")) {
-
+                    CitadelLauncher.getInstance().handleError("This method is not available!");
                 }
                 ImGui.sameLine();
                 ImGuiHelper.coloredText(KeyBinds.DUPLICATE.getKeyString(), ImGuiHelper.getTooltipColor());
@@ -179,10 +180,10 @@ public abstract class LevelEditor {
 
                 if (ImGui.beginMenu("Overlay")) {
                     if (ImGui.menuItem("Show Grid")) {
-                        //TODO: Rendering system
+                        CitadelLauncher.getInstance().handleError("This rendering system is not available!");
                     }
                     if (ImGui.menuItem("Show Axis")) {
-                        //TODO: Rendering system
+                        CitadelLauncher.getInstance().handleError("This rendering system is not available!");
                     }
                     ImGui.endMenu();
                 }
@@ -196,7 +197,7 @@ public abstract class LevelEditor {
                 }
 
                 if (ImGui.menuItem("Documentation")) {
-                    //TODO: UI
+                    CitadelLauncher.getInstance().handleError("This UI window is not available!");
                 }
 
                 ImGui.endMenu();
@@ -280,6 +281,7 @@ public abstract class LevelEditor {
             );
         } else if (selectedObject != null) {
             // TODO: Object deletion system needed
+            CitadelLauncher.getInstance().handleError("GameObject deletion system needed!");
         }
     }
 

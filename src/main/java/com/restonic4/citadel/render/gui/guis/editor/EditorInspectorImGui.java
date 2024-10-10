@@ -1,7 +1,9 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.registries.built_in.managers.Icons;
+import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import com.restonic4.citadel.registries.built_in.types.Icon;
 import com.restonic4.citadel.registries.built_in.types.subtypes.IconSize;
 import com.restonic4.citadel.render.Texture;
@@ -72,23 +74,23 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
             }
 
             if (ImGui.menuItem("Copy")) {
-
+                CitadelLauncher.getInstance().handleError("This method is not available!");
             }
 
             if (ImGui.beginMenu("Paste")) {
                 if (ImGui.menuItem("Paste into")) {
-
+                    CitadelLauncher.getInstance().handleError("This method is not available!");
                 }
 
                 if (ImGui.menuItem("Replace")) {
-
+                    CitadelLauncher.getInstance().handleError("This method is not available!");
                 }
 
                 ImGui.endMenu();
             }
 
             if (ImGui.menuItem("Duplicate")) {
-
+                CitadelLauncher.getInstance().handleError("This method is not available!");
             }
 
             if (ImGui.menuItem("Delete")) {

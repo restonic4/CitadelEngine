@@ -18,6 +18,7 @@ public class ImGuiScreens extends AbstractRegistryInitializer {
     public static EditorAssetsImGui EDITOR_ASSETS;
     public static ToggleableImGuiScreen EDITOR_ABOUT;
     public static EditorRenameImGui EDITOR_RENAME;
+    public static EditorMessageImGui EDITOR_MESSAGE;
 
     @Override
     public void register() {
@@ -30,5 +31,6 @@ public class ImGuiScreens extends AbstractRegistryInitializer {
         EDITOR_ASSETS = (EditorAssetsImGui) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_assets"), new EditorAssetsImGui());
         EDITOR_ABOUT = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_about"), new EditorAboutImGui());
         EDITOR_RENAME = (EditorRenameImGui) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_rename"), new EditorRenameImGui());
+        EDITOR_MESSAGE = (EditorMessageImGui) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_message"), new EditorMessageImGui());
     }
 }

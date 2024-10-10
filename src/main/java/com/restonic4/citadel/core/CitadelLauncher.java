@@ -244,6 +244,8 @@ public class CitadelLauncher {
             SoundSource soundSource = Sounds.CRASH.createSource(false, false);
             soundSource.setPosition(new Vector3f(0, 0, 0));
             soundSource.play();
+
+            ImGuiScreens.EDITOR_MESSAGE.show(message);
         }
         else {
             throw new RuntimeException("Critical error");
