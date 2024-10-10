@@ -1,14 +1,11 @@
 package com.restonic4.citadel.render.gui;
 
-import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
-import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import imgui.ImDrawList;
 import imgui.ImGui;
-import imgui.ImGuiIO;
 import imgui.ImVec2;
 import imgui.flag.*;
-import imgui.type.ImString;
 import org.joml.Vector4f;
 
 public class ImGuiHelper {
@@ -103,5 +100,19 @@ public class ImGuiHelper {
 
     public static Vector4f getTooltipColor() {
         return toolTipColor;
+    }
+
+    public static void drawLastElementAsSelected() {
+        ImDrawList drawList = ImGui.getWindowDrawList();
+
+        float x = ImGui.getCursorScreenPos().x;
+        float y = ImGui.getCursorScreenPos().y;
+
+        float width = ImGui.getContentRegionAvail().x;
+        float height = ImGui.getItemRectSize().y;
+
+        int color = ImGui.getColorU32(ImGuiCol.TextSelectedBg);
+
+        drawList.addRectFilled(x, y, x + width, y + height, color);
     }
 }
