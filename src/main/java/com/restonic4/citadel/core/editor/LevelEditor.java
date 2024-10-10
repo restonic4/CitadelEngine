@@ -76,19 +76,21 @@ public abstract class LevelEditor {
                    historyCommandManager.undo();
                 }
                 ImGui.sameLine();
-                ImGui.text("↩");
-                ImGui.sameLine();
                 ImGuiHelper.coloredText(KeyBinds.UNDO.getKeyString(), ImGuiHelper.getTooltipColor());
 
                 if (ImGui.menuItem("Redo")) {
                     historyCommandManager.redo();
                 }
                 ImGui.sameLine();
-                ImGui.text("↪");
-                ImGui.sameLine();
                 ImGuiHelper.coloredText(KeyBinds.REDO.getKeyString(), ImGuiHelper.getTooltipColor());
 
                 ImGui.separator();
+
+                if (ImGui.menuItem("Rename")) {
+                    handleRenaming();
+                }
+                ImGui.sameLine();
+                ImGuiHelper.coloredText(KeyBinds.RENAME.getKeyString(), ImGuiHelper.getTooltipColor());
 
                 if (ImGui.menuItem("Copy")) {
 
@@ -109,7 +111,7 @@ public abstract class LevelEditor {
                 ImGuiHelper.coloredText(KeyBinds.DUPLICATE.getKeyString(), ImGuiHelper.getTooltipColor());
 
                 if (ImGui.menuItem("Delete")) {
-
+                    handleRemoval();
                 }
                 ImGui.sameLine();
                 ImGuiHelper.coloredText(KeyBinds.DELETE.getKeyString(), ImGuiHelper.getTooltipColor());
@@ -249,9 +251,9 @@ public abstract class LevelEditor {
     }
 
     private static void handleKeyInputs() {
-        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_F2)) {
+        if (KeyBinds.RENAME.isPressedOnce()) {
             handleRenaming();
-        } else if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_DELETE)) {
+        } else if (KeyBinds.DELETE.isPressedOnce()) {
             handleRemoval();
         }
     }
