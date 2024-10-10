@@ -15,8 +15,9 @@ public class ImGuiScreens extends AbstractRegistryInitializer {
     public static ToggleableImGuiScreen GAME_VIEWPORT;
     public static ToggleableImGuiScreen EDITOR_INSPECTOR;
     public static ToggleableImGuiScreen EDITOR_PROPERTIES;
-    public static ToggleableImGuiScreen EDITOR_ASSETS;
+    public static EditorAssetsImGui EDITOR_ASSETS;
     public static ToggleableImGuiScreen EDITOR_ABOUT;
+    public static EditorRenameImGui EDITOR_RENAME;
 
     @Override
     public void register() {
@@ -26,7 +27,8 @@ public class ImGuiScreens extends AbstractRegistryInitializer {
         GAME_VIEWPORT = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "game_viewport"), new GameViewportImGui());
         EDITOR_INSPECTOR = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_inspector"), new EditorInspectorImGui());
         EDITOR_PROPERTIES = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_properties"), new EditorPropertiesImGui());
-        EDITOR_ASSETS = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_assets"), new EditorAssetsImGui());
+        EDITOR_ASSETS = (EditorAssetsImGui) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_assets"), new EditorAssetsImGui());
         EDITOR_ABOUT = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_about"), new EditorAboutImGui());
+        EDITOR_RENAME = (EditorRenameImGui) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_rename"), new EditorRenameImGui());
     }
 }

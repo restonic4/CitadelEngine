@@ -19,6 +19,8 @@ import imgui.flag.ImGuiStyleVar;
 import imgui.type.ImBoolean;
 import org.lwjgl.glfw.GLFW;
 
+import java.nio.file.Files;
+
 import static imgui.flag.ImGuiWindowFlags.*;
 import static imgui.flag.ImGuiWindowFlags.NoNavFocus;
 
@@ -240,7 +242,20 @@ public abstract class LevelEditor {
 
         ImGui.popStyleVar();
 
-        handleRenaming();
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_F2)) {
+            if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) {
+                ImGuiScreens.EDITOR_ASSETS.handleAction(
+                        false,
+                        !Files.isDirectory(ImGuiScreens.EDITOR_ASSETS.getHoveringPath()),
+                        ImGuiScreens.EDITOR_ASSETS.getHoveringPath()
+                );
+            } else if (selectedObject != null) {
+                handleRenaming(getSelectedObject().getName(), () -> {
+                    String newName = ImGuiScreens.EDITOR_RENAME.getResult();
+                    historyCommandManager.executeCommand(new RenameGameObjectHistoryCommand(getSelectedObject(), newName));
+                });
+            }
+        }
 
         handleHistory();
     }
@@ -259,27 +274,10 @@ public abstract class LevelEditor {
         }
     }
 
-    private static void handleRenaming() {
-        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_F2) && selectedObject != null) {
-            isRenamingEnabled = true;
-        }
-
-        if (isRenamingEnabled) {
-            ImGuiHelper.renameBox(getSelectedObject().getName());
-
-            if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ESCAPE)) {
-                isRenamingEnabled = false;
-                ImGuiHelper.resetRenameBox();
-            }
-            else if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ENTER)) {
-                String newName = ImGuiHelper.getRenameBoxResult();
-
-                isRenamingEnabled = false;
-                ImGuiHelper.resetRenameBox();
-
-                historyCommandManager.executeCommand(new RenameGameObjectHistoryCommand(getSelectedObject(), newName));
-            }
-        }
+    public static void handleRenaming(String defaultText, Runnable runnable) {
+        ImGuiScreens.EDITOR_RENAME.setDefaultText(defaultText);
+        ImGuiScreens.EDITOR_RENAME.setRunnable(runnable);
+        ImGuiScreens.EDITOR_RENAME.show();
     }
 
     public static GameObject getSelectedObject() {

@@ -6,6 +6,7 @@ import com.restonic4.citadel.exceptions.FileException;
 import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.registries.built_in.managers.Icons;
+import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.registries.built_in.types.Icon;
 import com.restonic4.citadel.registries.built_in.types.subtypes.IconSize;
 import com.restonic4.citadel.render.Texture;
@@ -35,9 +36,10 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean needsToRefresh;
 
     private boolean isCreating = false;
-    private boolean isRenaming = false;
     private boolean isFile = false;
+
     private Path rightClickedPath = null;
+    private Path hoveringPath = null;
 
     @Override
     public void render() {
@@ -60,22 +62,21 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
             ImGui.openPopup("RightClickMenu");
         }
 
+        hoveringPath = null;
+
         renderDirectoryContent();
 
         if (ImGui.beginPopup("RightClickMenu")) {
             if (rightClickedPath == null) {
                 if (ImGui.menuItem("New Folder")) {
-                    isCreating = true;
-                    isFile = false;
+                    handleAction(true, false);
                 }
                 if (ImGui.menuItem("New File")) {
-                    isCreating = true;
-                    isFile = true;
+                    handleAction(true, true);
                 }
             } else {
                 if (ImGui.menuItem("Rename")) {
-                    isRenaming = true;
-                    isFile = !Files.isDirectory(rightClickedPath);
+                    handleAction(false, !Files.isDirectory(rightClickedPath));
                 }
                 if (ImGui.menuItem("Delete")) {
                     LevelEditor.getHistoryCommandManager().executeCommand(new DeleteFileHistoryCommand(rightClickedPath.toString()));
@@ -84,52 +85,41 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
             ImGui.endPopup();
         }
 
-        handleCreateAction();
-        handleRenaming();
-
         ImGui.end();
     }
 
-    private void handleCreateAction() {
-        if (isCreating) {
-            if (isFile) {
-                ImGuiHelper.renameBox("New file.txt");
-            } else {
-                ImGuiHelper.renameBox("New directory");
-            }
+    public void handleAction(boolean creating, boolean file) {
+        handleAction(creating, file, rightClickedPath);
+    }
 
-            if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ESCAPE)) {
-                isCreating = false;
-                ImGuiHelper.resetRenameBox();
-            } else if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ENTER)) {
-                String name = ImGuiHelper.getRenameBoxResult();
+    public void handleAction(boolean creating, boolean file, Path path) {
+        isCreating = creating;
+        isFile = file;
 
-                LevelEditor.getHistoryCommandManager().executeCommand(new CreateFileHistoryCommand(currentDir, name, isFile));
-
-                isCreating = false;
-                ImGuiHelper.resetRenameBox();
-            }
+        if (creating) {
+            handleCreating();
+        } else {
+            handleRenaming(path);
         }
     }
 
-    private void handleRenaming() {
-        if (isRenaming) {
-            ImGuiHelper.renameBox(rightClickedPath.getFileName().toString());
+    private void handleRenaming(Path path) {
+        LevelEditor.handleRenaming(path.getFileName().toString(), () -> {
+            String name = ImGuiScreens.EDITOR_RENAME.getResult();
+            LevelEditor.getHistoryCommandManager().executeCommand(new RenameFileHistoryCommand(path, name));
+            reload();
+        });
+    }
 
-            if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ESCAPE)) {
-                isRenaming = false;
-                ImGuiHelper.resetRenameBox();
-            }
-            else if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_ENTER)) {
-                String newName = ImGuiHelper.getRenameBoxResult();
+    private void handleCreating() {
+        if (isCreating) {
+            String defaultText = (isFile) ? "New file.txt" : "New directory";
 
-                isRenaming = false;
-                ImGuiHelper.resetRenameBox();
-
-                LevelEditor.getHistoryCommandManager().executeCommand(new RenameFileHistoryCommand(rightClickedPath, newName));
-
+            LevelEditor.handleRenaming(defaultText, () -> {
+                String name = ImGuiScreens.EDITOR_RENAME.getResult();
+                LevelEditor.getHistoryCommandManager().executeCommand(new CreateFileHistoryCommand(currentDir, name, isFile));
                 reload();
-            }
+            });
         }
     }
 
@@ -165,6 +155,10 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
             else if (pathActions[1]) {
                 rightClickedPath = path;
             }
+
+            if (pathActions[2]) {
+                hoveringPath = path;
+            }
         }
     }
 
@@ -174,7 +168,8 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
         return new boolean[] {
                 (clicked && ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)), // Double clicked
-                (ImGui.isItemHovered() && ImGui.isMouseClicked(ImGuiMouseButton.Right)) // Right clicked
+                (ImGui.isItemHovered() && ImGui.isMouseClicked(ImGuiMouseButton.Right)), // Right clicked
+                (ImGui.isItemHovered()) // Hover
         };
     }
 
@@ -255,5 +250,13 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
     public void reload() {
         this.needsToRefresh = true;
+    }
+
+    public Path getHoveringPath() {
+        return hoveringPath;
+    }
+
+    public Path getRightClickedPath() {
+        return rightClickedPath;
     }
 }

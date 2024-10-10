@@ -77,52 +77,6 @@ public class ImGuiHelper {
         ImGui.columns(1);
     }
 
-    private static final int windowWidth = 300;
-    private static final float padding = 10.0f;
-    private static final ImString inputBuffer = new ImString(128);
-
-    public static void renameBox(String defaultText) {
-        ImGuiIO io = ImGui.getIO();
-        float screenWidth = io.getDisplaySizeX();
-        float screenHeight = io.getDisplaySizeY();
-
-        float titleBarHeight = ImGui.getFontSize() + ImGui.getStyle().getFramePadding().y * 2.0f;
-
-        float inputHeight = ImGui.getTextLineHeightWithSpacing();
-        float windowHeight = titleBarHeight + inputHeight + 2 * padding;
-
-        float windowPosX = (screenWidth - windowWidth) / 2.0f;
-        float windowPosY = (screenHeight - windowHeight) / 2.0f;
-
-        ImGui.setNextWindowPos(windowPosX, windowPosY, ImGuiCond.Always);
-        ImGui.setNextWindowSize(windowWidth, windowHeight);
-
-        ImGui.begin("Renaming", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse);
-        ImGui.setWindowFocus();
-
-        if (inputBuffer.isEmpty()) {
-            inputBuffer.set(defaultText);
-            ImGui.setKeyboardFocusHere();
-        }
-
-        ImGui.setCursorPos(padding, padding + titleBarHeight);
-
-        float inputWidth = windowWidth - 2 * padding;
-        ImGui.pushItemWidth(inputWidth);
-        ImGui.inputText("##Input", inputBuffer, ImGuiInputTextFlags.None);
-        ImGui.popItemWidth();
-
-        ImGui.end();
-    }
-
-    public static String getRenameBoxResult() {
-        return inputBuffer.get();
-    }
-
-    public static void resetRenameBox() {
-        inputBuffer.clear();
-    }
-
     public static void setCentered(float elementWidth) {
         float windowWidth = ImGui.getWindowSizeX();
         float cursorPosX = (windowWidth - elementWidth) / 2.0f;

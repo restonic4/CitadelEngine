@@ -16,7 +16,6 @@ import imgui.flag.ImGuiWindowFlags;
 
 @ClientSide
 public class EditorAboutImGui extends ToggleableImGuiScreen {
-    int imageSize = 75;
     String latestVersion;
 
     String title = StringBuilderHelper.concatenate("Citadel engine ", GradleUtil.VERSION);
@@ -41,7 +40,7 @@ public class EditorAboutImGui extends ToggleableImGuiScreen {
 
         ImGui.newLine();
 
-        ImGuiHelper.setCentered(imageSize);
+        ImGuiHelper.setCentered(100);
         Icons.ICON.renderImGui(IconSize.SIZE_100);
 
         ImGui.setWindowFontScale(1.5f);
