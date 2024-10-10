@@ -13,7 +13,10 @@ import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
+import imgui.flag.ImGuiMouseButton;
 import imgui.flag.ImGuiTreeNodeFlags;
+
+import java.nio.file.Path;
 
 public class EditorInspectorImGui extends ToggleableImGuiScreen {
     @Override
@@ -49,9 +52,50 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
                 if (ImGuiHelper.selectableTruncated(StringBuilderHelper.concatenate(gameObject.getName(), "##", gameObject.getId()), isSelected)) {
                     LevelEditor.setSelectedObject(gameObject);
                 }
+
+                // If right click select the object
+                if (ImGui.isItemClicked(ImGuiMouseButton.Right)) {
+                    LevelEditor.setSelectedObject(gameObject);
+                }
             }
 
             ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
+        }
+
+        if (ImGui.isWindowHovered() && ImGui.isMouseClicked(ImGuiMouseButton.Right)) {
+            ImGui.openPopup("InspectorRightClickMenu");
+        }
+
+        if (ImGui.beginPopup("InspectorRightClickMenu")) {
+            if (ImGui.menuItem("Rename")) {
+
+            }
+
+            if (ImGui.menuItem("Copy")) {
+
+            }
+
+            if (ImGui.beginMenu("Paste")) {
+                if (ImGui.menuItem("Paste into")) {
+
+                }
+
+                if (ImGui.menuItem("Replace")) {
+
+                }
+
+                ImGui.endMenu();
+            }
+
+            if (ImGui.menuItem("Duplicate")) {
+
+            }
+
+            if (ImGui.menuItem("Delete")) {
+
+            }
+
+            ImGui.endPopup();
         }
 
         ImGui.end();

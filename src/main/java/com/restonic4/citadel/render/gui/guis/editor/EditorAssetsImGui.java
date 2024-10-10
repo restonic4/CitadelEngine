@@ -52,14 +52,14 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
         if (ImGui.isWindowHovered() && ImGui.isMouseClicked(ImGuiMouseButton.Right)) {
             rightClickedPath = null;
-            ImGui.openPopup("RightClickMenu");
+            ImGui.openPopup("AssetsRightClickMenu");
         }
 
         hoveringPath = null;
 
         renderDirectoryContent();
 
-        if (ImGui.beginPopup("RightClickMenu")) {
+        if (ImGui.beginPopup("AssetsRightClickMenu")) {
             if (rightClickedPath == null) {
                 if (ImGui.menuItem("New Folder")) {
                     handleAction(true, false);
