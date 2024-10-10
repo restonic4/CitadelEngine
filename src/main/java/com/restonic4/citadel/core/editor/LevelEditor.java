@@ -272,6 +272,12 @@ public abstract class LevelEditor {
                     !Files.isDirectory(ImGuiScreens.EDITOR_ASSETS.getHoveringPath()),
                     ImGuiScreens.EDITOR_ASSETS.getHoveringPath()
             );
+        } else if (ImGuiScreens.EDITOR_ASSETS.getLastClickedPath() != null) {
+            ImGuiScreens.EDITOR_ASSETS.handleAction(
+                    false,
+                    !Files.isDirectory(ImGuiScreens.EDITOR_ASSETS.getLastClickedPath()),
+                    ImGuiScreens.EDITOR_ASSETS.getLastClickedPath()
+            );
         } else if (selectedObject != null) {
             renameAction(getSelectedObject().getName(), () -> {
                 String newName = ImGuiScreens.EDITOR_RENAME.getResult();
@@ -284,6 +290,10 @@ public abstract class LevelEditor {
         if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) {
             LevelEditor.getHistoryCommandManager().executeCommand(
                     new DeleteFileHistoryCommand(ImGuiScreens.EDITOR_ASSETS.getHoveringPath().toString())
+            );
+        } else if (ImGuiScreens.EDITOR_ASSETS.getLastClickedPath() != null) {
+            LevelEditor.getHistoryCommandManager().executeCommand(
+                    new DeleteFileHistoryCommand(ImGuiScreens.EDITOR_ASSETS.getLastClickedPath().toString())
             );
         } else if (selectedObject != null) {
             // TODO: Object deletion system needed

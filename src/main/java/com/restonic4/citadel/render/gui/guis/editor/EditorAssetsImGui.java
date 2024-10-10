@@ -6,6 +6,7 @@ import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.registries.built_in.managers.Icons;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.registries.built_in.types.subtypes.IconSize;
+import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.history.commands.CreateFileHistoryCommand;
@@ -31,6 +32,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     private boolean isCreating = false;
     private boolean isFile = false;
 
+    private Path lastClickedPath = null;
     private Path rightClickedPath = null;
     private Path hoveringPath = null;
 
@@ -48,6 +50,14 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
             if (isBackNavigationSelected()) {
                 navigateToParentDirectory();
             }
+        }
+
+        if (ImGui.isMouseClicked(ImGuiMouseButton.Left) || ImGui.isMouseClicked(ImGuiMouseButton.Right) || ImGui.isMouseClicked(ImGuiMouseButton.Middle)) {
+            lastClickedPath = null;
+        }
+
+        if (!ImGui.isWindowHovered() && !ImGui.isPopupOpen("AssetsRightClickMenu")) {
+            lastClickedPath = null;
         }
 
         if (ImGui.isWindowHovered() && ImGui.isMouseClicked(ImGuiMouseButton.Right)) {
@@ -140,16 +150,24 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
     private void renderDirectoryContent() {
         for (Path path : paths) {
+            if (lastClickedPath == path) {
+                ImGuiHelper.drawLastElementAsSelected();
+            }
+
             boolean[] pathActions = getPathActions(path);
 
             if (pathActions[0]) {
                 handlePathSelection(path);
             }
             else if (pathActions[1]) {
+                lastClickedPath = path;
+            }
+            else if (pathActions[2]) {
                 rightClickedPath = path;
+                lastClickedPath = path;
             }
 
-            if (pathActions[2]) {
+            if (pathActions[3]) {
                 hoveringPath = path;
             }
         }
@@ -161,6 +179,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
         return new boolean[] {
                 (clicked && ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)), // Double clicked
+                (clicked && ImGui.isItemHovered()), // Single click
                 (ImGui.isItemHovered() && ImGui.isMouseClicked(ImGuiMouseButton.Right)), // Right clicked
                 (ImGui.isItemHovered()) // Hover
         };
@@ -251,5 +270,9 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
 
     public Path getRightClickedPath() {
         return rightClickedPath;
+    }
+
+    public Path getLastClickedPath() {
+        return lastClickedPath;
     }
 }
