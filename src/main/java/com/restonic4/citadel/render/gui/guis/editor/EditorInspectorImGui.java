@@ -68,7 +68,7 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
 
         if (ImGui.beginPopup("InspectorRightClickMenu")) {
             if (ImGui.menuItem("Rename")) {
-
+                LevelEditor.handleRenaming();
             }
 
             if (ImGui.menuItem("Copy")) {
@@ -92,7 +92,7 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
             }
 
             if (ImGui.menuItem("Delete")) {
-
+                LevelEditor.handleRemoval();
             }
 
             ImGui.endPopup();

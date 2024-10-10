@@ -258,7 +258,7 @@ public abstract class LevelEditor {
         }
     }
 
-    private static void handleRenaming() {
+    public static void handleRenaming() {
         if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) {
             ImGuiScreens.EDITOR_ASSETS.handleAction(
                     false,
@@ -273,7 +273,7 @@ public abstract class LevelEditor {
         }
     }
 
-    private static void handleRemoval() {
+    public static void handleRemoval() {
         if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) {
             LevelEditor.getHistoryCommandManager().executeCommand(
                     new DeleteFileHistoryCommand(ImGuiScreens.EDITOR_ASSETS.getHoveringPath().toString())
