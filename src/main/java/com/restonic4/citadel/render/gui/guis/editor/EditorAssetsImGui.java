@@ -1,26 +1,19 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
-import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.exceptions.FileException;
 import com.restonic4.citadel.files.FileManager;
-import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.registries.built_in.managers.Icons;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
-import com.restonic4.citadel.registries.built_in.types.Icon;
 import com.restonic4.citadel.registries.built_in.types.subtypes.IconSize;
-import com.restonic4.citadel.render.Texture;
-import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.history.commands.CreateFileHistoryCommand;
 import com.restonic4.citadel.util.history.commands.DeleteFileHistoryCommand;
 import com.restonic4.citadel.util.history.commands.RenameFileHistoryCommand;
-import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
 import imgui.ImGui;
 import imgui.flag.ImGuiMouseButton;
 import imgui.flag.ImGuiSelectableFlags;
-import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
 import java.io.IOException;
@@ -104,7 +97,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     }
 
     private void handleRenaming(Path path) {
-        LevelEditor.handleRenaming(path.getFileName().toString(), () -> {
+        LevelEditor.renameAction(path.getFileName().toString(), () -> {
             String name = ImGuiScreens.EDITOR_RENAME.getResult();
             LevelEditor.getHistoryCommandManager().executeCommand(new RenameFileHistoryCommand(path, name));
             reload();
@@ -115,7 +108,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
         if (isCreating) {
             String defaultText = (isFile) ? "New file.txt" : "New directory";
 
-            LevelEditor.handleRenaming(defaultText, () -> {
+            LevelEditor.renameAction(defaultText, () -> {
                 String name = ImGuiScreens.EDITOR_RENAME.getResult();
                 LevelEditor.getHistoryCommandManager().executeCommand(new CreateFileHistoryCommand(currentDir, name, isFile));
                 reload();

@@ -7,6 +7,7 @@ import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import com.restonic4.citadel.render.Texture;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.util.history.HistoryCommandManager;
+import com.restonic4.citadel.util.history.commands.DeleteFileHistoryCommand;
 import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
 import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.GameObject;
@@ -242,22 +243,42 @@ public abstract class LevelEditor {
 
         ImGui.popStyleVar();
 
-        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_F2)) {
-            if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) {
-                ImGuiScreens.EDITOR_ASSETS.handleAction(
-                        false,
-                        !Files.isDirectory(ImGuiScreens.EDITOR_ASSETS.getHoveringPath()),
-                        ImGuiScreens.EDITOR_ASSETS.getHoveringPath()
-                );
-            } else if (selectedObject != null) {
-                handleRenaming(getSelectedObject().getName(), () -> {
-                    String newName = ImGuiScreens.EDITOR_RENAME.getResult();
-                    historyCommandManager.executeCommand(new RenameGameObjectHistoryCommand(getSelectedObject(), newName));
-                });
-            }
-        }
+        handleKeyInputs();
 
         handleHistory();
+    }
+
+    private static void handleKeyInputs() {
+        if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_F2)) {
+            handleRenaming();
+        } else if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_DELETE)) {
+            handleRemoval();
+        }
+    }
+
+    private static void handleRenaming() {
+        if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) {
+            ImGuiScreens.EDITOR_ASSETS.handleAction(
+                    false,
+                    !Files.isDirectory(ImGuiScreens.EDITOR_ASSETS.getHoveringPath()),
+                    ImGuiScreens.EDITOR_ASSETS.getHoveringPath()
+            );
+        } else if (selectedObject != null) {
+            renameAction(getSelectedObject().getName(), () -> {
+                String newName = ImGuiScreens.EDITOR_RENAME.getResult();
+                historyCommandManager.executeCommand(new RenameGameObjectHistoryCommand(getSelectedObject(), newName));
+            });
+        }
+    }
+
+    private static void handleRemoval() {
+        if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) {
+            LevelEditor.getHistoryCommandManager().executeCommand(
+                    new DeleteFileHistoryCommand(ImGuiScreens.EDITOR_ASSETS.getHoveringPath().toString())
+            );
+        } else if (selectedObject != null) {
+            // TODO: Object deletion system needed
+        }
     }
 
     private static void handleHistory() {
@@ -274,7 +295,7 @@ public abstract class LevelEditor {
         }
     }
 
-    public static void handleRenaming(String defaultText, Runnable runnable) {
+    public static void renameAction(String defaultText, Runnable runnable) {
         ImGuiScreens.EDITOR_RENAME.setDefaultText(defaultText);
         ImGuiScreens.EDITOR_RENAME.setRunnable(runnable);
         ImGuiScreens.EDITOR_RENAME.show();
