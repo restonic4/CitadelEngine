@@ -256,6 +256,12 @@ public abstract class LevelEditor {
             handleRenaming();
         } else if (KeyBinds.DELETE.isPressedOnce()) {
             handleRemoval();
+        } else if (KeyBinds.COPY.isPressedOnce()) {
+            CitadelLauncher.getInstance().handleError("This method is not available!");
+        } else if (KeyBinds.PASTE.isPressedOnce()) {
+            CitadelLauncher.getInstance().handleError("This method is not available!");
+        } else if (KeyBinds.DUPLICATE.isPressedOnce()) {
+            CitadelLauncher.getInstance().handleError("This method is not available!");
         }
     }
 
