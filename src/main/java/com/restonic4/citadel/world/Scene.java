@@ -22,12 +22,15 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.io.Serial;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
 public class Scene extends Serializable {
+    private String name = getClass().getSimpleName();
+
     protected Renderer renderer = new Renderer(this);
     protected Camera camera;
     protected Transform transform = new Transform();
@@ -44,6 +47,8 @@ public class Scene extends Serializable {
     private List<RigidBodyComponent> rigidBodyComponents = new ArrayList<>();
 
     private boolean isActivated = false;
+    private boolean hasBeenDeserialized = false;
+    private Path sceneFile;
 
     public void init() {
         Logger.log("Initializing the scene " + this);
@@ -272,6 +277,27 @@ public class Scene extends Serializable {
         return this.transform;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void markAsDeserialized(Path path) {
+        this.hasBeenDeserialized = true;
+        this.sceneFile = path;
+    }
+
+    public Path getScenePath() {
+        return this.sceneFile;
+    }
+
+    public boolean hasBeenDeserialized() {
+        return this.hasBeenDeserialized;
+    }
+
     public void cleanup() {
         this.renderer.cleanup();
     }
@@ -302,60 +328,58 @@ public class Scene extends Serializable {
         return serializeObjects(rootGameObjects);
     }
 
-    public void deserializeGameObjects(String data) {
-        Stack<GameObject> objectStack = new Stack<>();
-        StringBuilder currentData = new StringBuilder();
+    public void processObjectHierarchy(String data) {
+        Stack<GameObject> parents = new Stack<>();
+        StringBuilder currentObject = new StringBuilder();
+
+        parents.push(null);
 
         for (int i = 0; i < data.length(); i++) {
             char c = data.charAt(i);
 
-            if (c == '{') {
-                if (currentData.length() > 0) {
-                    GameObject newGameObject = new GameObject();
-                    newGameObject.deserialize(currentData.toString().trim());
-                    if (!objectStack.isEmpty()) {
-                        objectStack.peek().addChild(newGameObject);
-                    }
-                    objectStack.push(newGameObject);
-                    currentData.setLength(0);
+            if (c == '&') {
+                if (currentObject.length() > 0) {
+                    createAndAddGameObject(currentObject.toString(), parents.peek());
+                    currentObject.setLength(0);
+                }
+            } else if (c == '{') {
+                if (currentObject.length() > 0) {
+                    GameObject newObject = createAndAddGameObject(currentObject.toString(), parents.peek());
+                    parents.push(newObject);
+                    currentObject.setLength(0);
                 }
             } else if (c == '}') {
-                if (currentData.length() > 0) {
-                    GameObject newGameObject = new GameObject();
-                    newGameObject.deserialize(currentData.toString().trim());
-                    if (!objectStack.isEmpty()) {
-                        objectStack.peek().addChild(newGameObject);
-                    }
-                    currentData.setLength(0);
+                if (currentObject.length() > 0) {
+                    createAndAddGameObject(currentObject.toString(), parents.peek());
+                    currentObject.setLength(0);
                 }
-
-                objectStack.pop();
-            } else if (c == '&') {
-                if (currentData.length() > 0) {
-                    GameObject newGameObject = new GameObject();
-                    newGameObject.deserialize(currentData.toString().trim());
-                    if (!objectStack.isEmpty()) {
-                        objectStack.peek().addChild(newGameObject);
-                    }
-                    currentData.setLength(0);
-                }
+                parents.pop();
             } else {
-                currentData.append(c);
+                currentObject.append(c);
             }
         }
 
-        if (currentData.length() > 0) {
-            GameObject newGameObject = new GameObject();
-            newGameObject.deserialize(currentData.toString().trim());
-            if (!objectStack.isEmpty()) {
-                objectStack.peek().addChild(newGameObject);
-            }
+        if (currentObject.length() > 0) {
+            createAndAddGameObject(currentObject.toString(), parents.peek());
         }
+    }
+
+    public GameObject createAndAddGameObject(String objectData, GameObject parent) {
+        GameObject newGameObject = new GameObject();
+        newGameObject.deserialize(objectData);
+
+        if (parent != null) {
+            newGameObject.transform.setParent(parent.transform);
+        }
+
+        addGameObject(newGameObject);
+
+        return newGameObject;
     }
 
     @Override
     public Object deserialize(String data) {
-        deserializeGameObjects(data);
+        processObjectHierarchy(data);
 
         return this;
     }

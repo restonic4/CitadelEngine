@@ -60,12 +60,16 @@ public abstract class SceneManager {
             return;
         }
 
-        Class<? extends Scene> sceneClass = currentScene.getClass();
+        if (currentScene.hasBeenDeserialized()) {
+            loadScene(currentScene);
+        } else {
+            Class<? extends Scene> sceneClass = currentScene.getClass();
 
-        try {
-            loadScene(sceneClass.getDeclaredConstructor().newInstance());
-        } catch (Exception e) {
-            Logger.logError(e);
+            try {
+                loadScene(sceneClass.getDeclaredConstructor().newInstance());
+            } catch (Exception e) {
+                Logger.logError(e);
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.util.history.HistoryCommandManager;
 import com.restonic4.citadel.util.history.commands.DeleteFileHistoryCommand;
 import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
+import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
@@ -74,8 +75,14 @@ public abstract class LevelEditor {
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("Edit")) {
                 if (ImGui.menuItem("Save")) {
-                    SceneSerializer sceneSerializer = new SceneSerializer();
-                    sceneSerializer.saveScene(SceneManager.getCurrentScene(), "resources/waos.citScene");
+                    Scene scene = SceneManager.getCurrentScene();
+
+                    if (scene.hasBeenDeserialized()) {
+                        SceneSerializer sceneSerializer = new SceneSerializer();
+                        sceneSerializer.saveScene(scene, scene.getScenePath().toString());
+                    } else {
+                        CitadelLauncher.getInstance().handleError("This scene is hardcoded. It can't be saved this way!");
+                    }
                 }
 
                 if (ImGui.menuItem("Undo")) {

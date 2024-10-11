@@ -29,7 +29,10 @@ public class SceneSerializer {
     public Scene loadScene(Path path) {
         try {
             String content = Files.readString(path);
-            return (Scene) new Scene().deserialize(content);
+            Scene scene = (Scene) new Scene().deserialize(content);
+            scene.setName(path.getFileName().toString().split("\\.")[0]);
+            scene.markAsDeserialized(path);
+            return scene;
         } catch (IOException e) {
             Logger.logError(e);
         }

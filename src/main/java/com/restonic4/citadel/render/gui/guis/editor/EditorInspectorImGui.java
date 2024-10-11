@@ -33,7 +33,7 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
             return;
         }
 
-        if (ImGui.collapsingHeader(StringBuilderHelper.concatenate("Scene: ", scene.getClass().getSimpleName()), ImGuiTreeNodeFlags.DefaultOpen)) {
+        if (ImGui.collapsingHeader(StringBuilderHelper.concatenate("Scene: ", scene.getName()), ImGuiTreeNodeFlags.DefaultOpen)) {
             ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
             for (int i = 0; i < scene.getRootGameObjects().size(); i++) {
