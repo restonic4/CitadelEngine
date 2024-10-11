@@ -73,6 +73,11 @@ public abstract class LevelEditor {
 
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("Edit")) {
+                if (ImGui.menuItem("Save")) {
+                    SceneSerializer sceneSerializer = new SceneSerializer();
+                    sceneSerializer.saveScene(SceneManager.getCurrentScene(), "resources/waos.citScene");
+                }
+
                 if (ImGui.menuItem("Undo")) {
                    historyCommandManager.undo();
                 }

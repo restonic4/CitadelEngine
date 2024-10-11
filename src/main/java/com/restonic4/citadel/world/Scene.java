@@ -25,6 +25,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 public class Scene extends Serializable {
     protected Renderer renderer = new Renderer(this);
@@ -275,14 +276,20 @@ public class Scene extends Serializable {
         this.renderer.cleanup();
     }
 
-    @Override
-    public String serialize() {
+    private String serializeObjects(List<GameObject> gameObjects) {
         String data = "";
 
-        for (int i = 0; i < allGameObjects.size(); i++) {
-            data = StringBuilderHelper.concatenate(data, allGameObjects.get(i).serialize());
+        for (int i = 0; i < gameObjects.size(); i++) {
+            GameObject gameObject = gameObjects.get(i);
 
-            if (i < allGameObjects.size() - 1) {
+            data = StringBuilderHelper.concatenate(data, gameObject.serialize());
+
+            List<GameObject> children = gameObject.transform.getChildren();
+            if (!children.isEmpty()) {
+                data = StringBuilderHelper.concatenate(data, "{", serializeObjects(children), "}");
+            }
+
+            if (i < gameObjects.size() - 1) {
                 data = StringBuilderHelper.concatenate(data, "&");
             }
         }
@@ -291,14 +298,64 @@ public class Scene extends Serializable {
     }
 
     @Override
-    public Object deserialize(String data) {
-        String[] gameObjects = data.split("&");
+    public String serialize() {
+        return serializeObjects(rootGameObjects);
+    }
 
-        for (int i = 0; i < gameObjects.length; i++) {
-            GameObject newGameObject = new GameObject();
-            newGameObject.deserialize(gameObjects[i]);
-            this.addGameObject(newGameObject);
+    public void deserializeGameObjects(String data) {
+        Stack<GameObject> objectStack = new Stack<>();
+        StringBuilder currentData = new StringBuilder();
+
+        for (int i = 0; i < data.length(); i++) {
+            char c = data.charAt(i);
+
+            if (c == '{') {
+                if (currentData.length() > 0) {
+                    GameObject newGameObject = new GameObject();
+                    newGameObject.deserialize(currentData.toString().trim());
+                    if (!objectStack.isEmpty()) {
+                        objectStack.peek().addChild(newGameObject);
+                    }
+                    objectStack.push(newGameObject);
+                    currentData.setLength(0);
+                }
+            } else if (c == '}') {
+                if (currentData.length() > 0) {
+                    GameObject newGameObject = new GameObject();
+                    newGameObject.deserialize(currentData.toString().trim());
+                    if (!objectStack.isEmpty()) {
+                        objectStack.peek().addChild(newGameObject);
+                    }
+                    currentData.setLength(0);
+                }
+
+                objectStack.pop();
+            } else if (c == '&') {
+                if (currentData.length() > 0) {
+                    GameObject newGameObject = new GameObject();
+                    newGameObject.deserialize(currentData.toString().trim());
+                    if (!objectStack.isEmpty()) {
+                        objectStack.peek().addChild(newGameObject);
+                    }
+                    currentData.setLength(0);
+                }
+            } else {
+                currentData.append(c);
+            }
         }
+
+        if (currentData.length() > 0) {
+            GameObject newGameObject = new GameObject();
+            newGameObject.deserialize(currentData.toString().trim());
+            if (!objectStack.isEmpty()) {
+                objectStack.peek().addChild(newGameObject);
+            }
+        }
+    }
+
+    @Override
+    public Object deserialize(String data) {
+        deserializeGameObjects(data);
 
         return this;
     }

@@ -47,7 +47,7 @@ public class TestScene extends Scene {
         music.setPosition(new Vector3f(0, 0, 0));
         //music.play();
 
-        int planeSize = 50;
+        int planeSize = 5;
 
         GameObject plane = new GameObject("Base plate", false);
         plane.transform.setPosition(0, 0, 0);
