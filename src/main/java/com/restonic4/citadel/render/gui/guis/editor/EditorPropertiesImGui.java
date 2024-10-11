@@ -5,13 +5,18 @@ import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.history.commands.MoveGameObjectHistoryCommand;
 import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
+import com.restonic4.citadel.util.history.commands.RotateGameObjectHistoryCommand;
+import com.restonic4.citadel.util.history.commands.ScaleGameObjectHistoryCommand;
 import com.restonic4.citadel.world.object.Component;
 import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiTreeNodeFlags;
+import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImString;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -23,7 +28,13 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
             return;
         }
 
-        ImGui.begin("Properties");
+        int windowFlags = ImGuiWindowFlags.HorizontalScrollbar;
+
+        if (LevelEditor.isUnsaved()) {
+            windowFlags |= ImGuiWindowFlags.UnsavedDocument;
+        }
+
+        ImGui.begin("Properties", windowFlags);
 
         GameObject selectedGameobject = LevelEditor.getSelectedObject();
 
@@ -67,14 +78,21 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
                         selectedGameobject.transform.getPosition().y,
                         selectedGameobject.transform.getPosition().z
                 };
-                ImGui.dragFloat3("##PositionDrag", posArray, 0.1f, -1000.0f, 1000.0f, "%.3f");
+                if (ImGui.dragFloat3("##PositionDrag", posArray, 0.1f, -1000.0f, 1000.0f, "%.3f")) {
+                    LevelEditor.getHistoryCommandManager().executeCommand(new MoveGameObjectHistoryCommand(selectedGameobject, new Vector3f(posArray[0], posArray[1], posArray[2])));
+                }
             });
 
             ImGuiHelper.renderPropertyRow("Rotation", () -> {
                 Vector3f euler = new Vector3f();
                 selectedGameobject.transform.getRotation().getEulerAnglesXYZ(euler);
+
                 float[] rotArray = { euler.x, euler.y, euler.z };
-                ImGui.dragFloat3("##RotationDrag", rotArray, 0.1f, -1000.0f, 1000.0f, "%.3f");
+                if (ImGui.dragFloat3("##RotationDrag", rotArray, 0.1f, -1000.0f, 1000.0f, "%.3f")) {
+                    Quaternionf newRotation = new Quaternionf().rotationXYZ(rotArray[0], rotArray[1], rotArray[2]);
+
+                    LevelEditor.getHistoryCommandManager().executeCommand(new RotateGameObjectHistoryCommand(selectedGameobject, newRotation));
+                }
             });
 
             ImGuiHelper.renderPropertyRow("Scale", () -> {
@@ -83,7 +101,9 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
                         selectedGameobject.transform.getScale().y,
                         selectedGameobject.transform.getScale().z
                 };
-                ImGui.dragFloat3("##ScaleDrag", scaleArray, 0.1f, -1000.0f, 1000.0f, "%.3f");
+                if (ImGui.dragFloat3("##ScaleDrag", scaleArray, 0.1f, -1000.0f, 1000.0f, "%.3f")) {
+                    LevelEditor.getHistoryCommandManager().executeCommand(new ScaleGameObjectHistoryCommand(selectedGameobject, new Vector3f(scaleArray[0], scaleArray[1], scaleArray[2])));
+                }
             });
 
             ImGui.unindent(CitadelConstants.IM_GUI_INDENT);

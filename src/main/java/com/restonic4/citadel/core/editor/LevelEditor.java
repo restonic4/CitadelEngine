@@ -2,7 +2,6 @@ package com.restonic4.citadel.core.editor;
 
 import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.Window;
-import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import com.restonic4.citadel.render.Texture;
@@ -20,7 +19,6 @@ import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiStyleVar;
 import imgui.type.ImBoolean;
-import org.lwjgl.glfw.GLFW;
 
 import java.nio.file.Files;
 
@@ -38,6 +36,8 @@ public abstract class LevelEditor {
     private static boolean isRenamingEnabled = false;
     private static boolean isPlaying = false;
     private static boolean isPaused = false;
+
+    private static boolean isUnsaved = false;
 
     static int playButtonTextureId, stopButtonTextureId, pauseButtonTextureId;
 
@@ -75,15 +75,10 @@ public abstract class LevelEditor {
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("Edit")) {
                 if (ImGui.menuItem("Save")) {
-                    Scene scene = SceneManager.getCurrentScene();
-
-                    if (scene.hasBeenDeserialized()) {
-                        SceneSerializer sceneSerializer = new SceneSerializer();
-                        sceneSerializer.saveScene(scene, scene.getScenePath().toString());
-                    } else {
-                        CitadelLauncher.getInstance().handleError("This scene is hardcoded. It can't be saved this way!");
-                    }
+                    saveScene();
                 }
+
+                ImGui.separator();
 
                 if (ImGui.menuItem("Undo")) {
                    historyCommandManager.undo();
@@ -225,16 +220,13 @@ public abstract class LevelEditor {
             if (!isIsPlaying()) {
                 ImGui.pushStyleColor(ImGuiCol.Button, new ImVec4(0, 0, 0, 0));
                 if (ImGui.imageButton(playButtonTextureId, buttonSize.x, buttonSize.y)) {
-                    SceneManager.reloadScene();
-                    setIsPlaying(true);
-                    setIsPaused(false);
+                    play();
                 }
                 ImGui.popStyleColor();
             } else {
                 ImGui.pushStyleColor(ImGuiCol.Button, new ImVec4(0, 0, 0, 0));
                 if (ImGui.imageButton(stopButtonTextureId, buttonSize.x, buttonSize.y)) {
-                    setIsPlaying(false);
-                    SceneManager.reloadScene();
+                    stop();
                 }
                 ImGui.popStyleColor();
 
@@ -245,7 +237,7 @@ public abstract class LevelEditor {
                 }
 
                 if (ImGui.imageButton(pauseButtonTextureId, buttonSize.x, buttonSize.y)) {
-                    setIsPaused(!isIsPaused());
+                    pause();
                 }
 
                 ImGui.popStyleColor();
@@ -278,19 +270,19 @@ public abstract class LevelEditor {
     }
 
     public static void handleRenaming() {
-        if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) {
+        if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) { // asset
             ImGuiScreens.EDITOR_ASSETS.handleAction(
                     false,
                     !Files.isDirectory(ImGuiScreens.EDITOR_ASSETS.getHoveringPath()),
                     ImGuiScreens.EDITOR_ASSETS.getHoveringPath()
             );
-        } else if (ImGuiScreens.EDITOR_ASSETS.getLastClickedPath() != null) {
+        } else if (ImGuiScreens.EDITOR_ASSETS.getLastClickedPath() != null) { // asset
             ImGuiScreens.EDITOR_ASSETS.handleAction(
                     false,
                     !Files.isDirectory(ImGuiScreens.EDITOR_ASSETS.getLastClickedPath()),
                     ImGuiScreens.EDITOR_ASSETS.getLastClickedPath()
             );
-        } else if (selectedObject != null) {
+        } else if (selectedObject != null) { // object
             renameAction(getSelectedObject().getName(), () -> {
                 String newName = ImGuiScreens.EDITOR_RENAME.getResult();
                 historyCommandManager.executeCommand(new RenameGameObjectHistoryCommand(getSelectedObject(), newName));
@@ -299,15 +291,15 @@ public abstract class LevelEditor {
     }
 
     public static void handleRemoval() {
-        if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) {
+        if (ImGuiScreens.EDITOR_ASSETS.getHoveringPath() != null) { // asset
             LevelEditor.getHistoryCommandManager().executeCommand(
                     new DeleteFileHistoryCommand(ImGuiScreens.EDITOR_ASSETS.getHoveringPath().toString())
             );
-        } else if (ImGuiScreens.EDITOR_ASSETS.getLastClickedPath() != null) {
+        } else if (ImGuiScreens.EDITOR_ASSETS.getLastClickedPath() != null) { // asset
             LevelEditor.getHistoryCommandManager().executeCommand(
                     new DeleteFileHistoryCommand(ImGuiScreens.EDITOR_ASSETS.getLastClickedPath().toString())
             );
-        } else if (selectedObject != null) {
+        } else if (selectedObject != null) { // object
             // TODO: Object deletion system needed
             CitadelLauncher.getInstance().handleError("GameObject deletion system needed!");
         }
@@ -333,6 +325,18 @@ public abstract class LevelEditor {
         ImGuiScreens.EDITOR_RENAME.show();
     }
 
+    public static void saveScene() {
+        Scene scene = SceneManager.getCurrentScene();
+
+        if (scene.hasBeenDeserialized()) {
+            SceneSerializer sceneSerializer = new SceneSerializer();
+            sceneSerializer.saveScene(scene, scene.getScenePath().toString());
+            setUnsaved(false);
+        } else {
+            CitadelLauncher.getInstance().handleError("This scene is hardcoded. It can't be saved this way!");
+        }
+    }
+
     public static GameObject getSelectedObject() {
         return selectedObject;
     }
@@ -349,6 +353,25 @@ public abstract class LevelEditor {
         return isPlaying;
     }
 
+    public static void play() {
+        if (!LevelEditor.isPlaying) {
+            saveScene();
+        }
+
+        SceneManager.reloadScene();
+        setIsPlaying(true);
+        setIsPaused(false);
+    }
+
+    public static void stop() {
+        setIsPlaying(false);
+        SceneManager.reloadScene();
+    }
+
+    public static void pause() {
+        setIsPaused(!isIsPaused());
+    }
+
     public static void setIsPlaying(boolean isPlaying) {
         LevelEditor.isPlaying = isPlaying;
         setSelectedObject(null);
@@ -360,5 +383,13 @@ public abstract class LevelEditor {
 
     public static void setIsPaused(boolean isPaused) {
         LevelEditor.isPaused = isPaused;
+    }
+
+    public static boolean isUnsaved() {
+        return isUnsaved;
+    }
+
+    public static void setUnsaved(boolean value) {
+        LevelEditor.isUnsaved = value;
     }
 }

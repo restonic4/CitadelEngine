@@ -25,7 +25,13 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
 
         Scene scene = SceneManager.getCurrentScene();
 
-        ImGui.begin("Inspector", ImGuiWindowFlags.HorizontalScrollbar);
+        int windowFlags = ImGuiWindowFlags.HorizontalScrollbar;
+
+        if (LevelEditor.isUnsaved()) {
+            windowFlags |= ImGuiWindowFlags.UnsavedDocument;
+        }
+
+        ImGui.begin("Inspector", windowFlags);
 
         if (scene == null) {
             ImGui.text("The scene could not be loaded!");

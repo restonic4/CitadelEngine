@@ -219,6 +219,11 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     }
 
     private void openSceneFile(Path path) {
+        if (LevelEditor.isIsPlaying()) {
+            CitadelLauncher.getInstance().handleError("Can't load the scene. There is a scene running!");
+            return;
+        }
+
         SceneSerializer sceneSerializer = new SceneSerializer();
         Scene scene = sceneSerializer.loadScene(path);
 
