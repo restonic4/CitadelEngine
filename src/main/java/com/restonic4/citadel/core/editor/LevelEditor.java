@@ -365,7 +365,13 @@ public abstract class LevelEditor {
 
     public static void stop() {
         setIsPlaying(false);
-        SceneManager.reloadScene();
+
+        if (SceneManager.getCurrentScene().hasBeenDeserialized()) {
+            SceneSerializer sceneSerializer = new SceneSerializer();
+            SceneManager.loadScene(sceneSerializer.loadScene(SceneManager.getCurrentScene().getScenePath()));
+        } else {
+            SceneManager.reloadScene();
+        }
     }
 
     public static void pause() {

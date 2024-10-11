@@ -5,10 +5,7 @@ import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
-import com.restonic4.citadel.util.history.commands.MoveGameObjectHistoryCommand;
-import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
-import com.restonic4.citadel.util.history.commands.RotateGameObjectHistoryCommand;
-import com.restonic4.citadel.util.history.commands.ScaleGameObjectHistoryCommand;
+import com.restonic4.citadel.util.history.commands.*;
 import com.restonic4.citadel.world.object.Component;
 import com.restonic4.citadel.world.object.GameObject;
 import imgui.ImGui;
@@ -64,7 +61,11 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
                 LevelEditor.getHistoryCommandManager().executeCommand(new RenameGameObjectHistoryCommand(selectedGameobject, nameBuffer.get()));
             }
 
-            ImGui.checkbox("Static", selectedGameobject.isStatic());
+            boolean isStatic = selectedGameobject.isStatic();
+
+            if (ImGui.checkbox("Static", isStatic)) {
+                LevelEditor.getHistoryCommandManager().executeCommand(new StaticToggleGameObjectHistoryCommand(selectedGameobject, !isStatic));
+            }
 
             ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
         }

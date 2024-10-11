@@ -123,6 +123,10 @@ public class GameObject extends Serializable {
         return this.isStatic;
     }
 
+    public void setStatic(boolean value) {
+        this.isStatic = value;
+    }
+
     public void setName(String name) {
         if (!name.isBlank() && !name.isEmpty()) {
             this.name = name;

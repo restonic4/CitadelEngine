@@ -1,5 +1,7 @@
 package com.restonic4.citadel.util.history;
 
+import com.restonic4.citadel.core.editor.LevelEditor;
+
 import java.util.Stack;
 
 public class HistoryCommandManager {
@@ -8,8 +10,10 @@ public class HistoryCommandManager {
 
     public void executeCommand(HistoryCommand command) {
         command.execute();
-        undoStack.push(command);
-        redoStack.clear();
+        if (!LevelEditor.isIsPlaying()) {
+            undoStack.push(command);
+            redoStack.clear();
+        }
     }
 
     public void undo() {

@@ -23,7 +23,7 @@ public abstract class SceneManager {
         Logger.log("Loading the scene: " + scene);
 
         if (currentScene != null) {
-            currentScene.unload();
+            unLoadScene(currentScene);
         }
 
         // Makes sure OpenGL finishes his things, so it doesn't break, Spoiler: It breaks at the start of the engine and if the scene changes every frame, cool I guess
@@ -61,7 +61,7 @@ public abstract class SceneManager {
         }
 
         if (currentScene.hasBeenDeserialized()) {
-            loadScene(currentScene);
+            loadScene(new Scene(currentScene));
         } else {
             Class<? extends Scene> sceneClass = currentScene.getClass();
 

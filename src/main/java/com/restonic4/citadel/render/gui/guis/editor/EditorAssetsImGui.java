@@ -227,6 +227,7 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
         SceneSerializer sceneSerializer = new SceneSerializer();
         Scene scene = sceneSerializer.loadScene(path);
 
+        LevelEditor.setSelectedObject(null);
         SceneManager.loadScene(scene);
     }
 

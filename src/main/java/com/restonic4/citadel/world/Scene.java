@@ -50,6 +50,25 @@ public class Scene extends Serializable {
     private boolean hasBeenDeserialized = false;
     private Path sceneFile;
 
+    public Scene() {}
+
+    public Scene(Scene currentScene) {
+        super();
+
+        this.name = currentScene.name;
+        this.transform = currentScene.transform;
+        this.allGameObjects = currentScene.allGameObjects;
+        this.staticGameObjects = currentScene.staticGameObjects;
+        this.dynamicGameObjects = currentScene.dynamicGameObjects;
+        this.rootGameObjects = currentScene.rootGameObjects;
+        this.transformToGameObjectMap = currentScene.transformToGameObjectMap;
+        this.lightComponents = currentScene.lightComponents;
+        this.colliderComponents = currentScene.colliderComponents;
+        this.rigidBodyComponents = currentScene.rigidBodyComponents;
+        this.hasBeenDeserialized = currentScene.hasBeenDeserialized;
+        this.sceneFile = currentScene.sceneFile;
+    }
+
     public void init() {
         Logger.log("Initializing the scene " + this);
     }
