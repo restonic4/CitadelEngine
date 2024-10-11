@@ -22,8 +22,11 @@ public class SceneSerializer {
         }
     }
 
-    public Scene loadScene(String filePath) {
-        Path path = Paths.get(filePath);
+    public Scene loadScene(String path) {
+        return loadScene(Path.of(path));
+    }
+
+    public Scene loadScene(Path path) {
         try {
             String content = Files.readString(path);
             return (Scene) new Scene().deserialize(content);

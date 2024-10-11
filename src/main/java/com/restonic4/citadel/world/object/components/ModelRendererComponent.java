@@ -4,6 +4,7 @@ import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.world.object.*;
 import imgui.ImGui;
+import org.joml.Vector3f;
 
 public class ModelRendererComponent extends Component {
     private Mesh mesh;
@@ -41,6 +42,8 @@ public class ModelRendererComponent extends Component {
 
     @Override
     public Object deserialize(String data) {
+        this.mesh = new Mesh(new Vector3f[]{}, new int[]{});
+
         return this;
     }
 }

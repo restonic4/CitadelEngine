@@ -10,7 +10,7 @@ import com.restonic4.citadel.world.SceneManager;
 public class TestClient implements GameLogic {
     @Override
     public void start() {
-        SceneManager.loadScene(new TestScene());
+        //SceneManager.loadScene(new TestScene());
     }
 
     @Override

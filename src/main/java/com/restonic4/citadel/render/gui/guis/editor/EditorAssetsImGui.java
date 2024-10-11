@@ -1,6 +1,8 @@
 package com.restonic4.citadel.render.gui.guis.editor;
 
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.editor.LevelEditor;
+import com.restonic4.citadel.core.editor.SceneSerializer;
 import com.restonic4.citadel.exceptions.FileException;
 import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.registries.built_in.managers.Icons;
@@ -12,6 +14,8 @@ import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.history.commands.CreateFileHistoryCommand;
 import com.restonic4.citadel.util.history.commands.DeleteFileHistoryCommand;
 import com.restonic4.citadel.util.history.commands.RenameFileHistoryCommand;
+import com.restonic4.citadel.world.Scene;
+import com.restonic4.citadel.world.SceneManager;
 import imgui.ImGui;
 import imgui.flag.ImGuiMouseButton;
 import imgui.flag.ImGuiSelectableFlags;
@@ -194,6 +198,15 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
     }
 
     private void openFile(Path path) {
+        String fileExtension = getFileExtension(path.getFileName().toString());
+
+        switch (fileExtension) {
+            case "citScene" -> {
+                openSceneFile(path);
+                return;
+            }
+        }
+
         if (Desktop.isDesktopSupported()) {
             try {
                 Desktop.getDesktop().open(path.toFile());
@@ -203,6 +216,13 @@ public class EditorAssetsImGui extends ToggleableImGuiScreen {
         } else {
             Logger.log("Java desktop is not supported here");
         }
+    }
+
+    private void openSceneFile(Path path) {
+        SceneSerializer sceneSerializer = new SceneSerializer();
+        Scene scene = sceneSerializer.loadScene(path);
+
+        SceneManager.loadScene(scene);
     }
 
     private void navigateToDirectory(Path path) {
