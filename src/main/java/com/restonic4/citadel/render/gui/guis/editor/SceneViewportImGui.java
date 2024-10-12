@@ -11,11 +11,13 @@ import com.restonic4.citadel.world.SceneManager;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiMouseButton;
 import imgui.flag.ImGuiWindowFlags;
 
 @ClientSide
-public class GameViewportImGui extends ToggleableImGuiScreen {
+public class SceneViewportImGui extends ToggleableImGuiScreen {
     private boolean isFocused;
+    private boolean isRightClick;
 
     @Override
     public void render() {
@@ -23,35 +25,20 @@ public class GameViewportImGui extends ToggleableImGuiScreen {
             return;
         }
 
-        ImGui.begin("Game Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
+        ImGui.begin("Scene Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
 
         isFocused = ImGui.isWindowFocused();
-
-        /*if (ImGui.beginMenuBar()) {
-            if (ImGui.beginMenu("Test")) {
-                if (ImGui.menuItem("Test2", ImGuiScreens.GAME_VIEWPORT.isVisible())) {
-
-                }
-
-                ImGui.endMenu();
-            }
-
-            ImGui.endMenuBar();
-        }*/
+        isRightClick = ImGui.isWindowHovered() && ImGui.isMouseDown(ImGuiMouseButton.Right);
 
         ImVec2 windowSize = getLargestSizeForViewport();
         ImVec2 windowPos = getCenteredPositionForViewport(windowSize);
 
         ImGui.setCursorPos(windowPos.x, windowPos.y);
-        int textureId = FrameBuffers.GAME_VIEWPORT.getTextureId();
+        int textureId = FrameBuffers.SCENE_VIEWPORT.getTextureId();
         ImGui.image(textureId, windowSize.x, windowSize.y, 0, 1, 1, 0);
 
         if (!CitadelLauncher.getInstance().getSettings().shouldGenerateBindlessTextures()) {
             renderErrorMessage(StringBuilderHelper.concatenate("Could not render due to an incompatibility", PlatformManager.getEndOfLine(), "with your graphics card."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
-        }
-
-        if (SceneManager.getCurrentScene().getMainCamera() == null) {
-            renderErrorMessage(StringBuilderHelper.concatenate("Camera missing!", PlatformManager.getEndOfLine(), "You need at least 1 camera to render into the screen."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
         }
 
         ImGui.end();
@@ -101,5 +88,9 @@ public class GameViewportImGui extends ToggleableImGuiScreen {
 
     public boolean isWindowFocused() {
         return isFocused;
+    }
+
+    public boolean isRightClickDetected() {
+        return isRightClick;
     }
 }

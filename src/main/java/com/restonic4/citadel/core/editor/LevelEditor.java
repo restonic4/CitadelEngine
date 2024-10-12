@@ -12,6 +12,7 @@ import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryComman
 import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.GameObject;
+import com.restonic4.citadel.world.object.Transform;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.ImVec4;
@@ -31,6 +32,7 @@ import static imgui.flag.ImGuiWindowFlags.NoNavFocus;
 public abstract class LevelEditor {
     private static Window window;
     private static HistoryCommandManager historyCommandManager;
+    private static HardcodedCamera hardcodedCamera;
 
     private static GameObject selectedObject;
     private static boolean isRenamingEnabled = false;
@@ -47,7 +49,10 @@ public abstract class LevelEditor {
 
         historyCommandManager = new HistoryCommandManager();
 
+        hardcodedCamera = new HardcodedCamera(new Transform());
+
         ImGuiScreens.GAME_VIEWPORT.show();
+        ImGuiScreens.SCENE_VIEWPORT.show();
         ImGuiScreens.EDITOR_INSPECTOR.show();
         ImGuiScreens.EDITOR_PROPERTIES.show();
         ImGuiScreens.EDITOR_ASSETS.show();
@@ -128,7 +133,18 @@ public abstract class LevelEditor {
             }
 
             if (ImGui.beginMenu("View")) {
-                if (ImGui.menuItem("Scene view", ImGuiScreens.GAME_VIEWPORT.isVisible())) {
+                if (ImGui.menuItem("Scene view", ImGuiScreens.SCENE_VIEWPORT.isVisible())) {
+                    ImGuiScreens.SCENE_VIEWPORT.toggle();
+
+                    if (ImGuiScreens.SCENE_VIEWPORT.isVisible()) {
+                        ImGuiScreens.SCENE_VIEWPORT.show();
+                    }
+                    else {
+                        ImGuiScreens.SCENE_VIEWPORT.hide();
+                    }
+                }
+
+                if (ImGui.menuItem("Game view", ImGuiScreens.GAME_VIEWPORT.isVisible())) {
                     ImGuiScreens.GAME_VIEWPORT.toggle();
 
                     if (ImGuiScreens.GAME_VIEWPORT.isVisible()) {
@@ -138,6 +154,8 @@ public abstract class LevelEditor {
                         ImGuiScreens.GAME_VIEWPORT.hide();
                     }
                 }
+
+                ImGui.separator();
 
                 if (ImGui.menuItem("Statistics", ImGuiScreens.RENDER_STATISTICS.isVisible())) {
                     ImGuiScreens.RENDER_STATISTICS.toggle();
@@ -250,6 +268,10 @@ public abstract class LevelEditor {
 
         ImGui.popStyleVar();
 
+        if (ImGuiScreens.SCENE_VIEWPORT.isWindowFocused()) {
+            hardcodedCamera.update();
+        }
+
         handleKeyInputs();
 
         handleHistory();
@@ -337,22 +359,6 @@ public abstract class LevelEditor {
         }
     }
 
-    public static GameObject getSelectedObject() {
-        return selectedObject;
-    }
-
-    public static void setSelectedObject(GameObject gameObject) {
-        selectedObject = gameObject;
-    }
-
-    public static HistoryCommandManager getHistoryCommandManager() {
-        return historyCommandManager;
-    }
-
-    public static boolean isIsPlaying() {
-        return isPlaying;
-    }
-
     public static void play() {
         if (!LevelEditor.isPlaying) {
             saveScene();
@@ -378,6 +384,22 @@ public abstract class LevelEditor {
         setIsPaused(!isIsPaused());
     }
 
+    public static GameObject getSelectedObject() {
+        return selectedObject;
+    }
+
+    public static void setSelectedObject(GameObject gameObject) {
+        selectedObject = gameObject;
+    }
+
+    public static HistoryCommandManager getHistoryCommandManager() {
+        return historyCommandManager;
+    }
+
+    public static boolean isIsPlaying() {
+        return isPlaying;
+    }
+
     public static void setIsPlaying(boolean isPlaying) {
         LevelEditor.isPlaying = isPlaying;
         setSelectedObject(null);
@@ -397,5 +419,9 @@ public abstract class LevelEditor {
 
     public static void setUnsaved(boolean value) {
         LevelEditor.isUnsaved = value;
+    }
+
+    public static HardcodedCamera getHardcodedCamera() {
+        return hardcodedCamera;
     }
 }

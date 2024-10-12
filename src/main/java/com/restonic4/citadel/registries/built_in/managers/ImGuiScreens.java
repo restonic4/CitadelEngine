@@ -12,7 +12,8 @@ public class ImGuiScreens extends AbstractRegistryInitializer {
     public static ToggleableImGuiScreen RENDER_STATISTICS;
     public static ToggleableImGuiScreen CAMERA_SETTINGS;
     public static ToggleableImGuiScreen SERVER_CONSOLE;
-    public static ToggleableImGuiScreen GAME_VIEWPORT;
+    public static GameViewportImGui GAME_VIEWPORT;
+    public static SceneViewportImGui SCENE_VIEWPORT;
     public static ToggleableImGuiScreen EDITOR_INSPECTOR;
     public static ToggleableImGuiScreen EDITOR_PROPERTIES;
     public static EditorAssetsImGui EDITOR_ASSETS;
@@ -25,7 +26,8 @@ public class ImGuiScreens extends AbstractRegistryInitializer {
         RENDER_STATISTICS = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "render_statistics"), new StatisticsImGui());
         CAMERA_SETTINGS = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "camera_settings"), new CameraSettingsImGui());
         SERVER_CONSOLE = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "server_console"), new ServerConsoleImGui());
-        GAME_VIEWPORT = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "game_viewport"), new GameViewportImGui());
+        GAME_VIEWPORT = (GameViewportImGui) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "game_viewport"), new GameViewportImGui());
+        SCENE_VIEWPORT = (SceneViewportImGui) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "scene_viewport"), new SceneViewportImGui());
         EDITOR_INSPECTOR = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_inspector"), new EditorInspectorImGui());
         EDITOR_PROPERTIES = (ToggleableImGuiScreen) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_properties"), new EditorPropertiesImGui());
         EDITOR_ASSETS = (EditorAssetsImGui) Registry.register(Registries.IM_GUI_SCREEN, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "editor_assets"), new EditorAssetsImGui());

@@ -254,6 +254,10 @@ public class Window {
             KeyListener.endFrame();
             MouseListener.endFrame();
 
+            if (!citadelSettings.isEditorMode() || (citadelSettings.isEditorMode() && !LevelEditor.getHardcodedCamera().isBeingControlled())) {
+                MouseListener.endFrame();
+            }
+
             glfwSwapBuffers(glfwWindowAddress);
 
             Time.onFrameEnded();
@@ -458,8 +462,12 @@ public class Window {
             GLFW.glfwSetInputMode(glfwWindowAddress, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
         } else {
             GLFW.glfwSetInputMode(glfwWindowAddress, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-            glfwSetCursorPos(glfwWindowAddress, this.width / 2, this.height / 2);
+            setCursorPosition(this.width / 2, this.height / 2);
         }
+    }
+
+    public void setCursorPosition(double x, double y) {
+        glfwSetCursorPos(glfwWindowAddress, x, y);
     }
 
     public boolean isCursorLocked() {

@@ -10,6 +10,7 @@ import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.GameObject;
 import com.restonic4.citadel.world.object.Transform;
+import com.restonic4.citadel.world.object.components.CameraComponent;
 import com.restonic4.citadel.world.object.components.ModelRendererComponent;
 import com.restonic4.citadel.util.debug.DebugManager;
 import org.joml.Vector2f;
@@ -202,7 +203,7 @@ public class RenderBatch {
         updateIndices();
     }
 
-    public void render() {
+    public void render(CameraComponent camera) {
         Scene scene = SceneManager.getCurrentScene();
 
         UniformsMap mainShaderUniformMap = Shaders.MAIN.getUniformsMap();
@@ -221,8 +222,8 @@ public class RenderBatch {
 
         // Main
 
-        mainShaderUniformMap.setUniform("uProjection", scene.getMainCamera().getProjectionMatrix());
-        mainShaderUniformMap.setUniform("uView", scene.getMainCamera().getViewMatrix());
+        mainShaderUniformMap.setUniform("uProjection", camera.getProjectionMatrix());
+        mainShaderUniformMap.setUniform("uView", camera.getViewMatrix());
         // TODO: I think this should not be updated every frame (Lights)
         mainShaderUniformMap.setUniform("uLightPos", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightPositions(), CitadelConstants.MAX_LIGHTS));
         mainShaderUniformMap.setUniform("uLightAmount", scene.getLightsAmount());

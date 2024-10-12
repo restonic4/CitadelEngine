@@ -3,9 +3,11 @@ package com.restonic4.citadel.render;
 import com.restonic4.ClientSide;
 import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.CitadelSettings;
+import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.exceptions.RenderException;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.managers.Shaders;
+import com.restonic4.citadel.registries.built_in.types.FrameBuffer;
 import com.restonic4.citadel.render.shadows.CascadeShadow;
 import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
@@ -28,6 +30,8 @@ public class Renderer {
 
     private Scene scene;
     private CitadelSettings citadelSettings;
+
+    private CameraComponent cameraBeingUsed;
 
     // This is just stats
     private int drawCallsConsumed = 0;
@@ -96,16 +100,32 @@ public class Renderer {
         CameraComponent camera = scene.getMainCamera();
 
         if (camera == null) {
+            if (citadelSettings.isEditorMode()) {
+                FrameBuffers.GAME_VIEWPORT.bind();
+            }
+
             renderBlack();
+
+            FrameBufferManager.unbindCurrentFrameBuffer();
+
             return;
         }
 
-        updateFrustum(camera);
+        if (citadelSettings.isEditorMode()) {
+            updateFrustum(LevelEditor.getHardcodedCamera());
+            renderAll(FrameBuffers.SCENE_VIEWPORT);
 
-        renderAll();
+            updateFrustum(camera);
+            renderAll(FrameBuffers.GAME_VIEWPORT);
+        }
+        else {
+            renderAll(null);
+        }
     }
 
     private void updateFrustum(CameraComponent camera) {
+        cameraBeingUsed = camera;
+
         Matrix4f projection = camera.getProjectionMatrix();
         Matrix4f view = camera.getViewMatrix();
 
@@ -121,25 +141,22 @@ public class Renderer {
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS);
     }
 
-    private void renderAll() {
+    private void renderAll(FrameBuffer frameBuffer) {
         glClearColor(0.267f, 0.741f, 1, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Render batches
-
         renderShadowsCascades();
+
+        if (frameBuffer != null) {
+            frameBuffer.bind();
+        }
+
         renderGeometry();
     }
 
     private void renderBlack() {
-        if (citadelSettings.isEditorMode()) {
-            FrameBuffers.GAME_VIEWPORT.bind();
-        }
-
         glClearColor(0, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        FrameBufferManager.unbindCurrentFrameBuffer();
     }
 
     private void renderShadowsCascades() {
@@ -159,10 +176,6 @@ public class Renderer {
     }
 
     private void renderGeometry() {
-        if (citadelSettings.isEditorMode()) {
-            FrameBuffers.GAME_VIEWPORT.bind();
-        }
-
         Shaders.MAIN.use();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -202,7 +215,7 @@ public class Renderer {
                 continue;
             }
 
-            batch.render();
+            batch.render(cameraBeingUsed);
 
             drawCallsConsumed++;
         }

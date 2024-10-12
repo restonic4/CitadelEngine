@@ -11,6 +11,7 @@ import org.joml.Vector3f;
 
 public class CameraComponent extends Component {
     private CameraType cameraType;
+    protected Transform transform;
 
     protected Matrix4f projectionMatrix, viewMatrix;
 
@@ -34,14 +35,32 @@ public class CameraComponent extends Component {
         adjustProjection();
     }
 
+    public CameraComponent(CameraType cameraType, Transform transform) {
+        this.cameraType = cameraType;
+        this.transform = transform;
+        this.projectionMatrix = new Matrix4f();
+        this.viewMatrix = new Matrix4f();
+        this.isSimulated = false;
+
+        adjustProjection();
+    }
+
     @Override
     public void start() {
+        syncTransformWithGameObject();
+
         getViewMatrix();
         getProjectionMatrix();
     }
 
     @Override
     public void update() {}
+
+    private void syncTransformWithGameObject() {
+        if (gameObject != null) {
+            this.transform = gameObject.transform;
+        }
+    }
 
     public void adjustProjection() {
         if (this.cameraType == CameraType.ORTHOGRAPHIC) {
@@ -66,12 +85,12 @@ public class CameraComponent extends Component {
     public Matrix4f getViewMatrix() {
         this.viewMatrix.identity();
 
-        front.set(0, 0, -1).rotate(gameObject.transform.getRotation());
-        up.set(0, 1, 0).rotate(gameObject.transform.getRotation());
+        front.set(0, 0, -1).rotate(transform.getRotation());
+        up.set(0, 1, 0).rotate(transform.getRotation());
 
-        center.set(gameObject.transform.getPosition()).add(front);
+        center.set(transform.getPosition()).add(front);
 
-        this.viewMatrix.lookAt(gameObject.transform.getPosition(), center, up);
+        this.viewMatrix.lookAt(transform.getPosition(), center, up);
 
         return this.viewMatrix;
     }
