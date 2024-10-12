@@ -1,5 +1,6 @@
 package com.restonic4.citadel.render.gui.guis;
 
+import com.restonic4.citadel.world.object.components.CameraComponent;
 import imgui.ImGui;
 import com.restonic4.ClientSide;
 import imgui.extension.implot.ImPlot;
@@ -7,7 +8,6 @@ import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.registries.AssetLocation;
 import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.RegistryKey;
-import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.render.Renderer;
 import com.restonic4.citadel.render.gui.LineGraphImGui;
 import com.restonic4.citadel.sound.SoundManager;
@@ -51,7 +51,7 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
 
         Scene scene = SceneManager.getCurrentScene();
         Window window = Window.getInstance();
-        Camera camera = scene.getCamera();
+        CameraComponent camera = scene.getMainCamera();
         Renderer renderer = scene.getRenderer();
         SoundManager soundManager = SoundManager.getInstance();
 
@@ -108,7 +108,7 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
             ImGui.text(StringBuilderHelper.concatenate("AspectRatio: ", window.getAspectRatio()));
             ImGui.text(StringBuilderHelper.concatenate("Width: ", window.getWidth()));
             ImGui.text(StringBuilderHelper.concatenate("Height: ", window.getHeight()));
-            ImGui.text(StringBuilderHelper.concatenate("Camera position: (", camera.transform.getPosition().x, ", ", camera.transform.getPosition().y, ", ", camera.transform.getPosition().z, ")"));
+            ImGui.text(StringBuilderHelper.concatenate("Camera position: (", camera.gameObject.transform.getPosition().x, ", ", camera.gameObject.transform.getPosition().y, ", ", camera.gameObject.transform.getPosition().z, ")"));
 
             ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
         }

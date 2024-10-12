@@ -221,8 +221,8 @@ public class RenderBatch {
 
         // Main
 
-        mainShaderUniformMap.setUniform("uProjection", scene.getCamera().getProjectionMatrix());
-        mainShaderUniformMap.setUniform("uView", scene.getCamera().getViewMatrix());
+        mainShaderUniformMap.setUniform("uProjection", scene.getMainCamera().getProjectionMatrix());
+        mainShaderUniformMap.setUniform("uView", scene.getMainCamera().getViewMatrix());
         // TODO: I think this should not be updated every frame (Lights)
         mainShaderUniformMap.setUniform("uLightPos", ArrayHelper.nullifyWithFixedSize_GC_Optimized(scene.getLightPositions(), CitadelConstants.MAX_LIGHTS));
         mainShaderUniformMap.setUniform("uLightAmount", scene.getLightsAmount());

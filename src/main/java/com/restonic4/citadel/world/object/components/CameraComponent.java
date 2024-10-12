@@ -1,49 +1,75 @@
-package com.restonic4.citadel.render.cameras;
+package com.restonic4.citadel.world.object.components;
 
-import com.restonic4.ClientSide;
+import com.restonic4.citadel.core.Window;
+import com.restonic4.citadel.util.CitadelConstants;
+import com.restonic4.citadel.world.object.Component;
 import com.restonic4.citadel.world.object.Transform;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import java.io.Serial;
-import java.io.Serializable;
+public class CameraComponent extends Component {
+    private CameraType cameraType;
 
-@ClientSide
-public abstract class Camera implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+    protected Matrix4f projectionMatrix, viewMatrix;
 
-    protected transient Matrix4f projectionMatrix, viewMatrix;
-    public Transform transform;
-
-    private transient boolean isSimulated;
-    private transient Matrix4f fakeProjectionMatrix, fakeViewMatrix;
+    private boolean isSimulated;
+    private Matrix4f fakeProjectionMatrix, fakeViewMatrix;
 
     // Cache
 
-    private Vector3f front = new Vector3f(0, 0, -1);
-    private Vector3f up = new Vector3f(0, 1, 0);
-    private Vector3f center = new Vector3f();
+    private final Vector3f front = new Vector3f(0, 0, -1);
+    private final Vector3f up = new Vector3f(0, 1, 0);
+    private final Vector3f center = new Vector3f();
 
-    public Camera(Transform transform) {
-        this.transform = transform;
+    public CameraComponent() {}
+
+    public CameraComponent(CameraType cameraType) {
+        this.cameraType = cameraType;
         this.projectionMatrix = new Matrix4f();
         this.viewMatrix = new Matrix4f();
         this.isSimulated = false;
+
         adjustProjection();
     }
 
-    public abstract void adjustProjection();
+    @Override
+    public void start() {
+        getViewMatrix();
+        getProjectionMatrix();
+    }
+
+    @Override
+    public void update() {}
+
+    public void adjustProjection() {
+        if (this.cameraType == CameraType.ORTHOGRAPHIC) {
+            adjustOrthographic();
+        } else if (this.cameraType == CameraType.PERSPECTIVE) {
+            adjustPerspective();
+        }
+    }
+
+    public void adjustOrthographic() {
+        this.projectionMatrix.identity();
+
+        projectionMatrix.ortho(0.0f, Window.getInstance().getWidth(), 0.0f, Window.getInstance().getHeight(), CitadelConstants.CAMERA_NEAR_PLANE, CitadelConstants.CAMERA_FAR_PLANE);
+    }
+
+    public void adjustPerspective() {
+        this.projectionMatrix.identity();
+
+        projectionMatrix.perspective(CitadelConstants.CAMERA_FOV, Window.getInstance().getAspectRatio(), CitadelConstants.CAMERA_NEAR_PLANE, CitadelConstants.CAMERA_FAR_PLANE);
+    }
 
     public Matrix4f getViewMatrix() {
         this.viewMatrix.identity();
 
-        front.set(0, 0, -1).rotate(transform.getRotation());
-        up.set(0, 1, 0).rotate(transform.getRotation());
+        front.set(0, 0, -1).rotate(gameObject.transform.getRotation());
+        up.set(0, 1, 0).rotate(gameObject.transform.getRotation());
 
-        center.set(transform.getPosition()).add(front);
+        center.set(gameObject.transform.getPosition()).add(front);
 
-        this.viewMatrix.lookAt(transform.getPosition(), center, up);
+        this.viewMatrix.lookAt(gameObject.transform.getPosition(), center, up);
 
         return this.viewMatrix;
     }
@@ -84,11 +110,6 @@ public abstract class Camera implements Serializable {
         return frustumCorners;
     }
 
-    public void load() {
-        getViewMatrix();
-        getProjectionMatrix();
-    }
-
     public void setSimulated(boolean value) {
         if (value) {
             this.fakeViewMatrix = new Matrix4f(viewMatrix);
@@ -100,5 +121,9 @@ public abstract class Camera implements Serializable {
 
     public boolean isSimulated() {
         return this.isSimulated;
+    }
+
+    public enum CameraType {
+        PERSPECTIVE, ORTHOGRAPHIC
     }
 }

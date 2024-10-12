@@ -1,8 +1,5 @@
 package com.restonic4.citadel.world;
 
-import com.restonic4.citadel.core.CitadelLauncher;
-import com.restonic4.citadel.core.CitadelSettings;
-import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.events.EventResult;
 import com.restonic4.citadel.events.types.SceneEvents;
 import com.restonic4.citadel.physics.PhysicsManager;
@@ -10,18 +7,17 @@ import com.restonic4.citadel.sound.SoundManager;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.world.object.GameObject;
-import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.render.Renderer;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.world.object.Serializable;
 import com.restonic4.citadel.world.object.Transform;
+import com.restonic4.citadel.world.object.components.CameraComponent;
 import com.restonic4.citadel.world.object.components.ColliderComponent;
 import com.restonic4.citadel.world.object.components.LightComponent;
 import com.restonic4.citadel.world.object.components.RigidBodyComponent;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import java.io.Serial;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,9 +27,9 @@ import java.util.Stack;
 public class Scene extends Serializable {
     private String name = getClass().getSimpleName();
 
-    protected Renderer renderer = new Renderer(this);
-    protected Camera camera;
-    protected Transform transform = new Transform();
+    private Renderer renderer = new Renderer(this);
+    private CameraComponent mainCamera;
+    private Transform transform = new Transform();
 
     private List<GameObject> allGameObjects = new ArrayList<>();
     private List<GameObject> staticGameObjects = new ArrayList<>();
@@ -57,6 +53,7 @@ public class Scene extends Serializable {
 
         this.name = currentScene.name;
         this.transform = currentScene.transform;
+        this.mainCamera = currentScene.mainCamera;
         this.allGameObjects = currentScene.allGameObjects;
         this.staticGameObjects = currentScene.staticGameObjects;
         this.dynamicGameObjects = currentScene.dynamicGameObjects;
@@ -145,6 +142,11 @@ public class Scene extends Serializable {
             rigidBodyComponents.add(rigidBodyComponent);
         }
 
+        CameraComponent cameraComponent = gameObject.getComponent(CameraComponent.class);
+        if (cameraComponent != null) {
+            mainCamera = cameraComponent;
+        }
+
         if (gameObject.transform.getParent() == null) {
             gameObject.transform.setParent(transform);
         }
@@ -203,8 +205,8 @@ public class Scene extends Serializable {
         return false;
     }
 
-    public Camera getCamera() {
-        return this.camera;
+    public CameraComponent getMainCamera() {
+        return this.mainCamera;
     }
 
     public Renderer getRenderer() {

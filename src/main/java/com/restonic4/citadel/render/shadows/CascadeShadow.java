@@ -24,8 +24,8 @@ public class CascadeShadow {
             return;
         }
 
-        Matrix4f viewMatrix = scene.getCamera().getViewMatrix();
-        Matrix4f projMatrix = scene.getCamera().getProjectionMatrix();
+        Matrix4f viewMatrix = scene.getMainCamera().getViewMatrix();
+        Matrix4f projMatrix = scene.getMainCamera().getProjectionMatrix();
         Vector4f lightPos = new Vector4f(scene.getLightComponentsOfType(LightComponent.LightType.DIRECTIONAL).get(0).getDirection(), 0);
 
         float cascadeSplitLambda = 0.95f;

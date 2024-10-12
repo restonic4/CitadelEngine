@@ -6,7 +6,6 @@ import com.restonic4.citadel.input.KeyListener;
 import com.restonic4.citadel.input.MouseListener;
 import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
 import com.restonic4.citadel.registries.built_in.managers.Sounds;
-import com.restonic4.citadel.render.cameras.PerspectiveCamera;
 import com.restonic4.citadel.sound.SoundManager;
 import com.restonic4.citadel.sound.SoundSource;
 import com.restonic4.citadel.util.Time;
@@ -15,10 +14,7 @@ import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.object.GameObject;
 import com.restonic4.citadel.world.object.Mesh;
 import com.restonic4.citadel.world.object.Transform;
-import com.restonic4.citadel.world.object.components.ColliderComponent;
-import com.restonic4.citadel.world.object.components.LightComponent;
-import com.restonic4.citadel.world.object.components.ModelRendererComponent;
-import com.restonic4.citadel.world.object.components.RigidBodyComponent;
+import com.restonic4.citadel.world.object.components.*;
 import org.joml.Math;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -36,12 +32,10 @@ public class TestScene extends Scene {
 
     @Override
     public void init() {
-        Transform camTransform = new Transform();
-        camTransform.setPosition(0, 10, 100);
-        camTransform.setScale(1, 1, 1);
-
-        camera = new PerspectiveCamera(camTransform);
-        camera.load();
+        GameObject camera = new GameObject("Camera", false);
+        camera.addComponent(new CameraComponent(CameraComponent.CameraType.PERSPECTIVE));
+        camera.transform.setPosition(0, 10, 100);
+        this.addGameObject(camera);
 
         music = Sounds.CRASH.createSource(true, true);
         music.setPosition(new Vector3f(0, 0, 0));
@@ -128,7 +122,7 @@ public class TestScene extends Scene {
         }
 
         if (KeyBinds.CRASH.isPressed()) {
-            Logger.log("Size: " + renderer.getByteSize());
+            Logger.log("Size: " + getRenderer().getByteSize());
             throw new RuntimeException("Manual crash triggered by using ESC + F9");
         }
 
@@ -145,24 +139,24 @@ public class TestScene extends Scene {
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {
-            camera.transform.addLocalPositionX((float) (-velocity * Time.getDeltaTime()));
+            getMainCamera().gameObject.transform.addLocalPositionX((float) (-velocity * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_D)) {
-            camera.transform.addLocalPositionX((float) (velocity * Time.getDeltaTime()));
+            getMainCamera().gameObject.transform.addLocalPositionX((float) (velocity * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_W)) {
-            camera.transform.addLocalPositionZ((float) (-velocity * Time.getDeltaTime()));
+            getMainCamera().gameObject.transform.addLocalPositionZ((float) (-velocity * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_S)) {
-            camera.transform.addLocalPositionZ((float) (velocity * Time.getDeltaTime()));
+            getMainCamera().gameObject.transform.addLocalPositionZ((float) (velocity * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_Q)) {
-            camera.transform.addLocalPositionY((float) (-velocity * Time.getDeltaTime()));
+            getMainCamera().gameObject.transform.addLocalPositionY((float) (-velocity * Time.getDeltaTime()));
         }
         if (KeyListener.isKeyPressed(GLFW.GLFW_KEY_E)) {
-            camera.transform.addLocalPositionY((float) (velocity * Time.getDeltaTime()));
+            getMainCamera().gameObject.transform.addLocalPositionY((float) (velocity * Time.getDeltaTime()));
         }
 
         if (KeyListener.isKeyPressedOnce(GLFW.GLFW_KEY_X)) {
@@ -178,11 +172,11 @@ public class TestScene extends Scene {
             Quaternionf pitchRotation = new Quaternionf().rotateX(xMouseDelta);
             Quaternionf yawRotation = new Quaternionf().rotateY(yMouseDelta);
 
-            camera.transform.addRotationQuaternion(yawRotation);
-            camera.transform.addRotationQuaternion(pitchRotation);
+            getMainCamera().gameObject.transform.addRotationQuaternion(yawRotation);
+            getMainCamera().gameObject.transform.addRotationQuaternion(pitchRotation);
         }
 
-        SoundManager.getInstance().updateListenerPosition(camera);
+        SoundManager.getInstance().updateListenerPosition(getMainCamera());
 
         super.update();
     }

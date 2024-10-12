@@ -1,7 +1,7 @@
 package com.restonic4.citadel.sound;
 
-import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import com.restonic4.citadel.world.object.components.CameraComponent;
 import org.joml.*;
 import org.lwjgl.openal.*;
 
@@ -112,9 +112,9 @@ public class SoundManager {
         this.listener = listener;
     }
 
-    public void updateListenerPosition(Camera camera) {
-        Matrix4f viewMatrix = camera.getViewMatrix();
-        listener.setPosition(camera.transform.getPosition());
+    public void updateListenerPosition(CameraComponent cameraComponent) {
+        Matrix4f viewMatrix = cameraComponent.getViewMatrix();
+        listener.setPosition(cameraComponent.gameObject.transform.getPosition());
         viewMatrix.positiveZ(at).negate();
         viewMatrix.positiveY(up);
         listener.setOrientation(at, up);

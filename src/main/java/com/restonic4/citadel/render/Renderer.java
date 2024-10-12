@@ -6,11 +6,11 @@ import com.restonic4.citadel.core.CitadelSettings;
 import com.restonic4.citadel.exceptions.RenderException;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.managers.Shaders;
-import com.restonic4.citadel.render.cameras.Camera;
 import com.restonic4.citadel.render.shadows.CascadeShadow;
 import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
 import com.restonic4.citadel.world.object.GameObject;
+import com.restonic4.citadel.world.object.components.CameraComponent;
 import com.restonic4.citadel.world.object.components.ModelRendererComponent;
 import com.restonic4.citadel.util.CitadelConstants;
 import org.joml.Matrix4f;
@@ -93,7 +93,7 @@ public class Renderer {
             return;
         }
 
-        Camera camera = scene.getCamera();
+        CameraComponent camera = scene.getMainCamera();
 
         // Updating the frustum culling
 
