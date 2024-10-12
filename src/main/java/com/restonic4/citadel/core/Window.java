@@ -244,7 +244,7 @@ public class Window {
                 if (!citadelSettings.isEditorMode() || (LevelEditor.isIsPlaying() && !LevelEditor.isIsPaused())) {
                     scene.update();
                 }
-                else {
+                else if (scene.isActivated()) {
                     scene.getRenderer().render();
                 }
             }

@@ -95,8 +95,17 @@ public class Renderer {
 
         CameraComponent camera = scene.getMainCamera();
 
-        // Updating the frustum culling
+        if (camera == null) {
+            renderBlack();
+            return;
+        }
 
+        updateFrustum(camera);
+
+        renderAll();
+    }
+
+    private void updateFrustum(CameraComponent camera) {
         Matrix4f projection = camera.getProjectionMatrix();
         Matrix4f view = camera.getViewMatrix();
 
@@ -110,7 +119,9 @@ public class Renderer {
 
         FrustumCullingFilter.getInstance().updateFrustum(projection, view);
         FrustumCullingFilter.getInstance().filter(scene.getGameObjects(), CitadelConstants.FRUSTUM_BOUNDING_SPHERE_RADIUS);
+    }
 
+    private void renderAll() {
         glClearColor(0.267f, 0.741f, 1, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -118,6 +129,17 @@ public class Renderer {
 
         renderShadowsCascades();
         renderGeometry();
+    }
+
+    private void renderBlack() {
+        if (citadelSettings.isEditorMode()) {
+            FrameBuffers.GAME_VIEWPORT.bind();
+        }
+
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        FrameBufferManager.unbindCurrentFrameBuffer();
     }
 
     private void renderShadowsCascades() {

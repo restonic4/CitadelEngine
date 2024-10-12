@@ -2,6 +2,7 @@ package com.restonic4.citadel.world.object;
 
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.UniqueIdentifierManager;
+import com.restonic4.citadel.world.object.components.CameraComponent;
 import com.restonic4.citadel.world.object.components.LightComponent;
 import com.restonic4.citadel.world.object.components.ModelRendererComponent;
 import org.joml.Vector3f;
@@ -191,6 +192,7 @@ public class GameObject extends Serializable {
             Component newComponent = switch (componentPrefix) {
                 case "mr" -> (Component) new ModelRendererComponent().deserialize(cSplits[1]);
                 case "l" -> (Component) new LightComponent().deserialize(cSplits[1]);
+                case "c" -> (Component) new CameraComponent().deserialize(cSplits[1]);
                 default -> null;
             };
 

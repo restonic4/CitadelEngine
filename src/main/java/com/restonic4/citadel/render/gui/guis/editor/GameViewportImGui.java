@@ -4,32 +4,14 @@ import com.restonic4.ClientSide;
 import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.platform.PlatformManager;
-import com.restonic4.citadel.registries.AssetLocation;
-import com.restonic4.citadel.registries.Registry;
-import com.restonic4.citadel.registries.RegistryKey;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
-import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
-import com.restonic4.citadel.render.Renderer;
-import com.restonic4.citadel.render.Texture;
-import com.restonic4.citadel.render.cameras.Camera;
-import com.restonic4.citadel.render.gui.LineGraphImGui;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
-import com.restonic4.citadel.sound.SoundManager;
-import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.StringBuilderHelper;
-import com.restonic4.citadel.util.Time;
-import com.restonic4.citadel.util.math.UnitConverter;
-import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
 import imgui.ImGui;
 import imgui.ImVec2;
-import imgui.extension.implot.ImPlot;
-import imgui.flag.ImGuiBackendFlags;
 import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiWindowFlags;
-import imgui.internal.flag.ImGuiDockNodeFlags;
-
-import java.util.Map;
 
 @ClientSide
 public class GameViewportImGui extends ToggleableImGuiScreen {
@@ -62,6 +44,10 @@ public class GameViewportImGui extends ToggleableImGuiScreen {
 
         if (!CitadelLauncher.getInstance().getSettings().shouldGenerateBindlessTextures()) {
             renderErrorMessage(StringBuilderHelper.concatenate("Could not render due to an incompatibility", PlatformManager.getEndOfLine(), "with your graphics card."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+        }
+
+        if (SceneManager.getCurrentScene().getMainCamera() == null) {
+            renderErrorMessage(StringBuilderHelper.concatenate("Camera missing!", PlatformManager.getEndOfLine(), "You need at least 1 camera to render into the screen."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
         }
 
         ImGui.end();

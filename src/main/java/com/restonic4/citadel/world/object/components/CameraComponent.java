@@ -2,7 +2,9 @@ package com.restonic4.citadel.world.object.components;
 
 import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.util.CitadelConstants;
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.world.object.Component;
+import com.restonic4.citadel.world.object.Mesh;
 import com.restonic4.citadel.world.object.Transform;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -125,5 +127,19 @@ public class CameraComponent extends Component {
 
     public enum CameraType {
         PERSPECTIVE, ORTHOGRAPHIC
+    }
+
+    @Override
+    public String serialize() {
+        return StringBuilderHelper.concatenate("c%", cameraType);
+    }
+
+    @Override
+    public Object deserialize(String data) {
+        String[] splits = data.split(",");
+
+        this.cameraType = CameraComponent.CameraType.valueOf(splits[0]);
+
+        return this;
     }
 }

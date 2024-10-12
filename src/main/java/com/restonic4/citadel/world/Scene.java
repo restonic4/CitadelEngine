@@ -96,6 +96,10 @@ public class Scene extends Serializable {
     }
 
     public void update() {
+        if (!isActivated) {
+            return;
+        }
+
         PhysicsManager.update();
 
         for (int i = 0; i < this.staticGameObjects.size(); i++) {
@@ -111,6 +115,8 @@ public class Scene extends Serializable {
 
     public void unload() {
         Logger.log("Unloading the scene");
+
+        isActivated = false;
 
         SoundManager.getInstance().reset();
 
@@ -317,6 +323,10 @@ public class Scene extends Serializable {
 
     public boolean hasBeenDeserialized() {
         return this.hasBeenDeserialized;
+    }
+
+    public boolean isActivated() {
+        return this.isActivated;
     }
 
     public void cleanup() {
