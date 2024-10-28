@@ -127,6 +127,15 @@ public class ColliderComponent extends Component {
         return false;
     }
 
+    @Override
+    public String serialize() {
+        return "";
+    }
+
+    @Override
+    public Object deserialize(String data) {
+        return null;
+    }
 
     public enum ColliderType {
         BOX,

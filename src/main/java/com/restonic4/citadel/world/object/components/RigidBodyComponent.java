@@ -73,4 +73,14 @@ public class RigidBodyComponent extends Component {
     public void setVelocity(Vector3f velocity) {
         this.velocity.set(velocity);
     }
+
+    @Override
+    public String serialize() {
+        return "";
+    }
+
+    @Override
+    public Object deserialize(String data) {
+        return null;
+    }
 }

@@ -13,4 +13,14 @@ public class DebugComponent extends Component {
     public void update() {
 
     }
+
+    @Override
+    public String serialize() {
+        return "";
+    }
+
+    @Override
+    public Object deserialize(String data) {
+        return null;
+    }
 }

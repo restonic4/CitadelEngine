@@ -1,18 +1,25 @@
 package com.restonic4.citadel.world.object;
 
+import com.restonic4.citadel.files.Serializable;
+import com.restonic4.citadel.registries.AssetLocation;
+import com.restonic4.citadel.registries.Registries;
+import com.restonic4.citadel.registries.Registry;
+import com.restonic4.citadel.registries.RegistryObject;
+import com.restonic4.citadel.registries.built_in.managers.Components;
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.UniqueIdentifierManager;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.world.object.components.CameraComponent;
+import com.restonic4.citadel.world.object.components.DebugComponent;
 import com.restonic4.citadel.world.object.components.LightComponent;
 import com.restonic4.citadel.world.object.components.ModelRendererComponent;
-import org.joml.Vector3f;
 
-import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-public class GameObject extends Serializable {
+public class GameObject implements Serializable {
     public Transform transform;
 
     private int id;
@@ -189,12 +196,19 @@ public class GameObject extends Serializable {
 
             String componentPrefix = cSplits[0];
 
-            Component newComponent = switch (componentPrefix) {
-                case "mr" -> (Component) new ModelRendererComponent().deserialize(cSplits[1]);
-                case "l" -> (Component) new LightComponent().deserialize(cSplits[1]);
-                case "c" -> (Component) new CameraComponent().deserialize(cSplits[1]);
-                default -> null;
-            };
+            Component newComponent = null;
+
+            Map<AssetLocation, Component> registryData = Registry.getRegistry(Registries.COMPONENT);
+            for (Component component : registryData.values()) {
+                if (componentPrefix.equals(component.getSerializerID())) {
+                    try {
+                        Class<? extends Component> foundClass = component.getClass();
+                        newComponent = foundClass.getDeclaredConstructor(String.class).newInstance(cSplits[1]);
+                    } catch (Exception exception) {
+                        Logger.logError(exception);
+                    }
+                }
+            }
 
             if (newComponent != null) {
                 this.addComponent(newComponent);

@@ -193,6 +193,7 @@ public class CitadelLauncher {
         RegistryManager.registerBuiltInRegistrySet(new Packets());
         RegistryManager.registerBuiltInRegistrySet(new FrameBuffers());
         RegistryManager.registerBuiltInRegistrySet(new Icons());
+        RegistryManager.registerBuiltInRegistrySet(new Components());
 
         // Register all
         RegistryManager.registerBuiltIn();

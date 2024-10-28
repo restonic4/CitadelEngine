@@ -9,7 +9,7 @@ import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.world.object.GameObject;
 import com.restonic4.citadel.render.Renderer;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
-import com.restonic4.citadel.world.object.Serializable;
+import com.restonic4.citadel.files.Serializable;
 import com.restonic4.citadel.world.object.Transform;
 import com.restonic4.citadel.world.object.components.CameraComponent;
 import com.restonic4.citadel.world.object.components.ColliderComponent;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
-public class Scene extends Serializable {
+public class Scene implements Serializable {
     private String name = getClass().getSimpleName();
 
     private Renderer renderer = new Renderer(this);

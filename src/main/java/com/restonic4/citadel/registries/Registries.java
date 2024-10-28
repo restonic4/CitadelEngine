@@ -2,6 +2,7 @@ package com.restonic4.citadel.registries;
 
 import com.restonic4.citadel.registries.built_in.types.*;
 import com.restonic4.citadel.render.Shader;
+import com.restonic4.citadel.world.object.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class Registries {
     public static final RegistryKey<Packet> PACKET = new RegistryKey<>("packet");
     public static final RegistryKey<PacketDataType<?>> PACKET_DATA_TYPE = new RegistryKey<>("packet_data_type");
     public static final RegistryKey<FrameBuffer> FRAME_BUFFER = new RegistryKey<>("frame_buffer");
+    public static final RegistryKey<Component> COMPONENT = new RegistryKey<>("component");
 
     // Custom key system, where you can register your own keys
 

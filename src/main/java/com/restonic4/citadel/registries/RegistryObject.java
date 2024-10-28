@@ -28,4 +28,8 @@ public abstract class RegistryObject {
     public void onPopulate() {
         this.isPopulated = true;
     }
+
+    public boolean isPopulated() {
+        return this.isPopulated;
+    }
 }
