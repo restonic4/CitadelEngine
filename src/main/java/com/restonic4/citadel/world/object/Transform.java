@@ -11,7 +11,7 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Transform extends Serializable {
+public class Transform implements Serializable {
     private int id;
     private Transform parent;
 
