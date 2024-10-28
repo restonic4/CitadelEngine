@@ -14,6 +14,8 @@ public class ColliderComponent extends Component {
     private BoundingSphere boundingSphere;
     private OBB obb;
 
+    public ColliderComponent() {}
+
     public ColliderComponent(ColliderType colliderType) {
         this.colliderType = colliderType;
     }

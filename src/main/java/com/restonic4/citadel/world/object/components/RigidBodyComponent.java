@@ -10,6 +10,8 @@ public class RigidBodyComponent extends Component {
     private Vector3f force;
     private Vector3f acceleration;
 
+    public RigidBodyComponent() {}
+
     public RigidBodyComponent(float mass) {
         this.mass = mass;
         this.velocity = new Vector3f();

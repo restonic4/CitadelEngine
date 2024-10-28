@@ -18,10 +18,10 @@ public class Components extends AbstractRegistryInitializer {
     @Override
     public void register() {
         DEBUG = (DebugComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "debug"), new DebugComponent().setSerializerID("db"));
-        MODEL_RENDERER = (ModelRendererComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "model_renderer"), new DebugComponent().setSerializerID("mr"));
-        LIGHT = (LightComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "light"), new DebugComponent().setSerializerID("l"));
-        CAMERA = (CameraComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "camera"), new DebugComponent().setSerializerID("cam"));
-        COLLIDER = (ColliderComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "collider"), new DebugComponent().setSerializerID("c"));
-        RIGID_BODY = (RigidBodyComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "rigid_body"), new DebugComponent().setSerializerID("rb"));
+        MODEL_RENDERER = (ModelRendererComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "model_renderer"), new ModelRendererComponent().setSerializerID("mr"));
+        LIGHT = (LightComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "light"), new LightComponent().setSerializerID("l"));
+        CAMERA = (CameraComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "camera"), new CameraComponent().setSerializerID("cam"));
+        COLLIDER = (ColliderComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "collider"), new ColliderComponent().setSerializerID("c"));
+        RIGID_BODY = (RigidBodyComponent) Registry.register(Registries.COMPONENT, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "rigid_body"), new RigidBodyComponent().setSerializerID("rb"));
     }
 }
