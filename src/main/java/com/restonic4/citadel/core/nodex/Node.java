@@ -1,4 +1,6 @@
-package com.restonic4.citadel.files.save;
+package com.restonic4.citadel.core.nodex;
+
+import com.restonic4.citadel.registries.built_in.types.NodeType;
 
 import java.io.*;
 import java.util.HashMap;
@@ -6,14 +8,13 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-// Node Serialization System (NSS)
 public class Node {
     private String key;
-    private NodeType type;
+    private NodeType<?> type;
     private Object value;
     private Map<String, Node> children;
 
-    public Node(String key, NodeType type) {
+    public Node(String key, NodeType<?> type) {
         this.key = key;
         this.type = type;
         this.children = new HashMap<>();
@@ -23,7 +24,7 @@ public class Node {
         return key;
     }
 
-    public NodeType getType() {
+    public NodeType<?> getType() {
         return type;
     }
 
@@ -57,7 +58,7 @@ public class Node {
 
     public static void serialize(Node node, DataOutputStream out) throws IOException {
         out.writeUTF(node.getKey());
-        out.writeInt(node.getType().ordinal());
+        out.writeInt(node.getType().serialize());
 
         switch (node.getType()) {
             case STRING:
@@ -83,7 +84,7 @@ public class Node {
 
     public static Node deserialize(DataInputStream in) throws IOException {
         String key = in.readUTF();
-        NodeType type = NodeType.values()[in.readInt()];
+        NodeType<?> type = NodeType.values()[in.readInt()];
         Node node = new Node(key, type);
 
         switch (type) {
@@ -110,7 +111,7 @@ public class Node {
     }
 
     public static void saveToCompressedFile(Node root, String path) throws IOException {
-        try (DataOutputStream out = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(path)))) {
+        try (DataOutputStream out = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(path.concat(".ndx"))))) {
             serialize(root, out);
         }
     }

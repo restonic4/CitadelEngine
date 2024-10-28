@@ -1,15 +1,10 @@
 package com.restonic4.test;
 
 import com.restonic4.citadel.core.GameLogic;
-import com.restonic4.citadel.core.editor.SceneSerializer;
-import com.restonic4.citadel.files.save.Node;
-import com.restonic4.citadel.files.save.NodeType;
-import com.restonic4.citadel.util.StringHelper;
+import com.restonic4.citadel.core.nodex.Node;
+import com.restonic4.citadel.core.nodex.NodeType;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
-import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
-
-import java.io.DataOutputStream;
 
 public class TestClient implements GameLogic {
     @Override
@@ -22,7 +17,7 @@ public class TestClient implements GameLogic {
         node.addChild(node);
 
         try {
-            Node.saveToCompressedFile(node, "node.txt");
+            Node.saveToCompressedFile(node, "node");
         } catch (Exception e) {
             Logger.logError(e);
         }
