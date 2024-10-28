@@ -1,8 +1,12 @@
 package com.restonic4.citadel.world.object.components;
 
+import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import com.restonic4.citadel.util.history.commands.ChangeLightColorHistoryCommand;
+import com.restonic4.citadel.util.history.commands.ChangeLightTypeHistoryCommand;
+import com.restonic4.citadel.util.history.commands.ScaleGameObjectHistoryCommand;
 import com.restonic4.citadel.world.object.Component;
 import imgui.ImGui;
 import imgui.flag.ImGuiColorEditFlags;
@@ -64,13 +68,13 @@ public class LightComponent extends Component {
 
         ImGuiHelper.renderPropertyRow("Type", () -> {
             if (ImGui.combo(StringBuilderHelper.concatenate("##lightType", this.getId()), currentOption, comboOptions)) {
-                //lightType = lightTypes[currentOption.get()];
+                LevelEditor.getHistoryCommandManager().executeCommand(new ChangeLightTypeHistoryCommand(this, lightTypes[currentOption.get()]));
             }
         });
 
         ImGuiHelper.renderPropertyRow("Color", () -> {
             if (ImGui.colorEdit4(StringBuilderHelper.concatenate("##colorPicker", this.getId()), colorValues, ImGuiColorEditFlags.AlphaPreviewHalf)) {
-                //color.set(colorValues[0], colorValues[1], colorValues[2]);
+                LevelEditor.getHistoryCommandManager().executeCommand(new ChangeLightColorHistoryCommand(this, new Vector3f(colorValues[0], colorValues[1], colorValues[2])));
             }
         });
     }
@@ -91,8 +95,16 @@ public class LightComponent extends Component {
         colorValues[3] = 1;
     }
 
+    public void setColor(Vector3f color) {
+        this.color = color;
+    }
+
     public Vector3f getColor() {
         return color;
+    }
+
+    public void setLightType(LightType lightType) {
+        this.lightType = lightType;
     }
 
     public LightType getLightType() {
