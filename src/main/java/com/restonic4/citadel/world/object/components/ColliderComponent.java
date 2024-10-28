@@ -3,6 +3,7 @@ package com.restonic4.citadel.world.object.components;
 import com.restonic4.citadel.physics.bounding.AABB;
 import com.restonic4.citadel.physics.bounding.BoundingSphere;
 import com.restonic4.citadel.physics.bounding.OBB;
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.world.object.Component;
 import com.restonic4.citadel.world.object.GameObject;
 import org.joml.Vector3f;
@@ -131,7 +132,7 @@ public class ColliderComponent extends Component {
 
     @Override
     public String serialize() {
-        return "";
+        return StringBuilderHelper.concatenate(getSerializerID(), "%", getId());
     }
 
     @Override

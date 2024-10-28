@@ -150,7 +150,7 @@ public class CameraComponent extends Component {
 
     @Override
     public String serialize() {
-        return StringBuilderHelper.concatenate("c%", cameraType);
+        return StringBuilderHelper.concatenate(getSerializerID(), "%", cameraType);
     }
 
     @Override

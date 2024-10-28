@@ -1,5 +1,6 @@
 package com.restonic4.citadel.world.object.components;
 
+import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.world.object.Component;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
@@ -16,7 +17,7 @@ public class DebugComponent extends Component {
 
     @Override
     public String serialize() {
-        return "";
+        return StringBuilderHelper.concatenate(getSerializerID(), "%", getId());
     }
 
     @Override

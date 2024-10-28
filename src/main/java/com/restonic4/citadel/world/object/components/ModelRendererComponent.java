@@ -37,7 +37,7 @@ public class ModelRendererComponent extends Component {
 
     @Override
     public String serialize() {
-        return StringBuilderHelper.concatenate("mr%", getId());
+        return StringBuilderHelper.concatenate(getSerializerID(), "%", getId());
     }
 
     @Override
