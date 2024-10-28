@@ -203,7 +203,7 @@ public class GameObject implements Serializable {
                 if (componentPrefix.equals(component.getSerializerID())) {
                     try {
                         Class<? extends Component> foundClass = component.getClass();
-                        newComponent = (Component) foundClass.getDeclaredConstructor().newInstance().deserialize(cSplits[1]);
+                        newComponent = ((Component) foundClass.getDeclaredConstructor().newInstance().deserialize(cSplits[1])).setSerializerID(component.getSerializerID());
                     } catch (Exception exception) {
                         Logger.logError(exception);
                     }
