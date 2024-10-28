@@ -46,12 +46,16 @@ public class GameViewportImGui extends ToggleableImGuiScreen {
         int textureId = FrameBuffers.GAME_VIEWPORT.getTextureId();
         ImGui.image(textureId, windowSize.x, windowSize.y, 0, 1, 1, 0);
 
-        if (!CitadelLauncher.getInstance().getSettings().shouldGenerateBindlessTextures()) {
-            renderErrorMessage(StringBuilderHelper.concatenate("Could not render due to an incompatibility", PlatformManager.getEndOfLine(), "with your graphics card."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
-        }
+        if (!CitadelLauncher.getInstance().getSettings().shouldGenerateBindlessTextures() && SceneManager.getCurrentScene().getMainCamera() == null) {
+            renderErrorMessage(StringBuilderHelper.concatenate("Could not render due to an incompatibility", PlatformManager.getEndOfLine(), "with your graphics card.", PlatformManager.getEndOfLine(), PlatformManager.getEndOfLine(), "Camera missing!", PlatformManager.getEndOfLine(), "You need at least 1 camera to render into the screen."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+        } else {
+            if (!CitadelLauncher.getInstance().getSettings().shouldGenerateBindlessTextures()) {
+                renderErrorMessage(StringBuilderHelper.concatenate("Could not render due to an incompatibility", PlatformManager.getEndOfLine(), "with your graphics card."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+            }
 
-        if (SceneManager.getCurrentScene().getMainCamera() == null) {
-            renderErrorMessage(StringBuilderHelper.concatenate("Camera missing!", PlatformManager.getEndOfLine(), "You need at least 1 camera to render into the screen."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+            if (SceneManager.getCurrentScene().getMainCamera() == null) {
+                renderErrorMessage(StringBuilderHelper.concatenate("Camera missing!", PlatformManager.getEndOfLine(), "You need at least 1 camera to render into the screen."), windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+            }
         }
 
         ImGui.end();
