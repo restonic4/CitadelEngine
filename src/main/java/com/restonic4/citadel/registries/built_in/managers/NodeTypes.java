@@ -582,8 +582,7 @@ public class NodeTypes extends AbstractRegistryInitializer {
                 try {
                     int childrenCount = in.readInt();
                     for (int i = 0; i < childrenCount; i++) {
-
-                        node.addChild(deserialize(in));
+                        node.addChild(Node.deserialize(in));
                     }
 
                     return true;

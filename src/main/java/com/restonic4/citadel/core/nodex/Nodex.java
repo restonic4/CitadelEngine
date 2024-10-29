@@ -38,4 +38,13 @@ public abstract class Nodex {
 
         return childNode;
     }
+
+    public static Node addChild(Node node, String name) {
+        Node childNode = new Node(name, NodeTypes.STRING);
+        childNode.setValue("Holder");
+
+        node.addChild(childNode);
+
+        return childNode;
+    }
 }

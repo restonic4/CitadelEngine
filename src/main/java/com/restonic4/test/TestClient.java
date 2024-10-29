@@ -24,16 +24,19 @@ public class TestClient implements GameLogic {
 
         //
 
-        Node node = Nodex.createRootNode();
-        Nodex.setValue(node, "coins", 10);
-        Nodex.setValue(node, "level", 1.2f);
-        Nodex.setValue(node, "name", "Aguacate");
-        Nodex.setValue(node, "prefix", 'a');
-        Nodex.setValue(node, "position", new Vector3f(15, 64, 20));
-        Nodex.setValue(node, "position", new Node("caca", NodeTypes.BOOLEAN));
+        Node playerData = Nodex.createRootNode();
+
+        Nodex.setValue(playerData, "coins", 10);
+        Nodex.setValue(playerData, "level", 1.2f);
+        Nodex.setValue(playerData, "name", "Aguacate");
+        Nodex.setValue(playerData, "prefix", 'a');
+        Nodex.setValue(playerData, "position", new Vector3f(15, 64, 20));
+
+        Node inventory = Nodex.addChild(playerData, "inventory");
+        Nodex.setValue(inventory, "espada", 10);
 
         try {
-            Node.saveToCompressedFile(node, "node");
+            Node.saveToCompressedFile(playerData, "node");
         } catch (Exception e) {
             Logger.logError(e);
         }
