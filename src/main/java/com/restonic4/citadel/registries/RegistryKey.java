@@ -1,5 +1,7 @@
 package com.restonic4.citadel.registries;
 
+import com.restonic4.citadel.util.StringHelper;
+
 public class RegistryKey<T> {
     private final String key, rootDirectory, assetFileExtension;
 
@@ -25,6 +27,17 @@ public class RegistryKey<T> {
 
     public String getAssetFileExtension() {
         return assetFileExtension;
+    }
+
+    public long getMemorySize() {
+        long size = 8;
+        size += 3 * 8;
+
+        size += StringHelper.getMemorySize(getKey());
+        size += StringHelper.getMemorySize(getRootDirectory());
+        size += StringHelper.getMemorySize(getAssetFileExtension());
+
+        return size;
     }
 
     @Override

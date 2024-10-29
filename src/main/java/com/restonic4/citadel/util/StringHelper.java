@@ -12,4 +12,19 @@ public class StringHelper {
 
         return utf8Bytes;
     }
+
+    public static long getMemorySize(String string) {
+        if (string == null) return 0;
+
+        long stringSize = 8;
+        stringSize += 8;
+        stringSize += 4;
+        stringSize += 4;
+
+
+        stringSize += 16;
+        stringSize += string.length() * 2L;
+
+        return stringSize;
+    }
 }

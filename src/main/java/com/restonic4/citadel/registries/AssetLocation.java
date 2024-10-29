@@ -2,6 +2,7 @@ package com.restonic4.citadel.registries;
 
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.exceptions.AssetLocationException;
+import com.restonic4.citadel.util.StringHelper;
 
 import java.util.Objects;
 
@@ -57,6 +58,17 @@ public class AssetLocation {
             }
         }
         return true;
+    }
+
+    public long getMemorySize() {
+        long size = 8;
+        size += 3 * 8;
+
+        size += StringHelper.getMemorySize(getNamespace());
+        size += StringHelper.getMemorySize(getPath());
+        size += (getRegistryKey() != null) ? getRegistryKey().getMemorySize() : 0;
+
+        return size;
     }
 
     public String toString() {

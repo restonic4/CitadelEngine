@@ -114,4 +114,27 @@ public class Registry {
 
         return false;
     }
+
+    public static long getApproximatedMemorySize() {
+        long size = 36;
+
+        for (Map.Entry<RegistryKey<?>, Map<AssetLocation, ?>> entry : registries.entrySet()) {
+            size += entry.getKey().getMemorySize();
+
+            Map<AssetLocation, ?> innerMap = entry.getValue();
+            size += 32;
+            size += 8;
+
+            if (innerMap != null) {
+                size += 36;
+
+                for (Map.Entry<AssetLocation, ?> innerEntry : innerMap.entrySet()) {
+                    size += innerEntry.getKey().getMemorySize();
+                    size += 8;
+                }
+            }
+        }
+
+        return size;
+    }
 }
