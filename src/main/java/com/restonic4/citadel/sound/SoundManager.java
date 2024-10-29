@@ -47,7 +47,8 @@ public class SoundManager {
         ALCCapabilities deviceCaps = ALC.createCapabilities(device);
         this.context = alcCreateContext(device, (IntBuffer) null);
         if (context == NULL) {
-            throw new IllegalStateException("Failed to create OpenAL context.");
+            Logger.logError("Failed to create OpenAL context.");
+            return;
         }
         alcMakeContextCurrent(context);
         AL.createCapabilities(deviceCaps);
@@ -122,5 +123,9 @@ public class SoundManager {
 
     public int getSourcesAmount() {
         return this.soundSourceMap.size();
+    }
+
+    public long getContext() {
+        return this.context;
     }
 }

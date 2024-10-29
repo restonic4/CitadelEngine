@@ -2,6 +2,7 @@ package com.restonic4.citadel.sound;
 
 import com.restonic4.citadel.files.FileManager;
 import com.restonic4.ClientSide;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.system.*;
 
@@ -18,6 +19,14 @@ public class SoundBuffer {
     private ShortBuffer pcm;
 
     public SoundBuffer(String filePath) {
+        if (SoundManager.getInstance().getContext() == 0) {
+            Logger.logError("Could not create sound buffer, the OpenAL context is missing!");
+
+            this.bufferId = 0;
+
+            return;
+        }
+
         this.bufferId = alGenBuffers();
         try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
             pcm = readVorbis(filePath, info);

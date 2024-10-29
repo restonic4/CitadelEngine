@@ -42,6 +42,10 @@ public class Node {
         return children;
     }
 
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
     public void setValue(String value) {
         this.value = value;
     }

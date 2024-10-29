@@ -34,6 +34,8 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
     public static NodeType QUATERNIONF;
 
+    public static NodeType NODE;
+
     public void register() {
         STRING = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "string"), new NodeType() {
             @Override
@@ -287,7 +289,7 @@ public class NodeTypes extends AbstractRegistryInitializer {
             }
         });
 
-        VECTOR2I = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vec2i"), new NodeType() {
+        VECTOR2I = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector2i"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
                 Node node = (Node) object;
@@ -323,7 +325,7 @@ public class NodeTypes extends AbstractRegistryInitializer {
             }
         });
 
-        VECTOR3I = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vec3i"), new NodeType() {
+        VECTOR3I = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector3i"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
                 Node node = (Node) object;
@@ -361,7 +363,7 @@ public class NodeTypes extends AbstractRegistryInitializer {
             }
         });
 
-        VECTOR4I = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vec4i"), new NodeType() {
+        VECTOR4I = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector4i"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
                 Node node = (Node) object;
@@ -401,7 +403,7 @@ public class NodeTypes extends AbstractRegistryInitializer {
             }
         });
 
-        VECTOR2F = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vec2f"), new NodeType() {
+        VECTOR2F = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector2f"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
                 Node node = (Node) object;
@@ -437,7 +439,7 @@ public class NodeTypes extends AbstractRegistryInitializer {
             }
         });
 
-        VECTOR3F = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vec3f"), new NodeType() {
+        VECTOR3F = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector3f"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
                 Node node = (Node) object;
@@ -475,7 +477,7 @@ public class NodeTypes extends AbstractRegistryInitializer {
             }
         });
 
-        VECTOR4F = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vec4f"), new NodeType() {
+        VECTOR4F = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector4f"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
                 Node node = (Node) object;
@@ -546,6 +548,43 @@ public class NodeTypes extends AbstractRegistryInitializer {
                     float w = in.readFloat();
 
                     node.setValue(new Quaternionf(x, y, z, w));
+
+                    return true;
+                } catch (Exception exception) {
+                    Logger.log(exception);
+                    return false;
+                }
+            }
+        });
+
+        NODE = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "node"), new NodeType() {
+            @Override
+            public boolean serialize(Object object, DataOutputStream out) {
+                Node node = (Node) object;
+
+                try {
+                    out.writeInt(node.getChildren().size());
+                    for (Node child : node.getChildren().values()) {
+                        child.getType().serialize(child, out);
+                    }
+
+                    return true;
+                } catch (Exception exception) {
+                    Logger.logError(exception);
+                    return false;
+                }
+            }
+
+            @Override
+            public boolean deserialize(Object object, DataInputStream in) {
+                Node node = (Node) object;
+
+                try {
+                    int childrenCount = in.readInt();
+                    for (int i = 0; i < childrenCount; i++) {
+
+                        node.addChild(deserialize(in));
+                    }
 
                     return true;
                 } catch (Exception exception) {
