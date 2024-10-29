@@ -5,7 +5,7 @@ import com.restonic4.citadel.events.types.SceneEvents;
 import com.restonic4.citadel.physics.PhysicsManager;
 import com.restonic4.citadel.sound.SoundManager;
 import com.restonic4.citadel.util.CitadelConstants;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.world.object.GameObject;
 import com.restonic4.citadel.render.Renderer;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;

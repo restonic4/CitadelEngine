@@ -11,15 +11,13 @@ import com.restonic4.citadel.registries.RegistryManager;
 import com.restonic4.citadel.registries.built_in.managers.*;
 import com.restonic4.citadel.sound.SoundManager;
 import com.restonic4.citadel.sound.SoundSource;
-import com.restonic4.citadel.util.ArrayHelper;
+import com.restonic4.citadel.util.helpers.ArrayHelper;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.util.GradleUtil;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.DebugManager;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import org.joml.Vector3f;
-
-import java.util.Objects;
 
 public class CitadelLauncher {
     private static CitadelLauncher instance;

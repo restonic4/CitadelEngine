@@ -5,8 +5,8 @@ import imgui.extension.implot.flag.ImPlotCol;
 import imgui.extension.implot.flag.ImPlotCond;
 import imgui.extension.implot.flag.ImPlotFlags;
 import com.restonic4.ClientSide;
-import com.restonic4.citadel.util.ColorHelper;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.ColorHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 
 import java.util.ArrayList;
 import java.util.List;

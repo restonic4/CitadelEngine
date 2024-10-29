@@ -4,15 +4,9 @@ import com.restonic4.citadel.files.Serializable;
 import com.restonic4.citadel.registries.AssetLocation;
 import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
-import com.restonic4.citadel.registries.RegistryObject;
-import com.restonic4.citadel.registries.built_in.managers.Components;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.util.UniqueIdentifierManager;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
-import com.restonic4.citadel.world.object.components.CameraComponent;
-import com.restonic4.citadel.world.object.components.DebugComponent;
-import com.restonic4.citadel.world.object.components.LightComponent;
-import com.restonic4.citadel.world.object.components.ModelRendererComponent;
 
 import java.util.ArrayList;
 import java.util.List;

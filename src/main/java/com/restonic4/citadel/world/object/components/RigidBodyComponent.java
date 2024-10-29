@@ -1,6 +1,6 @@
 package com.restonic4.citadel.world.object.components;
 
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.util.Time;
 import com.restonic4.citadel.world.object.Component;
 import org.joml.Vector3f;

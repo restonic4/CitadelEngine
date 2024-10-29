@@ -4,7 +4,7 @@ import com.restonic4.citadel.exceptions.NetworkException;
 import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.types.PacketDataType;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 
 import java.util.ArrayList;
 import java.util.List;

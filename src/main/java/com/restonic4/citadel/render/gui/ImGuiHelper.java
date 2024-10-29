@@ -1,7 +1,7 @@
 package com.restonic4.citadel.render.gui;
 
 import com.restonic4.citadel.util.CitadelConstants;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import imgui.ImDrawList;
 import imgui.ImGui;
 import imgui.ImVec2;

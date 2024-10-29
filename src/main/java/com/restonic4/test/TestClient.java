@@ -20,7 +20,6 @@ public class TestClient implements GameLogic {
             Logger.logError(e);
         }
 
-
         //
 
         Node node = new Node("main", NodeTypes.STRING);

@@ -2,6 +2,7 @@ package com.restonic4.citadel.util;
 
 import com.restonic4.citadel.platform.PlatformManager;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 
 public class GradleUtil {
     // These variables are generated with a gradle task

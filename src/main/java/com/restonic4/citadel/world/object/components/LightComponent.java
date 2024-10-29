@@ -2,17 +2,14 @@ package com.restonic4.citadel.world.object.components;
 
 import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.history.commands.ChangeLightColorHistoryCommand;
 import com.restonic4.citadel.util.history.commands.ChangeLightTypeHistoryCommand;
-import com.restonic4.citadel.util.history.commands.ScaleGameObjectHistoryCommand;
 import com.restonic4.citadel.world.object.Component;
 import imgui.ImGui;
 import imgui.flag.ImGuiColorEditFlags;
-import imgui.type.ImFloat;
 import imgui.type.ImInt;
-import imgui.type.ImString;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;

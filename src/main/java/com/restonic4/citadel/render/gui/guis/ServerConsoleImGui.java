@@ -6,7 +6,7 @@ import imgui.type.ImString;
 import com.restonic4.ClientSide;
 import com.restonic4.citadel.exceptions.NetworkException;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
-import com.restonic4.citadel.util.ColorHelper;
+import com.restonic4.citadel.util.helpers.ColorHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.util.List;

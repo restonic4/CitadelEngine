@@ -1,6 +1,6 @@
 package com.restonic4.citadel.registries;
 
-import com.restonic4.citadel.util.StringHelper;
+import com.restonic4.citadel.util.helpers.StringHelper;
 
 public class RegistryKey<T> {
     private final String key, rootDirectory, assetFileExtension;

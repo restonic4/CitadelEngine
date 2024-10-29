@@ -2,7 +2,7 @@ package com.restonic4.citadel.registries;
 
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.exceptions.AssetLocationException;
-import com.restonic4.citadel.util.StringHelper;
+import com.restonic4.citadel.util.helpers.StringHelper;
 
 import java.util.Objects;
 

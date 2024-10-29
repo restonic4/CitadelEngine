@@ -1,7 +1,7 @@
 package com.restonic4.citadel.world.object;
 
 import com.restonic4.citadel.files.Serializable;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.util.UniqueIdentifierManager;
 import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;

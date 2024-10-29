@@ -2,15 +2,12 @@ package com.restonic4.citadel.render;
 
 import com.restonic4.ClientSide;
 import com.restonic4.citadel.exceptions.RenderException;
-import com.restonic4.citadel.platform.PlatformManager;
 import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.registries.RegistryObject;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;

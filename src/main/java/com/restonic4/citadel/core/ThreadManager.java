@@ -1,6 +1,6 @@
 package com.restonic4.citadel.core;
 
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.util.ArrayList;

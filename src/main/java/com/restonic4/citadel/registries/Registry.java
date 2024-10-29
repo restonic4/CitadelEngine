@@ -4,7 +4,7 @@ import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.CitadelSettings;
 import com.restonic4.citadel.exceptions.RegistryObjectException;
 import com.restonic4.citadel.util.CitadelConstants;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 
 import java.util.HashMap;
 import java.util.Map;

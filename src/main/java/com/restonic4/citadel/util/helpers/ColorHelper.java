@@ -1,4 +1,4 @@
-package com.restonic4.citadel.util;
+package com.restonic4.citadel.util.helpers;
 
 public class ColorHelper {
     public static int hexToARGB(int hex) {

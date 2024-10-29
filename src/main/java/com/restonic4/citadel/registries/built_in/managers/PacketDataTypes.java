@@ -6,7 +6,7 @@ import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.types.PacketDataType;
 import com.restonic4.citadel.util.CitadelConstants;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import org.joml.*;
 
 public class PacketDataTypes extends AbstractRegistryInitializer {

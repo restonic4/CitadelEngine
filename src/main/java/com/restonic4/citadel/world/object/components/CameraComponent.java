@@ -2,9 +2,8 @@ package com.restonic4.citadel.world.object.components;
 
 import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.util.CitadelConstants;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.world.object.Component;
-import com.restonic4.citadel.world.object.Mesh;
 import com.restonic4.citadel.world.object.Transform;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;

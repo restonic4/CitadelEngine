@@ -1,4 +1,4 @@
-package com.restonic4.citadel.util;
+package com.restonic4.citadel.util.helpers;
 
 import org.json.JSONObject;
 

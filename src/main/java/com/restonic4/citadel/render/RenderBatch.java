@@ -4,7 +4,7 @@ import com.restonic4.ClientSide;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.registries.built_in.managers.Shaders;
 import com.restonic4.citadel.render.shadows.CascadeShadow;
-import com.restonic4.citadel.util.ArrayHelper;
+import com.restonic4.citadel.util.helpers.ArrayHelper;
 import com.restonic4.citadel.util.CitadelConstants;
 import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;

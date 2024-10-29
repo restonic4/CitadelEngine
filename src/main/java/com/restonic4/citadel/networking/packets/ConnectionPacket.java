@@ -1,7 +1,7 @@
 package com.restonic4.citadel.networking.packets;
 
 import com.restonic4.citadel.networking.PacketData;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import io.netty.channel.ChannelHandlerContext;
 import com.restonic4.citadel.networking.PacketType;

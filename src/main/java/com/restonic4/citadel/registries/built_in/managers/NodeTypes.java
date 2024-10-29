@@ -7,14 +7,11 @@ import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.types.NodeType;
 import com.restonic4.citadel.util.CitadelConstants;
-import com.restonic4.citadel.util.StringBuilderHelper;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import org.joml.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.util.zip.GZIPOutputStream;
 
 public class NodeTypes extends AbstractRegistryInitializer {
     public static NodeType STRING;

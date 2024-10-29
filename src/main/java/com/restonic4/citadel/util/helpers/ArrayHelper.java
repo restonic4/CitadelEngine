@@ -1,4 +1,4 @@
-package com.restonic4.citadel.util;
+package com.restonic4.citadel.util.helpers;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;

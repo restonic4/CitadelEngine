@@ -1,4 +1,4 @@
-package com.restonic4.citadel.util;
+package com.restonic4.citadel.util.helpers;
 
 // This class was made to avoid memory leaks doing string concatenations
 public class StringBuilderHelper {

@@ -6,7 +6,7 @@ import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.platform.PlatformManager;
 import com.restonic4.citadel.registries.built_in.managers.FrameBuffers;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.world.SceneManager;
 import imgui.ImGui;
 import imgui.ImVec2;

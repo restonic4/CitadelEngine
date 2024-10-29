@@ -1,9 +1,7 @@
 package com.restonic4.citadel.world.object.components;
 
-import com.restonic4.citadel.render.gui.ImGuiHelper;
-import com.restonic4.citadel.util.StringBuilderHelper;
+import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.world.object.*;
-import imgui.ImGui;
 import org.joml.Vector3f;
 
 public class ModelRendererComponent extends Component {
