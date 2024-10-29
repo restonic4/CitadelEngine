@@ -1,5 +1,10 @@
 package com.restonic4.citadel.render.gui.guis;
 
+import com.restonic4.citadel.registries.RegistryObject;
+import com.restonic4.citadel.registries.built_in.types.KeyBind;
+import com.restonic4.citadel.registries.built_in.types.Locale;
+import com.restonic4.citadel.render.Shader;
+import com.restonic4.citadel.util.StringHelper;
 import com.restonic4.citadel.world.object.components.CameraComponent;
 import imgui.ImGui;
 import com.restonic4.ClientSide;
@@ -137,8 +142,49 @@ public class StatisticsImGui extends ToggleableImGuiScreen {
 
                     for (Map.Entry<AssetLocation, ?> registryData : map.entrySet()) {
                         AssetLocation assetLocation = registryData.getKey();
+                        RegistryObject registryObject = (RegistryObject) registryData.getValue();
 
-                        ImGui.text(assetLocation.toString());
+                        if (registryObject instanceof KeyBind keyBind) {
+                            if (ImGui.collapsingHeader(assetLocation.toString())) {
+                                ImGui.indent(CitadelConstants.IM_GUI_INDENT);
+
+                                ImGui.text(keyBind.getKeyString());
+
+                                ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
+                            }
+                        } else if (registryObject instanceof Shader shader) {
+                            if (ImGui.collapsingHeader(assetLocation.toString())) {
+                                ImGui.indent(CitadelConstants.IM_GUI_INDENT);
+
+                                if (ImGui.collapsingHeader(StringBuilderHelper.concatenate("Vertex shader source ##", assetLocation.toString()))) {
+                                    ImGui.indent(CitadelConstants.IM_GUI_INDENT);
+
+                                    ImGui.text(shader.getVertexShaderSource());
+
+                                    ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
+                                }
+
+                                if (ImGui.collapsingHeader(StringBuilderHelper.concatenate("Fragment shader source ##", assetLocation.toString()))) {
+                                    ImGui.indent(CitadelConstants.IM_GUI_INDENT);
+
+                                    ImGui.text(shader.getFragmentShaderSource());
+
+                                    ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
+                                }
+
+                                ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
+                            }
+                        } else if (registryObject instanceof Locale locale) {
+                            if (ImGui.collapsingHeader(assetLocation.toString())) {
+                                ImGui.indent(CitadelConstants.IM_GUI_INDENT);
+
+                                ImGui.text(StringHelper.formatJson(locale.getData().toString()));
+
+                                ImGui.unindent(CitadelConstants.IM_GUI_INDENT);
+                            }
+                        } else {
+                            ImGui.text(assetLocation.toString());
+                        }
                     }
 
                     ImGui.unindent(CitadelConstants.IM_GUI_INDENT);

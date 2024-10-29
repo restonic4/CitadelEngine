@@ -27,4 +27,54 @@ public class StringHelper {
 
         return stringSize;
     }
+
+    public static String formatJson(String json) {
+        StringBuilder formatted = new StringBuilder();
+        int indent = 0;
+        boolean inQuotes = false;
+
+        for (char c : json.toCharArray()) {
+            switch (c) {
+                case '"':
+                    inQuotes = !inQuotes;
+                    formatted.append(c);
+                    break;
+                case '{':
+                case '[':
+                    formatted.append(c);
+                    if (!inQuotes) {
+                        formatted.append("\n");
+                        indent++;
+                        addIndent(formatted, indent);
+                    }
+                    break;
+                case '}':
+                case ']':
+                    if (!inQuotes) {
+                        formatted.append("\n");
+                        indent--;
+                        addIndent(formatted, indent);
+                    }
+                    formatted.append(c);
+                    break;
+                case ',':
+                    formatted.append(c);
+                    if (!inQuotes) {
+                        formatted.append("\n");
+                        addIndent(formatted, indent);
+                    }
+                    break;
+                default:
+                    formatted.append(c);
+            }
+        }
+
+        return formatted.toString();
+    }
+
+    private static void addIndent(StringBuilder formatted, int indent) {
+        for (int i = 0; i < indent; i++) {
+            formatted.append("    ");
+        }
+    }
 }

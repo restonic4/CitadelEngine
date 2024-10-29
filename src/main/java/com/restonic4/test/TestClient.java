@@ -3,6 +3,7 @@ package com.restonic4.test;
 import com.restonic4.citadel.core.GameLogic;
 import com.restonic4.citadel.core.nodex.Node;
 import com.restonic4.citadel.registries.Registry;
+import com.restonic4.citadel.registries.built_in.managers.Locales;
 import com.restonic4.citadel.registries.built_in.managers.NodeTypes;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.world.SceneManager;
@@ -34,6 +35,7 @@ public class TestClient implements GameLogic {
         }
 
         Logger.log("Registry memory size: " + Registry.getApproximatedMemorySize());
+        Logger.log(Locales.EN_US.getData().toString());
     }
 
     @Override

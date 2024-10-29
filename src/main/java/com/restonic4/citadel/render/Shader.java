@@ -27,6 +27,8 @@ public class Shader extends RegistryObject {
     private UniformsMap uniformsMap;
     private boolean isUsed = false;
 
+    private String vertexShaderSource, fragmentShaderSource;
+
     public Shader() {}
 
     public Shader(String[] uniforms) {
@@ -48,6 +50,9 @@ public class Shader extends RegistryObject {
             String source = FileManager.readFile(filepath);
 
             String[] splitString = source.split("(#type)( )+([a-zA-Z]+)");
+
+            vertexShaderSource = splitString[1];
+            fragmentShaderSource = splitString[2];
 
             setShaderInPattern("vertex", splitString[1]);
             setShaderInPattern("fragment", splitString[2]);
@@ -161,5 +166,13 @@ public class Shader extends RegistryObject {
 
     public UniformsMap getUniformsMap() {
         return this.uniformsMap;
+    }
+
+    public String getVertexShaderSource() {
+        return vertexShaderSource;
+    }
+
+    public String getFragmentShaderSource() {
+        return fragmentShaderSource;
     }
 }
