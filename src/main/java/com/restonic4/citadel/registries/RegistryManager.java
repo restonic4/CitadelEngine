@@ -29,6 +29,12 @@ public class RegistryManager {
         }
     }
 
+    public static void registerBuiltInRegistrySet(AbstractRegistryInitializer... abstractRegistryInitializers) {
+        for (AbstractRegistryInitializer abstractRegistryInitializer : abstractRegistryInitializers) {
+            registerBuiltInRegistrySet(abstractRegistryInitializer);
+        }
+    }
+
     public static void registerBuiltInRegistrySet(AbstractRegistryInitializer abstractRegistryInitializer) {
         EventResult eventResult = RegistriesEvents.REGISTERING_SET.invoker().onRegisteringSet(abstractRegistryInitializer, true);
         if (eventResult == EventResult.CANCELED) {
@@ -38,6 +44,12 @@ public class RegistryManager {
         builtInRegistries.add(abstractRegistryInitializer);
 
         RegistriesEvents.SET_REGISTERED.invoker().onSetRegistered(abstractRegistryInitializer, true);
+    }
+
+    public static void registerRegistrySet(AbstractRegistryInitializer... abstractRegistryInitializers) {
+        for (AbstractRegistryInitializer abstractRegistryInitializer : abstractRegistryInitializers) {
+            registerRegistrySet(abstractRegistryInitializer);
+        }
     }
 
     public static void registerRegistrySet(AbstractRegistryInitializer abstractRegistryInitializer) {

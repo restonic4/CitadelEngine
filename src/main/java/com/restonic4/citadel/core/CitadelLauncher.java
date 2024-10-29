@@ -183,18 +183,11 @@ public class CitadelLauncher {
         }
 
         // Loading the registry sets
-        RegistryManager.registerBuiltInRegistrySet(new Shaders());
-        RegistryManager.registerBuiltInRegistrySet(new Sounds());
-        RegistryManager.registerBuiltInRegistrySet(new ProfilerStats());
-        RegistryManager.registerBuiltInRegistrySet(new Locales());
-        RegistryManager.registerBuiltInRegistrySet(new KeyBinds());
-        RegistryManager.registerBuiltInRegistrySet(new ImGuiScreens());
-        RegistryManager.registerBuiltInRegistrySet(new PacketDataTypes());
-        RegistryManager.registerBuiltInRegistrySet(new Packets());
-        RegistryManager.registerBuiltInRegistrySet(new FrameBuffers());
-        RegistryManager.registerBuiltInRegistrySet(new Icons());
-        RegistryManager.registerBuiltInRegistrySet(new Components());
-        RegistryManager.registerBuiltInRegistrySet(new NodeTypes());
+        RegistryManager.registerBuiltInRegistrySet(
+                new Shaders(), new Sounds(), new ProfilerStats(), new Locales(),
+                new KeyBinds(), new ImGuiScreens(), new PacketDataTypes(), new Packets(),
+                new FrameBuffers(), new Icons(), new Components(), new NodeTypes()
+        );
 
         // Register all
         RegistryManager.registerBuiltIn();
