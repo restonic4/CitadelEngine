@@ -21,7 +21,7 @@ public class Registries {
     public static final RegistryKey<ImGuiScreen> IM_GUI_SCREEN = new RegistryKey<>("im_gui_screen");
     public static final RegistryKey<Packet> PACKET = new RegistryKey<>("packet");
     public static final RegistryKey<PacketDataType<?>> PACKET_DATA_TYPE = new RegistryKey<>("packet_data_type");
-    public static final RegistryKey<NodeType<?>> NODE_TYPE = new RegistryKey<>("node_type");
+    public static final RegistryKey<NodeType> NODE_TYPE = new RegistryKey<>("node_type");
     public static final RegistryKey<FrameBuffer> FRAME_BUFFER = new RegistryKey<>("frame_buffer");
     public static final RegistryKey<Component> COMPONENT = new RegistryKey<>("component");
 

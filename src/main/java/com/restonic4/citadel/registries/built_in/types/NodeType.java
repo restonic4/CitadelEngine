@@ -2,23 +2,17 @@ package com.restonic4.citadel.registries.built_in.types;
 
 import com.restonic4.citadel.registries.RegistryObject;
 
-public class NodeType<T> extends RegistryObject {
-    private final Class<T> typeClass;
+import java.io.*;
+import java.nio.file.Path;
+import java.util.zip.GZIPOutputStream;
 
-    public NodeType(Class<T> typeClass) {
-        this.typeClass = typeClass;
-    }
-
-    public Class<T> getTypeClass() {
-        return typeClass;
-    }
-
+public class NodeType extends RegistryObject {
     // Should override this
-    public String serialize(Object object) {
-        return object.toString();
+    public boolean serialize(Object object, DataOutputStream out) {
+        return true;
     }
 
-    public T deserialize(String value) {
-        return null;
+    public boolean deserialize(Object object, DataInputStream in) {
+        return true;
     }
 }

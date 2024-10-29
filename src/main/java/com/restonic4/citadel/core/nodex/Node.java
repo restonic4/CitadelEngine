@@ -1,6 +1,12 @@
 package com.restonic4.citadel.core.nodex;
 
+import com.restonic4.citadel.registries.AssetLocation;
+import com.restonic4.citadel.registries.Registries;
+import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.types.NodeType;
+import com.restonic4.citadel.util.CitadelConstants;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import org.joml.*;
 
 import java.io.*;
 import java.util.HashMap;
@@ -10,11 +16,11 @@ import java.util.zip.GZIPOutputStream;
 
 public class Node {
     private String key;
-    private NodeType<?> type;
+    private NodeType type;
     private Object value;
     private Map<String, Node> children;
 
-    public Node(String key, NodeType<?> type) {
+    public Node(String key, NodeType type) {
         this.key = key;
         this.type = type;
         this.children = new HashMap<>();
@@ -24,7 +30,7 @@ public class Node {
         return key;
     }
 
-    public NodeType<?> getType() {
+    public NodeType getType() {
         return type;
     }
 
@@ -44,11 +50,59 @@ public class Node {
         this.value = value;
     }
 
-    public void setValue(double value) {
+    public void setValue(float value) {
         this.value = value;
     }
 
     public void setValue(boolean value) {
+        this.value = value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public void setValue(long value) {
+        this.value = value;
+    }
+
+    public void setValue(short value) {
+        this.value = value;
+    }
+
+    public void setValue(byte value) {
+        this.value = value;
+    }
+
+    public void setValue(char value) {
+        this.value = value;
+    }
+
+    public void setValue(Vector2i value) {
+        this.value = value;
+    }
+
+    public void setValue(Vector3i value) {
+        this.value = value;
+    }
+
+    public void setValue(Vector4i value) {
+        this.value = value;
+    }
+
+    public void setValue(Vector2f value) {
+        this.value = value;
+    }
+
+    public void setValue(Vector3f value) {
+        this.value = value;
+    }
+
+    public void setValue(Vector4f value) {
+        this.value = value;
+    }
+
+    public void setValue(Quaternionf value) {
         this.value = value;
     }
 
@@ -58,9 +112,10 @@ public class Node {
 
     public static void serialize(Node node, DataOutputStream out) throws IOException {
         out.writeUTF(node.getKey());
-        out.writeInt(node.getType().serialize());
+        out.writeUTF(node.getType().getAssetLocation().toString());
+        node.getType().serialize(node, out);
 
-        switch (node.getType()) {
+        /*switch (node.getType()) {
             case STRING:
                 out.writeUTF((String) node.getValue());
                 break;
@@ -79,15 +134,18 @@ public class Node {
                     serialize(child, out);
                 }
                 break;
-        }
+        }*/
     }
 
     public static Node deserialize(DataInputStream in) throws IOException {
         String key = in.readUTF();
-        NodeType<?> type = NodeType.values()[in.readInt()];
-        Node node = new Node(key, type);
 
-        switch (type) {
+        NodeType type = Registry.getRegistryObject(Registries.NODE_TYPE, new AssetLocation(in.readUTF()));
+
+        Node node = new Node(key, type);
+        node.getType().deserialize(node, in);
+
+        /*switch (type) {
             case STRING:
                 node.setValue(in.readUTF());
                 break;
@@ -106,7 +164,7 @@ public class Node {
                     node.addChild(deserialize(in));
                 }
                 break;
-        }
+        }*/
         return node;
     }
 
@@ -117,7 +175,7 @@ public class Node {
     }
 
     public static Node loadFromCompressedFile(String path) throws IOException {
-        try (DataInputStream in = new DataInputStream(new GZIPInputStream(new FileInputStream(path)))) {
+        try (DataInputStream in = new DataInputStream(new GZIPInputStream(new FileInputStream(path.concat(".ndx"))))) {
             return deserialize(in);
         }
     }
