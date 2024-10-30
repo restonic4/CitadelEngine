@@ -1,6 +1,8 @@
 package com.restonic4.citadel.registries.built_in.managers;
 
 import com.restonic4.citadel.core.nodex.Node;
+import com.restonic4.citadel.core.nodex.RootNode;
+import com.restonic4.citadel.core.nodex.ValueNode;
 import com.restonic4.citadel.registries.AbstractRegistryInitializer;
 import com.restonic4.citadel.registries.AssetLocation;
 import com.restonic4.citadel.registries.Registries;
@@ -40,7 +42,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         STRING = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "string"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeUTF((String) node.getValue());
@@ -53,7 +57,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     node.setValue(in.readUTF());
@@ -68,7 +74,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         INTEGER = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "integer"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeInt((Integer) node.getValue());
@@ -81,7 +89,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     node.setValue(in.readInt());
@@ -96,7 +106,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         FLOAT = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "float"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeFloat((Float) node.getValue());
@@ -109,7 +121,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     node.setValue(in.readFloat());
@@ -124,7 +138,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         BOOLEAN = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "boolean"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeBoolean((Boolean) node.getValue());
@@ -137,7 +153,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     node.setValue(in.readBoolean());
@@ -152,7 +170,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         DOUBLE = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "double"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeDouble((Double) node.getValue());
@@ -165,7 +185,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     node.setValue(in.readDouble());
@@ -180,7 +202,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         LONG = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "long"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeLong((Long) node.getValue());
@@ -193,7 +217,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     node.setValue(in.readLong());
@@ -208,7 +234,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         SHORT = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "short"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeShort((Short) node.getValue());
@@ -221,7 +249,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     node.setValue(in.readShort());
@@ -236,7 +266,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         BYTE = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "byte"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeByte((Byte) node.getValue());
@@ -249,7 +281,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     node.setValue(in.readByte());
@@ -264,7 +298,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         CHARACTER = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "character"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeChar((Character) node.getValue());
@@ -277,7 +313,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     node.setValue(in.readChar());
@@ -292,7 +330,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         VECTOR2I = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector2i"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     Vector2i vector2i = (Vector2i) node.getValue();
@@ -309,7 +349,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     int x = in.readInt();
@@ -328,7 +370,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         VECTOR3I = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector3i"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     Vector3i vector3i = (Vector3i) node.getValue();
@@ -346,7 +390,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     int x = in.readInt();
@@ -366,7 +412,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         VECTOR4I = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector4i"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     Vector4i vector4i = (Vector4i) node.getValue();
@@ -385,7 +433,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     int x = in.readInt();
@@ -406,7 +456,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         VECTOR2F = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector2f"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     Vector2f vector2f = (Vector2f) node.getValue();
@@ -423,7 +475,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     float x = in.readFloat();
@@ -442,7 +496,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         VECTOR3F = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector3f"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     Vector3f vector3f = (Vector3f) node.getValue();
@@ -460,7 +516,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     float x = in.readFloat();
@@ -480,7 +538,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         VECTOR4F = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "vector4f"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     Vector4f vector4f = (Vector4f) node.getValue();
@@ -499,7 +559,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     float x = in.readFloat();
@@ -520,7 +582,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         QUATERNIONF = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "quaternionf"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     Quaternionf quaternionf = (Quaternionf) node.getValue();
@@ -539,7 +603,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof ValueNode node)) {
+                    return false;
+                }
 
                 try {
                     float x = in.readFloat();
@@ -560,7 +626,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
         NODE = Registry.register(Registries.NODE_TYPE, new AssetLocation(CitadelConstants.REGISTRY_NAMESPACE, "node"), new NodeType() {
             @Override
             public boolean serialize(Object object, DataOutputStream out) {
-                Node node = (Node) object;
+                if (!(object instanceof RootNode node)) {
+                    return false;
+                }
 
                 try {
                     out.writeInt(node.getChildren().size());
@@ -577,7 +645,9 @@ public class NodeTypes extends AbstractRegistryInitializer {
 
             @Override
             public boolean deserialize(Object object, DataInputStream in) {
-                Node node = (Node) object;
+                if (!(object instanceof RootNode node)) {
+                    return false;
+                }
 
                 try {
                     int childrenCount = in.readInt();
