@@ -1,16 +1,7 @@
 package com.restonic4.citadel.core.nodex;
 
-import com.restonic4.citadel.registries.AssetLocation;
-import com.restonic4.citadel.registries.Registries;
-import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.types.NodeType;
 import org.joml.*;
-
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 public class ValueNode extends Node {
     private Object value;
@@ -20,7 +11,8 @@ public class ValueNode extends Node {
     }
 
     public ValueNode(String key, Object value) {
-        super(key, NodexHelper.getDesiredNodeType(value));
+        super(key, Nodex.getDesiredNodeType(value));
+        setValue(value);
     }
 
     public void setValue(Object value) {

@@ -3,10 +3,12 @@ package com.restonic4.citadel.core.nodex;
 import com.restonic4.citadel.registries.AssetLocation;
 import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
-import com.restonic4.citadel.registries.built_in.managers.NodeTypes;
 import com.restonic4.citadel.registries.built_in.types.NodeType;
 
+import java.io.*;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  <h1>Examples:</h1>
@@ -65,7 +67,7 @@ ValueNode playerCoins = playerData.getValueNode("coins");
 }</pre>
  */
 
-public abstract class NodexHelper {
+public abstract class Nodex {
     public static NodeType getDesiredNodeType(Object value) {
         NodeType type = null;
 

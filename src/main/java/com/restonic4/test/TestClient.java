@@ -47,9 +47,6 @@ public class TestClient implements GameLogic {
         } catch (Exception e) {
             Logger.logError(e);
         }
-
-        Logger.log("Registry memory size: " + Registry.getApproximatedMemorySize());
-        Logger.log(Locales.EN_US.getData().toString());
     }
 
     @Override
