@@ -5,19 +5,11 @@ import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.managers.NodeTypes;
 import com.restonic4.citadel.registries.built_in.types.NodeType;
-import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.util.Map;
 
-public abstract class Nodex {
-    public static Node createRootNode() {
-        Node rootNode = new Node("root", NodeTypes.STRING);
-        rootNode.setValue("Nodex");
-
-        return rootNode;
-    }
-
-    public static Node setValue(Node node, String name, Object value) {
+public abstract class NodexHelper {
+    public static NodeType getDesiredNodeType(Object value) {
         NodeType type = null;
 
         Map<AssetLocation, NodeType> registries = Registry.getRegistry(Registries.NODE_TYPE);
@@ -31,20 +23,6 @@ public abstract class Nodex {
             throw new IllegalArgumentException("Unsupported value type: " + value.getClass());
         }
 
-        Node childNode = new Node(name, type);
-        childNode.setValue(value);
-
-        node.addChild(childNode);
-
-        return childNode;
-    }
-
-    public static Node addChild(Node node, String name) {
-        Node childNode = new Node(name, NodeTypes.STRING);
-        childNode.setValue("Holder");
-
-        node.addChild(childNode);
-
-        return childNode;
+        return type;
     }
 }
