@@ -1,9 +1,13 @@
 package com.restonic4.citadel.core.nodex;
 
+import com.restonic4.citadel.files.FileManager;
 import com.restonic4.citadel.registries.AssetLocation;
 import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
+import com.restonic4.citadel.registries.built_in.managers.NodeTypes;
 import com.restonic4.citadel.registries.built_in.types.NodeType;
+import com.restonic4.citadel.util.CitadelConstants;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.io.*;
 import java.util.Map;
@@ -68,6 +72,65 @@ ValueNode playerCoins = playerData.getValueNode("coins");
  */
 
 public abstract class Nodex {
+    public static ValueNode getSavedValueNode(String key) {
+        return (ValueNode) getSavedNode(key);
+    }
+
+    public static RootNode getSavedRootNode(String key) {
+        return (RootNode) getSavedNode(key);
+    }
+
+    public static Node getSavedNode(String key) {
+        String dirPath = FileManager.createDirectory(CitadelConstants.NODEX_DIRECTORY);
+        String filePath = dirPath + "/" + key + ".ndx";
+
+        try (DataInputStream in = new DataInputStream(new GZIPInputStream(new FileInputStream(filePath)))) {
+            return deserialize(in);
+        } catch (Exception exception) {
+            Logger.logError(exception);
+            return null;
+        }
+    }
+
+    public static void save(Node node) {
+        String dirPath = FileManager.createDirectory(CitadelConstants.NODEX_DIRECTORY);
+        String filePath = dirPath + "/" + node.getKey() + ".ndx";
+
+        try (DataOutputStream out = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)))) {
+            serialize(node, out);
+        } catch (Exception exception) {
+            Logger.logError(exception);
+        }
+    }
+
+    public static void serialize(Node node, DataOutputStream out) throws IOException {
+        String key = node.getKey();
+        String assetLocation = node.getType().getAssetLocation().toString();
+
+        out.writeUTF(key);
+        out.writeUTF(assetLocation);
+        node.getType().serialize(node, out);
+    }
+
+    public static Node deserialize(DataInputStream in) throws IOException {
+        String key = in.readUTF();
+        String assetLocation = in.readUTF();
+
+        NodeType type = Registry.getRegistryObject(Registries.NODE_TYPE, new AssetLocation(assetLocation));
+
+        Node node = null;
+
+        if (type == NodeTypes.NODE) {
+            node = new RootNode(key);
+        } else {
+            node = new ValueNode(key, type);
+        }
+
+        node.getType().deserialize(node, in);
+
+        return node;
+    }
+
     public static NodeType getDesiredNodeType(Object value) {
         NodeType type = null;
 

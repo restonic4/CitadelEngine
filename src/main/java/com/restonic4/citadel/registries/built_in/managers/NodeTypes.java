@@ -1,6 +1,7 @@
 package com.restonic4.citadel.registries.built_in.managers;
 
 import com.restonic4.citadel.core.nodex.Node;
+import com.restonic4.citadel.core.nodex.Nodex;
 import com.restonic4.citadel.core.nodex.RootNode;
 import com.restonic4.citadel.core.nodex.ValueNode;
 import com.restonic4.citadel.registries.AbstractRegistryInitializer;
@@ -633,7 +634,7 @@ public class NodeTypes extends AbstractRegistryInitializer {
                 try {
                     out.writeInt(node.getChildren().size());
                     for (Node child : node.getChildren().values()) {
-                        child.getType().serialize(child, out);
+                        Nodex.serialize(child, out);
                     }
 
                     return true;
@@ -652,7 +653,7 @@ public class NodeTypes extends AbstractRegistryInitializer {
                 try {
                     int childrenCount = in.readInt();
                     for (int i = 0; i < childrenCount; i++) {
-                        node.addChild(Node.deserialize(in));
+                        node.addChild(Nodex.deserialize(in));
                     }
 
                     return true;

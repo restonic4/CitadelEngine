@@ -2,6 +2,7 @@ package com.restonic4.test;
 
 import com.restonic4.citadel.core.GameLogic;
 import com.restonic4.citadel.core.nodex.Node;
+import com.restonic4.citadel.core.nodex.Nodex;
 import com.restonic4.citadel.core.nodex.RootNode;
 import com.restonic4.citadel.core.nodex.ValueNode;
 import com.restonic4.citadel.registries.Registry;
@@ -15,12 +16,8 @@ public class TestClient implements GameLogic {
     public void start() {
         SceneManager.loadScene(new TestScene());
 
-        try {
-            Node foundNode = Node.loadFromCompressedFile("node");
-            Logger.log("yippie");
-        } catch (Exception e) {
-            Logger.logError(e);
-        }
+        RootNode foundNode = Nodex.getSavedRootNode("playerData");
+        Logger.log("yippie");
 
         //
 
@@ -42,11 +39,13 @@ public class TestClient implements GameLogic {
 
         playerData.addChild(coins, wins, isNew, inventory);
 
-        try {
-            Node.saveToCompressedFile(playerData, "node");
-        } catch (Exception e) {
-            Logger.logError(e);
-        }
+        Nodex.save(playerData);
+
+        ValueNode waos = new ValueNode("waos", 629);
+        waos.save();
+
+        ValueNode waosLoaded = Nodex.getSavedValueNode("waos");
+        Logger.log("waos");
     }
 
     @Override

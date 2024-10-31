@@ -17,6 +17,8 @@ public class CitadelConstants {
     public static final String LOG_FILE = "CurrentLog.txt";
     public static final String LOG_DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss";
 
+    public static final String NODEX_DIRECTORY = "nodex";
+
     public static final int MAX_STATIC_BATCH_VERTEX_SIZE = 2048; // 2048
     public static final int MAX_DYNAMIC_BATCH_VERTEX_SIZE = 1024; // 1024
 
