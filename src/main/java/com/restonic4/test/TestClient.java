@@ -39,6 +39,7 @@ public class TestClient implements GameLogic {
 
         ValueNode waos = new ValueNode("waos", 629);
         waos.save();
+        Nodex.backup(waos);
 
         ValueNode waosLoaded = Nodex.getSavedValueNode("waos");
         Logger.log("waos");

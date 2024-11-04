@@ -104,6 +104,19 @@ public abstract class Nodex {
         }
     }
 
+    public static void backup(Node node) {
+        long epoch = System.currentTimeMillis()/1000;
+
+        String dirPath = FileManager.createDirectory(CitadelConstants.NODEX_DIRECTORY);
+        String filePath = dirPath + "/" + node.getKey() + ".ndx." + epoch + ".backup";
+
+        try (DataOutputStream out = new DataOutputStream(new ConfigurableGZIPOutputStream(new FileOutputStream(filePath)).setCompressionLevel(Deflater.BEST_COMPRESSION))) {
+            serialize(node, out);
+        } catch (Exception exception) {
+            Logger.logError(exception);
+        }
+    }
+
     public static void serialize(Node node, DataOutputStream out) throws IOException {
         String key = node.getKey();
         String assetLocation = node.getType().getAssetLocation().toString();
