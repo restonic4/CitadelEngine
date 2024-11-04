@@ -31,4 +31,11 @@ public class HistoryCommandManager {
             undoStack.push(command);
         }
     }
+
+    public HistoryCommand getLastAction() {
+        if (!undoStack.isEmpty()) {
+            return undoStack.peek();
+        }
+        return null;
+    }
 }

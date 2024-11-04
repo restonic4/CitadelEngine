@@ -4,6 +4,7 @@ import com.restonic4.citadel.core.GameLogic;
 import com.restonic4.citadel.core.nodex.Nodex;
 import com.restonic4.citadel.core.nodex.RootNode;
 import com.restonic4.citadel.core.nodex.ValueNode;
+import com.restonic4.citadel.tools.discord.DiscordIntegration;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.world.SceneManager;
 
@@ -43,6 +44,8 @@ public class TestClient implements GameLogic {
 
         ValueNode waosLoaded = Nodex.getSavedValueNode("waos");
         Logger.log("waos");
+
+        DiscordIntegration.init();
     }
 
     @Override

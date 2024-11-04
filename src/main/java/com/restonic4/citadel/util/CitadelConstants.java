@@ -63,4 +63,6 @@ public class CitadelConstants {
     public static Locale DEFAULT_LOCALE = Locales.EN_US;
 
     public static String MODS_DIRECTORY = "mods";
+
+    public static long DISCORD_APP_ID = 1287694211906539520L;
 }

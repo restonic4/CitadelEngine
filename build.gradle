@@ -46,6 +46,9 @@ dependencies {
     // Netty
     implementation 'io.netty:netty-all:4.1.113.Final'
 
+    // Discord
+    implementation 'com.github.JnCrMx:discord-game-sdk4j:5cdac341e3'
+
     // Processors
     annotationProcessor project(':processors')
     implementation project(path: ':processors')

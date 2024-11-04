@@ -2,6 +2,7 @@ package com.restonic4.citadel.world;
 
 import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.events.types.SceneEvents;
+import com.restonic4.citadel.tools.discord.DiscordIntegration;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import static org.lwjgl.opengl.GL11.glFinish;
@@ -17,6 +18,8 @@ public abstract class SceneManager {
     private static void setScene(Scene scene) {
         changes++;
         currentScene = scene;
+
+        DiscordIntegration.updateActivityDetails();
     }
 
     public static void loadScene(Scene scene) {
