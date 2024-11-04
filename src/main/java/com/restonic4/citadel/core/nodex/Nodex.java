@@ -7,12 +7,13 @@ import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.managers.NodeTypes;
 import com.restonic4.citadel.registries.built_in.types.NodeType;
 import com.restonic4.citadel.util.CitadelConstants;
+import com.restonic4.citadel.util.ConfigurableGZIPOutputStream;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
 
 import java.io.*;
 import java.util.Map;
+import java.util.zip.Deflater;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  <h1>Examples:</h1>
@@ -96,7 +97,7 @@ public abstract class Nodex {
         String dirPath = FileManager.createDirectory(CitadelConstants.NODEX_DIRECTORY);
         String filePath = dirPath + "/" + node.getKey() + ".ndx";
 
-        try (DataOutputStream out = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)))) {
+        try (DataOutputStream out = new DataOutputStream(new ConfigurableGZIPOutputStream(new FileOutputStream(filePath)).setCompressionLevel(Deflater.BEST_COMPRESSION))) {
             serialize(node, out);
         } catch (Exception exception) {
             Logger.logError(exception);

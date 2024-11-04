@@ -4,6 +4,7 @@ import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.CitadelSettings;
 import com.restonic4.citadel.exceptions.RegistryObjectException;
 import com.restonic4.citadel.util.CitadelConstants;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 
 import java.util.HashMap;
@@ -12,8 +13,27 @@ import java.util.Objects;
 
 public class Registry {
     private static final Map<RegistryKey<?>, Map<AssetLocation, ?>> registries = new HashMap<>();
+    private static final Map<RegistryKey<?>, Map<AssetLocation, ?>> redirects = new HashMap<>();
 
+    public static <T extends RegistryObject> T redirect(RegistryKey<T> registryKey, AssetLocation assetLocation, T object) {
+        if (CitadelLauncher.getInstance().getModLoader().isBootstrapped()) {
+            throw new RuntimeException("The mods have already been bootstrapped.");
+        }
+
+        Map<AssetLocation, T> registry = getOrCreateRegistry(registryKey);
+        registry.put(assetLocation, object);
+
+        redirects.put(registryKey, registry);
+
+        return object;
+    }
+
+    @SuppressWarnings("unchecked")
     public static <T extends RegistryObject> T register(RegistryKey<T> registryKey, AssetLocation assetLocation, T object) {
+        if (!CitadelLauncher.getInstance().getModLoader().isBootstrapped()) {
+            throw new RuntimeException("All mods must be bootstrapped before using this method. You should register objects after bootstrap.");
+        }
+
         if (!isValidNamespace(assetLocation)) {
             String allowedNamespacesText = "[";
 
@@ -42,6 +62,12 @@ public class Registry {
 
         if (registry.containsKey(assetLocation)) {
             throw new IllegalArgumentException("Duplicate asset location: " + assetLocation);
+        }
+
+        Map<AssetLocation, T> redirectedRegistry = (Map<AssetLocation, T>) redirects.get(registryKey);
+        if (redirectedRegistry != null && redirectedRegistry.containsKey(assetLocation)) {
+            object = redirectedRegistry.get(assetLocation);
+            Logger.log("Redirected " + registryKey.toString() + "/" + assetLocation);
         }
 
         object.setAssetLocation(assetLocation);

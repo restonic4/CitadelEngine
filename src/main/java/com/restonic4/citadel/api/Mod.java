@@ -5,6 +5,11 @@ This interface is used to set up mods. It provides useful methods.
  */
 public interface Mod {
     /**
+     Gets called when the mod gets loaded.
+     */
+    void onBootstrap();
+
+    /**
     Gets called on the start phase of your mod.
      */
     void onStart();

@@ -18,6 +18,8 @@ import java.util.Properties;
 public class ModLoader {
     private final List<Mod> mods;
 
+    private boolean isBootstrapped;
+
     public ModLoader() {
         this.mods = new ArrayList<>();
     }
@@ -69,14 +71,22 @@ public class ModLoader {
                 Class<?> modClass = Class.forName(mainClass, true, classLoader);
                 Mod mod = (Mod) modClass.getDeclaredConstructor().newInstance();
 
-                mods.add(mod);
+                mod.onBootstrap();
 
-                mod.onStart();
+                mods.add(mod);
 
                 CitadelLifecycleEvents.MOD_LOADED.invoker().onModLoaded(mod);
             }
         } catch (Exception exception) {
             Logger.log("Couldn't load mods: " + exception.getMessage());
+        }
+
+        isBootstrapped = true;
+    }
+
+    public void startMods() {
+        for (Mod mod : mods) {
+            mod.onStart();
         }
 
         // Subscribe to end mods
@@ -96,5 +106,9 @@ public class ModLoader {
         for (int i = 0; i < mods.size(); i++) {
             mods.get(i).onUpdate();
         }
+    }
+
+    public boolean isBootstrapped() {
+        return isBootstrapped;
     }
 }

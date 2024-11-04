@@ -55,6 +55,7 @@ public class CitadelLauncher {
         CitadelLifecycleEvents.CITADEL_STARTING.invoker().onCitadelStarting(this);
 
         handleCrashes();
+        this.modLoader.loadMods();
         startRegistries();
         logUsefulData();
 
@@ -92,7 +93,7 @@ public class CitadelLauncher {
             startServer();
         }
 
-        this.modLoader.loadMods();
+        this.modLoader.startMods();
     }
 
     private void startClient() {
@@ -223,6 +224,10 @@ public class CitadelLauncher {
 
     public CitadelSettings getSettings() {
         return this.citadelSettings;
+    }
+
+    public ModLoader getModLoader() {
+        return this.modLoader;
     }
 
     public static synchronized void finishApp() {
