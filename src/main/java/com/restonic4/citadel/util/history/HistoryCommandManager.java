@@ -1,5 +1,6 @@
 package com.restonic4.citadel.util.history;
 
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.editor.LevelEditor;
 
 import java.util.Stack;

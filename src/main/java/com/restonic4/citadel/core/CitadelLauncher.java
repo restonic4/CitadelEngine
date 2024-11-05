@@ -84,18 +84,16 @@ public class CitadelLauncher {
     }
 
     private void startDesiredEnvironment() {
+        this.modLoader.startMods();
         this.citadelSettings.getSharedGameLogic().start();
 
         if (citadelSettings.isServerSide()) {
             Logger.log("Launching as server");
             startServer();
-        }
-        else {
+        } else {
             Logger.log("Launching as client");
             startClient();
         }
-
-        this.modLoader.startMods();
     }
 
     private void startClient() {
@@ -121,7 +119,6 @@ public class CitadelLauncher {
 
     private void startServer() {
         ThreadManager.startThread(CitadelConstants.SERVER_SIDE_THREAD_NAME, false, () -> {
-            DebugManager.setDebugMode(true);
             Server server = new Server(citadelSettings.getServerPort());
             server.run();
         });
