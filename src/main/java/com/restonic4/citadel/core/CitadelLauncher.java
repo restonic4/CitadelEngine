@@ -55,8 +55,10 @@ public class CitadelLauncher {
         CitadelLifecycleEvents.CITADEL_STARTING.invoker().onCitadelStarting(this);
 
         handleCrashes();
+
         this.modLoader.loadMods();
         startRegistries();
+
         logUsefulData();
 
         startDesiredEnvironment();
@@ -84,13 +86,13 @@ public class CitadelLauncher {
     private void startDesiredEnvironment() {
         this.citadelSettings.getSharedGameLogic().start();
 
-        if (!citadelSettings.isServerSide()) {
-            Logger.log("Launching as client");
-            startClient();
-        }
-        else {
+        if (citadelSettings.isServerSide()) {
             Logger.log("Launching as server");
             startServer();
+        }
+        else {
+            Logger.log("Launching as client");
+            startClient();
         }
 
         this.modLoader.startMods();

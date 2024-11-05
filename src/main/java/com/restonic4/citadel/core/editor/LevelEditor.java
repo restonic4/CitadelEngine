@@ -35,7 +35,6 @@ public abstract class LevelEditor {
     private static HardcodedCamera hardcodedCamera;
 
     private static GameObject selectedObject;
-    private static boolean isRenamingEnabled = false;
     private static boolean isPlaying = false;
     private static boolean isPaused = false;
 

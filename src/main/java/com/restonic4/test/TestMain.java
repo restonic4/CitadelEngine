@@ -6,6 +6,7 @@ import com.restonic4.citadel.core.CitadelSettings;
 public class TestMain {
     public static void main(String[] args) {
         CitadelSettings citadelSettings = new CitadelSettings(new TestClient(), new TestServer(), new TestShared(), "TestGame", args);
+        citadelSettings.setServerSide(true);
         citadelSettings.setEditorMode(true);
 
         CitadelLauncher.create(citadelSettings).launch();
