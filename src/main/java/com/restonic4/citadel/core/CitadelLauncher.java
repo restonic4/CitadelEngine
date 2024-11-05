@@ -70,7 +70,7 @@ public class CitadelLauncher {
             }
         }
 
-        killNetworkThreads();
+        killMainThreads();
 
         CitadelLifecycleEvents.CITADEL_STOPPED.invoker().onCitadelStopped(CitadelLauncher.getInstance());
     }
@@ -130,7 +130,7 @@ public class CitadelLauncher {
                 try {
                     Window.getInstance().initGuiOnly();
                 } catch (Exception e) {
-                    killNetworkThreads();
+                    killMainThreads();
                     System.exit(0);
                     throw new RuntimeException(e);
                 }
@@ -194,7 +194,7 @@ public class CitadelLauncher {
 
     private void handleCrashes() {
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-            killNetworkThreads();
+            killMainThreads();
             finishApp();
             ThreadManager.stopAllThreads();
             ThreadManager.shutdownExecutor();
@@ -204,8 +204,8 @@ public class CitadelLauncher {
         });
     }
 
-    private void killNetworkThreads() {
-        Logger.log("Killing networking threads");
+    private void killMainThreads() {
+        Logger.log("Killing main threads");
 
         Thread clientThread = ThreadManager.findThreadByName(CitadelConstants.CLIENT_SIDE_THREAD_NAME);
         if (clientThread != null) {
@@ -215,6 +215,11 @@ public class CitadelLauncher {
         Thread serverThread = ThreadManager.findThreadByName(CitadelConstants.SERVER_SIDE_THREAD_NAME);
         if (serverThread != null) {
             ThreadManager.stopThread(serverThread);
+        }
+
+        Thread discordThread = ThreadManager.findThreadByName(CitadelConstants.DISCORD_THREAD_NAME);
+        if (discordThread != null) {
+            ThreadManager.stopThread(discordThread);
         }
     }
 
