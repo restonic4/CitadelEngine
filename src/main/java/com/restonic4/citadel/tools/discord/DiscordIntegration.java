@@ -1,5 +1,6 @@
 package com.restonic4.citadel.tools.discord;
 
+import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.ThreadManager;
 import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.platform.PlatformManager;
@@ -9,15 +10,13 @@ import com.restonic4.citadel.util.history.HistoryCommand;
 import com.restonic4.citadel.world.SceneManager;
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
-import de.jcm.discordgamesdk.activity.Activity;
-import de.jcm.discordgamesdk.activity.ActivityButton;
-import de.jcm.discordgamesdk.activity.ActivityButtonsMode;
-import de.jcm.discordgamesdk.activity.ActivityType;
+import de.jcm.discordgamesdk.activity.*;
 
 import java.time.Instant;
 
 public class DiscordIntegration {
     private static Core core;
+    private static Activity activity;
 
     public static void init() {
         ThreadManager.startThread("Discord RPC", false, DiscordIntegration::startActivity);
@@ -33,9 +32,11 @@ public class DiscordIntegration {
             {
                 core = newCore;
 
-                try(Activity activity = new Activity())
+                try(Activity newActivity = new Activity())
                 {
-                    activity.setDetails("Empty project");
+                    activity = newActivity;
+
+                    updateActivityDetails();
 
                     activity.timestamps().setStart(Instant.now());
 
@@ -59,19 +60,24 @@ public class DiscordIntegration {
     }
 
     public static void updateActivityDetails() {
-        try (Activity activity = new Activity()) {
-            activity.setDetails(getUpdatedActivityDetails());
+        if (activity == null) {
+            return;
+        }
 
-            if (core != null) {
-                core.activityManager().updateActivity(activity);
-            }
+        activity.setDetails(getUpdatedActivityDetails());
+        activity.setState(getUpdatedActivityState());
+        activity.setType(ActivityType.PLAYING);
+
+        if (core != null) {
+            core.activityManager().updateActivity(activity);
         }
     }
 
     public static String getUpdatedActivityDetails() {
-        return StringBuilderHelper.concatenate(
-                    "Project: ", "Not implemented", "\n",
-                    "Scene: ", SceneManager.getCurrentScene().getName()
-        );
+        return CitadelLauncher.getInstance().getAppName();
+    }
+
+    public static String getUpdatedActivityState() {
+        return SceneManager.getCurrentScene().getName();
     }
 }
