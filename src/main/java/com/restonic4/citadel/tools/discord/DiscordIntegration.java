@@ -19,7 +19,7 @@ public class DiscordIntegration {
     private static Activity activity;
 
     public static void init() {
-        ThreadManager.startThread("Discord RPC", false, DiscordIntegration::startActivity);
+        ThreadManager.startThread(CitadelConstants.DISCORD_THREAD_NAME, false, DiscordIntegration::startActivity);
     }
 
     private static void startActivity() {

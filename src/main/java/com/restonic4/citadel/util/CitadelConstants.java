@@ -46,6 +46,7 @@ public class CitadelConstants {
     public static final String CLIENT_SIDE_THREAD_NAME = "Networking client side";
     public static final String CLIENT_SIDE_RENDER_THREAD_NAME = "Render client side";
     public static final String SERVER_SIDE_THREAD_NAME = "Networking server side";
+    public static final String DISCORD_THREAD_NAME = "Discord Rich Presence";
 
     // Can be modified
 
