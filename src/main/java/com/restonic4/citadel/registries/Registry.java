@@ -141,6 +141,7 @@ public class Registry {
         return false;
     }
 
+    // this is just shit
     public static long getApproximatedMemorySize() {
         long size = 36;
 
