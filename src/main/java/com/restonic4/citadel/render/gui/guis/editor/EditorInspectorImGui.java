@@ -2,9 +2,15 @@ package com.restonic4.citadel.render.gui.guis.editor;
 
 import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.editor.LevelEditor;
+import com.restonic4.citadel.registries.AssetLocation;
+import com.restonic4.citadel.registries.Registries;
+import com.restonic4.citadel.registries.Registry;
+import com.restonic4.citadel.registries.built_in.types.ImGuiScreen;
+import com.restonic4.citadel.registries.built_in.types.LevelEditorAddTemplate;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
 import com.restonic4.citadel.render.gui.guis.ToggleableImGuiScreen;
 import com.restonic4.citadel.util.CitadelConstants;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.world.Scene;
 import com.restonic4.citadel.world.SceneManager;
@@ -15,6 +21,7 @@ import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.flag.ImGuiWindowFlags;
 
 import java.util.List;
+import java.util.Map;
 
 public class EditorInspectorImGui extends ToggleableImGuiScreen {
     @Override
@@ -61,6 +68,21 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
         }
 
         if (ImGui.beginPopup("InspectorRightClickMenu")) {
+            if (ImGui.beginMenu("Add")) {
+                Map<AssetLocation, LevelEditorAddTemplate> guis = Registry.getRegistry(Registries.LEVEL_EDITOR_ADD_TEMPLATE);
+                for (Map.Entry<AssetLocation, LevelEditorAddTemplate> entry : guis.entrySet()) {
+                    LevelEditorAddTemplate template = entry.getValue();
+
+                    if (ImGui.menuItem(template.getName())) {
+                        template.add();
+                    }
+                }
+
+                ImGui.endMenu();
+            }
+
+            ImGui.separator();
+
             if (ImGui.menuItem("Rename")) {
                 LevelEditor.handleRenaming();
             }

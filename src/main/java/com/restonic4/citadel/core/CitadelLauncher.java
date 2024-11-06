@@ -184,7 +184,8 @@ public class CitadelLauncher {
         RegistryManager.registerBuiltInRegistrySet(
                 new Shaders(), new Sounds(), new ProfilerStats(), new Locales(),
                 new KeyBinds(), new ImGuiScreens(), new PacketDataTypes(), new Packets(),
-                new FrameBuffers(), new Icons(), new Components(), new NodeTypes()
+                new FrameBuffers(), new Icons(), new Components(), new NodeTypes(),
+                new LevelEditorAddTemplates()
         );
 
         // Register all

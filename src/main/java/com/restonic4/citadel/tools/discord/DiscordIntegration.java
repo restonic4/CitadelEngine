@@ -5,6 +5,7 @@ import com.restonic4.citadel.core.ThreadManager;
 import com.restonic4.citadel.core.editor.LevelEditor;
 import com.restonic4.citadel.platform.PlatformManager;
 import com.restonic4.citadel.util.CitadelConstants;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.helpers.StringBuilderHelper;
 import com.restonic4.citadel.util.history.HistoryCommand;
 import com.restonic4.citadel.world.SceneManager;
@@ -52,9 +53,11 @@ public class DiscordIntegration {
                     }
                     catch(InterruptedException e)
                     {
-                        e.printStackTrace();
+                        Logger.logError(e);
                     }
                 }
+            } catch (Exception exception) {
+                Logger.logError(exception);
             }
         }
     }

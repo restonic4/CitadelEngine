@@ -2,10 +2,15 @@ package com.restonic4.citadel.core.editor;
 
 import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.Window;
+import com.restonic4.citadel.registries.AssetLocation;
+import com.restonic4.citadel.registries.Registries;
+import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
 import com.restonic4.citadel.registries.built_in.managers.KeyBinds;
+import com.restonic4.citadel.registries.built_in.types.LevelEditorAddTemplate;
 import com.restonic4.citadel.render.Texture;
 import com.restonic4.citadel.render.gui.ImGuiHelper;
+import com.restonic4.citadel.util.debug.diagnosis.Logger;
 import com.restonic4.citadel.util.history.HistoryCommandManager;
 import com.restonic4.citadel.util.history.commands.DeleteFileHistoryCommand;
 import com.restonic4.citadel.util.history.commands.RenameGameObjectHistoryCommand;
@@ -22,6 +27,7 @@ import imgui.flag.ImGuiStyleVar;
 import imgui.type.ImBoolean;
 
 import java.nio.file.Files;
+import java.util.Map;
 
 import static imgui.flag.ImGuiWindowFlags.*;
 import static imgui.flag.ImGuiWindowFlags.NoNavFocus;
@@ -127,6 +133,21 @@ public abstract class LevelEditor {
                 }
                 ImGui.sameLine();
                 ImGuiHelper.coloredText(KeyBinds.DELETE.getKeyString(), ImGuiHelper.getTooltipColor());
+
+                ImGui.separator();
+
+                if (ImGui.beginMenu("Add")) {
+                    Map<AssetLocation, LevelEditorAddTemplate> guis = Registry.getRegistry(Registries.LEVEL_EDITOR_ADD_TEMPLATE);
+                    for (Map.Entry<AssetLocation, LevelEditorAddTemplate> entry : guis.entrySet()) {
+                        LevelEditorAddTemplate template = entry.getValue();
+
+                        if (ImGui.menuItem(template.getName())) {
+                            template.add();
+                        }
+                    }
+
+                    ImGui.endMenu();
+                }
 
                 ImGui.endMenu();
             }
@@ -324,6 +345,10 @@ public abstract class LevelEditor {
             // TODO: Object deletion system needed
             CitadelLauncher.getInstance().handleError("GameObject deletion system needed!");
         }
+    }
+
+    public static void handleAdding() {
+
     }
 
     private static void handleHistory() {

@@ -24,6 +24,7 @@ public class Registries {
     public static final RegistryKey<NodeType> NODE_TYPE = new RegistryKey<>("node_type");
     public static final RegistryKey<FrameBuffer> FRAME_BUFFER = new RegistryKey<>("frame_buffer");
     public static final RegistryKey<Component> COMPONENT = new RegistryKey<>("component");
+    public static final RegistryKey<LevelEditorAddTemplate> LEVEL_EDITOR_ADD_TEMPLATE = new RegistryKey<>("level_editor_add_template");
 
     // Custom key system, where you can register your own keys
 
