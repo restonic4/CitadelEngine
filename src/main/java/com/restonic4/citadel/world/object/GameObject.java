@@ -183,6 +183,10 @@ public class GameObject implements Serializable {
         isStatic = Objects.equals(splits[1], "t");
         transform = (Transform) new Transform().deserialize(splits[2]);
 
+        if (splits.length < 4 || splits[3] == null) {
+            return this;
+        }
+
         String[] components = splits[3].split("_");
 
         for (int i = 0; i < components.length; i++) {
