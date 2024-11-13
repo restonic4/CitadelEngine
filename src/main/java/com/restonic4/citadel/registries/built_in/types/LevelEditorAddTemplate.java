@@ -2,6 +2,7 @@ package com.restonic4.citadel.registries.built_in.types;
 
 import com.restonic4.citadel.registries.RegistryObject;
 import com.restonic4.citadel.util.debug.diagnosis.Logger;
+import com.restonic4.citadel.world.object.Transform;
 
 public class LevelEditorAddTemplate extends RegistryObject {
     private final String name;
@@ -10,7 +11,7 @@ public class LevelEditorAddTemplate extends RegistryObject {
         this.name = name;
     }
 
-    public void add() {
+    public void add(Transform parent) {
         Logger.log(name + " added");
     }
 

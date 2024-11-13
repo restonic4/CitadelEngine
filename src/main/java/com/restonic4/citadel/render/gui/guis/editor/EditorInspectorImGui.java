@@ -46,6 +46,10 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
             return;
         }
 
+        if (ImGui.isWindowHovered() && ImGui.isMouseClicked(ImGuiMouseButton.Left)) {
+            LevelEditor.setSelectedObject(null);
+        }
+
         if (ImGui.collapsingHeader(StringBuilderHelper.concatenate("Scene: ", scene.getName()), ImGuiTreeNodeFlags.DefaultOpen)) {
             ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
@@ -74,7 +78,11 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
                     LevelEditorAddTemplate template = entry.getValue();
 
                     if (ImGui.menuItem(template.getName())) {
-                        template.add();
+                        if (LevelEditor.getSelectedObject() != null) {
+                            template.add(LevelEditor.getSelectedObject().transform);
+                        } else {
+                            template.add(SceneManager.getCurrentScene().getTransform());
+                        }
                     }
                 }
 

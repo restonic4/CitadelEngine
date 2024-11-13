@@ -142,7 +142,11 @@ public abstract class LevelEditor {
                         LevelEditorAddTemplate template = entry.getValue();
 
                         if (ImGui.menuItem(template.getName())) {
-                            template.add();
+                            if (LevelEditor.getSelectedObject() != null) {
+                                template.add(LevelEditor.getSelectedObject().transform);
+                            } else {
+                                template.add(SceneManager.getCurrentScene().getTransform());
+                            }
                         }
                     }
 
