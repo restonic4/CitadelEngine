@@ -169,6 +169,10 @@ public class Scene implements Serializable {
         }
     }
 
+    public void removeGameObject(GameObject gameObject) {
+        Logger.logError("Method not implemented yet!");
+    }
+
     public void addRootTransform(Transform transform) {
         GameObject gameObject = transformToGameObjectMap.get(transform);
 

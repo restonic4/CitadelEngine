@@ -15,6 +15,6 @@ public class EmptyLevelEditorAddTemplate extends LevelEditorAddTemplate {
         GameObject gameObject = new GameObject("Empty GameObject", false);
         gameObject.transform.setParent(parent);
 
-        SceneManager.getCurrentScene().addGameObject(gameObject);
+        this.executeHistoryCommand(gameObject);
     }
 }

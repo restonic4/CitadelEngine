@@ -18,6 +18,6 @@ public class CubeLevelEditorAddTemplate extends LevelEditorAddTemplate {
         gameObject.addComponent(new ModelRendererComponent(MeshLoader.loadMesh("assets/models/cube.obj")));
         gameObject.transform.setParent(parent);
 
-        SceneManager.getCurrentScene().addGameObject(gameObject);
+        this.executeHistoryCommand(gameObject);
     }
 }
