@@ -118,7 +118,7 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
             for (int i = 0; i < components.size(); i++) {
                 Component component = components.get(i);
 
-                if (ImGui.collapsingHeader(StringBuilderHelper.concatenate(component.getClass().getSimpleName(), "##", component.getId()))) {
+                if (ImGui.collapsingHeader(StringBuilderHelper.concatenate(fixComponentName(component.getClass().getSimpleName()), "##", component.getId()))) {
                     ImGui.indent(CitadelConstants.IM_GUI_INDENT);
 
                     component.renderEditorUI();
@@ -131,5 +131,27 @@ public class EditorPropertiesImGui extends ToggleableImGuiScreen {
         }
 
         ImGui.end();
+    }
+
+    public String fixComponentName(String rawName) {
+        String[] words = rawName
+                .replaceAll("([a-z])([A-Z])", "$1 $2")
+                .replaceAll("([A-Z]+)([A-Z][a-z])", "$1 $2")
+                .split(" ");
+
+        StringBuilder fixedName = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            if (i == words.length - 1 && words[i].equalsIgnoreCase("Component")) {
+                continue;
+            }
+
+            if (!fixedName.isEmpty()) {
+                fixedName.append(" ");
+            }
+
+            fixedName.append(words[i]);
+        }
+
+        return fixedName.toString();
     }
 }
