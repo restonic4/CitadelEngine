@@ -72,22 +72,7 @@ public class EditorInspectorImGui extends ToggleableImGuiScreen {
         }
 
         if (ImGui.beginPopup("InspectorRightClickMenu")) {
-            if (ImGui.beginMenu("Add")) {
-                Map<AssetLocation, LevelEditorAddTemplate> guis = Registry.getRegistry(Registries.LEVEL_EDITOR_ADD_TEMPLATE);
-                for (Map.Entry<AssetLocation, LevelEditorAddTemplate> entry : guis.entrySet()) {
-                    LevelEditorAddTemplate template = entry.getValue();
-
-                    if (ImGui.menuItem(template.getName())) {
-                        if (LevelEditor.getSelectedObject() != null) {
-                            template.add(LevelEditor.getSelectedObject().transform);
-                        } else {
-                            template.add(SceneManager.getCurrentScene().getTransform());
-                        }
-                    }
-                }
-
-                ImGui.endMenu();
-            }
+            LevelEditor.renderAddTemplates();
 
             ImGui.separator();
 

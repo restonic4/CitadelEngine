@@ -3,6 +3,7 @@ package com.restonic4.citadel.core.editor;
 import com.restonic4.citadel.core.CitadelLauncher;
 import com.restonic4.citadel.core.Window;
 import com.restonic4.citadel.registries.AssetLocation;
+import com.restonic4.citadel.registries.Collections;
 import com.restonic4.citadel.registries.Registries;
 import com.restonic4.citadel.registries.Registry;
 import com.restonic4.citadel.registries.built_in.managers.ImGuiScreens;
@@ -27,6 +28,7 @@ import imgui.flag.ImGuiStyleVar;
 import imgui.type.ImBoolean;
 
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Map;
 
 import static imgui.flag.ImGuiWindowFlags.*;
@@ -136,22 +138,7 @@ public abstract class LevelEditor {
 
                 ImGui.separator();
 
-                if (ImGui.beginMenu("Add")) {
-                    Map<AssetLocation, LevelEditorAddTemplate> guis = Registry.getRegistry(Registries.LEVEL_EDITOR_ADD_TEMPLATE);
-                    for (Map.Entry<AssetLocation, LevelEditorAddTemplate> entry : guis.entrySet()) {
-                        LevelEditorAddTemplate template = entry.getValue();
-
-                        if (ImGui.menuItem(template.getName())) {
-                            if (LevelEditor.getSelectedObject() != null) {
-                                template.add(LevelEditor.getSelectedObject().transform);
-                            } else {
-                                template.add(SceneManager.getCurrentScene().getTransform());
-                            }
-                        }
-                    }
-
-                    ImGui.endMenu();
-                }
+                renderAddTemplates();
 
                 ImGui.endMenu();
             }
@@ -299,6 +286,33 @@ public abstract class LevelEditor {
         handleKeyInputs();
 
         handleHistory();
+    }
+
+    // This is chaotic
+    public static void renderAddTemplates() {
+        if (ImGui.beginMenu("Add")) {
+            for (int i = 0; i < Collections.LEAT.size(); i++) {
+                List<LevelEditorAddTemplate> list = Collections.LEAT.get(i);
+
+                for (int j = 0; j < list.size(); j++) {
+                    LevelEditorAddTemplate template = list.get(j);
+
+                    if (ImGui.menuItem(template.getName())) {
+                        if (LevelEditor.getSelectedObject() != null) {
+                            template.add(LevelEditor.getSelectedObject().transform);
+                        } else {
+                            template.add(SceneManager.getCurrentScene().getTransform());
+                        }
+                    }
+                }
+
+                if (i != Collections.LEAT.size() - 1) {
+                    ImGui.separator();
+                }
+            }
+
+            ImGui.endMenu();
+        }
     }
 
     private static void handleKeyInputs() {
